@@ -1,0 +1,17 @@
+{
+	UserConfig:"conf.json"
+	FlashSpeed:20
+	GamePath:""
+	SaveImagePath:""
+	SaveImageTip:true
+	Version:"1.6.0.1"
+	GridGap:100
+	AutoSave:false
+	LineLevel:0.5
+	LCID:2052
+	SaveImageAllPath:false
+  LayerMaximum: 20
+  Initialized: false
+  AvatarUrl: "http://kritsu.net/avatar"
+  ApiUrl: "http://kritsu.net/avatar/image/avatar/"
+}

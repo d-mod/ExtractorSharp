@@ -1,0 +1,648 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\CefSharp.WinForms.57.0.0\build\CefSharp.WinForms.props" Condition="Exists('..\packages\CefSharp.WinForms.57.0.0\build\CefSharp.WinForms.props')" />
+  <Import Project="..\packages\CefSharp.Common.57.0.0\build\CefSharp.Common.props" Condition="Exists('..\packages\CefSharp.Common.57.0.0\build\CefSharp.Common.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{37D3351F-80F8-4905-A06F-65C430EC5EE2}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ExtractorSharp</RootNamespace>
+    <AssemblyName>ExtractorSharp</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <PublishUrl>ftp://hyu2719160001.my3w.com/htdocs/extractorsharp/</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>10</UpdateInterval>
+    <UpdateIntervalUnits>Hours</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>true</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <InstallUrl>http://kritsu.net/extractorsharp/</InstallUrl>
+    <ProductName>DNF Extractor Sharp</ProductName>
+    <PublisherName>Kritsu</PublisherName>
+    <MinimumRequiredVersion>1.2.0.0</MinimumRequiredVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.2.0.0</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <SonarQubeExclude>True</SonarQubeExclude>
+    <SonarQubeTestProject />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>0</WarningLevel>
+    <Prefer32Bit>true</Prefer32Bit>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <LangVersion>7.1</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <Prefer32Bit>true</Prefer32Bit>
+    <LangVersion>7.1</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>ExtractorSharp.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>aww.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Kritsu.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>8EEBEF0B99EFD4DC76335D34CF8453129ADAB5C9</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>ExtractorSharp_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup />
+  <PropertyGroup />
+  <PropertyGroup />
+  <PropertyGroup />
+  <PropertyGroup />
+  <PropertyGroup />
+  <PropertyGroup>
+    <NoWin32Manifest>true</NoWin32Manifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="SevenZipSharp">
+      <HintPath>..\SevenZipSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Bat\BatCavas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Bat\BatCavas.designer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Bat\Batch.cs" />
+    <Compile Include="Bat\BatDye.cs" />
+    <Compile Include="Bat\BatReplace.cs" />
+    <Compile Include="Bat\LinearDodge.cs" />
+    <Compile Include="Bat\Linghting.cs" />
+    <Compile Include="Bat\Split.cs" />
+    <Compile Include="Command\ColorChartCommand\ChangeColor.cs" />
+    <Compile Include="Command\DrawCommand\EraserDraw.cs" />
+    <Compile Include="Command\IAciton.cs" />
+    <Compile Include="Command\ImageCommand\ChangeSize.cs" />
+    <Compile Include="Command\ImageCommand\CutImage.cs" />
+    <Compile Include="Command\ImageCommand\LineDodge.cs" />
+    <Compile Include="Command\DrawCommand\PencilDraw.cs" />
+    <Compile Include="Command\ImageCommand\PasteImage.cs" />
+    <Compile Include="Command\ImgCommand\CutImg.cs" />
+    <Compile Include="Command\ImgCommand\MixImg.cs" />
+    <Compile Include="Command\ImgCommand\PasteImg.cs" />
+    <Compile Include="Command\ImgCommand\RepairImg.cs" />
+    <Compile Include="Command\ImgCommand\SplitImg.cs" />
+    <Compile Include="Command\LayerCommand\AddLayer.cs" />
+    <Compile Include="Command\LayerCommand\RenameLayer.cs" />
+    <Compile Include="Command\MergeCommand\RunMerge.cs" />
+    <Compile Include="Config\XmlConfig.cs" />
+    <Compile Include="Config\ConfigMode.cs" />
+    <Compile Include="Config\ConfigValue.cs" />
+    <Compile Include="Config\IConfig.cs" />
+    <Compile Include="Config\JsonConfig.cs" />
+    <Compile Include="Core\Clipboarder.cs" />
+    <Compile Include="Data\TempImage.cs" />
+    <Compile Include="Data\VersionInfo.cs" />
+    <Compile Include="Data\WeaponInfo.cs" />
+    <Compile Include="Draw\Brush\Eraser.cs" />
+    <Compile Include="Draw\Brush\Straw.cs" />
+    <Compile Include="UI\ColorList.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\ColorList.Designer.cs">
+      <DependentUpon>ColorList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EventArguments\ColorEventArgs.cs" />
+    <Compile Include="EventArguments\DialogDataEventArgs.cs" />
+    <Compile Include="EventArguments\DrawEventArgs.cs" />
+    <Compile Include="Core\QueueChangeMode.cs" />
+    <Compile Include="EventArguments\ActionEventArgs.cs" />
+    <Compile Include="EventArguments\CommandEventArgs.cs" />
+    <Compile Include="Core\Controller.cs" />
+    <Compile Include="EventArguments\DialogEventArgs.cs" />
+    <Compile Include="Core\Drawer.cs" />
+    <Compile Include="EventArguments\ImageEntityEventArgs.cs" />
+    <Compile Include="EventArguments\ItemHoverEventArgs.cs" />
+    <Compile Include="EventArguments\MergeQueueEventArgs.cs" />
+    <Compile Include="Core\Merger.cs" />
+    <Compile Include="Core\Viewer.cs" />
+    <Compile Include="Draw\Brush\IBrush.cs" />
+    <Compile Include="Draw\Brush\MoveTool.cs" />
+    <Compile Include="Draw\Brush\Pencil.cs" />
+    <Compile Include="Composition\IPluginMetadata.cs" />
+    <Compile Include="Composition\ISetting.cs" />
+    <Compile Include="Composition\ITools.cs" />
+    <Compile Include="Command\ICommand.cs" />
+    <Compile Include="Command\ImageCommand\ChangePosition.cs" />
+    <Compile Include="Command\ImageCommand\DyeImage.cs" />
+    <Compile Include="Command\ImageCommand\UnCavasImage.cs" />
+    <Compile Include="Command\ImgCommand\ConvertImg.cs" />
+    <Compile Include="Command\MergeCommand\SortSplice.cs" />
+    <Compile Include="Draw\Paint\Cavas.cs" />
+    <Compile Include="UI\EaseCavasBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\EaseTabPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\EaseTabPanel.Designer.cs">
+      <DependentUpon>EaseTabPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gif\AnimatedGifEncoder.cs" />
+    <Compile Include="Gif\Constants.cs" />
+    <Compile Include="Gif\GifDecoder.cs" />
+    <Compile Include="Gif\GifEncoder.cs" />
+    <Compile Include="Gif\ImageUtil.cs" />
+    <Compile Include="Gif\LZWEncoder.cs" />
+    <Compile Include="Gif\NeuQuant.cs" />
+    <Compile Include="Gif\PixelUtil.cs" />
+    <Compile Include="Gif\Posterize.cs" />
+    <Compile Include="Lib\Bass.cs" />
+    <Compile Include="Lib\FreeImage.cs" />
+    <Compile Include="EventArguments\MergeEventArg.cs" />
+    <Compile Include="Lib\Gif.cs" />
+    <Compile Include="Service\FitRoomService.cs" />
+    <Compile Include="Users\DecryptManager.cs" />
+    <Compile Include="Users\IDecrypter.cs" />
+    <Compile Include="Users\SecondDecrypter.cs" />
+    <Compile Include="View\Dialog\CavasDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Dialog\CavasDialog.designer.cs" />
+    <Compile Include="Command\ImageCommand\CavasImage.cs" />
+    <Compile Include="Command\ImageCommand\SaveImage.cs" />
+    <Compile Include="Command\ImgCommand\SortImg.cs" />
+    <Compile Include="Command\MergeCommand\AddMerge.cs" />
+    <Compile Include="Command\ImageCommand\DeleteImage.cs" />
+    <Compile Include="Command\ImageCommand\HideImage.cs" />
+    <Compile Include="Command\ImageCommand\LinkImage.cs" />
+    <Compile Include="Command\ImageCommand\NewImage.cs" />
+    <Compile Include="Command\ImageCommand\ReplaceImage.cs" />
+    <Compile Include="Command\ImgCommand\AddImg.cs" />
+    <Compile Include="Command\ImgCommand\DeleteImg.cs" />
+    <Compile Include="Command\ImgCommand\HideImg.cs" />
+    <Compile Include="Command\ImgCommand\NewImg.cs" />
+    <Compile Include="Command\ImgCommand\RenameImg.cs" />
+    <Compile Include="Command\ImgCommand\ReplaceImg.cs" />
+    <Compile Include="Command\MergeCommand\ClearMerge.cs" />
+    <Compile Include="Command\MergeCommand\RemoveMerge.cs" />
+    <Compile Include="View\Dialog\AboutDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Dialog\AboutDialog.designer.cs">
+      <DependentUpon>AboutDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialog\BatDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Dialog\BatDialog.Designer.cs">
+      <DependentUpon>BatDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialog\BugDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Dialog\BugDialog.Designer.cs">
+      <DependentUpon>BugDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialog\ClearDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Dialog\ClearDialog.Designer.cs">
+      <DependentUpon>ClearDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialog\ConvertDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Dialog\ConvertDialog.Designer.cs">
+      <DependentUpon>ConvertDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialog\MacroDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Dialog\MacroDialog.Designer.cs">
+      <DependentUpon>MacroDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialog\SplitFileDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Dialog\SplitFileDialog.Designer.cs">
+      <DependentUpon>SplitFileDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Pane\ActionPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\Pane\ActionPage.Designer.cs">
+      <DependentUpon>ActionPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Pane\ColorChartPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\Pane\ColorChartPanel.Designer.cs">
+      <DependentUpon>ColorChartPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Pane\HistoryPage.Designer.cs" />
+    <Compile Include="View\Pane\HistoryPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\Pane\OggPlayer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\Pane\OggPlayer.Designer.cs">
+      <DependentUpon>OggPlayer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialog\PropertyDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Dialog\PropertyDialog.Designer.cs">
+      <DependentUpon>PropertyDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\EaseTextDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\EaseTextDialog.Designer.cs">
+      <DependentUpon>EaseTextDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialog\ReplaceImageDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Dialog\ReplaceImageDialog.Designer.cs">
+      <DependentUpon>ReplaceImageDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Pane\DropPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\Pane\DropPanel.Designer.cs">
+      <DependentUpon>DropPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialog\NewImageDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Dialog\NewImageDialog.Designer.cs">
+      <DependentUpon>NewImageDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialog\SaveImageDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Dialog\SaveImageDialog.Designer.cs">
+      <DependentUpon>SaveImageDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialog\VersionDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Dialog\VersionDialog.Designer.cs">
+      <DependentUpon>VersionDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialog\DownloadFileDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Dialog\DownloadFileDialog.Designer.cs">
+      <DependentUpon>DownloadFileDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Draw\Paint\IPaint.cs" />
+    <Compile Include="UI\EaseButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\EaseButton.Designer.cs">
+      <DependentUpon>EaseButton.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\EaseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\EaseForm.Designer.cs">
+      <DependentUpon>EaseForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ProgressDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\ProgressDialog.Designer.cs">
+      <DependentUpon>ProgressDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\EaseDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\EaseDialog.designer.cs">
+      <DependentUpon>EaseDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Handle\FirstHandler.cs" />
+    <Compile Include="Handle\OggHandler.cs" />
+    <Compile Include="Handle\SixthHandler.cs" />
+    <Compile Include="Data\Language.cs" />
+    <Compile Include="Draw\Paint\Layer.cs" />
+    <Compile Include="Composition\Hoster.cs" />
+    <Compile Include="Data\Album.cs" />
+    <Compile Include="View\Dialog\ChangePositionDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Dialog\ChangePositionDialog.designer.cs">
+      <DependentUpon>ChangePositionDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialog\FitRoomDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Dialog\FitRoomDialog.designer.cs">
+      <DependentUpon>FitRoomDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Data\DDS.cs" />
+    <Compile Include="UI\EaseListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\EaseListBox.Designer.cs">
+      <DependentUpon>EaseListBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialog\EncryptDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Dialog\EncryptDialog.Designer.cs">
+      <DependentUpon>EncryptDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Pane\DecryptPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\Pane\DecryptPanel.Designer.cs">
+      <DependentUpon>DecryptPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Handle\FifthHandler.cs" />
+    <Compile Include="Handle\FourthHandler.cs" />
+    <Compile Include="Handle\Handler.cs" />
+    <Compile Include="Handle\SecondHandler.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="Users\Encrypt_Version.cs" />
+    <Compile Include="Tools.cs" />
+    <Compile Include="Data\ImageEntity.cs" />
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\Messager.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Core\Messager.designer.cs">
+      <DependentUpon>Messager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialog\NewImgDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Dialog\NewImgDialog.designer.cs">
+      <DependentUpon>NewImgDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Composition\IPlugin.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialog\SearchDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Dialog\SearchDialog.designer.cs">
+      <DependentUpon>SearchDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialog\MergeDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Dialog\MergeDialog.designer.cs">
+      <DependentUpon>MergeDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Users\Work.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Kritsu.snk" />
+    <None Include="Resources\alias_weapon.json" />
+    <None Include="Resources\chinese.json" />
+    <None Include="Resources\queues.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Bat\BatCavas.resx">
+      <DependentUpon>BatCavas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Dialog\CavasDialog.resx">
+      <DependentUpon>CavasDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Dialog\AboutDialog.resx">
+      <DependentUpon>AboutDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Dialog\BatDialog.resx">
+      <DependentUpon>BatDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Dialog\BugDialog.resx">
+      <DependentUpon>BugDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Dialog\ChangePositionDialog.resx">
+      <DependentUpon>ChangePositionDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Dialog\ClearDialog.resx">
+      <DependentUpon>ClearDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Dialog\ConvertDialog.resx">
+      <DependentUpon>ConvertDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Dialog\FitRoomDialog.resx">
+      <DependentUpon>FitRoomDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Dialog\EncryptDialog.resx">
+      <DependentUpon>EncryptDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Dialog\SplitFileDialog.resx">
+      <DependentUpon>SplitFileDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Pane\DecryptPanel.resx">
+      <DependentUpon>DecryptPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Dialog\MacroDialog.resx">
+      <DependentUpon>MacroDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Pane\OggPlayer.resx">
+      <DependentUpon>OggPlayer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Dialog\PropertyDialog.resx">
+      <DependentUpon>PropertyDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\EaseTextDialog.resx">
+      <DependentUpon>EaseTextDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Dialog\ReplaceImageDialog.resx">
+      <DependentUpon>ReplaceImageDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Pane\DropPanel.resx">
+      <DependentUpon>DropPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Dialog\NewImageDialog.resx">
+      <DependentUpon>NewImageDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Dialog\SaveImageDialog.resx">
+      <DependentUpon>SaveImageDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Dialog\VersionDialog.resx">
+      <DependentUpon>VersionDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Dialog\DownloadFileDialog.resx">
+      <DependentUpon>DownloadFileDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ProgressDialog.resx">
+      <DependentUpon>ProgressDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\Messager.resx">
+      <DependentUpon>Messager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Dialog\NewImgDialog.resx">
+      <DependentUpon>NewImgDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Dialog\SearchDialog.resx">
+      <DependentUpon>SearchDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Dialog\MergeDialog.resx">
+      <DependentUpon>MergeDialog.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 和 x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <FileAssociation Include=".img">
+      <Visible>False</Visible>
+      <Description>DNF Neople Img File</Description>
+      <Progid>100111</Progid>
+      <DefaultIcon>aww.ico</DefaultIcon>
+    </FileAssociation>
+    <FileAssociation Include=".NPK">
+      <Visible>False</Visible>
+      <Description>DNF Neople Pack</Description>
+      <Progid>100111</Progid>
+      <DefaultIcon>aww.ico</DefaultIcon>
+    </FileAssociation>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ExtractorSharp.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Back.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\aww.ico" />
+    <Content Include="aww.ico" />
+    <None Include="Resources\Shell.exe" />
+    <None Include="Resources\pencil.png" />
+    <None Include="Resources\pause.png" />
+    <None Include="Resources\run.png" />
+    <None Include="Resources\record.png" />
+    <None Include="Resources\delete.png" />
+    <None Include="Resources\config.json" />
+    <None Include="Resources\version.json" />
+    <None Include="Resources\view.json" />
+    <None Include="Resources\weapon.json" />
+    <None Include="Resources\UpdateLog.txt" />
+    <None Include="Resources\button.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="stdole">
+      <Guid>{00020430-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Debug\conf\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ExtractorSharp.Loose\ExtractorSharp.Loose.csproj">
+      <Project>{06d35140-706a-40ce-9373-6b948f092a30}</Project>
+      <Name>ExtractorSharp.Loose</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties Resources_4alias_3weapon_1json__JSONSchema="http://json.schemastore.org/config" Resources_4queues_1json__JSONSchema="http://json.schemastore.org/config" />
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
