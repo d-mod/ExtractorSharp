@@ -31,8 +31,9 @@ namespace ExtractorSharp.Config {
         /// </summary>
         public int Integer {
             get {
-                if (Object is int i)
+                if (Object is int i) {
                     return i;
+                }
                 int.TryParse(Value, out int rs);
                 return rs;
             }
@@ -54,8 +55,9 @@ namespace ExtractorSharp.Config {
         /// </summary>
         public bool Boolean {
             get {
-                if (Object is bool bl)
+                if (Object is bool bl) {
                     return bl;
+                }
                 bool.TryParse(Value, out bool rs);
                 return rs;
             }
@@ -65,8 +67,9 @@ namespace ExtractorSharp.Config {
         /// </summary>
         public DateTime DateTime {
             get {
-                if (Object is DateTime time)
+                if (Object is DateTime time) {
                     return time;
+                }
                 DateTime.TryParse(Value, out DateTime rs);
                 return rs;
             }
@@ -100,8 +103,9 @@ namespace ExtractorSharp.Config {
 
         public Point Location {
             get {
-                if (Object is Point point)
+                if (Object is Point point) {
                     return point;
+                }
                 if (Value.Contains(",")) {
                     var arr = Value.Split(",");
                     var x = int.Parse(arr[0]);
@@ -114,8 +118,9 @@ namespace ExtractorSharp.Config {
 
         public Size Size {
             get {
-                if (Object is Size size)
+                if (Object is Size size) {
                     return size;
+                }
                 if (Value.Contains(",")) {
                     var arr = Value.Split(",");
                     var width = int.Parse(arr[0]);
@@ -129,8 +134,9 @@ namespace ExtractorSharp.Config {
 
         public Image Image {
             get {
-                if (Object is Image image)
+                if (Object is Image image) {
                     return image;
+                }
                 if (Value != null && Value.Length > 0) {
                     if (File.Exists(Value))
                         return Image.FromFile(Value);

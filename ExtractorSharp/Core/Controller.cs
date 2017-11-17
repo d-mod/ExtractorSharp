@@ -94,7 +94,7 @@ namespace ExtractorSharp.Core{
         /// <summary>
         /// 正在录制宏
         /// </summary>
-        public bool IsRecord;
+        public bool IsRecord { private set; get; }
 
 
         public List<Album> List { set; get; }
@@ -473,8 +473,9 @@ namespace ExtractorSharp.Core{
         private void ChangeSave() {
             ImageFlush();
             isSave = false;
-            if (Config["AutoSave"].Boolean)
+            if (Config["AutoSave"].Boolean) {
                 SaveFile();
+            }
         }
 
         public void SelectPath() {
@@ -514,8 +515,8 @@ namespace ExtractorSharp.Core{
             }
         }
 
-        public void AddAlbum(bool Clear,int index,params Album[] array) {
-            if (Clear) {//当clear为true时，清空原列表
+        public void AddAlbum(bool clear,int index,params Album[] array) {
+            if (clear) {//当clear为true时，清空原列表
                 Main.albumList.Clear();
                 List.Clear();
                 Main.Path = string.Empty;
@@ -529,7 +530,7 @@ namespace ExtractorSharp.Core{
                 List.InsertRange(index,array);
                 AlbumList.Items.InsertRange(index,array);
             }
-            isSave = Clear;
+            isSave = clear;
             ImageFlush();
             GC.Collect();
         }
@@ -538,8 +539,8 @@ namespace ExtractorSharp.Core{
             AddAlbum(clear, array.Length, array);
         }
 
-        public void RemoveAlbum(params Album[] Array) {
-            foreach (var album in Array) {
+        public void RemoveAlbum(params Album[] array) {
+            foreach (var album in array) {
                 List.Remove(album);
                 AlbumList.Items.Remove(album);
             }
