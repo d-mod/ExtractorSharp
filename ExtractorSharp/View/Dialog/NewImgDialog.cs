@@ -4,6 +4,7 @@ using ExtractorSharp.Command;
 using ExtractorSharp.UI;
 using ExtractorSharp.View;
 using ExtractorSharp.Core;
+using ExtractorSharp.Data;
 
 namespace ExtractorSharp {
     public partial class NewImgDialog : EaseDialog {
