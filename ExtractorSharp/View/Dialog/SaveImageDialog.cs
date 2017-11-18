@@ -26,8 +26,9 @@ namespace ExtractorSharp.View {
             allPathCheck.Checked = Config["SaveImageAllPath"].Boolean;
             Album = args[0] as Album;
             Indexes = args[1] as int[];
-            if (Config["SaveImageTip"].Boolean) 
+            if (Config["SaveImageTip"].Boolean) {
                 return ShowDialog();
+            }
             Controller.Do("saveImage", Album, 1, Indexes, pathBox.Text);
             return DialogResult.None;
         }
@@ -43,8 +44,9 @@ namespace ExtractorSharp.View {
 
         public void LoadPath(object sender, EventArgs e) {
             var dialog = new FolderBrowserDialog();
-            if (dialog.ShowDialog() == DialogResult.OK) 
-                pathBox.Text = dialog.SelectedPath;          
+            if (dialog.ShowDialog() == DialogResult.OK) {
+                pathBox.Text = dialog.SelectedPath;
+            }   
         }
 
 

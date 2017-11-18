@@ -19,13 +19,11 @@ namespace ExtractorSharp.View {
         
         public void Replace(object sender, EventArgs e) {
             var array = new ImageEntity[0];
-            if (seletImageRadio.Checked)
-                array = Controller.CheckedImage;
-            else
-                array = Controller.AllImage;
+            array = seletImageRadio.Checked ? Controller.CheckedImage : Controller.AllImage;
             var indexes = new int[array.Length];
-            for(var i=0;i<array.Length;i++) 
+            for (var i = 0; i < array.Length; i++) {
                 indexes[i] = array[i].Index;
+            }
             var type = ColorBits.ARGB_1555;
             if (_4444_Radio.Checked)
                 type = ColorBits.ARGB_4444;
@@ -36,18 +34,21 @@ namespace ExtractorSharp.View {
             if (array.Length == 1) {
                 var dialog = new OpenFileDialog();
                 dialog.Filter = "图片|*.jpg;*.png;*.bmp";
-                if (dialog.ShowDialog() == DialogResult.OK)
-                    path = dialog.FileName;      
+                if (dialog.ShowDialog() == DialogResult.OK) { 
+                    path = dialog.FileName;
+                }
             } else if (fromGifBox.Checked) {
                 var dialog = new OpenFileDialog();
                 dialog.Filter = "gif动态图片|*.gif";
-                if (dialog.ShowDialog() == DialogResult.OK)
+                if (dialog.ShowDialog() == DialogResult.OK) {
                     path = dialog.FileName;
+                }
                 mode = 1;   
             } else {
                 var dialog = new FolderBrowserDialog();
-                if (dialog.ShowDialog() == DialogResult.OK) 
-                    path = dialog.SelectedPath;                
+                if (dialog.ShowDialog() == DialogResult.OK) {
+                    path = dialog.SelectedPath;
+                } 
                 mode = 2;
             }
             if (!path.Equals(string.Empty)) {

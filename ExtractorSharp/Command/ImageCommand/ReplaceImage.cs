@@ -21,8 +21,6 @@ namespace ExtractorSharp.Command.ImageCommand {
             Path = args[3] as string;
             Album = args[4] as Album;
             Indexes = args[5] as int[];
-            Path = Path.Replace(Album.Name, "");
-            Path = Path.Replace("\\", "/");
             switch (Mode) {
                 case 0:
                     if (Album.List.Count > 0) {
@@ -68,6 +66,7 @@ namespace ExtractorSharp.Command.ImageCommand {
 
         public Bitmap[] GetImages(Album Album,int count) {
             var dir = Path;
+            dir=dir.Replace(@"\","/");
             dir = dir.Complete("/" + Album.Path);//补全img路径
             if (!Directory.Exists(dir)) {//当不存在和img路径匹配的文件夹时。直接使用路径
                 dir = Path + "/" + Album.Name;

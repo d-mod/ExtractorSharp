@@ -1152,11 +1152,13 @@ namespace ExtractorSharp {
         /// <param name="e"></param>
         private void SaveGif(object sender, EventArgs e) {
             var array = Controller.CheckedImage;
-            if (array.Length < 1)
+            if (array.Length < 1) {
                 return;
+            }
             var dialog = new SaveFileDialog();
             var name = Controller.SelectAlbum.Name.RemoveSuffix(".");
             dialog.Filter = "gif动态图片|*.gif";
+            dialog.FileName = name;
             if (dialog.ShowDialog() == DialogResult.OK) {
                 Tools.SaveGif(dialog.FileName,array);
                 Messager.ShowOperate("SaveGif");

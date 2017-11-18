@@ -101,6 +101,7 @@
             this.cancelButton.TabIndex = 9;
             this.cancelButton.Text = Language["Cancel"];
             this.cancelButton.UseVisualStyleBackColor = true;
+            this.CancelButton = cancelButton;
             // 
             // NewImgDialog
             // 

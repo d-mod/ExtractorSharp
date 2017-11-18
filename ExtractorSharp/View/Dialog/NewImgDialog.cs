@@ -16,7 +16,7 @@ namespace ExtractorSharp {
             indexBox.KeyDown += EnterDownRun;
             countBox.KeyDown += EnterDownRun;
             yesButton.Click += NewImg;
-            cancelButton.Click += Cancel;
+
         }
 
         /// <summary>
@@ -25,8 +25,9 @@ namespace ExtractorSharp {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void EnterDownRun(object sender, KeyEventArgs e) {
-            if (e.KeyCode == Keys.Enter)
+            if (e.KeyCode == Keys.Enter) {
                 NewImg(sender, e);
+            }
         }
 
         public override DialogResult Show(params object[] args) {
@@ -35,10 +36,7 @@ namespace ExtractorSharp {
             indexBox.Value = count;
             return ShowDialog();
         }
-
-        public void Cancel(object sender,EventArgs e) {
-            Visible = false;
-        }
+        
         /// <summary>
         /// 新建一个img
         /// </summary>
