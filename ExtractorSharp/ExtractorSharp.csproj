@@ -597,6 +597,12 @@
     <None Include="Resources\Back.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bass.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="FreeImage.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Resources\aww.ico" />
     <Content Include="aww.ico" />
     <None Include="Resources\Shell.exe" />
@@ -635,7 +641,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Resources_4alias_3weapon_1json__JSONSchema="http://json.schemastore.org/config" Resources_4queues_1json__JSONSchema="http://json.schemastore.org/config" />
+      <UserProperties Resources_4queues_1json__JSONSchema="http://json.schemastore.org/config" Resources_4alias_3weapon_1json__JSONSchema="http://json.schemastore.org/config" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
