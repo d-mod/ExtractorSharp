@@ -38,28 +38,28 @@ namespace ExtractorSharp.Lib {
         }
 
 
-        [DllImport("FreeImage.dll", EntryPoint = "_FreeImage_Initialise@4")]
+        [DllImport("FreeImage.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "_FreeImage_Initialise@4")]
         private static extern void Init();
 
-        [DllImport("FreeImage.dll", EntryPoint = "_FreeImage_DeInitialise@0")]
+        [DllImport("FreeImage.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "_FreeImage_DeInitialise@0")]
         private static extern void Close();
 
-        [DllImport("FreeImage.dll", EntryPoint = "_FreeImage_OpenMemory@8")]
+        [DllImport("FreeImage.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "_FreeImage_OpenMemory@8")]
         private static extern IntPtr OpenMemory(byte[] data, int size);
 
-        [DllImport("FreeImage.dll", EntryPoint = "_FreeImage_LoadFromMemory@12")]
+        [DllImport("FreeImage.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "_FreeImage_LoadFromMemory@12")]
         private static extern IntPtr LoadMemory(int format, IntPtr memory, int dib);
 
-        [DllImport("FreeImage.dll", EntryPoint = "_FreeImage_GetBits@4")]
+        [DllImport("FreeImage.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "_FreeImage_GetBits@4")]
         private static extern IntPtr GetBits(IntPtr handle);
 
-        [DllImport("FreeImage.dll", EntryPoint = "_FreeImage_ZLibCompress@16")]
+        [DllImport("FreeImage.dll", CallingConvention =CallingConvention.Cdecl,EntryPoint = "_FreeImage_ZLibCompress@16")]
         private static extern int Compress([In, Out]byte[] dest,ref long destLen, byte[] source, long sourceLen);
 
-        [DllImport("FreeImage.dll", EntryPoint = "_FreeImage_ZLibUncompress@16")]
+        [DllImport("FreeImage.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "_FreeImage_ZLibUncompress@16")]
         private static extern int Uncompress([In, Out]byte[] dest,ref long destLen, byte[] source, long sourceLen);
 
-        [DllImport("FreeImage.dll", EntryPoint = "_FreeImage_GetFileTypeFromMemory@8")]
+        [DllImport("FreeImage.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "_FreeImage_GetFileTypeFromMemory@8")]
         private static extern int GetFormat(IntPtr memory,int dib);
 
         public static Bitmap Load(byte[] data, Size size) {

@@ -18,27 +18,12 @@
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <PublishUrl>ftp://hyu2719160001.my3w.com/htdocs/extractorsharp/</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Web</InstallFrom>
-    <UpdateEnabled>true</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>10</UpdateInterval>
-    <UpdateIntervalUnits>Hours</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>true</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>http://kritsu.net/extractorsharp/</InstallUrl>
-    <ProductName>DNF Extractor Sharp</ProductName>
-    <PublisherName>Kritsu</PublisherName>
-    <MinimumRequiredVersion>1.2.0.0</MinimumRequiredVersion>
+    <SonarQubeExclude>True</SonarQubeExclude>
+    <SonarQubeTestProject />
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.2.0.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <SonarQubeExclude>True</SonarQubeExclude>
-    <SonarQubeTestProject />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -103,9 +88,6 @@
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="SevenZipSharp">
-      <HintPath>..\SevenZipSharp.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
@@ -577,20 +559,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <FileAssociation Include=".img">
-      <Visible>False</Visible>
-      <Description>DNF Neople Img File</Description>
-      <Progid>100111</Progid>
-      <DefaultIcon>aww.ico</DefaultIcon>
-    </FileAssociation>
-    <FileAssociation Include=".NPK">
-      <Visible>False</Visible>
-      <Description>DNF Neople Pack</Description>
-      <Progid>100111</Progid>
-      <DefaultIcon>aww.ico</DefaultIcon>
-    </FileAssociation>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\ExtractorSharp.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -641,7 +609,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Resources_4queues_1json__JSONSchema="http://json.schemastore.org/config" Resources_4alias_3weapon_1json__JSONSchema="http://json.schemastore.org/config" />
+      <UserProperties Resources_4alias_3weapon_1json__JSONSchema="http://json.schemastore.org/config" Resources_4queues_1json__JSONSchema="http://json.schemastore.org/config" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

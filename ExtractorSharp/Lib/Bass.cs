@@ -14,14 +14,14 @@ namespace ExtractorSharp.Lib {
         /// 初始化
         /// </summary>
         /// <returns></returns>
-        [DllImport("bass.dll", EntryPoint = "BASS_Init")]
+        [DllImport("bass.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "BASS_Init")]
         public static extern bool Init(int device, int freq, int flags, int win, int clsid);
 
         /// <summary>
         /// 创建句柄
         /// </summary>
         /// <returns></returns>
-        [DllImport("bass.dll", EntryPoint = "BASS_StreamCreateFile")]
+        [DllImport("bass.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "BASS_StreamCreateFile")]
         public static extern int CreateFromMemory(bool mem, byte[] file, long offset, long length, int flags);
 
         /// <summary>
@@ -29,13 +29,13 @@ namespace ExtractorSharp.Lib {
         /// </summary>
         /// <param name="handle"></param>
         /// <returns></returns>
-        [DllImport("bass.dll", EntryPoint = "BASS_StreamFree")]
+        [DllImport("bass.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "BASS_StreamFree")]
         public static extern bool Close(int handle);
         /// <summary>
         /// 关闭Bass
         /// </summary>
         /// <returns></returns>
-        [DllImport("bass.dll", EntryPoint = "BASS_Free")]
+        [DllImport("bass.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "BASS_Free")]
         public static extern bool Close();
 
         /// <summary>
