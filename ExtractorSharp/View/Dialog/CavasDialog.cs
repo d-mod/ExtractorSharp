@@ -18,7 +18,7 @@ namespace ExtractorSharp.View {
 
         public void Run(object sender, EventArgs e) {
             Program.Controller.Do("cavasImage", Album, CavasSize, Indexes);
-            Visible = false;
+            DialogResult = DialogResult.OK;
         }
 
 

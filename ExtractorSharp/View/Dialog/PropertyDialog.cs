@@ -72,7 +72,7 @@ namespace ExtractorSharp.View {
             Config["LCID"] = new ConfigValue((languageBox.SelectedItem as Language)?.LCID);
             Config["SaveImageAllPath"] = new ConfigValue(saveImageAllPathCheck.Checked);
             Config.Save();
-            Visible = false;
+            DialogResult = DialogResult.OK;
             Controller.CavasFlush();
         }
 

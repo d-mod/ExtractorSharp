@@ -17,7 +17,6 @@ namespace ExtractorSharp.Bat {
 
         public void Run(object sender,EventArgs e) {
             DialogResult = DialogResult.OK;
-            Visible = false;
         }
 
 

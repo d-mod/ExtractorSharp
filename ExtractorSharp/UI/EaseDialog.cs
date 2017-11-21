@@ -44,7 +44,6 @@ namespace ExtractorSharp.UI {
         }
 
         protected virtual void OnEscape() {
-            Visible = false;
             DialogResult = DialogResult.Cancel;
         }
        

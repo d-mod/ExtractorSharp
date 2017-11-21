@@ -42,7 +42,7 @@ namespace ExtractorSharp.Lib {
         /// 停止播放
         /// </summary>
         /// <returns></returns>
-        [DllImport("bass.dll", EntryPoint = "BASS_Stop")]
+        [DllImport("bass.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "BASS_Stop")]
         public static extern bool Stop();
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace ExtractorSharp.Lib {
         /// </summary>
         /// <param name="restart">是否重新播放</param>
         /// <returns></returns>
-        [DllImport("bass.dll", EntryPoint = "BASS_ChannelPlay")]
+        [DllImport("bass.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "BASS_ChannelPlay")]
         public static extern bool Play(int handle, bool restart);
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace ExtractorSharp.Lib {
         /// </summary>
         /// <param name="handle"></param>
         /// <returns></returns>
-        [DllImport("bass.dll", EntryPoint = "BASS_ChannelPause")]
+        [DllImport("bass.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "BASS_ChannelPause")]
         public static extern bool Pause(int handle);
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace ExtractorSharp.Lib {
         /// </summary>
         /// <param name="handle"></param>
         /// <returns></returns>
-        [DllImport("bass.dll", EntryPoint = "BASS_ChannelStop")]
+        [DllImport("bass.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "BASS_ChannelStop")]
         public static extern bool Stop(int handle);
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace ExtractorSharp.Lib {
         /// </summary>
         /// <param name="handle"></param>
         /// <returns></returns>
-        [DllImport("bass.dll", EntryPoint = "BASS_ChannelGetPosition")]
+        [DllImport("bass.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "BASS_ChannelGetPosition")]
         public static extern int GetPosition(int handle);
 
 
@@ -83,7 +83,7 @@ namespace ExtractorSharp.Lib {
         /// </summary>
         /// <param name="handle"></param>
         /// <returns></returns>
-        [DllImport("bass.dll", EntryPoint = "BASS_ChannelSetPosition")]
+        [DllImport("bass.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "BASS_ChannelSetPosition")]
         public static extern int SetPosition(int handle);
 
 
@@ -92,10 +92,10 @@ namespace ExtractorSharp.Lib {
         /// </summary>
         /// <param name="handle"></param>
         /// <returns></returns>
-        [DllImport("bass.dll", EntryPoint = "BASS_ChannelGetLength")]
+        [DllImport("bass.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "BASS_ChannelGetLength")]
         public static extern int GetLength(int handle,int mode);
 
-        [DllImport("bass.dll",EntryPoint = "BASS_ChannelBytes2Seconds")]
+        [DllImport("bass.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "BASS_ChannelBytes2Seconds")]
         public static extern int GetTime(int handle,int position);
 
         /// <summary>

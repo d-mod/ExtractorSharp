@@ -34,11 +34,11 @@ namespace ExtractorSharp.View {
         }
 
         private void MergeCompleted(object sender, MergeEventArgs e) {
-            prograss.Visible = false;
+            Program.Controller.Do("replaceImg", Album, e.Album);
             spliceButton.Enabled = true;
             sortButton.Enabled = true;
-            Visible = false;
-            Program.Controller.Do("replaceImg", Album, e.Album);
+            prograss.Visible = false;
+            DialogResult = DialogResult.OK;
         }
 
         private void MergeProcessing(object sender, MergeEventArgs e) => prograss.Value++;
@@ -46,8 +46,8 @@ namespace ExtractorSharp.View {
         private void MergeStart(object sender, MergeEventArgs e) {
             spliceButton.Enabled = false;
             sortButton.Enabled = false;
+            prograss.Show();
             prograss.Value = 0;
-            prograss.Visible = true;
             prograss.Maximum = e.Count;
         }
 
@@ -116,8 +116,9 @@ namespace ExtractorSharp.View {
             var source = list.SelectedIndex;
             var target = list.IndexFromPoint(PointToClient(new Point(e.X, e.Y))) - 1;
             Merger.InterChange(source, target);
-            if (target > -1)
+            if (target > -1) {
                 list.SelectedIndex = target;
+            }
         }
 
         public void Remove(object sender, EventArgs e) {
@@ -139,8 +140,9 @@ namespace ExtractorSharp.View {
                     Album = new Album();
                     Controller.Do("newImg", Album, albumList.Text);
                 }
-            } else
-                Album = albumList.SelectedItem as Album;   
+            } else {
+                Album = albumList.SelectedItem as Album;
+            }
             Controller.Do("runSplice");      
 
         }

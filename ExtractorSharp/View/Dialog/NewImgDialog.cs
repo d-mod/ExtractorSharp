@@ -53,7 +53,7 @@ namespace ExtractorSharp {
             var album = new Album();
             Controller.Do("newImg",album, path, count, index);
             pathBox.Text = pathBox.Text.Replace(path.GetName(), "");
-            Visible = false;
+            DialogResult = DialogResult.OK;
         }
 
     }

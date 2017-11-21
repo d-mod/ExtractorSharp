@@ -38,7 +38,7 @@ namespace ExtractorSharp.Lib {
         }
 
 
-        [DllImport("FreeImage.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "_FreeImage_Initialise@4")]
+        [DllImport("FreeImage.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "_FreeImage_Initialise@4")]
         private static extern void Init();
 
         [DllImport("FreeImage.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "_FreeImage_DeInitialise@0")]

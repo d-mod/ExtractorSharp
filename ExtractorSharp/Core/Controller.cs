@@ -360,7 +360,7 @@ namespace ExtractorSharp.Core{
                     Current = cmd;
                 }
             } else
-                Messager.ShowMessage(Msg_Type.Error, "不存在的命令" + key);
+                Messager.ShowMessage(Msg_Type.Error, $"不存在的命令[{key}]");
         }
 
         /// <summary>
@@ -372,8 +372,9 @@ namespace ExtractorSharp.Core{
                 cmd.Undo();
                 redoStack.Push(cmd);
                 OnComandUndid(cmdArgs);
-                if (cmd.Changed)
+                if (cmd.Changed) {
                     SaveChanged?.Invoke();
+                }
             }
         }
 
@@ -508,10 +509,14 @@ namespace ExtractorSharp.Core{
         /// </summary>
         /// <param name="paths"></param>
         public void AddAlbum(bool clear, params string[] args) {
-            if (Main.Path.Length == 0) 
-                Main.Path=args.Find(item =>item.ToUpper().EndsWith(".NPK") )??string.Empty;
+            if (clear) {
+                Main.Path = string.Empty;
+            }
+            if (Main.Path.Length == 0) {
+                Main.Path = args.Find(item => item.ToUpper().EndsWith(".NPK"))?? string.Empty;
+            }
             if (args.Length > 0) {
-                Do("addImg", Tools.Load(args).ToArray(),clear);
+                Do("addImg", Tools.Load(args).ToArray(), clear);
             }
         }
 
@@ -519,9 +524,9 @@ namespace ExtractorSharp.Core{
             if (clear) {//当clear为true时，清空原列表
                 Main.albumList.Clear();
                 List.Clear();
-                Main.Path = string.Empty;
                 index = 0;
-            }         
+            }
+
             if (array.Length > 0) {
                 if (Main.albumList.Items.Count > 0)
                     Main.albumList.SelectedIndex = Main.albumList.Items.Count - 1;

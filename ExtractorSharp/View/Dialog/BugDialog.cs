@@ -36,7 +36,7 @@ namespace ExtractorSharp.View {
                 error = this.error;
             }
             Program.UploadBug(box.Text, textBox2.Text, error);
-            Visible = false;
+            DialogResult = DialogResult.OK;
         }
         
     }

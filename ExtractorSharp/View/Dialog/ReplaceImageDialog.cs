@@ -53,12 +53,12 @@ namespace ExtractorSharp.View {
             }
             if (!path.Equals(string.Empty)) {
                 Controller.Do("replaceImage", type, adjustPostionBox.Checked, mode, path, Controller.SelectAlbum,indexes);
-                Visible = false;
+                DialogResult = DialogResult.OK;
             }
         }
 
         public void Cancel(object sender,EventArgs e) {
-            Visible = false;
+            DialogResult = DialogResult.OK;
         }
         
     }

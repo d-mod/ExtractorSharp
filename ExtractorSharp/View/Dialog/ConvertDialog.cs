@@ -49,7 +49,7 @@ namespace ExtractorSharp.View {
             Controller.isSave = false;
             progress.Visible = false;
             GC.Collect();
-            Visible = false;
+            DialogResult = DialogResult.OK;
         }
         
     }

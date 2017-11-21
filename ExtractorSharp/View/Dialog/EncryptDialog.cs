@@ -42,7 +42,7 @@ namespace ExtractorSharp.View{
             var CanExtract = canExtractCheck.Checked;
             Work.CreateNewWork(Name, AuthorName, Key, Remark, Update, Expire, CanExtract, CanRead, array);
             Controller.ImageFlush();
-            Visible = false;
+            DialogResult = DialogResult.OK;
         }
 
         public override DialogResult Show(params object[] args) {

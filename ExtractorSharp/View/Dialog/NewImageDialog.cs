@@ -39,7 +39,7 @@ namespace ExtractorSharp.View {
                 type = ColorBits.ARGB_8888;
             var index = (int)index_box.Value;
             Controller.Do("newImage", Album, count, type, index);
-            Visible = false;
+            DialogResult = DialogResult.OK;
         }
 
     }

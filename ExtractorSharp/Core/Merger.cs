@@ -125,8 +125,9 @@ namespace ExtractorSharp.Core {
                 if (al.Version > version)//获得最高文件版本
                     version = al.Version;
             }
-            var Album = new Album();
-            Album.Version = version;
+            var Album = new Album{
+                Version = version
+            };
             Album.InitHandle(null);
             Album.Tables = new List<List<Color>>();
             e.Count = count;
@@ -180,8 +181,9 @@ namespace ExtractorSharp.Core {
                     foreach (var al in Array) {
                         if (i < al.List.Count) {
                             var source = al.List[i];
-                            if (source.Type == ColorBits.LINK)
+                            if (source.Type == ColorBits.LINK) {
                                 source = source.Target;
+                            }
                             g.DrawImage(source.Picture, source.X - x, source.Y - y);//绘制贴图
                         }
                     }

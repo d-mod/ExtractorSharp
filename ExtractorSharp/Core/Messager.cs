@@ -89,7 +89,7 @@ namespace ExtractorSharp.Core{
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void Exit(object sender, EventArgs e) => Visible = false;
+        public void Exit(object sender, EventArgs e) => Hide();
         
     }
 }

@@ -39,7 +39,7 @@ namespace ExtractorSharp.View {
             Config["SaveImageAllPath"] = new ConfigValue(allPathCheck.Checked);
             Config.Save();
             Controller.Do("saveImage", Album, 1, Indexes, pathBox.Text);
-            Visible = false;
+            DialogResult = DialogResult.OK;
         }
 
         public void LoadPath(object sender, EventArgs e) {
