@@ -1333,7 +1333,7 @@ namespace ExtractorSharp {
                 var data = new byte[entity.Length];
                 stream.Read(data);
                 if (entity.Compress != Compress.NONE) {
-                    var length = entity.Width * entity.Height * 4L;
+                    var length = entity.Width * entity.Height * 4;
                     data = FreeImage.Uncompress(data, length);
                 }
                 entity.Picture = FromArray(data, entity.Size);

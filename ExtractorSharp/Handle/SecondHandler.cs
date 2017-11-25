@@ -13,7 +13,7 @@ namespace ExtractorSharp.Handle {
         public override Bitmap ConvertToBitmap(ImageEntity entity) {
             var data = entity.Data;
             var type = entity.Type;
-            long size = entity.Width * entity.Height * (type == ColorBits.ARGB_8888 ? 4 : 2);
+            var size = entity.Width * entity.Height * (type == ColorBits.ARGB_8888 ? 4 : 2);
             if (entity.Compress == Compress.ZLIB) {
                 data = FreeImage.Uncompress(data, size);
             }

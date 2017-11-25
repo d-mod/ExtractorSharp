@@ -97,7 +97,10 @@ namespace ExtractorSharp {
 
         private static void OnShown(object sender, EventArgs e) {
             if (!Config["Initialized"].Boolean) {
+#if DEBUG
+#else
                 Initialize();
+#endif
             }
             if (showVersion) Viewer.Show("version", true);
             if (Arguments.Length == 1) {

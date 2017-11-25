@@ -16,7 +16,7 @@ namespace ExtractorSharp.Handle {
 
         public override Bitmap ConvertToBitmap(ImageEntity entity) {
             var data = entity.Data;
-            long size = entity.Width * entity.Height;
+            var size = entity.Width * entity.Height;
             if (entity.Compress != Compress.ZLIB) {
                 return base.ConvertToBitmap(entity);
             }
