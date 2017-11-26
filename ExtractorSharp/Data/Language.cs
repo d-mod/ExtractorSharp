@@ -25,8 +25,9 @@ namespace ExtractorSharp.Data {
         /// <returns></returns>
         public string this[string key] {
             get {
-             if (Dictionary.ContainsKey(key))
+                if (Dictionary.ContainsKey(key)) {
                     return Dictionary[key];
+                }
                 return key;
             }
             private set {
@@ -59,9 +60,11 @@ namespace ExtractorSharp.Data {
             lan.Name = root.GetAttribute("Name");
             int.TryParse(root.GetAttribute("LCID"), out int lcid);//LCID,表示地区标识符
             lan.LCID = lcid;
-            foreach (XmlNode item in list)
-                if (item.NodeType != XmlNodeType.Comment)//过滤注释
+            foreach (XmlNode item in list) {
+                if (item.NodeType != XmlNodeType.Comment) {//过滤注释
                     lan[item.Name] = item.InnerText;//根据标签名和标签内容得到key-value对
+                }
+            }
             return lan;
         }
 

@@ -2,27 +2,26 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using ExtractorSharp.Data;
 using ExtractorSharp.Loose;
 using ExtractorSharp.Properties;
 
 namespace ExtractorSharp.Service {
     public class FitRoomService {
-        private List<string> profession_list { get; set; }
+        private List<string> ProfessionList { get; set; }
+        private string Profession => ProfessionList[Index];
         private Dictionary<string, WeaponInfo> weapon_info;
         private Dictionary<string, string> replace_dic;
         private Dictionary<string, string> alias_list;
-        private string[] parts = { "hair", "cap", "face", "neck", "coat", "skin", "belt", "pants", "shoes" };
-        private int index { set; get; }
+        private readonly string[] parts = { "hair", "cap", "face", "neck", "coat", "skin", "belt", "pants", "shoes" };
+        private int Index { set; get; }
         public bool Mask { get; set; }
         public bool Ban { get; set; }
         public Album[] Array { get; set; }
-        private  string url = Program.Config["ApiUrl"].Value;
+        private readonly string RESOUCES_URL = Program.Config["ResourceUrl"].Value;
+        private readonly string API_URL = Program.Config["ApiUrl"].Value;
 
 
         public string[] Init() {
@@ -31,12 +30,12 @@ namespace ExtractorSharp.Service {
             var obj = builder.ReadJson(Resources.Weapon);
             weapon_info = new Dictionary<string, WeaponInfo>();
             obj.GetValue(ref weapon_info);
-            profession_list = new List<string>();
+            ProfessionList = new List<string>();
             foreach (var entry in weapon_info) {
                 var info = entry.Value;
-                profession_list.Add(entry.Key);
+                ProfessionList.Add(entry.Key);
                 if (info.HasAt) {
-                    profession_list.Add(entry.Key + "_at");
+                    ProfessionList.Add(entry.Key + "_at");
                 }
                 if (info.Alias != null) {
                     foreach (var en in info.Alias) {
@@ -47,17 +46,17 @@ namespace ExtractorSharp.Service {
                 info.Weapon.AddRange(info.Alias.Keys);
             }
             alias_list = new Dictionary<string, string>();
-            var array = new string[profession_list.Count];
+            var array = new string[ProfessionList.Count];
             obj = builder.ReadJson(Resources.Alias_Weapon);
             obj.GetValue(ref alias_list);
             for (var i = 0; i < array.Length; i++) {
-                array[i] = alias_list[profession_list[i]];
+                array[i] = alias_list[ProfessionList[i]];
             }
             return array;
         }
 
         public int SelectProfessionByName(string name) {
-            return profession_list.FindIndex(item => item.Equals(name));
+            return ProfessionList.FindIndex(item => item.Equals(name));
         }
 
         public string[] GetParts() {
@@ -69,8 +68,8 @@ namespace ExtractorSharp.Service {
         }
 
         public string[] GetWeapon(int index) {
-            this.index = index;
-            var profession = profession_list[index];
+            this.Index = index;
+            var profession = ProfessionList[index];
             profession = profession.Replace("_at", "");
             var array = weapon_info[profession].Weapon.ToArray();
             for (var i = 0; i < array.Length; i++) {
@@ -82,22 +81,25 @@ namespace ExtractorSharp.Service {
         public void ExtractImg(int[] values, int weaponValue, int wepaonIndex) {
             var list = new List<Album>();
             for (var i = 0; i < parts.Length; i++) {
-                var item = FindImg(profession_list[index], parts[i], values[i]);
+                var item = FindImg(ProfessionList[Index], parts[i], values[i]);
                 list.AddRange(item);
             }
             Array = list.ToArray();
         }
 
         private IEnumerable<Album> FindImg(string profession, string part, int code) {
-            if (code == -1)
+            if (code == -1) {
                 return new List<Album>();
+            }
             profession = profession.Contains("_at") ? profession : profession + "_";
             var name = part;
-            if (replace_dic.ContainsKey(name))
+            if (replace_dic.ContainsKey(name)) {
                 name = replace_dic[name];
+            }
             string path = $"{ Program.ResourcePath }sprite_character_{ profession }equipment_avatar_{ name }.NPK";
-            if (!File.Exists(path))
+            if (!File.Exists(path)) {
                 return new List<Album>();
+            }
             var list = Tools.Load(path);
             list = new List<Album>(Tools.Find(list, code.Completed()));   //检索
             part = part.Equals("skin") ? "body" : part;
@@ -132,13 +134,12 @@ namespace ExtractorSharp.Service {
         /// <param name="values"></param>
         /// <returns></returns>
         internal List<TempImage> LoadImage(int[] values) {
-            var builder = new LSBuilder();
             var list = new List<TempImage>();
             for (var i = 0; i < parts.Length; i++) {
                 if (values[i] == -1)
                     continue;
                 var value = values[i].Completed();
-                var temp = GetTempImage(profession_list[index], parts[i], value);
+                var temp = GetTempImage(parts[i], value);
                 list.AddRange(temp);
             }
             list.Sort((left, right) => left.Index - right.Index);
@@ -152,9 +153,8 @@ namespace ExtractorSharp.Service {
         /// <param name="part"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        private TempImage[] GetTempImage(string profession, string part, string value){
-            var suffix = $"{profession_list[index]}/{part}/{value}.json";
-            var tempPath = "temp/" + suffix;
+        private TempImage[] GetTempImage(string part, string value){
+            var tempPath = $"temp/{ ProfessionList[Index]}/{part}/{value}.json";
             var builder = new LSBuilder();
             var dir = Path.GetDirectoryName(tempPath);
             if (File.Exists(tempPath)) {
@@ -174,13 +174,13 @@ namespace ExtractorSharp.Service {
                 Directory.CreateDirectory(dir);
             }
             using (var client = new WebClient()) {
-                var file = url + suffix;
+                var file = $"{API_URL}/image?profession={Profession}&part={part}&code={value}";
                 client.DownloadFile(file, tempPath);
                 var o = builder.Read(tempPath);
                 var arr = o.GetValue(typeof(TempImage[])) as TempImage[];
                 for (var i = 0; i < arr.Length; i++) {
-                    var path = dir + "/" + arr[i].Name;
-                    var uri = url + suffix.Replace(tempPath.GetName(), arr[i].Name);
+                    var path = $"{dir}/{arr[i].Name}";
+                    var uri = $"{RESOUCES_URL}/{Profession}/{part}/{arr[i].Name}";
                     client.DownloadFile(uri, path);
                     arr[i].Image = Image.FromFile(path);
                 }

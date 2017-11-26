@@ -12,6 +12,6 @@
 	SaveImageAllPath:false
   LayerMaximum: 20
   Initialized: false
-  AvatarUrl: "http://kritsu.net/avatar"
-  ApiUrl: "http://kritsu.net/avatar/image/avatar/"
+  ResourceUrl: "http://kritsu.net/avatar/image/avatar",
+  ApiUrl: "http://extractorsharp.kritsu.net/api/avatar"
 }

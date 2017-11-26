@@ -11,13 +11,15 @@ namespace ExtractorSharp.Loose {
         }
 
         public LSObject Read(string file) {
-            using (var fs = new FileStream(file, FileMode.Open))
+            using (var fs = new FileStream(file, FileMode.Open)) {
                 return Read(fs);
+            }
         }
 
         public LSObject Read(Stream stream) {
-            using (var sr = new StreamReader(stream))
+            using (var sr = new StreamReader(stream)) {
                 return ReadJson(sr.ReadToEnd());
+            }
         }
 
         public LSObject ReadJson(string source) {
@@ -45,15 +47,20 @@ namespace ExtractorSharp.Loose {
 
         private void AddXml(LSObject parent, XmlNode doc) {
             var obj = new LSObject();
-            if (doc.Attributes != null)
-                foreach (XmlAttribute attr in doc.Attributes)
+            if (doc.Attributes != null) {
+                foreach (XmlAttribute attr in doc.Attributes) {
                     obj.Add(attr.Name, attr.Value.Parse());
-            foreach (XmlNode node in doc.ChildNodes)
-                if (node.NodeType == XmlNodeType.Element)
+                }
+            }
+            foreach (XmlNode node in doc.ChildNodes) {
+                if (node.NodeType == XmlNodeType.Element) {
                     AddXml(obj, node);
+                }
+            }
             obj.Name = doc.Name;
-            if (obj.Count == 0)
+            if (obj.Count == 0) {
                 obj.Value = doc.InnerText.Trim().Parse();
+            }
             parent.Add(obj);
         }
 

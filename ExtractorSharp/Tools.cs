@@ -437,11 +437,12 @@ namespace ExtractorSharp {
         public static string ReadPath(this Stream stream) {
             var data = new byte[256];
             var i = 0;
-            for (; i < 256; i++) {
+            while (i < 256) {
                 data[i] = (byte)(stream.ReadByte() ^ Key[i]);
                 if (data[i] == 0) {
                     break;
                 }
+                i++;
             }
             stream.Seek(255 - i);//防止因加密导致的文件名读取错误
             return Encoding.Default.GetString(data).Replace("\0", "");
@@ -492,8 +493,9 @@ namespace ExtractorSharp {
         public static string ReadString(this Stream stream) {
             var ms = new MemoryStream();
             var j = 0;
-            while ((j = stream.ReadByte()) != 0 && stream.Position < stream.Length)
+            while ((j = stream.ReadByte()) != 0 && stream.Position < stream.Length) {
                 ms.WriteByte((byte)j);
+            }
             ms.Close();
             return Encoding.Default.GetString(ms.ToArray());
         }
@@ -684,8 +686,9 @@ namespace ExtractorSharp {
             var data = new byte[entity.Width * entity.Height * 4];
             for (var i = 0; i < data.Length; i += 4) {
                 var type = entity.Type;
-                if (entity.Version == Img_Version.Ver4 && type == ColorBits.ARGB_1555)
+                if (entity.Version == Img_Version.Ver4 && type == ColorBits.ARGB_1555) {
                     type = ColorBits.ARGB_8888;
+                }
                 var temp = stream.ReadColor(type);
                 temp.CopyTo(data, i);
             }

@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using ExtractorSharp.Data;
 using ExtractorSharp.EventArguments;
@@ -46,10 +40,12 @@ namespace ExtractorSharp.View.Pane {
             Album = e.Album;
             if (Album != null) {
                 combo.Items.Clear();
-                for(var i = 0; i < Album.Tables.Count; i++) {
+                for (var i = 0; i < Album.Tables.Count; i++) {
                     combo.Items.Add(Language["ColorChart"] + i);
                 }
-                combo.SelectedIndex = Album.TableIndex;
+                if (Album.TableIndex < Album.Tables.Count) {
+                    combo.SelectedIndex = Album.TableIndex;
+                }
             }
         }
 

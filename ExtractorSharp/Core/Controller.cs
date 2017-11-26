@@ -31,13 +31,13 @@ namespace ExtractorSharp.Core{
     public class Controller {
         private IConfig Config => Program.Config;
         internal MainForm Main;
-        private Stack<ICommand> undoStack;
-        private Stack<ICommand> redoStack;
+        private readonly Stack<ICommand> undoStack;
+        private readonly Stack<ICommand> redoStack;
         static Dictionary<string, Type> Dic;
 
         public delegate void CommandHandler(object o, CommandEventArgs e);
 
-        private CommandEventArgs cmdArgs;
+        private readonly CommandEventArgs cmdArgs;
 
         /// <summary>
         /// 操作执行事件
@@ -65,7 +65,7 @@ namespace ExtractorSharp.Core{
         private void OnCommandRedid(CommandEventArgs e) => CommandRedid?.Invoke(this, e);
 
         public delegate void ActionHandler(object o, ActionEventArgs e);
-        private ActionEventArgs actArgs;
+        private readonly ActionEventArgs actArgs;
 
         /// <summary>
         /// 动作记录
@@ -528,8 +528,9 @@ namespace ExtractorSharp.Core{
             }
 
             if (array.Length > 0) {
-                if (Main.albumList.Items.Count > 0)
+                if (Main.albumList.Items.Count > 0) {
                     Main.albumList.SelectedIndex = Main.albumList.Items.Count - 1;
+                }
                 index = index >List.Count ? List.Count  : index;
                 index = index < 0 ? 0 : index;
                 List.InsertRange(index,array);
@@ -537,7 +538,6 @@ namespace ExtractorSharp.Core{
             }
             isSave = clear;
             ImageFlush();
-            GC.Collect();
         }
 
         public void AddAlbum(bool clear, params Album[] array) {
