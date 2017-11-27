@@ -53,10 +53,12 @@ namespace ExtractorSharp.View.Pane {
 
         public override void Refresh() {
             actionList.Items.Clear();
-            foreach (var item in Controller.Macro)
+            foreach (var item in Controller.Macro) {
                 actionList.Items.Add(item);
-            if (Controller.Index < actionList.Items.Count)
+            }
+            if (Controller.Index < actionList.Items.Count) {
                 actionList.SelectedIndex = Controller.Index;
+            }
             base.Refresh();
         }
 

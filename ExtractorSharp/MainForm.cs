@@ -695,8 +695,9 @@ namespace ExtractorSharp {
                 }
                 var i = imageList.SelectedIndex + 1;
                 i = i < imageList.Items.Count ? i : 0;
-                if (imageList.Items.Count > 0)
+                if (imageList.Items.Count > i) {
                     imageList.SelectedIndex = i;
+                }
             }
         }
 
@@ -880,7 +881,7 @@ namespace ExtractorSharp {
                             }
                         }
                     }
-                    if (imageList.Items.Count > 0) {
+                    if (imageList.Items.Count > index) {
                         imageList.SelectedIndex = index;
                     }
 
@@ -961,10 +962,11 @@ namespace ExtractorSharp {
         private void Painting(object sender, PaintEventArgs e) {
             var g = e.Graphics;
             g.InterpolationMode = InterpolationMode.NearestNeighbor;
-            if (displayBackBox.SelectedIndex == 0)
+            if (displayBackBox.SelectedIndex == 0) {
                 box.BackColor = BackBoxColor;
-            else if (displayBackBox.SelectedIndex == 1 && BackImage != null)
+            } else if (displayBackBox.SelectedIndex == 1 && BackImage != null) {
                 box.BackgroundImage = BackImage;
+            }
             var entity = Controller.SelectImage;//获得当前选择的贴图
             var pos = CurrentLayer.Location;
             if (!mutipleLayerItem.Checked && entity?.Picture != null) {

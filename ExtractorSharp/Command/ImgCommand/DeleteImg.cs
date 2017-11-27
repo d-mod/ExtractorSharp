@@ -26,8 +26,9 @@ namespace ExtractorSharp.Command.ImgCommand {
             Controller.RemoveAlbum(Array);
             int index = Indexes2[Array[0]] - 1;
             index = index < 0 ? 0 : index;
-            if (Controller.AlbumList.Items.Count > 0)
+            if (Controller.AlbumList.Items.Count > index) {
                 Controller.AlbumList.SelectedIndex = index;
+            }
         }
 
         public void Undo() {

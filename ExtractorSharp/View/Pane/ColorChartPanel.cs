@@ -22,8 +22,9 @@ namespace ExtractorSharp.View.Pane {
             var dialog = new ColorDialog();
             var items = list.SelectedItems;
             var color = Color.Empty;
-            if (items.Count > 0)
+            if (items.Count > 0) {
                 color = (Color)items[0].Tag;
+            }
             dialog.Color = color;
             if (dialog.ShowDialog() == DialogResult.OK) {
                 color = dialog.Color;
@@ -43,7 +44,7 @@ namespace ExtractorSharp.View.Pane {
                 for (var i = 0; i < Album.Tables.Count; i++) {
                     combo.Items.Add(Language["ColorChart"] + i);
                 }
-                if (Album.TableIndex < Album.Tables.Count) {
+                if (Album.Tables.Count > Album.TableIndex) {
                     combo.SelectedIndex = Album.TableIndex;
                 }
             }
