@@ -10,16 +10,10 @@ using System.Windows.Forms;
 using System.ComponentModel;
 using System.Diagnostics;
 
-namespace ExtractorSharp.Update {
+namespace ExtractorSharp.Install {
     public partial class UpdateForm : Form {
 
-        private  const string UPDATE_URL =
-            #if DEBUG
-                "http://localhost/"
-            #else
-                "http://extractorsharp.kritsu.net/"
-            #endif 
-                +"api/program/update?type=release";
+        private const string UPDATE_URL ="http://extractorsharp.kritsu.net/api/program/update?type=release";
         private const string DOWNLOAD_URL = "http://static.kritsu.net/file";
         private Stack<FileInfo> Stack;
         private WebClient Client;
@@ -36,6 +30,7 @@ namespace ExtractorSharp.Update {
             if (Stack.Count > 0) {
                 Download(Stack.Pop());
             } else {
+                Client.Dispose();
                 Start();
             }
         }

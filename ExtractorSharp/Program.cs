@@ -35,7 +35,7 @@ namespace ExtractorSharp {
         internal static Hoster Hoster { get; private set; }
         internal static Merger Merger { get; private set; }
         internal static Drawer Drawer { get; private set; }
-        internal static List<Language> LanguageList;
+        internal static List<Language> LanguageList { get; private set; }
         public static string ResourcePath => Config["GamePath"].Value == string.Empty ? string.Empty : Config["GamePath"] + "/ImagePacks2/";
 
         internal static IConfig ViewConfig { get; private set; }
@@ -48,19 +48,7 @@ namespace ExtractorSharp {
         private static bool showVersion;
 
         private static string[] Arguments;
-
-        private const string UPDATE_URL =
-#if DEBUG
-            "http://localhost/"
-            #else
-            
-            "http://extractorsharp.kritsu.net"
-#endif
-            +"/api/program/update?type=release";
-
-        private const string UPDATE_FILE_URL = "http://static.kritsu.net/update.exe";
-
-        /// <summary>
+       /// <summary>
         /// 应用程序的主入口点。
         /// </summary>
         [STAThread]
@@ -203,7 +191,7 @@ namespace ExtractorSharp {
         /// </summary>
         /// <returns></returns>
         internal static Dictionary<string, string> LoadFileList() {
-            var file = Config["GamePath"].Value + "/auto.lst";
+            var file = $"{Config["GamePath"]}/auto.lst";
             var dic = new Dictionary<string, string>();
             if (File.Exists(file)) {
                 var fs = new StreamReader(file);
@@ -225,29 +213,17 @@ namespace ExtractorSharp {
         /// 初始化字典
         /// </summary>
         internal static Dictionary<string, string> InitDictionary() {
-            var Dictionary = new Dictionary<string, string>();
+            var dic = new Dictionary<string, string>();
             var file = Application.StartupPath + "/dictionary.txt";
             if (File.Exists(file)) {
-                var fs = new StreamReader(file, Encoding.Default);
-                while (!fs.EndOfStream) {
-                    var str = fs.ReadLine();
-                    if (str.StartsWith("//"))
-                        continue;
-                    var dt = str.Split("=");
-                    if (dt.Length < 2) {
-                        continue;
-                    }
-                    if (!Dictionary.ContainsKey(dt[0]))
-                        Dictionary.Add(dt[0], dt[1]);
-                }
+                var data = File.ReadAllText(file);
+                var builder = new LSBuilder();
+                var obj=builder.ReadProperties(data);
+                obj.GetValue(ref dic);
             }
-            return Dictionary;
+            return dic;
         }
 
-        /// <summary>
-        /// 使主程序报错退出
-        /// </summary>
-        public static void Dispose() => throw new NullReferenceException();
 
 
 
@@ -256,17 +232,19 @@ namespace ExtractorSharp {
         /// </summary>
         /// <returns></returns>
         public static void CheckUpdate(bool Tips) {
-            var builder = new LSBuilder();
-            var obj = builder.Get(UPDATE_URL).GetValue(typeof(VersionInfo)) as VersionInfo;
-            if (!obj.Version.Equals(Version)) {//若当前版本低于最新版本时，触发更新
-                if (MessageBox.Show(Language.Default["NeedUpdateTips"], "", MessageBoxButtons.OKCancel) != DialogResult.OK) {
-                    return;                 //提示更新
+            try {
+                var builder = new LSBuilder();
+                var obj = builder.Get(Config["UpdateUrl"].Value).GetValue(typeof(VersionInfo)) as VersionInfo;
+                if (!obj.Version.Equals(Version)) {//若当前版本低于最新版本时，触发更新
+                    if (MessageBox.Show(Language.Default["NeedUpdateTips"], "", MessageBoxButtons.OKCancel) != DialogResult.OK) {
+                        return;                 //提示更新
+                    }
+                    StartUpdate();//启动更新
+                } else if (Tips) {
+                    MessageBox.Show(Language.Default["NeedNotUpdateTips"]);//提示不需要更新
                 }
-                StartUpdate();//启动更新
-            } else if (Tips) {
-                MessageBox.Show(Language.Default["NeedNotUpdateTips"]);//提示不需要更新
-            }
-            showVersion = true;//需要进行提示
+                showVersion = true;//需要进行提示
+            } catch (Exception) { }
             Config["ProgramVersion"] = new ConfigValue(Version);//更新记录版本
             Config.Save();
         }
@@ -280,10 +258,11 @@ namespace ExtractorSharp {
         /// <param name="address"></param>
         /// <param name="productName"></param>
         internal static void StartUpdate() {
-            var name = $"{Application.StartupPath}/{UPDATE_FILE_URL.GetName()}";
+            var name = $"{Application.StartupPath}/{Config["UpdateExeName"]}";
             try {
                 var client = new WebClient();
-                client.DownloadFile(UPDATE_FILE_URL, name);
+                client.DownloadFile(Config["UpdateExeUrl"].Value, name);
+                client.Dispose();       
                 Process.Start(name);
             } finally {
                 Environment.Exit(-1);

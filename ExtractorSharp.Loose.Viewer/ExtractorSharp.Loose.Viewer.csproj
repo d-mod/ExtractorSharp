@@ -77,13 +77,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="test.es" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ExtractorSharp.Script\ExtractorSharp.Loose.csproj">
+    <ProjectReference Include="..\ExtractorSharp.Loose\ExtractorSharp.Loose.csproj">
       <Project>{06d35140-706a-40ce-9373-6b948f092a30}</Project>
       <Name>ExtractorSharp.Loose</Name>
     </ProjectReference>

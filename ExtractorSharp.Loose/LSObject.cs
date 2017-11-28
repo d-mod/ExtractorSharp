@@ -222,7 +222,7 @@ namespace ExtractorSharp.Loose {
                 case IDictionary dic:
                     if (arr.Length > 1 && arr[0].Equals(typeof(string))) {
                         type = arr[1];
-                        List.ForEach(item => dic.Add(item.Name, item.GetValue(type)));
+                        List.ForEach(item => dic[item.Name] = item.GetValue(type));
                     }
                     break;
                 //数组

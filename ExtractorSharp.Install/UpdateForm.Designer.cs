@@ -1,4 +1,4 @@
-﻿namespace ExtractorSharp.Update {
+﻿namespace ExtractorSharp.Install {
     partial class UpdateForm {
         /// <summary>
         /// 必需的设计器变量。

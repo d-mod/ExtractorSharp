@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -8,7 +7,7 @@ using System.Xml;
 namespace ExtractorSharp.Loose {
     public class LSBuilder {
 
-        private LSParser parser;
+        private readonly LSParser parser;
 
         public Encoding Encoding { set; get; } = Encoding.UTF8;
         
@@ -122,7 +121,7 @@ namespace ExtractorSharp.Loose {
             var props = properties.Split("\r\n");
             foreach (var p in props) {
                 var i = p.IndexOf("//");//过滤注释部分
-                var tp = i > 0 ? p.Substring(0, i) : p;
+                var tp = i > -1 ? p.Substring(0, i) : p;
                 if (tp.Length > 0) {
                     var entry = tp.Split("=");
                     var key = entry[0];

@@ -1154,11 +1154,13 @@ namespace ExtractorSharp {
 
         private void SaveAllImage(object sender, EventArgs e) {
             var album = Controller.SelectAlbum;
-            if (album == null && album.List.Count < 1)
+            if (album == null || album.List.Count < 1) {
                 return;
+            }
             var indexes = new int[album.List.Count];
-            for (var i = 0; i < indexes.Length; i++)
+            for (var i = 0; i < indexes.Length; i++) {
                 indexes[i] = i;
+            }
             Viewer.Show("saveImage", album, indexes);
         }
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExtractorSharp.Update {
+namespace ExtractorSharp.Install {
     class VersionInfo {
         public string Version { set; get; } 
         public string Time { set; get; }

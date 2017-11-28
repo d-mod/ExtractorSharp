@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{56B182EF-36A7-4A45-ADC9-212DCEB615EA}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>ExtractorSharp.Update</RootNamespace>
-    <AssemblyName>ExtractorSharp.Update</AssemblyName>
+    <RootNamespace>ExtractorSharp.Install</RootNamespace>
+    <AssemblyName>install</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -76,6 +76,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

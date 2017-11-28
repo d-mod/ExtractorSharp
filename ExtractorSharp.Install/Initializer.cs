@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ExtractorSharp.Update {
+namespace ExtractorSharp.Install {
     class Initializer {
 
         public void SetOpenWith() {

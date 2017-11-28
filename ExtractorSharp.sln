@@ -7,7 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractorSharp", "Extractor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractorSharp.Loose", "ExtractorSharp.Loose\ExtractorSharp.Loose.csproj", "{06D35140-706A-40CE-9373-6B948F092A30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractorSharp.Update", "ExtractorSharp.Update\ExtractorSharp.Update.csproj", "{56B182EF-36A7-4A45-ADC9-212DCEB615EA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractorSharp.Install", "ExtractorSharp.Install\ExtractorSharp.Install.csproj", "{56B182EF-36A7-4A45-ADC9-212DCEB615EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractorSharp.Loose.Viewer", "ExtractorSharp.Loose.Viewer\ExtractorSharp.Loose.Viewer.csproj", "{6CD9A8BE-BB87-43E1-81BF-9526F5F54A90}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,22 @@ Global
 		{56B182EF-36A7-4A45-ADC9-212DCEB615EA}.Release|x64.Build.0 = Release|Any CPU
 		{56B182EF-36A7-4A45-ADC9-212DCEB615EA}.Release|x86.ActiveCfg = Release|Any CPU
 		{56B182EF-36A7-4A45-ADC9-212DCEB615EA}.Release|x86.Build.0 = Release|Any CPU
+		{6CD9A8BE-BB87-43E1-81BF-9526F5F54A90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CD9A8BE-BB87-43E1-81BF-9526F5F54A90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CD9A8BE-BB87-43E1-81BF-9526F5F54A90}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{6CD9A8BE-BB87-43E1-81BF-9526F5F54A90}.Debug|ARM.Build.0 = Debug|Any CPU
+		{6CD9A8BE-BB87-43E1-81BF-9526F5F54A90}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6CD9A8BE-BB87-43E1-81BF-9526F5F54A90}.Debug|x64.Build.0 = Debug|Any CPU
+		{6CD9A8BE-BB87-43E1-81BF-9526F5F54A90}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6CD9A8BE-BB87-43E1-81BF-9526F5F54A90}.Debug|x86.Build.0 = Debug|Any CPU
+		{6CD9A8BE-BB87-43E1-81BF-9526F5F54A90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CD9A8BE-BB87-43E1-81BF-9526F5F54A90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CD9A8BE-BB87-43E1-81BF-9526F5F54A90}.Release|ARM.ActiveCfg = Release|Any CPU
+		{6CD9A8BE-BB87-43E1-81BF-9526F5F54A90}.Release|ARM.Build.0 = Release|Any CPU
+		{6CD9A8BE-BB87-43E1-81BF-9526F5F54A90}.Release|x64.ActiveCfg = Release|Any CPU
+		{6CD9A8BE-BB87-43E1-81BF-9526F5F54A90}.Release|x64.Build.0 = Release|Any CPU
+		{6CD9A8BE-BB87-43E1-81BF-9526F5F54A90}.Release|x86.ActiveCfg = Release|Any CPU
+		{6CD9A8BE-BB87-43E1-81BF-9526F5F54A90}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

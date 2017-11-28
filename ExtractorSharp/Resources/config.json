@@ -12,7 +12,11 @@
 	SaveImageAllPath:false
   LayerMaximum: 20
   Initialized: false
+  AvatarUrl:"http://extractorsharp.kritsu.net/avatar.html",
   ResourceUrl: "http://kritsu.net/avatar/image/avatar",
   ApiUrl: "http://extractorsharp.kritsu.net/api/avatar",
+  UpdateUrl:"http://extractorsharp.kritsu.net/api/program/update?type=release",
+  UpdateExeUrl:"http://static.kritsu.net/install.exe",
+  UpdateExeName:"install.exe",
   AutoUpdate: true
 }

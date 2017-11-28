@@ -277,11 +277,11 @@ namespace ExtractorSharp {
         /// <param name="condition"></param>
         /// <param name="Items"></param>
         /// <returns></returns>
-        [Obsolete]
+        [Obsolete("")]
         public static IEnumerable<Album> Find2(IEnumerable<Album> Items, params string[] condition) {
             var isEmpty = true;
             foreach (var item in condition) {
-                if (!item.Equals(string.Empty)) {
+                if (!string.IsNullOrEmpty(item)) {
                     isEmpty = false;
                     break;
                 }
@@ -970,10 +970,11 @@ namespace ExtractorSharp {
 
         public static List<Layer> ReadModel(string Path) {
             if (File.Exists(Path)) {
-                var ms = new FileStream(Path, FileMode.Open);
-                return ms.ReadModel();
+                using (var ms = new FileStream(Path, FileMode.Open)) {
+                    return ms.ReadModel();
+                }
             }
-            return null;
+            return new List<Layer>();
         }
 
 

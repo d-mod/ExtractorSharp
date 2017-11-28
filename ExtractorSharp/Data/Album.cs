@@ -259,6 +259,5 @@ namespace ExtractorSharp.Data{
         }
 
         public IEnumerator<ImageEntity> GetEnumerator() => List.GetEnumerator();
-
     }
 }
