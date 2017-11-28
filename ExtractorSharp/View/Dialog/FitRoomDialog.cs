@@ -136,7 +136,7 @@ namespace ExtractorSharp.View{
         private void RefreshImage() => imageBox.Invalidate();
 
         private void OnPainting(object sender, PaintEventArgs e) {
-            Graphics g = e.Graphics;
+            var g = e.Graphics;
             g.DrawImage(Resources.Back, 0, 0);
             var values = GetValues(true);
             var list = Service.LoadImage(values);
@@ -155,8 +155,9 @@ namespace ExtractorSharp.View{
             width /= 3;
             height /= 2;
             foreach (var image in list) {
-                if (image.Image != null)
+                if (image.Image != null) {
                     g.DrawImage(image.Image, image.X - width, image.Y - height);
+                }
             }
         }
         

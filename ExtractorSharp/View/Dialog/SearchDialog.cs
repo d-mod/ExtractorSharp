@@ -92,8 +92,9 @@ namespace ExtractorSharp {
         /// <param name="e"></param>
         private void AddNPK(object sender, EventArgs e) {
             var array = GetNPK();
-            if (array.Length > 0)
-                Controller.Do("addImg", Tools.Load(array).ToArray());
+            if (array.Length > 0) {
+                Controller.Do("addImg", Tools.Load(array).ToArray(), false);
+            }
         }
 
         /// <summary>
@@ -215,10 +216,10 @@ namespace ExtractorSharp {
             else {
                 var npks = GetNPK();
                 list = Tools.Load(npks);//同一NPK的文件只需要读取一次
-                list = new List<Album>(Tools.Find(list ,allNameBox.Checked,GetPattern()));//使用find过滤出符合条件的
+                list = new List<Album>(Tools.Find(list, allNameBox.Checked, GetPattern()));//使用find过滤出符合条件的
             }
             Visible = false;
-            Controller.Do("addImg", list.ToArray());
+            Controller.Do("addImg", list.ToArray(), false);
             GC.Collect();
         }
 
@@ -227,8 +228,9 @@ namespace ExtractorSharp {
             if (index > -1) {
                 var result = resultList.Items[index] as SearchResult;
                 var al = Tools.LoadAlbum(result.Path, result.imgPath);
-                if (al != null)
-                    Controller.Do("addImg", new Album[] { al });
+                if (al != null) {
+                    Controller.Do("addImg", new Album[] { al }, false);
+                }
                 Visible = false;
                 GC.Collect();
             }
