@@ -19,6 +19,7 @@ using ExtractorSharp.View;
 using Microsoft.Win32;
 using ExtractorSharp.View.Dialog;
 using ExtractorSharp.Data;
+using ExtractorSharp.Loose;
 
 namespace ExtractorSharp {
     /// <summary>
@@ -48,6 +49,17 @@ namespace ExtractorSharp {
 
         private static string[] Arguments;
 
+        private const string UPDATE_URL =
+#if DEBUG
+            "http://localhost/"
+            #else
+            
+            "http://extractorsharp.kritsu.net"
+#endif
+            +"/api/program/update?type=release";
+
+        private const string UPDATE_FILE_URL = "http://static.kritsu.net/update.exe";
+
         /// <summary>
         /// 应用程序的主入口点。
         /// </summary>
@@ -56,7 +68,7 @@ namespace ExtractorSharp {
             Arguments = args;
             LoadConfig();
             LoadLanguage();
-            //CheckUpdate(Config["AutoUpdate"].Boolean);
+            CheckUpdate(Config["AutoUpdate"].Boolean);
             LoadRegistry();
 #if DEBUG
 #else
@@ -80,29 +92,10 @@ namespace ExtractorSharp {
 
 
 
-        /// <summary>
-        /// 注册表
-        /// </summary>
-        public static void Initialize() {
-            var path = Application.ExecutablePath;
-            var cmd = $"\"{path}\" \"%1\"";
-            var name = "esharp";
-            var surekamKey = Registry.ClassesRoot.CreateSubKey(name);
-            surekamKey.SetValue("URL Protocol", "");
-            var commandKey = surekamKey.CreateSubKey(@"shell\open\command");
-            commandKey.SetValue("", cmd);
-            Config["Initialized"] = new ConfigValue(true);
-            Config.Save();
-        }
-
         private static void OnShown(object sender, EventArgs e) {
-            if (!Config["Initialized"].Boolean) {
-#if DEBUG
-#else
-                Initialize();
-#endif
+            if (showVersion) {
+                Viewer.Show("version", true);
             }
-            if (showVersion) Viewer.Show("version", true);
             if (Arguments.Length == 1) {
                 var command = Arguments[0];
                 if (!command.StartsWith("esharp://")) {
@@ -241,8 +234,9 @@ namespace ExtractorSharp {
                     if (str.StartsWith("//"))
                         continue;
                     var dt = str.Split("=");
-                    if (dt.Length < 2)
+                    if (dt.Length < 2) {
                         continue;
+                    }
                     if (!Dictionary.ContainsKey(dt[0]))
                         Dictionary.Add(dt[0], dt[1]);
                 }
@@ -254,7 +248,7 @@ namespace ExtractorSharp {
         /// 使主程序报错退出
         /// </summary>
         public static void Dispose() => throw new NullReferenceException();
-        
+
 
 
         /// <summary>
@@ -262,36 +256,22 @@ namespace ExtractorSharp {
         /// </summary>
         /// <returns></returns>
         public static void CheckUpdate(bool Tips) {
-            try {
-                var updateConfig = new JsonConfig();
-                updateConfig.Load("http://kritsu.net/extractorsharp/update.json");
-                var name = updateConfig["Name"].Value;//获得文件名
-                var address = updateConfig["Address"].Value;//获得更新文件地址
-                var latest_version = updateConfig["Version"].Value.ToIntVersion();//获得最新版本
-                var updateUrl = updateConfig["Update"].Value;//获得更新程序地址
-                var current_version = Version.ToIntVersion();//当前版本
-                if (latest_version > current_version) {//若当前版本低于最新版本时，触发更新
-                    if (MessageBox.Show(Language.Default["NeedUpdateTips"], "", MessageBoxButtons.OKCancel) != DialogResult.OK) 
-                        return;                 //提示更新
-                    StartUpdate(updateUrl, address, name);//启动更新
-                } else if (Tips)
-                    MessageBox.Show(Language.Default["NeedNotUpdateTips"]);//提示不需要更新
-                var property_version = Config["ProgramVersion"].Value.ToIntVersion();//版本记录
-                if (current_version > property_version) {//当前版本高于记录版本时
-                    var updateName = updateUrl.GetName();
-                    if (File.Exists(updateName))//删除更新程序
-                        File.Delete(updateName);
-                    showVersion = true;//需要进行提示
-                    Config["ProgramVersion"] = new ConfigValue(Program.Version);//更新记录版本
-                    Config.Save();
+            var builder = new LSBuilder();
+            var obj = builder.Get(UPDATE_URL).GetValue(typeof(VersionInfo)) as VersionInfo;
+            if (!obj.Version.Equals(Version)) {//若当前版本低于最新版本时，触发更新
+                if (MessageBox.Show(Language.Default["NeedUpdateTips"], "", MessageBoxButtons.OKCancel) != DialogResult.OK) {
+                    return;                 //提示更新
                 }
-                GC.Collect();
-            } catch (Exception) {
-                Dispose();
+                StartUpdate();//启动更新
+            } else if (Tips) {
+                MessageBox.Show(Language.Default["NeedNotUpdateTips"]);//提示不需要更新
             }
+            showVersion = true;//需要进行提示
+            Config["ProgramVersion"] = new ConfigValue(Version);//更新记录版本
+            Config.Save();
         }
 
-      
+
 
         /// <summary>
         /// 启动更新
@@ -299,19 +279,12 @@ namespace ExtractorSharp {
         /// <param name="updateUrl"></param>
         /// <param name="address"></param>
         /// <param name="productName"></param>
-        internal static void StartUpdate(string updateUrl, string address, string productName) {
-            var name = Application.StartupPath + "/" + updateUrl.GetName();
+        internal static void StartUpdate() {
+            var name = $"{Application.StartupPath}/{UPDATE_FILE_URL.GetName()}";
             try {
                 var client = new WebClient();
-                client.DownloadFile(updateUrl, name);
-                var info = new ProcessStartInfo();
-                var pro = new Process();
-                info.UseShellExecute = false;
-                info.FileName = name;
-                info.CreateNoWindow = false;
-                info.Arguments = address + " " + productName;
-                pro.StartInfo = info;
-                pro.Start();
+                client.DownloadFile(UPDATE_FILE_URL, name);
+                Process.Start(name);
             } finally {
                 Environment.Exit(-1);
             }

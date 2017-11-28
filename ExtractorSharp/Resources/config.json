@@ -13,5 +13,6 @@
   LayerMaximum: 20
   Initialized: false
   ResourceUrl: "http://kritsu.net/avatar/image/avatar",
-  ApiUrl: "http://extractorsharp.kritsu.net/api/avatar"
+  ApiUrl: "http://extractorsharp.kritsu.net/api/avatar",
+  AutoUpdate: true
 }
