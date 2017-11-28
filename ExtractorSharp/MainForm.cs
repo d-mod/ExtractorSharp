@@ -464,8 +464,9 @@ namespace ExtractorSharp {
                 if (rs == DialogResult.Yes) {
                     SaveFile(this, e);
                     e.Cancel = !Controller.isSave;
-                } else if (rs != DialogResult.No)
+                } else if (rs != DialogResult.No) {
                     e.Cancel = true;
+                }
                 player.Close();
             }
         }
@@ -538,15 +539,18 @@ namespace ExtractorSharp {
                     }
                     albumList.Items.Add(al);
                 }
-            } else
-                albumList.Items.AddRange(new List<Album>(array).ToArray());
+            } else {
+                albumList.Items.AddRange(array.ToArray());
+            }
             foreach (var entity in cs) {
                 var i = albumList.Items.IndexOf(entity);
-                if (i > -1)
+                if (i > -1) {
                     albumList.SetItemChecked(i, true);
+                }
             }
-            if (select != null && albumList.Items.Contains(select))
+            if (select != null && albumList.Items.Contains(select)) {
                 albumList.SelectedItem = select;
+            }
         }
 
 
@@ -580,7 +584,6 @@ namespace ExtractorSharp {
             Viewer.Dispose();
             ImageFlush();
             pathBox.Text = string.Empty;
-            GC.Collect();
         }
 
         private void OnMouseWheel(object sender,MouseEventArgs e) {
@@ -611,8 +614,9 @@ namespace ExtractorSharp {
             if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
                 var args = e.Data.GetData(DataFormats.FileDrop, false) as string[];
                 Controller.AddAlbum(false, args);
-            } else if (e.Data.GetDataPresent(DataFormats.Serializable))
+            } else if (e.Data.GetDataPresent(DataFormats.Serializable)) {
                 (sender as System.Windows.Forms.Control)?.DoDragDrop(e.Data, e.Effect);
+            }
         }
 
 
@@ -624,8 +628,9 @@ namespace ExtractorSharp {
 
         private void ShowConvert(object sender, EventArgs e) {
             var array = Controller.CheckedAlbum;
-            if (array.Length > 0 && CheckOgg(array))
+            if (array.Length > 0 && CheckOgg(array)) {
                 Viewer.Show("convert", array);
+            }
         }
 
         private void ShowEncrypt(object sender, EventArgs e) {
@@ -695,7 +700,7 @@ namespace ExtractorSharp {
                 }
                 var i = imageList.SelectedIndex + 1;
                 i = i < imageList.Items.Count ? i : 0;
-                if (imageList.Items.Count > i) {
+                if (imageList.Items.Count > 0) {
                     imageList.SelectedIndex = i;
                 }
             }
@@ -714,8 +719,9 @@ namespace ExtractorSharp {
         /// <param name="e"></param>
         private void HideImg(object sender, EventArgs e) {
             var list = Controller.CheckedAlbum;
-            if (list.Length > 0 && CheckOgg(list) && MessageBox.Show(Language["HideTips"], "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+            if (list.Length > 0 && CheckOgg(list) && MessageBox.Show(Language["HideTips"], "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) {
                 Controller.Do("hideImg", list);
+            }
         }
 
         /// <summary>
@@ -739,16 +745,18 @@ namespace ExtractorSharp {
             if (item != null) {
                 var dialog = new OpenFileDialog();
                 dialog.Filter = "图片资源|*.img|音效资源|*.ogg;*.wav;*.mp3|全部文件|*.*";
-                if (item.Version == Img_Version.OGG)
+                if (item.Version == Img_Version.OGG) {
                     dialog.FilterIndex = 2;
-                else if (item.Name.EndsWith(".img"))
+                } else if (item.Name.EndsWith(".img")) {
                     dialog.FilterIndex = 1;
-                else
+                } else {
                     dialog.FilterIndex = 3;
+                }
                 if (dialog.ShowDialog() == DialogResult.OK) {
                     var list = new List<Album>(Tools.Load(dialog.FileName));
-                    if (list.Count > 0)
+                    if (list.Count > 0) {
                         Controller.Do("replaceImg", item, list[0]);
+                    }
                 }
             }
         }
@@ -764,12 +772,14 @@ namespace ExtractorSharp {
                 var dialog = new SaveFileDialog();
                 dialog.FileName = array[0].Name;
                 dialog.Filter = array[0].Version == Img_Version.OGG ? "音效文件|*.ogg;*.mp3;*.wav" : "img文件|*.img";
-                if (dialog.ShowDialog() == DialogResult.OK)
+                if (dialog.ShowDialog() == DialogResult.OK) {
                     Tools.SaveFile(dialog.FileName, array[0]);
+                }
             } else if (array.Length > 1) {
                 var dialog = new FolderBrowserDialog();
-                if (dialog.ShowDialog() == DialogResult.OK)
+                if (dialog.ShowDialog() == DialogResult.OK) {
                     Tools.SaveDirectory(dialog.SelectedPath, array);
+                }
             }
         }
 
@@ -780,8 +790,9 @@ namespace ExtractorSharp {
         /// <param name="e"></param>
         private void DeleteImg() {
             var list = Controller.CheckedAlbum;
-            if (list.Length > 0 && MessageBox.Show(Language["DeleteTips"],"", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) 
-                Controller.Do("deleteImg", list);          
+            if (list.Length > 0 && MessageBox.Show(Language["DeleteTips"], "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) {
+                Controller.Do("deleteImg", list);
+            }
         }
 
         /// <summary>
@@ -823,13 +834,14 @@ namespace ExtractorSharp {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void RenameImg(object sender, EventArgs e) {
-            var album = Controller.SelectAlbum;      
+            var album = Controller.SelectAlbum;
             if (album != null) {
                 var dialog = new EaseTextDialog();
                 dialog.InputText = album.Path;
                 dialog.Text = Language["Rename"];
-                if (dialog.Show() == DialogResult.OK) 
-                    Controller.Do("renameImg", album, dialog.InputText);                
+                if (dialog.Show() == DialogResult.OK) {
+                    Controller.Do("renameImg", album, dialog.InputText);
+                }
             }
         }
 
@@ -871,23 +883,21 @@ namespace ExtractorSharp {
                 imageList.Items.Clear();
                 decryptPanel.Visible = false;
                 if (al != null && Controller.CheckEncrypt(al)) {
-                    imageList.Items.AddRange(al.List.ToArray());
-                    //添加贴图
-                    index = (index > -1 && index < imageList.Items.Count) ? index : 0;
-                    if (!clear) {
-                        foreach (var i in indexes) {
-                            if (i > -1 && i < imageList.Items.Count) {
-                                imageList.SetItemChecked(i, true);
-                            }
+                    imageList.Items.AddRange(al.List.ToArray());              
+                }
+                //添加贴图
+                index = (index > -1 && index < imageList.Items.Count) ? index : 0;
+                if (!clear) {
+                    foreach (var i in indexes) {
+                        if (i > -1 && i < imageList.Items.Count) {
+                            imageList.SetItemChecked(i, true);
                         }
                     }
-                    if (imageList.Items.Count > index) {
-                        imageList.SelectedIndex = index;
-                    }
-
-                    if (imageList.Items.Count == 0) {
-                        CavasFlush();
-                    }
+                }
+                if (imageList.Items.Count > 0) {
+                    imageList.SelectedIndex = index;
+                } else if (imageList.Items.Count == 0) {
+                    CavasFlush();
                 }
             }
         }
@@ -906,8 +916,9 @@ namespace ExtractorSharp {
             var dialog = new OpenFileDialog();
             dialog.Filter = "图片资源|*.NPK;*.img;|音效资源|*.mp3;*.wav;*.ogg";
             dialog.Multiselect = true;
-            if (dialog.ShowDialog() == DialogResult.OK)
+            if (dialog.ShowDialog() == DialogResult.OK) {
                 Controller.AddAlbum(!sender.Equals(addFileItem), dialog.FileNames);
+            }
         }
 
         /// <summary>
@@ -917,8 +928,9 @@ namespace ExtractorSharp {
         /// <param name="e"></param>
         private void InputDirectory(object sender, EventArgs e) {
             var dialog = new FolderBrowserDialog();
-            if (dialog.ShowDialog() == DialogResult.OK)
+            if (dialog.ShowDialog() == DialogResult.OK) {
                 Controller.AddAlbum(true, dialog.SelectedPath);
+            }
         }
 
         /// <summary>
@@ -930,8 +942,9 @@ namespace ExtractorSharp {
             var dialog = new SaveFileDialog();
             dialog.Filter = "NPK文件|*.NPK";
             dialog.FileName = Path.GetName();
-            if (dialog.ShowDialog() == DialogResult.OK) 
-                Controller.WriteNPK(dialog.FileName);         
+            if (dialog.ShowDialog() == DialogResult.OK) {
+                Controller.WriteNPK(dialog.FileName);
+            }    
         }
 
         /// <summary>
@@ -940,14 +953,16 @@ namespace ExtractorSharp {
         /// <param name="sender"></param>
         private void OutputDirectory(object sender, EventArgs e) {
             var dialog = new FolderBrowserDialog();
-            if (dialog.ShowDialog() == DialogResult.OK)
+            if (dialog.ShowDialog() == DialogResult.OK) {
                 Controller.WriteToDirectory(dialog.SelectedPath);
+            }
         }
 
         private void AddSplice(object sender, EventArgs e) {
             var array = Controller.CheckedAlbum;
-            if (array.Length > 0&&CheckOgg(array))
+            if (array.Length > 0 && CheckOgg(array)) {
                 Controller.Do("addSplice", array);
+            }
         }
 
         private void DisplaySplice(object sender, EventArgs e) {
@@ -963,9 +978,9 @@ namespace ExtractorSharp {
             var g = e.Graphics;
             g.InterpolationMode = InterpolationMode.NearestNeighbor;
             if (displayBackBox.SelectedIndex == 0) {
-                box.BackColor = BackBoxColor;
+                g.Clear(BackBoxColor);
             } else if (displayBackBox.SelectedIndex == 1 && BackImage != null) {
-                box.BackgroundImage = BackImage;
+                g.DrawImage(BackImage, 0, 0, box.Width, box.Height);
             }
             var entity = Controller.SelectImage;//获得当前选择的贴图
             var pos = CurrentLayer.Location;
@@ -973,11 +988,10 @@ namespace ExtractorSharp {
                 if (entity.Type == ColorBits.LINK && entity.Target != null)
                     entity = entity.Target;
                 var pictrue = entity.Picture;
-                if (pictrue == null)
-                    return;
                 var size = entity.Size.Star(ImageScale);
-                if (linedodgeBox.Checked)
+                if (linedodgeBox.Checked) {
                     pictrue = pictrue.LinearDodge();
+                }
                 if (onionskinBox.Checked) {
                     LastLayer?.Draw(g);
                 }
@@ -989,9 +1003,9 @@ namespace ExtractorSharp {
                 Drawer.DrawLayer(g);
             }
             if (displayRuleItem.Checked) {//显示标尺
-                if (!lockRuleItem.Checked)
+                if (!lockRuleItem.Checked) {
                     rule_Real_Point = rule_Point.Add(pos);
-            //    rule_Point = rule_Real_Point.Minus(pos);
+                }
                 var rp = rule_Real_Point;
                 g.DrawString(Language["AbsolutePosition"] + ":" + rp.GetString(), DefaultFont, Brushes.White, new Point(rp.X + rule_radius, rp.Y - rule_radius - DefaultFont.Height));
                 g.DrawString(Language["RealativePosition"] + ":" + rule_Point.Reverse().GetString(), DefaultFont, Brushes.White, new Point(rp.X + rule_radius, rp.Y - rule_radius - DefaultFont.Height * 2));
@@ -1006,10 +1020,12 @@ namespace ExtractorSharp {
             if (gridItem.Checked) {//显示网格
                 var grap = Config["GridGap"].Integer;
                 for (var i = 0; i < box.Width || i < box.Height; i += grap) {
-                    if (i < box.Width)
+                    if (i < box.Width) {
                         g.DrawLine(Pens.White, new Point(i, 0), new Point(i, box.Height));
-                    if (i < box.Height)
+                    }
+                    if (i < box.Height) {
                         g.DrawLine(Pens.White, new Point(0, i), new Point(box.Width, i));
+                    }
                 }
             }
         }

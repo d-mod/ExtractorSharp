@@ -433,9 +433,8 @@ namespace ExtractorSharp.Core{
         public Album SelectAlbum {
             get {
                 var item = Main.albumList.SelectedItem as Album;
-                if (item != null && CheckEncrypt(item)) {
+                if (item != null && CheckEncrypt(item))
                     return item;
-                }
                 return null;
             }
         }

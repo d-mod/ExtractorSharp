@@ -35,13 +35,15 @@ namespace ExtractorSharp.View.Pane {
         }
 
         private void Record(object sender, EventArgs e) {
-            if (MessageBox.Show(Language["Record"]) == DialogResult.OK)
+            if (MessageBox.Show(Language["Record"]) == DialogResult.OK) {
                 Controller.Record();
+            }
         }
 
         private void Pause(object sender, EventArgs e) {
-            if (MessageBox.Show(Language["Pause"]) == DialogResult.OK)
+            if (MessageBox.Show(Language["Pause"]) == DialogResult.OK) {
                 Controller.Pause();
+            }
         }
 
         private void Run(object sender, EventArgs e) {

@@ -77,9 +77,8 @@ namespace ExtractorSharp.View{
                 partCheckes[i] = check;
             }
             professionBox.Items.AddRange(list);
-            if (professionBox.Items.Count > 0) {
+            if (professionBox.Items.Count > 0)
                 professionBox.SelectedIndex = 0;
-            }
             pathBox.Text = Config["GamePath"].Value;
             PartUpdate();
         }
@@ -103,9 +102,8 @@ namespace ExtractorSharp.View{
             if (professionBox.SelectedIndex > -1) {
                 var arr = Service.GetWeapon(professionBox.SelectedIndex);
                 weaponCombo.Items.AddRange(arr);
-                if (arr.Length > 0) {            //当武器种类大于0时，默认选择第一个
+                if (arr.Length > 0)                 //当武器种类大于0时，默认选择第一个
                     weaponCombo.SelectedIndex = 0;
-                }
             }
         }
 
