@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Windows.Forms;
-using ExtractorSharp.Command;
 using ExtractorSharp.UI;
 
 namespace ExtractorSharp.View {
     public partial class BugDialog : EaseDialog {
-        private string error = "";
-        private int mode;
+        private string Error { set; get; }
+        private string Mode { set; get; }
         public BugDialog(){
             InitializeComponent();
             CancelButton = cancelButton;
@@ -14,10 +13,10 @@ namespace ExtractorSharp.View {
         }
 
         public override DialogResult Show(params object[] args) {
-            mode = (int)args[0];
+            Mode = args[0] as string;
             box.Text = string.Empty;
-            if (mode == 0) {
-                error = (string)args[1];
+            if ("debug".Equals(Mode)) {
+                Error = args[1] as string;
                 label1.Text = "程序出现了一些问题";
                 submitCheck.Checked = true;
                 submitCheck.Visible = true;
@@ -29,8 +28,8 @@ namespace ExtractorSharp.View {
             return ShowDialog();
         }
 
-        public void Submit(object sender,EventArgs e) {
-            Program.UploadBug(box.Text, textBox2.Text, error);
+        public void Submit(object sender, EventArgs e) {
+            Program.UploadBug(box.Text, textBox2.Text, Error, Mode);
             DialogResult = DialogResult.OK;
         }
         

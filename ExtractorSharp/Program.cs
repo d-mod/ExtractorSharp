@@ -16,6 +16,8 @@ using Microsoft.Win32;
 using ExtractorSharp.View.Dialog;
 using ExtractorSharp.Data;
 using ExtractorSharp.Loose;
+using System.Threading;
+using System.Text;
 
 namespace ExtractorSharp {
     /// <summary>
@@ -42,14 +44,14 @@ namespace ExtractorSharp {
         /// 应用程序的主入口点。
         /// </summary>
         [STAThread]
-        static void Main(string[] args) {
+        static void Main(string[] args) { 
             Arguments = args;
             LoadConfig();
             LoadLanguage();
             if (Config["AutoUpdate"].Boolean) {
                 CheckUpdate(false);
             }
-            Application.ThreadException += (o, e) => Viewer.Show("debug", 0, e.Exception.Message + ";" + e.Exception.StackTrace);   
+            Application.ThreadException += ShowDebug;   
             Application.SetCompatibleTextRenderingDefault(true);           
             Application.EnableVisualStyles();
             LoadRegistry();
@@ -65,6 +67,13 @@ namespace ExtractorSharp {
             Hoster = new Hoster();
             Merger = new Merger();
             Application.Run(Form);
+        }
+
+        private static void ShowDebug(object sender, ThreadExceptionEventArgs e) {
+            var log = $"{e.Exception.Message};\r\n{e.Exception.StackTrace}";
+            var data = Encoding.Default.GetBytes(log);
+            log = Convert.ToBase64String(data);
+            Viewer.Show("debug", "debug", log);
         }
 
 
@@ -249,7 +258,7 @@ namespace ExtractorSharp {
             try {
                 var client = new WebClient();
                 client.DownloadFile(Config["UpdateExeUrl"].Value, name);
-                client.Dispose();       
+                client.Dispose();
                 Process.Start(name);
             } finally {
                 Environment.Exit(-1);
@@ -280,12 +289,14 @@ namespace ExtractorSharp {
         /// <param name="contact"></param>
         /// <param name="buglog"></param>
         /// <returns></returns>
-        internal static bool UploadBug(string remark, string contact, string log) {
+        internal static bool UploadBug(string remark, string contact, string log,string type) {
             try {
                 var data = new Dictionary<string, object>() {
                     { "remark",remark },
                     { "contact",contact},
-                    { "log", log }
+                    { "log", log },
+                    { "type",type},
+                    { "version",Version}
                 };
                 var builder = new LSBuilder();
                 var resultObj=builder.Post(Config["DebugUrl"].Value,data);

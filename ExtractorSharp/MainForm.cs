@@ -28,9 +28,6 @@ namespace ExtractorSharp {
         private Drawer Drawer { get; }
         private Controller Controller { get; }
         private decimal ImageScale => scaleBox.Value / 100;
-        private ImageEntity preview;
-        private int Preview_Width { set; get; } = 200;
-        private int Preview_Height { set; get; } = 200;
         public string Path {
             set => pathBox.Text = value;
             get => pathBox.Text;
@@ -90,7 +87,7 @@ namespace ExtractorSharp {
         /// </summary>
         private void AddShow() {
             AddShow(aboutItem, "about");
-            AddShow(debugItem, "debug", 1);
+            AddShow(debugItem, "debug", "feedback");
             AddShow(fitItem, "fit");
             AddShow(propertyItem, "property");
             AddShow(versionItem, "version");
