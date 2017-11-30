@@ -21,24 +21,20 @@ namespace ExtractorSharp.Config {
 
         public string ConfigDir { set; get; }
         public string UserPath { set; get; }   //用户配置文件路径
-        private LSBuilder reader;
+        private readonly LSBuilder reader;
         /// <summary>
         /// 根据对应的指定的key，获得对应的ConfigValue
-        /// 当key前带有@时，则返回系统设置
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
         public ConfigValue this[string key] {
             get {
-                if (key.StartsWith("@")) {
-                    key = key.Substring(1);
-                    if (OriginalConfig.ContainsKey(key))
-                        return OriginalConfig[key];
-                }
-                if (UserConfig.ContainsKey(key) && UserConfig[key].IsEmpty)
+                if (UserConfig.ContainsKey(key) && UserConfig[key].NotEmpty) {
                     return UserConfig[key];
-                if (OriginalConfig.ContainsKey(key))
+                }
+                if (OriginalConfig.ContainsKey(key)) {
                     return OriginalConfig[key];
+                }
                 return ConfigValue.NullValue;
             }
             set {
@@ -48,10 +44,7 @@ namespace ExtractorSharp.Config {
                     }
                     return;
                 }
-                if (UserConfig.ContainsKey(key)) //当用户设置已存在该选项时修改
-                    UserConfig[key] = value;
-                else                             //不存在时添加
-                    UserConfig.Add(key, value);
+                UserConfig[key] = value;
             }
         }
 
@@ -62,8 +55,9 @@ namespace ExtractorSharp.Config {
 
         private void Init(LSObject obj) {
             ConfigDir = Application.StartupPath + "/conf/";
-            if (!Directory.Exists(ConfigDir))
+            if (!Directory.Exists(ConfigDir)) {
                 Directory.CreateDirectory(ConfigDir);
+            }
             OriginalConfig = Read(obj);
             Reload();
         }

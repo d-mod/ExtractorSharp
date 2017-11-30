@@ -403,7 +403,7 @@ namespace ExtractorSharp {
         private void LoadModel(object sender, EventArgs e) {
             var dialog = new OpenFileDialog() {
                 Filter = "图层模板|*.md",
-                InitialDirectory = Application.StartupPath + "/model/",
+                InitialDirectory = $"{Config["RootPath"]}/model/",
             };
             if (dialog.ShowDialog() == DialogResult.OK) {
                 Drawer.LayerList.Clear();

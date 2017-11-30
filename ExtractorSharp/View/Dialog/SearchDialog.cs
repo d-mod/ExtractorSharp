@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
-using ExtractorSharp.Command;
 using ExtractorSharp.UI;
-using ExtractorSharp.Properties;
-using ExtractorSharp.Config;
 using System.Linq;
 using ExtractorSharp.Core;
 using ExtractorSharp.Data;
@@ -167,17 +164,19 @@ namespace ExtractorSharp {
         /// <param name="e"></param>
         private void Filter(object sender, EventArgs e) {
             var pattern = GetPattern();
-            if (pattern.Length < 1)
+            if (pattern.Length < 1) {
                 return;
+            }
             resultList.Items.Clear();
             var list = List.FindAll(
                 item => {
-                    if (allNameBox.Checked && !pattern[0].Equals(item.Name))
+                    if (allNameBox.Checked && !pattern[0].Equals(item.Name)) {
                         return false;
+                    }
                     return pattern.All( pat => item.imgPath.Contains(pat) );
                 });
-            list.Distinct();
-            resultList.Items.AddRange(list.ToArray());
+            var array = list.Distinct().ToArray() ;
+            resultList.Items.AddRange(array);
         }
 
         /// <summary>
@@ -218,9 +217,8 @@ namespace ExtractorSharp {
                 list = Tools.Load(npks);//同一NPK的文件只需要读取一次
                 list = new List<Album>(Tools.Find(list, allNameBox.Checked, GetPattern()));//使用find过滤出符合条件的
             }
-            Visible = false;
+            DialogResult = DialogResult.OK;
             Controller.Do("addImg", list.ToArray(), false);
-            GC.Collect();
         }
 
         private void MouseAddList(object sender, MouseEventArgs e) {
@@ -231,8 +229,7 @@ namespace ExtractorSharp {
                 if (al != null) {
                     Controller.Do("addImg", new Album[] { al }, false);
                 }
-                Visible = false;
-                GC.Collect();
+                DialogResult = DialogResult.OK;
             }
         }      
 
@@ -243,9 +240,9 @@ namespace ExtractorSharp {
 
 
         private  void Search() {
-            if (Directory.Exists(Program.ResourcePath)) {
+            if (Directory.Exists(Config["ResourcePath"].Value)) {
                 bar.Visible = true;
-                var files = Directory.GetFiles(Program.ResourcePath);
+                var files = Directory.GetFiles(Config["ResourcePath"].Value);
                 bar.Maximum = files.Length;
                 bar.Value = 0;
                 displayModeBox.Enabled = false;

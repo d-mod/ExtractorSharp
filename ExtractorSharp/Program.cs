@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Security.AccessControl;
-using System.Text;
 using System.Windows.Forms;
-using System.Xml;
 using ExtractorSharp.Composition;
 using ExtractorSharp.Config;
 using ExtractorSharp.Core;
-using ExtractorSharp.EventArguments;
 using ExtractorSharp.UI;
 using ExtractorSharp.Properties;
 using ExtractorSharp.View;
@@ -36,16 +32,10 @@ namespace ExtractorSharp {
         internal static Merger Merger { get; private set; }
         internal static Drawer Drawer { get; private set; }
         internal static List<Language> LanguageList { get; private set; }
-        public static string ResourcePath => Config["GamePath"].Value == string.Empty ? string.Empty : Config["GamePath"] + "/ImagePacks2/";
-
+    
         internal static IConfig ViewConfig { get; private set; }
 
         internal readonly static string Version = Assembly.GetAssembly(typeof(Program)).GetName().Version.ToString();
-
-        /// <summary>
-        /// 是否需要提示版本特性
-        /// </summary>
-        private static bool showVersion;
 
         private static string[] Arguments;
        /// <summary>
@@ -59,13 +49,10 @@ namespace ExtractorSharp {
             if (Config["AutoUpdate"].Boolean) {
                 CheckUpdate(false);
             }
-            LoadRegistry();
-#if DEBUG
-#else
             Application.ThreadException += (o, e) => Viewer.Show("debug", 0, e.Exception.Message + ";" + e.Exception.StackTrace);   
-#endif
-            Application.SetCompatibleTextRenderingDefault(true);
+            Application.SetCompatibleTextRenderingDefault(true);           
             Application.EnableVisualStyles();
+            LoadRegistry();
             Controller = new Controller();
             Viewer = new Viewer();
             Drawer = new Drawer();
@@ -83,7 +70,9 @@ namespace ExtractorSharp {
 
 
         private static void OnShown(object sender, EventArgs e) {
-            if (showVersion) {
+            if (!Config["Version"].Value.Equals(Version)) {
+                Config["Version"] = new ConfigValue(Version);
+                Config.Save();
                 Viewer.Show("version", true);
             }
             if (Arguments.Length == 1) {
@@ -148,14 +137,15 @@ namespace ExtractorSharp {
             var chinese = Language.CreateFromJson(Resources.Chinese);
             LanguageList = new List<Language>();
             LanguageList.Add(chinese);
-            var path = Application.StartupPath + "/lan/";
+            var path =  $"{Config["RootPath"]}/lan/";
             if (Directory.Exists(path)) {
                 foreach (var file in Directory.GetFiles(path, "*.json")) {
                     var lan = Language.CreateFromFile(file);
                     LanguageList.Add(lan);
                 }
-            } else
+            } else {
                 Directory.CreateDirectory(path);
+            }
             if (Config["LCID"].Integer == -1) {
                 Config["LCID"] = new ConfigValue(Application.CurrentCulture.LCID);
                 Config.Save();
@@ -168,23 +158,18 @@ namespace ExtractorSharp {
             Config.LoadConfig(Resources.Config);
             ViewConfig = new JsonConfig();
             ViewConfig.LoadConfig(Resources.View);
+            Config["RootPath"] = new ConfigValue(Application.StartupPath);
+            Config["ResourcePath"] = new ConfigValue($"{Config["GamePath"]}/ImagePacks2");
         }
 
         /// <summary>
         /// 加载注册表
         /// </summary>
         private static void LoadRegistry() {
-            try {
-                if (Config["GamePath"].Value.Equals(string.Empty) || !Directory.Exists(Config["GamePath"].Value)) {
-                    var path = Registry.CurrentUser.OpenSubKey("software\\tencent\\dnf", RegistryKeyPermissionCheck.Default, RegistryRights.ReadKey).GetValue("InstallPath").ToString();
-                    Config["GamePath"] = new ConfigValue(path);
-                }
-                var lastVersion = Config["Version"].Value;
-                if (lastVersion.ToIntVersion() < Version.ToIntVersion()) {
-                    showVersion = true;
-                    Config["Version"] = new ConfigValue(Version);
-                }
-            } catch (Exception) { }
+            if (Config["GamePath"].Value.Equals(string.Empty) || !Directory.Exists(Config["GamePath"].Value)) {
+                var path = Registry.CurrentUser.OpenSubKey("software\\tencent\\dnf", RegistryKeyPermissionCheck.Default, RegistryRights.ReadKey).GetValue("InstallPath").ToString();
+                Config["GamePath"] = new ConfigValue(path);
+            }
             Config.Save();
         }
 
@@ -216,7 +201,7 @@ namespace ExtractorSharp {
         /// </summary>
         internal static Dictionary<string, string> InitDictionary() {
             var dic = new Dictionary<string, string>();
-            var file = Application.StartupPath + "/dictionary.txt";
+            var file = $"{Config["RootPath"]}/dictionary.txt";
             if (File.Exists(file)) {
                 var data = File.ReadAllText(file);
                 var builder = new LSBuilder();
@@ -245,9 +230,9 @@ namespace ExtractorSharp {
                 } else if (Tips) {
                     MessageBox.Show(Language.Default["NeedNotUpdateTips"]);//提示不需要更新
                 }
-                showVersion = true;//需要进行提示
-            } catch (Exception) { }
-            Config["ProgramVersion"] = new ConfigValue(Version);//更新记录版本
+            } catch (Exception e) {
+                Console.Write(e.StackTrace);
+            }
             Config.Save();
         }
 
@@ -260,7 +245,7 @@ namespace ExtractorSharp {
         /// <param name="address"></param>
         /// <param name="productName"></param>
         internal static void StartUpdate() {
-            var name = $"{Application.StartupPath}/{Config["UpdateExeName"]}";
+            var name = $"{Config["RootPath"]}/{Config["UpdateExeName"]}";
             try {
                 var client = new WebClient();
                 client.DownloadFile(Config["UpdateExeUrl"].Value, name);
@@ -277,7 +262,7 @@ namespace ExtractorSharp {
         internal static bool SelectPath() {
             var dialog = new FolderBrowserDialog();
             if (dialog.ShowDialog() == DialogResult.OK) {
-                var rsPath = dialog.SelectedPath + "/ImagePacks2";
+                var rsPath = $"{dialog.SelectedPath}/ImagePacks2";
                 if (Directory.Exists(rsPath)) {
                     Config["GamePath"] = new ConfigValue(dialog.SelectedPath);
                     return true;
@@ -295,27 +280,20 @@ namespace ExtractorSharp {
         /// <param name="contact"></param>
         /// <param name="buglog"></param>
         /// <returns></returns>
-        internal static bool UploadBug(string remark, string contact, string buglog) {
+        internal static bool UploadBug(string remark, string contact, string log) {
             try {
-                contact = (contact == string.Empty || contact == null) ? "无" : contact;
-                remark = (remark == string.Empty || remark == null) ? "无" : remark;
-                var encoding = Encoding.GetEncoding("utf-8");
-                var url = "http://kritsu.net/extractorsharp/debug.php";
-                var request = WebRequest.Create(url) as HttpWebRequest;
-                request.Method = "POST";
-                request.ContentType = "application/x-www-form-urlencoded";
-                var data = encoding.GetBytes(url + "&contact=" + contact + "&remark=" + remark + "&buglog=" + buglog + "&version=" + Program.Version);
-                request.ContentLength = data.Length;
-                var os = request.GetRequestStream();
-                os.Write(data);
-                os.Flush();
-                os.Close();
-                var response = request.GetResponse() as HttpWebResponse;
-                var rs = new StreamReader(response.GetResponseStream(), encoding);
-                var result = bool.Parse(rs.ReadToEnd());
-
+                var data = new Dictionary<string, object>() {
+                    { "remark",remark },
+                    { "contact",contact},
+                    { "log", log }
+                };
+                var builder = new LSBuilder();
+                var resultObj=builder.Post(Config["DebugUrl"].Value,data);
+                var result = (bool)resultObj.GetValue(typeof(bool));
                 return result;
-            } catch (Exception) { }
+            } catch (Exception e) {
+                Console.Write(e.StackTrace);
+            }
             return false;
         }
 

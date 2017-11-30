@@ -5,8 +5,8 @@ using ExtractorSharp.UI;
 
 namespace ExtractorSharp.View {
     public partial class BugDialog : EaseDialog {
-        string error = "";
-        int mode;
+        private string error = "";
+        private int mode;
         public BugDialog(){
             InitializeComponent();
             CancelButton = cancelButton;
@@ -18,7 +18,6 @@ namespace ExtractorSharp.View {
             box.Text = string.Empty;
             if (mode == 0) {
                 error = (string)args[1];
-                error = error.Replace("&", "");
                 label1.Text = "程序出现了一些问题";
                 submitCheck.Checked = true;
                 submitCheck.Visible = true;
@@ -31,10 +30,6 @@ namespace ExtractorSharp.View {
         }
 
         public void Submit(object sender,EventArgs e) {
-            var error = "无";
-            if (submitCheck.Checked) {
-                error = this.error;
-            }
             Program.UploadBug(box.Text, textBox2.Text, error);
             DialogResult = DialogResult.OK;
         }

@@ -120,8 +120,9 @@ namespace ExtractorSharp.Data{
 
         public Album() {
             Handler = new SecondHandler(this);
-            Tables = new List<List<Color>>();
-            Tables.Add(new List<Color>());
+            Tables = new List<List<Color>> {
+                new List<Color>()
+            };
         }
         
         /// <summary>
@@ -134,13 +135,16 @@ namespace ExtractorSharp.Data{
         /// </summary>
         /// <param name="stream"></param>
         public void InitHandle(Stream stream) {
-            if (!Handler.Dic.ContainsKey(Version))
+            if (!Handler.Dic.ContainsKey(Version)) {
                 return;
+            }
             var type = Handler.Dic[Version];
-            if (type != null && typeof(Handler).IsAssignableFrom(type))
+            if (type != null && typeof(Handler).IsAssignableFrom(type)) {
                 Handler = type.CreateInstance(this) as Handler;
-            if (Handler != null && stream != null)
+            }
+            if (Handler != null && stream != null) {
                 Handler.CreateFromStream(stream);
+            }
         }
 
         /// <summary>
@@ -156,8 +160,7 @@ namespace ExtractorSharp.Data{
             Handler.Album = this;
             List.Clear();
             List.AddRange(album.List);
-            foreach(var al in List) 
-                al.Parent = this;       
+            AdjustIndex();
         }
 
         /// <summary>

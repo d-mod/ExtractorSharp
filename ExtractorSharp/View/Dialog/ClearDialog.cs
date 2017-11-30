@@ -11,7 +11,7 @@ using ExtractorSharp.Core;
 
 namespace ExtractorSharp.View {
     internal partial class ClearDialog : EaseDialog {
-        private string Path => Program.ResourcePath;
+        private string Path => Config["ResourcePath"].Value;
         private Dictionary<string, string> Dic;
         public ClearDialog(){
             InitializeComponent();
@@ -38,7 +38,7 @@ namespace ExtractorSharp.View {
             bar.Maximum = array.Length;
             bar.Value = 0;
             bar.Visible = true;
-            var backup = Application.StartupPath + "/backup/";
+            var backup = $"{Config["RootPath"]}/backup/";
             if (!Directory.Exists(backup))
                 Directory.CreateDirectory(backup);
             foreach (var f in array) {

@@ -17,6 +17,7 @@
   ApiUrl: "http://extractorsharp.kritsu.net/api/avatar",
   UpdateUrl:"http://extractorsharp.kritsu.net/api/program/update?type=release",
   UpdateExeUrl:"http://static.kritsu.net/install.exe",
+  DebugUrl:"http://extractorsharp.kritsu.net/api/program/debug"
   UpdateExeName:"install.exe",
   AutoUpdate: true
 }

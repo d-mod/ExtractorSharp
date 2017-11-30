@@ -130,7 +130,7 @@ namespace ExtractorSharp {
                 if (index > 0)
                     path = path.Substring(0, index);//获得img所在的文件夹
                 path = path.Replace("/", "_");//通常情况下，游戏原文件名和img文件夹对应
-                path = Program.ResourcePath + "/" + path + ".NPK";//得到游戏原文件路径
+                path = $"{Program.Config["ResourcePath"]}/{path}.NPK";//得到游戏原文件路径
                 if (!dic.ContainsKey(path))
                     dic.Add(path, new List<string>());
                 dic[path].Add(item.Name);

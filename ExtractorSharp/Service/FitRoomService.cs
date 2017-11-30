@@ -12,6 +12,7 @@ namespace ExtractorSharp.Service {
     public class FitRoomService {
         private List<string> ProfessionList { get; set; }
         private string Profession => ProfessionList[Index];
+        private string[] WeaponArray { set; get; }
         private Dictionary<string, WeaponInfo> weapon_info;
         private Dictionary<string, string> replace_dic;
         private Dictionary<string, string> alias_list;
@@ -71,9 +72,10 @@ namespace ExtractorSharp.Service {
             this.Index = index;
             var profession = ProfessionList[index];
             profession = profession.Replace("_at", "");
-            var array = weapon_info[profession].Weapon.ToArray();
-            for (var i = 0; i < array.Length; i++) {
-                array[i] = alias_list[array[i]];
+            WeaponArray = weapon_info[profession].Weapon.ToArray();
+            var array = new string[WeaponArray.Length];
+            for (var i = 0; i < WeaponArray.Length; i++) {
+                array[i] = alias_list[WeaponArray[i]];
             }
             return array;
         }
@@ -81,9 +83,11 @@ namespace ExtractorSharp.Service {
         public void ExtractImg(int[] values, int weaponValue, int wepaonIndex) {
             var list = new List<Album>();
             for (var i = 0; i < parts.Length; i++) {
-                var item = FindImg(ProfessionList[Index], parts[i], values[i]);
+                var item = FindImg(Profession, parts[i], values[i]);
                 list.AddRange(item);
             }
+            var weapon = FindWeapon(Profession, WeaponArray[wepaonIndex], weaponValue);
+            list.AddRange(weapon);
             Array = list.ToArray();
         }
 
@@ -96,7 +100,7 @@ namespace ExtractorSharp.Service {
             if (replace_dic.ContainsKey(name)) {
                 name = replace_dic[name];
             }
-            string path = $"{ Program.ResourcePath }sprite_character_{ profession }equipment_avatar_{ name }.NPK";
+            string path = $"{ Program.Config["ResourcePath"]}/sprite_character_{ profession }equipment_avatar_{ name }.NPK";
             if (!File.Exists(path)) {
                 return new List<Album>();
             }
@@ -196,11 +200,16 @@ namespace ExtractorSharp.Service {
         /// <param name="code"></param>
         /// <returns></returns>
         private IEnumerable<Album> FindWeapon(string prefession, string type, int code) {
-            if (code == -1)
+            if (code == -1) {
                 return new List<Album>();
-            var path = $"{ Program.ResourcePath }sprite_character_{ prefession }equipment_weapon_{ type }.NPK";
-            if (!File.Exists(path))
+            }
+            if (!prefession.EndsWith("_at")) {
+                prefession += "_";
+            }
+            var path = $"{ Program.Config["ResourcePath"]}/sprite_character_{ prefession }equipment_weapon_{ type }.NPK";
+            if (!File.Exists(path)) {
                 return new List<Album>();
+            }
             var list = Tools.Load(path);
             list = new List<Album>(Tools.Find(list, code.Completed()));
             return FindImg(list, code, type);

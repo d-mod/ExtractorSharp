@@ -21,7 +21,7 @@ using System.Diagnostics;
 namespace ExtractorSharp.View{
     internal partial class FitRoomDialog : EaseDialog {
         private Controller Controller;
-        private string Path => Program.ResourcePath;
+        private string Path => Config["ResourcePath"].Value;
         private string[] parts;
         private FitRoomService Service { get; }
         public FitRoomDialog() {
@@ -102,8 +102,9 @@ namespace ExtractorSharp.View{
             if (professionBox.SelectedIndex > -1) {
                 var arr = Service.GetWeapon(professionBox.SelectedIndex);
                 weaponCombo.Items.AddRange(arr);
-                if (arr.Length > 0)                 //当武器种类大于0时，默认选择第一个
+                if (arr.Length > 0) {                 //当武器种类大于0时，默认选择第一个
                     weaponCombo.SelectedIndex = 0;
+                }
             }
         }
 

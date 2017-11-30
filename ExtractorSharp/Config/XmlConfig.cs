@@ -37,7 +37,7 @@ namespace ExtractorSharp.Config {
                     if (OriginalConfig.ContainsKey(key))
                         return OriginalConfig[key];
                 }
-                if (UserConfig.ContainsKey(key)&&UserConfig[key].IsEmpty)
+                if (UserConfig.ContainsKey(key)&&UserConfig[key].NotEmpty)
                     return UserConfig[key];
                 if (OriginalConfig.ContainsKey(key))
                     return OriginalConfig[key];
@@ -59,8 +59,9 @@ namespace ExtractorSharp.Config {
 
         private void Init(XmlDocument doc) {
             ConfigDir = Application.StartupPath + "/conf/";
-            if (!Directory.Exists(ConfigDir))
+            if (!Directory.Exists(ConfigDir)) {
                 Directory.CreateDirectory(ConfigDir);
+            }
             OriginalConfig = Read(doc);
             Reload();
         }

@@ -30,7 +30,7 @@ namespace ExtractorSharp.Command.ImageCommand {
             Controller.Clipboarder = Clipboarder.CreateClipboarder(Album, Indexes, Mode);
 
             var arr = new string[Indexes.Length];
-            var dir = Application.StartupPath + "/temp/clipbord_image";
+            var dir = $"{Program.Config["RootPath"]}/temp/clipbord_image";
             if (Directory.Exists(dir)) {
                 Directory.Delete(dir);
             }

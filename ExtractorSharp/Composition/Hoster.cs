@@ -30,7 +30,7 @@ namespace ExtractorSharp.Composition{
         /// 初始化
         /// </summary>
         public void Initialize() {
-            var Path = Application.StartupPath+"/plugin";
+            var Path = $"{Program.Config["RootPath"]}/plugin";
             if (Directory.Exists(Path)) {
                 var catalog = new AggregateCatalog(new AssemblyCatalog(Assembly.GetExecutingAssembly()));
                 catalog.Catalogs.Add(new DirectoryCatalog(Path));

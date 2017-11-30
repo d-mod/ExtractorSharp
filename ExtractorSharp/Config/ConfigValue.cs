@@ -149,7 +149,7 @@ namespace ExtractorSharp.Config {
             }
         }
 
-        public bool IsEmpty => Value?.Length > 0;
+        public bool NotEmpty => Value?.Length > 0;
 
         public override string ToString() => Value;
 
