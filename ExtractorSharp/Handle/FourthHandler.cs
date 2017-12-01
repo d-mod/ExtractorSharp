@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 
 namespace ExtractorSharp.Handle {
     /// <summary>
@@ -62,8 +63,9 @@ namespace ExtractorSharp.Handle {
             array[0] = new ImageEntity(Album);
             array[0].Index = index;
             array[0].Data = new byte[4];
-            if (type != ColorBits.LINK)
+            if (type != ColorBits.LINK) {
                 array[0].Type = type;
+            }
             for (var i = 1; i < count; i++) {
                 array[i] = new ImageEntity(Album);
                 array[i].Type = type;
@@ -77,11 +79,6 @@ namespace ExtractorSharp.Handle {
 
         public override byte[] AdjustIndex() {
             var table = Album.CurrentTable;
-            if (table.Count > 256) {
-                Album.ConvertTo(Img_Version.Ver2);
-                Album.Adjust();
-                return Album.Handler.AdjustIndex();
-            }
             var ms = new MemoryStream();
             ms.WriteInt(table.Count);
             ms.WriteColorChart(table.ToArray());

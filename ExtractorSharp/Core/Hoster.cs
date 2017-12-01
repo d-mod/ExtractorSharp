@@ -14,7 +14,7 @@ namespace ExtractorSharp.Core{
     /// <summary>
     /// 插件宿主
     /// </summary>
-    internal class Hoster {
+    public class Hoster {
         private CompositionContainer Container;
 
         /// <summary>

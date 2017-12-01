@@ -110,10 +110,11 @@ namespace ExtractorSharp.Data{
         public ImageEntity this[int index] {
             get => List[index];
             set {
-                if (index < List.Count)
+                if (index < List.Count) {
                     List[index] = value;
-                else
+                } else {
                     List.Add(value);
+                }
             }
         }
 

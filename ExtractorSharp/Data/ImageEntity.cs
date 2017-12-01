@@ -151,8 +151,9 @@ namespace ExtractorSharp.Data{
         /// </summary>
         /// <param name="bmp"></param>
         public void ReplaceImage(ColorBits type, bool isAdjust, Bitmap bmp) {
-            if (bmp == null)
+            if (bmp == null) {
                 return;
+            }
             Picture = bmp;
             Target = null;
             Type = type;
@@ -161,12 +162,15 @@ namespace ExtractorSharp.Data{
                 Location.Y += bmp.Height - Size.Height;
             }
             Size = bmp.Size;
-            if (Cavas_Size.Height < bmp.Height)
+            if (Cavas_Size.Height < bmp.Height) {
                 Cavas_Size.Height = bmp.Height;
-            if (Cavas_Size.Width < bmp.Width)
+            }
+            if (Cavas_Size.Width < bmp.Width) {
                 Cavas_Size.Width = bmp.Width;
-            if (Width * Height > 1)
+            }
+            if (Width * Height > 1) {
                 Compress = Compress.ZLIB;
+            }
         }
 
 

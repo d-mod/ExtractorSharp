@@ -37,21 +37,24 @@ namespace ExtractorSharp.Handle {
             for (var i = 0; i < data.Length; i += 4) {
                 var color = Color.FromArgb(data[i + 3], data[i + 2], data[i + 1], data[i]);
                 var table = Album.CurrentTable;
-                if (!table.Contains(color))
+                if (!table.Contains(color)) {
                     table.Add(color);
+                }
                 ms.WriteByte((byte)table.IndexOf(color));
             }
             ms.Close();
             data = ms.ToArray();
-            if (data.Length < 2)
+            if (data.Length < 2) {
                 data = new byte[2];
+            }
             return data;
         }
 
         public override void NewImage(int count, ColorBits type, int index) {
             var array = new ImageEntity[count];
-            if (count < 1)
+            if (count < 1) {
                 return;
+            }
             array[0] = new ImageEntity(Album);
             array[0].Index = index;
             array[0].Data = new byte[4];
@@ -101,10 +104,13 @@ namespace ExtractorSharp.Handle {
         }
 
         public override void ConvertToVersion(Img_Version Version) {
-            if (Album.Version == Img_Version.Ver2 || Album.Version == Img_Version.Ver5)
-                foreach (var item in Album.List)
-                    if (item.Type != ColorBits.LINK)
+            if (Album.Version == Img_Version.Ver2 || Album.Version == Img_Version.Ver5) {
+                foreach (var item in Album.List) {
+                    if (item.Type != ColorBits.LINK) {
                         item.Type = ColorBits.ARGB_8888;
+                    }
+                }
+            }
         }
 
         public override void CreateFromStream(Stream stream) {

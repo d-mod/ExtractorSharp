@@ -6,7 +6,6 @@ using System.Net;
 using System.Reflection;
 using System.Security.AccessControl;
 using System.Windows.Forms;
-using ExtractorSharp.Composition;
 using ExtractorSharp.Config;
 using ExtractorSharp.Core;
 using ExtractorSharp.UI;

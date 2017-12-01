@@ -34,7 +34,7 @@ namespace ExtractorSharp.Command.ImageCommand {
             var arr = new string[Indexes.Length];
             var dir = $"{Program.Config["RootPath"]}/temp/clipbord_image";
             if (Directory.Exists(dir)) {
-                Directory.Delete(dir);
+                Directory.Delete(dir,true);
             }
             Directory.CreateDirectory(dir);
             var builder = new LSBuilder();

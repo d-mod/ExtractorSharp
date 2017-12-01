@@ -137,8 +137,9 @@ namespace ExtractorSharp.Handle {
                 stream.Read(data);
                 image.Data = data;
             }
-            if (!canRead)
+            if (!canRead) {
                 Album.Work = Work.CreateDefaultWork();
+            }
         }
 
         public override void ConvertToVersion(Img_Version Version) {

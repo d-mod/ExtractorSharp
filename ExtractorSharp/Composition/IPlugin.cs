@@ -17,7 +17,7 @@ namespace ExtractorSharp.Composition {
     /// <summary>
     /// 
     /// </summary>
-    internal class Plugin {
+    public class Plugin {
         internal IPluginMetadata MetaData { get; }
         internal Guid Guid { get; }
         internal Plugin(IPluginMetadata metadata) {
