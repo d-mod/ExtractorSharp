@@ -255,10 +255,8 @@ namespace ExtractorSharp {
                 Drawer.Color = Color.Empty;
                 return;
             }
-            var dialog = new ColorDialog();
-            dialog.Color = Drawer.Color;
-            if (dialog.ShowDialog() == DialogResult.OK) {
-                Drawer.Color = dialog.Color;
+            if (colorDialog.ShowDialog() == DialogResult.OK) {
+                Drawer.Color = colorDialog.Color;
             }
         }
 
@@ -1039,9 +1037,8 @@ namespace ExtractorSharp {
         /// <param name="e"></param>
         private void ReplaceBack(object sender, EventArgs e) {
             if (displayBackBox.SelectedIndex == 0) {
-                var dialog = new ColorDialog();
-                if (dialog.ShowDialog() == DialogResult.OK) {
-                    BackBoxColor = dialog.Color;
+                if (colorDialog.ShowDialog() == DialogResult.OK) {
+                    BackBoxColor = colorDialog.Color;
                     CavasFlush();
                 }
             } else if (displayBackBox.SelectedIndex == 1) {

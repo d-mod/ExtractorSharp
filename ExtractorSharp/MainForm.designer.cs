@@ -559,6 +559,8 @@ namespace ExtractorSharp {
             saveAsLayerItem.Text = Language["SaveAs"];
             replaceLayerItem.Text = Language["ReplaceImage"];
 
+            colorDialog = new ColorDialog();
+
             AutoScaleDimensions = new SizeF(6F, 12F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(imageList);
@@ -720,7 +722,9 @@ namespace ExtractorSharp {
         private ToolStripMenuItem toolsItem;    //拓展
         private ToolStripMenuItem cavasImageItem;//画布化贴图
         private ToolStripMenuItem uncavasImageItem;//去画布化贴图
-        private ToolStripMenuItem lineDodgeItem; 
+        private ToolStripMenuItem lineDodgeItem;
+
+        private ColorDialog colorDialog;
 
 
         private ComboBox displayBackBox;        //显示背景
