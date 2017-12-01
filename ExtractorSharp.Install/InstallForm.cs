@@ -11,13 +11,13 @@ using System.ComponentModel;
 using System.Diagnostics;
 
 namespace ExtractorSharp.Install {
-    public partial class UpdateForm : Form {
+    public partial class InstallForm : Form {
 
         private const string UPDATE_URL ="http://extractorsharp.kritsu.net/api/program/update?type=release";
         private const string DOWNLOAD_URL = "http://static.kritsu.net/file";
         private Stack<FileInfo> Stack;
         private WebClient Client;
-        public UpdateForm(string[] args) {
+        public InstallForm(string[] args) {
             Client = new WebClient();
             Client.DownloadProgressChanged += ProgressChanged;
             Client.DownloadFileCompleted += ProgressCompleted;

@@ -1,4 +1,5 @@
 ﻿using ExtractorSharp.Core;
+using ExtractorSharp.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,10 +43,12 @@ namespace ExtractorSharp.View.Pane {
             if (Parent.Visible) {
                 historyList.Items.Clear();
                 historyList.Items.Add("...");
-                foreach (var item in Controller.History)
-                    historyList.Items.Add(item.ToString());
-                if (Controller.Index < historyList.Items.Count)
+                foreach (var item in Controller.History) {
+                    historyList.Items.Add(Language.Default[item.Name]);
+                }
+                if (Controller.Index < historyList.Items.Count) {
                     historyList.SelectedIndex = Controller.Index;
+                }
                 base.Refresh();
             }
         }

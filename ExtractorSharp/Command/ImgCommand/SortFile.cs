@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 namespace ExtractorSharp.Command.ImgCommand {
     /// <summary>
-    /// 文件分类
+    /// 文件排序
     /// </summary>
-    class SortImg : ICommand {
-        List<Album> List;
-        List<Album> oldList;
-        Controller Controller => Program.Controller;
+    class SortFile : ICommand {
+        private List<Album> List;
+        private List<Album> oldList;
+        private Controller Controller => Program.Controller;
         public void Do(params object[] args) {
             oldList = new List<Album>();
             oldList.AddRange(Controller.List);
@@ -49,6 +49,6 @@ namespace ExtractorSharp.Command.ImgCommand {
 
         public bool Changed => true;
 
-        public override string ToString() => Language.Default["Sort"];
+        public string Name => "SortFile";
     }
 }

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2009
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractorSharp", "ExtractorSharp\ExtractorSharp.csproj", "{37D3351F-80F8-4905-A06F-65C430EC5EE2}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractorSharp.Install", "ExtractorSharp.Install\ExtractorSharp.Install.csproj", "{56B182EF-36A7-4A45-ADC9-212DCEB615EA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractorSharp.Loose.Viewer", "ExtractorSharp.Loose.Viewer\ExtractorSharp.Loose.Viewer.csproj", "{6CD9A8BE-BB87-43E1-81BF-9526F5F54A90}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractorSharp.Brushes", "ExtractorSharp.Brushes\ExtractorSharp.Brushes.csproj", "{04E653A6-1C41-4769-A52C-ADBECF99D71B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,6 +89,22 @@ Global
 		{6CD9A8BE-BB87-43E1-81BF-9526F5F54A90}.Release|x64.Build.0 = Release|Any CPU
 		{6CD9A8BE-BB87-43E1-81BF-9526F5F54A90}.Release|x86.ActiveCfg = Release|Any CPU
 		{6CD9A8BE-BB87-43E1-81BF-9526F5F54A90}.Release|x86.Build.0 = Release|Any CPU
+		{04E653A6-1C41-4769-A52C-ADBECF99D71B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04E653A6-1C41-4769-A52C-ADBECF99D71B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04E653A6-1C41-4769-A52C-ADBECF99D71B}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{04E653A6-1C41-4769-A52C-ADBECF99D71B}.Debug|ARM.Build.0 = Debug|Any CPU
+		{04E653A6-1C41-4769-A52C-ADBECF99D71B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{04E653A6-1C41-4769-A52C-ADBECF99D71B}.Debug|x64.Build.0 = Debug|Any CPU
+		{04E653A6-1C41-4769-A52C-ADBECF99D71B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{04E653A6-1C41-4769-A52C-ADBECF99D71B}.Debug|x86.Build.0 = Debug|Any CPU
+		{04E653A6-1C41-4769-A52C-ADBECF99D71B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04E653A6-1C41-4769-A52C-ADBECF99D71B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04E653A6-1C41-4769-A52C-ADBECF99D71B}.Release|ARM.ActiveCfg = Release|Any CPU
+		{04E653A6-1C41-4769-A52C-ADBECF99D71B}.Release|ARM.Build.0 = Release|Any CPU
+		{04E653A6-1C41-4769-A52C-ADBECF99D71B}.Release|x64.ActiveCfg = Release|Any CPU
+		{04E653A6-1C41-4769-A52C-ADBECF99D71B}.Release|x64.Build.0 = Release|Any CPU
+		{04E653A6-1C41-4769-A52C-ADBECF99D71B}.Release|x86.ActiveCfg = Release|Any CPU
+		{04E653A6-1C41-4769-A52C-ADBECF99D71B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -17,6 +17,8 @@ namespace ExtractorSharp.Command.ColorChartCommand {
 
         public bool Changed => true;
 
+        public string Name => "ChangeColor";
+
         public void Do(params object[] args) {
             Album = args[0] as Album;
             TableIndex = (int)args[1];

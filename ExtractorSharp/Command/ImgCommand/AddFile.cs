@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 
 namespace ExtractorSharp.Command.ImgCommand {
-    class AddImg : ICommand{
+    class AddFile : ICommand{
         private Album[] Array;
         private Album[] List;
         private bool Clear;
@@ -28,9 +28,9 @@ namespace ExtractorSharp.Command.ImgCommand {
             }
         }
 
-        public bool CanUndo => true;
+        public string Name => "AddFile";
 
-        public override string ToString() => Language.Default["Add"];
+        public bool CanUndo => true;
 
         public bool Changed => false;
     }

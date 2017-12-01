@@ -27,7 +27,7 @@ namespace ExtractorSharp.View{
         /// </summary>
         private void InitializeComponent() {
             imageBox = new PictureBox();
-            addSpliceButton = new Button();
+            addMergeButton = new Button();
             addListButton = new Button();
             saveButton = new Button();
             loadButton = new Button();
@@ -49,7 +49,7 @@ namespace ExtractorSharp.View{
             pathLabel = new Label();
 
             addListGroup = new GroupBox();
-            addSpliceGroup = new GroupBox();
+            addMergeGroup = new GroupBox();
             otherGroup = new GroupBox();
             ((System.ComponentModel.ISupportInitialize)(imageBox)).BeginInit();
             SuspendLayout();
@@ -64,14 +64,14 @@ namespace ExtractorSharp.View{
             imageBox.TabIndex = 8;
             imageBox.TabStop = false;
             // 
-            // addSpliceButton
+            // addMergeButton
             // 
-            addSpliceButton.Location = new Point(134, 410);
-            addSpliceButton.Name = "addSpliceButton";
-            addSpliceButton.Size = new Size(97, 23);
-            addSpliceButton.TabIndex = 9;
-            addSpliceButton.Text = Language["AddSplice"];
-            addSpliceButton.UseVisualStyleBackColor = true;
+            addMergeButton.Location = new Point(134, 410);
+            addMergeButton.Name = "addMergeButton";
+            addMergeButton.Size = new Size(97, 23);
+            addMergeButton.TabIndex = 9;
+            addMergeButton.Text = Language["AddMerge"];
+            addMergeButton.UseVisualStyleBackColor = true;
             // 
             // addListButton
             // 
@@ -146,7 +146,7 @@ namespace ExtractorSharp.View{
             clearCheck.AutoSize = true;
             clearCheck.Location = new Point(20, 30);
             clearCheck.Size = new Size(156, 16);
-            clearCheck.Text = Language["ClearSplice"];
+            clearCheck.Text = Language["ClearMerge"];
             clearCheck.Checked = true;
             clearCheck.UseVisualStyleBackColor = true;
 
@@ -169,11 +169,11 @@ namespace ExtractorSharp.View{
             pathLabel.Location = new Point(13, 265);
             pathLabel.Size = new Size(80, 15);
 
-            addSpliceGroup.Text = Language["AddSplice"];
-            addSpliceGroup.Location = new Point(175, 300);
-            addSpliceGroup.Width = 150;
-            addSpliceGroup.Controls.Add(clearCheck);
-            addSpliceGroup.Controls.Add(addWeaponCheck);
+            addMergeGroup.Text = Language["AddMerge"];
+            addMergeGroup.Location = new Point(175, 300);
+            addMergeGroup.Width = 150;
+            addMergeGroup.Controls.Add(clearCheck);
+            addMergeGroup.Controls.Add(addWeaponCheck);
 
             addWeaponCheck.Text = Language["AddWeapon"];
             addWeaponCheck.Location = new Point(20, 50);
@@ -198,7 +198,7 @@ namespace ExtractorSharp.View{
             AutoScaleDimensions = new SizeF(6F, 12F);
             AutoScaleMode = AutoScaleMode.Font;
             Size = new Size(560, 500);
-            Controls.Add(addSpliceGroup);
+            Controls.Add(addMergeGroup);
             Controls.Add(addListGroup);
             Controls.Add(otherGroup);
             Controls.Add(professionLabel);
@@ -208,7 +208,7 @@ namespace ExtractorSharp.View{
             Controls.Add(saveButton);
             Controls.Add(otherButton);
             Controls.Add(addListButton);
-            Controls.Add(addSpliceButton);
+            Controls.Add(addMergeButton);
             Controls.Add(imageBox);
             Controls.Add(weaponCombo);
             Controls.Add(weaponBox);
@@ -229,7 +229,7 @@ namespace ExtractorSharp.View{
         private NumericUpDown weaponBox;
         private ComboBox weaponCombo;
         private PictureBox imageBox;
-        private Button addSpliceButton;
+        private Button addMergeButton;
         private Button addListButton;
         private Button saveButton;
         private Button otherButton;
@@ -247,7 +247,7 @@ namespace ExtractorSharp.View{
         private TextBox pathBox;
 
         private GroupBox addListGroup;
-        private GroupBox addSpliceGroup;
+        private GroupBox addMergeGroup;
         private GroupBox otherGroup;
     }
 }

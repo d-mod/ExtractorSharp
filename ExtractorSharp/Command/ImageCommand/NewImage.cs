@@ -9,10 +9,11 @@ namespace ExtractorSharp.Command.ImageCommand {
     /// 可宏命令
     /// </summary>
     class NewImage : ICommand,MutipleAciton{
-        Album Album;
-        int Index;
-        int Count;
-        ColorBits Type;
+        private Album Album;
+        private int Index;
+        private int Count;
+        private ColorBits Type;
+        public string Name => "NewImage";
         public void Do(params object[] args) {
             Album = args[0] as Album;
             Count = (int)args[1];

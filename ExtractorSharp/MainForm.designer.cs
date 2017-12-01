@@ -47,11 +47,11 @@ namespace ExtractorSharp {
             saveAsItem = new ToolStripMenuItem();
             newImgItem = new ToolStripMenuItem();
             hideImgItem = new ToolStripMenuItem();
-            addSpliceItem = new ToolStripMenuItem();
+            addMergeItem = new ToolStripMenuItem();
             encryptItem = new ToolStripMenuItem();
             deleteEncryptItem = new ToolStripMenuItem();
-            addOutsideSpliceItem = new ToolStripMenuItem();
-            runSpliceItem = new ToolStripMenuItem();
+            addOutsideMergeItem = new ToolStripMenuItem();
+            runMergeItem = new ToolStripMenuItem();
             renameItem = new ToolStripMenuItem();
 
 
@@ -195,9 +195,9 @@ namespace ExtractorSharp {
             albumListMenu.Items.Add(renameItem);
             albumListMenu.Items.Add(convertItem);
             albumListMenu.Items.Add(new ToolStripSeparator());
-            albumListMenu.Items.Add(addSpliceItem);
-            albumListMenu.Items.Add(addOutsideSpliceItem);
-            albumListMenu.Items.Add(runSpliceItem);
+            albumListMenu.Items.Add(addMergeItem);
+            albumListMenu.Items.Add(addOutsideMergeItem);
+            albumListMenu.Items.Add(runMergeItem);
             albumListMenu.Items.Add(new ToolStripSeparator());
             albumListMenu.Items.Add(encryptItem);
             albumListMenu.Items.Add(deleteEncryptItem);
@@ -216,19 +216,19 @@ namespace ExtractorSharp {
             saveAsItem.ShortcutKeys = Keys.Control | Keys.E;
             newImgItem.Text = Language["NewFile"];
             newImgItem.ShortcutKeys = Keys.Control | Keys.N;
-            hideImgItem.Text = Language["HideImg"];
+            hideImgItem.Text = Language["HideFile"];
             hideImgItem.ShortcutKeys = Keys.Control | Keys.H;
             convertItem.Text = Language["ConvertVersion"];
-            addSpliceItem.Text = Language["AddSplice"];
-            addSpliceItem.ShortcutKeys = Keys.Control | Keys.M;
-            addOutsideSpliceItem.Text = Language["AddOutsideSplice"];
-            addOutsideSpliceItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.M;
+            addMergeItem.Text = Language["AddMerge"];
+            addMergeItem.ShortcutKeys = Keys.Control | Keys.M;
+            addOutsideMergeItem.Text = Language["AddOutsideMerge"];
+            addOutsideMergeItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.M;
             encryptItem.Text = Language["Encrypt"];
             deleteEncryptItem.Text = Language["DeletePassword"];
-            runSpliceItem.Text = Language["RunSplice"];
+            runMergeItem.Text = Language["RunMerge"];
             renameItem.Text = Language["Rename"];
             renameItem.ShortcutKeys = Keys.Control | Keys.R;
-            repairImgItem.Text = Language["RepairImg"];
+            repairImgItem.Text = Language["RepairFile"];
             splitImgItem.Text = Language["SplitFile"];
             mixImgItem.Text = Language["MixFile"];
             // 
@@ -472,6 +472,7 @@ namespace ExtractorSharp {
             colorPanel.Location = new Point(800, 48);
             colorPanel.BackColor = Color.White;
             colorPanel.Size = new Size(25, 25);
+            colorPanel.BorderStyle = BorderStyle.FixedSingle;
             ///
             ///
             ///
@@ -689,9 +690,9 @@ namespace ExtractorSharp {
         private ToolStripMenuItem renameItem;       //重命名
         private ToolStripMenuItem convertItem;      //转换版本
         private ToolStripMenuItem hideImgItem;      //隐藏文件内所有贴图
-        private ToolStripMenuItem addSpliceItem;    //加入拼合队列
-        private ToolStripMenuItem addOutsideSpliceItem;//加入外部文件到拼合队列
-        private ToolStripMenuItem runSpliceItem;    //执行拼合队列
+        private ToolStripMenuItem addMergeItem;    //加入拼合队列
+        private ToolStripMenuItem addOutsideMergeItem;//加入外部文件到拼合队列
+        private ToolStripMenuItem runMergeItem;    //执行拼合队列
         private ToolStripMenuItem encryptItem;      //密码保护
         private ToolStripMenuItem deleteEncryptItem;//删除密码
         private ToolStripMenuItem repairImgItem;    //帧数补正

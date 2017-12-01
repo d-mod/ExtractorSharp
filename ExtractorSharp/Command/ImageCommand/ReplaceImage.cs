@@ -6,14 +6,15 @@ using System.IO;
 
 namespace ExtractorSharp.Command.ImageCommand {
     class ReplaceImage : ICommand,SingleAction{
-        Album Album;
+        
         public int[] Indexes { set; get; }
-        string Path;
-        Bitmap[] oldImages;
-        ColorBits type;
-        ColorBits[] types;
-        bool isAdjust;//是否校正坐标
-        int Mode;//替换模式 0为替换贴图 1为替换gif 2为替换文件夹
+        private Album Album;
+        private string Path;
+        private Bitmap[] oldImages;
+        private ColorBits type;
+        private ColorBits[] types;
+        private bool isAdjust;//是否校正坐标
+        private int Mode;//替换模式 0为替换贴图 1为替换gif 2为替换文件夹
         public void Do(params object[] args) {
             type = (ColorBits)args[0];
             isAdjust = (bool)args[1];
@@ -109,9 +110,11 @@ namespace ExtractorSharp.Command.ImageCommand {
         
 
         public void Undo() {
-            for (int i = 0; i < Indexes.Length; i++) 
-                if (Indexes[i] < Album.List.Count && Indexes[i] > -1&&oldImages[i]!=null) 
+            for (int i = 0; i < Indexes.Length; i++) {
+                if (Indexes[i] < Album.List.Count && Indexes[i] > -1 && oldImages[i] != null) {
                     Album[Indexes[i]].ReplaceImage(types[i], isAdjust, oldImages[i]);
+                }
+            }
         }
 
         public void Action(Album Album,int[] indexes) {
@@ -145,6 +148,9 @@ namespace ExtractorSharp.Command.ImageCommand {
         public bool CanUndo => true;
 
         public bool Changed => true;
+
+
+        public string Name => "ReplaceImage";
 
         public override string ToString() => Language.Default["ReplaceImage"];
         

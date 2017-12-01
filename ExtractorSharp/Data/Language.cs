@@ -31,8 +31,9 @@ namespace ExtractorSharp.Data {
                 return key;
             }
             private set {
-                if (Dictionary.ContainsKey(key))
+                if (Dictionary.ContainsKey(key)) {
                     Dictionary.Remove(key);
+                }
                 Dictionary.Add(key, value);
             }
         }

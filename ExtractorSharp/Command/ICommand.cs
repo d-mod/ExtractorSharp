@@ -5,6 +5,7 @@ namespace ExtractorSharp.Command {
     /// 命令
     /// </summary>
     public interface ICommand {
+        string Name { get; }
         /// <summary>
         /// 执行
         /// </summary>

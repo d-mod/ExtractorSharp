@@ -7,11 +7,12 @@ namespace ExtractorSharp.Composition {
         /// <summary>
         /// 安装插件
         /// </summary>
-       void Install();
+        void Install();
         /// <summary>
         /// 卸载插件
         /// </summary>
         void UnInstall();
+
     }
     /// <summary>
     /// 

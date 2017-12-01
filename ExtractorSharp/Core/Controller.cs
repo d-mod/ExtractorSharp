@@ -13,7 +13,7 @@ using ExtractorSharp.Command;
 using ExtractorSharp.Command.ImageCommand;
 using ExtractorSharp.Command.ImgCommand;
 using ExtractorSharp.Command.LayerCommand;
-using ExtractorSharp.Command.SpliceCommand;
+using ExtractorSharp.Command.MergeCommand;
 using ExtractorSharp.Config;
 using ExtractorSharp.Core;
 using ExtractorSharp.EventArguments;
@@ -127,20 +127,20 @@ namespace ExtractorSharp.Core{
             List = new List<Album>();
             Dic = new Dictionary<string, Type>();
             SaveChanged += ChangeSave;
-            Regisity("addImg", typeof(AddImg));
-            Regisity("deleteImg", typeof(DeleteImg));
-            Regisity("renameImg", typeof(RenameImg));
-            Regisity("replaceImg", typeof(ReplaceImg));
-            Regisity("newImg", typeof(NewImg));
-            Regisity("hideImg", typeof(HideImg));
-            Regisity("sortImg", typeof(SortImg));
+            Regisity("addImg", typeof(AddFile));
+            Regisity("deleteImg", typeof(DeleteFile));
+            Regisity("renameImg", typeof(RenameFile));
+            Regisity("replaceImg", typeof(ReplaceFile));
+            Regisity("newImg", typeof(NewFile));
+            Regisity("hideImg", typeof(HideFile));
+            Regisity("sortImg", typeof(SortFile));
 
-            Regisity("cutImg", typeof(CutImg));
-            Regisity("pasteImg", typeof(PasteImg));
+            Regisity("cutImg", typeof(CutFile));
+            Regisity("pasteImg", typeof(PasteFile));
 
-            Regisity("repairImg", typeof(RepairImg));
-            Regisity("splitImg", typeof(SplitImg));
-            Regisity("mixImg", typeof(MixImg));
+            Regisity("repairImg", typeof(RepairFile));
+            Regisity("splitImg", typeof(SplitFile));
+            Regisity("mixImg", typeof(MixFile));
 
             Regisity("newImage", typeof(NewImage));
             Regisity("replaceImage", typeof(ReplaceImage));
@@ -153,10 +153,10 @@ namespace ExtractorSharp.Core{
             Regisity("cutImage", typeof(CutImage));
             Regisity("pasteImage", typeof(PasteImage));
 
-            Regisity("addSplice", typeof(AddMerge));
-            Regisity("removeSplice", typeof(RemoveMerge));
-            Regisity("clearSplice", typeof(ClearMerge));
-            Regisity("runSplice", typeof(RunMerge));
+            Regisity("addMerge", typeof(AddMerge));
+            Regisity("removeMerge", typeof(RemoveMerge));
+            Regisity("clearMerge", typeof(ClearMerge));
+            Regisity("runMerge", typeof(RunMerge));
 
             Regisity("cavasImage", typeof(CavasImage));
             Regisity("uncavasImage", typeof(UnCavasImage));
@@ -166,6 +166,7 @@ namespace ExtractorSharp.Core{
 
             Regisity("changeColor", typeof(ChangeColor));
             Regisity("pencil", typeof(PencilDraw));
+            Regisity("eraser", typeof(EraserDraw));
         }
 
         /// <summary>

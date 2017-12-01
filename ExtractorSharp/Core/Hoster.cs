@@ -8,8 +8,9 @@ using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Primitives;
 using System.Linq;
+using ExtractorSharp.Command;
 
-namespace ExtractorSharp.Composition{
+namespace ExtractorSharp.Core{
     /// <summary>
     /// 插件宿主
     /// </summary>
@@ -20,10 +21,15 @@ namespace ExtractorSharp.Composition{
         /// 插件
         /// </summary>
         [ImportMany(RequiredCreationPolicy =CreationPolicy.Shared)]
+
         private IEnumerable<Lazy<IPlugin,IPluginMetadata>> plugins;
+
+        [ImportMany(RequiredCreationPolicy =CreationPolicy.Shared)]
+        private IEnumerable<Lazy<ICommand, IPluginMetadata>> commands;
+
         private List<Plugin> List;
         public Hoster() {
-           // Initialize();
+            Initialize();
         }
 
         /// <summary>
@@ -36,22 +42,31 @@ namespace ExtractorSharp.Composition{
                 catalog.Catalogs.Add(new DirectoryCatalog(Path));
                 Container = new CompositionContainer(catalog);
                 Container.ComposeParts(this);
-                List= Install(plugins).ToList();
-            } else
+                List = Install(plugins).ToList();
+            } else {
                 Directory.CreateDirectory(Path);
+            }
         }
 
 
+        /// <summary>
+        /// 安装插件
+        /// </summary>
+        /// <param name="lazys"></param>
+        /// <returns></returns>
         public IEnumerable<Plugin> Install(IEnumerable<Lazy<IPlugin, IPluginMetadata>> lazys) {
             var guids = new HashSet<Guid>();
             foreach (var lazy in lazys) {
-                if (!Guid.TryParse(lazy.Metadata.Guid, out Guid guid)) continue;
-                if (!guids.Add(guid)) continue;
+                if (!Guid.TryParse(lazy.Metadata.Guid, out Guid guid)) {
+                    continue;
+                }
+                if (!guids.Add(guid)) {
+                    continue;
+                }
                 var sucess = false;
                 var plugin = new Plugin(lazy.Metadata);
                 try {
                     lazy.Value.Install();
-                    sucess = true;
                 } catch (Exception) {
                     sucess = false;
                 }

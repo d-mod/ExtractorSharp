@@ -7,20 +7,22 @@ namespace ExtractorSharp.Command.ImageCommand {
     /// 可宏命令
     /// </summary>
     class LinkImage : ICommand,SingleAction{
-        int Index;
         public int[] Indexes { set; get; }
-        ColorBits[] types;
-        Album Album;
+        public string Name => "LinkImage";
+        private ColorBits[] Types;
+        private Album Album;
+        private int Index;
         public void Do(params object[] args) {
             Album = args[0] as Album;
             Index = (int)args[1];
             Indexes = args[2] as int[];
-            types = new ColorBits[Indexes.Length];
+            Types = new ColorBits[Indexes.Length];
             for (var i = 0; i < Indexes.Length; i++) {
-                if (Index > Album.List.Count - 1 || Index < 0 || Index == Indexes[i])
+                if (Index > Album.List.Count - 1 || Index < 0 || Index == Indexes[i]) {
                     continue;
+                }
                 var entity = Album.List[Indexes[i]];
-                types[i] = entity.Type;
+                Types[i] = entity.Type;
                 entity.Type = ColorBits.LINK;
                 entity.Target = Album.List[Index];
             }
@@ -29,7 +31,7 @@ namespace ExtractorSharp.Command.ImageCommand {
         public void Undo() {
             for (int i = 0; i < Indexes.Length; i++) {
                 var entity = Album.List[Indexes[i]];
-                entity.Type = types[i];
+                entity.Type = Types[i];
                 entity.Target = null;
             }
         }

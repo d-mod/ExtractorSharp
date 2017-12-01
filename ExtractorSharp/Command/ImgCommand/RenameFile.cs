@@ -3,7 +3,7 @@ using ExtractorSharp.Data;
 using ExtractorSharp.View;
 
 namespace ExtractorSharp.Command.ImgCommand{
-    class RenameImg : ICommand {
+    class RenameFile : ICommand {
         Album Album;
         /// <summary>
         /// 原文件名
@@ -34,7 +34,7 @@ namespace ExtractorSharp.Command.ImgCommand{
 
         public bool Changed => true;
 
-        public override string ToString() => Language.Default["Rename"];
+        public string Name => "Rename";
 
     }
 }

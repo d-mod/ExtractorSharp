@@ -9,18 +9,20 @@ namespace ExtractorSharp.Command.ImageCommand {
     /// 去画布化
     /// </summary>
     class UnCavasImage : ICommand, SingleAction {
-        Album Album;
         public int[] Indexes { set; get; }
-        Bitmap[] Images;
-        Point[] Locations;
+        public string Name => "UnCavas";
+        private Album Album;
+        private Bitmap[] Images;
+        private Point[] Locations;
         public void Do(params object[] args) {
             Album = args[0] as Album;
             Indexes = args[1] as int[];
             Images = new Bitmap[Indexes.Length];
             Locations = new Point[Indexes.Length];
             for (var i = 0; i < Indexes.Length; i++) {
-                if (Indexes[i] > Album.List.Count - 1 || Indexes[i] < 0)
+                if (Indexes[i] > Album.List.Count - 1 || Indexes[i] < 0) {
                     continue;
+                }
                 var entity = Album.List[Indexes[i]];
                 Images[i] = entity.Picture;
                 Locations[i] = entity.Location;
@@ -41,9 +43,11 @@ namespace ExtractorSharp.Command.ImageCommand {
         }
 
         public void Action(Album Album, int[] indexes) {
-            foreach (var i in indexes)
-                if (i < Album.List.Count && i > -1)
+            foreach (var i in indexes) {
+                if (i < Album.List.Count && i > -1) {
                     Album.List[i].UnCavasImage();
+                }
+            }
         }
 
         public void RunScript(string arg) { }

@@ -17,14 +17,14 @@ namespace ExtractorSharp.Command.ImageCommand {
     /// </summary>
     class SaveImage : ICommand,SingleAction{
         public int[] Indexes { set; get; }
-        Album Album;
-        string Path;
+        private Album Album;
+        private string Path;
         /// <summary>
         /// 提取模式
         /// <para>0.单张贴图</para>
         /// <para>其他.多张贴图</para>
         /// </summary>
-        int Mode;
+        private int Mode;
         public void Do(params object[] args) {
             Album = args[0] as Album;
             Mode = (int)args[1];
@@ -45,13 +45,16 @@ namespace ExtractorSharp.Command.ImageCommand {
                 var suffix = Program.Config["SaveImageAllPath"].Boolean ? album.Path : album.Name;
                 var dir = Path.Replace('\\','/');
                 dir = dir.Complete("/"+suffix);
-                if (File.Exists(dir))//当已存在同名的文件时,文件夹加上下划线后缀
+                if (File.Exists(dir)) {//当已存在同名的文件时,文件夹加上下划线后缀
                     dir += "_";
-                if (!Directory.Exists(dir))
+                }
+                if (!Directory.Exists(dir)) {
                     Directory.CreateDirectory(dir);
+                }
                 for (int i = 0; i < indexes.Length && i < album.List.Count; i++) {
-                    if (indexes[i] > album.List.Count - 1 || indexes[i] < 0)
+                    if (indexes[i] > album.List.Count - 1 || indexes[i] < 0) {
                         continue;
+                    }
                     var entity = album.List[indexes[i]];
                     var path = $"{dir}/{indexes[i]}.png";//文件名格式:文件路径/贴图索引.png
                     entity.Picture.Save(path);//保存贴图
@@ -62,6 +65,8 @@ namespace ExtractorSharp.Command.ImageCommand {
         public bool CanUndo => false;
 
         public bool Changed => false;
+
+        public string Name => "SaveImage";
 
         public override string ToString() => Language.Default["SaveImage"];
 

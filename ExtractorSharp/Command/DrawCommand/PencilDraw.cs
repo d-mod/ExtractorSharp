@@ -12,8 +12,11 @@ namespace ExtractorSharp.Command.DrawCommand {
         private Point Location;
         private Color Color;
         private Bitmap Image;
-        public bool CanUndo => true;
 
+        public string Name => "Pencil";
+
+        public bool CanUndo => true;
+      
         public bool Changed => false;
 
         public void Do(params object[] args) {
@@ -48,7 +51,7 @@ namespace ExtractorSharp.Command.DrawCommand {
                 g.DrawImage(Image, _x, _y, Image.Width, Image.Height);
             }
             image.SetPixel(Location.X, Location.Y, Color);
-            Entity.ReplaceImage(Entity.Type, false, image);
+            Entity.Picture = image;
             Entity.Location = Entity.Location.Minus(new Point(_x, _y));
             Program.Controller.CavasFlush();
         }

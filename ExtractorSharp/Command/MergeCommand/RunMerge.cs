@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExtractorSharp.Command.SpliceCommand {
+namespace ExtractorSharp.Command.MergeCommand {
     class RunMerge : ICommand {
         public bool CanUndo => false;
 
@@ -18,6 +18,6 @@ namespace ExtractorSharp.Command.SpliceCommand {
         public void Redo() { }
         public void Undo() { }
 
-        public override string ToString() => Language.Default["Merge"];
+        public string Name => "RunMerge";
     }
 }

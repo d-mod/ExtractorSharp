@@ -4,22 +4,25 @@ using ExtractorSharp.Handle;
 using ExtractorSharp.View;
 
 namespace ExtractorSharp.Command.ImgCommand {
-    class NewImg : ICommand,MutipleAciton{
-        Controller Controller => Program.Controller;
-        Album Album;
-        string Path;
-        int Count;
-        int Index;  
+    class NewFile : ICommand,MutipleAciton{
+        private Controller Controller => Program.Controller;
+        private Album Album;
+        private string Path;
+        private int Count;
+        private int Index;  
         public void Do(params object[] args) {
             Album = args[0] as Album;
             Path = args[1] as string;
             Index = Album.List.Count;
-            if (args.Length > 2)
+            if (args.Length > 2) {
                 Count = (int)args[2];
-            if (args.Length > 3)
+            }
+            if (args.Length > 3) {
                 Index = (int)args[3];
-            if (Path.EndsWith(".ogg"))
+            }
+            if (Path.EndsWith(".ogg")) {
                 Album.Version = Img_Version.OGG;
+            }
             Album.Path = Path;
             Album.NewImage(Count, ColorBits.LINK, -1);
             Index = Controller.List.Count;
@@ -56,7 +59,7 @@ namespace ExtractorSharp.Command.ImgCommand {
 
         public bool CanUndo => true;
 
-        public override string ToString() => Language.Default["NewFile"];
+        public string Name => "NewFile";
         
 
     }

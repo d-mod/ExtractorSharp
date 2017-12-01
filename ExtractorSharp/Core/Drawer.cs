@@ -107,16 +107,21 @@ namespace ExtractorSharp.Core {
         }
 
         public void ReplaceLayer(params ImageEntity[] array) {
-            foreach (Layer layer in LayerList)
-                for (int j = 0; j < array.Length; j++)
-                    if (layer.Index == array[j].Index)
+            foreach (var layer in LayerList) {
+                for (int j = 0; j < array.Length; j++) {
+                    if (layer.Index == array[j].Index) {
                         layer.Replace(array[j]);
+                    }
+                }
+            }
         }
 
         public int IndexOfLayer(Point point) {
-            for (var i = LayerList.Count - 1; i > -1; i--)
-                if (LayerList[i].Contains(point))
+            for (var i = LayerList.Count - 1; i > -1; i--) {
+                if (LayerList[i].Contains(point)) {
                     return i + 2;
+                }
+            }
             return -1;
         }
 
@@ -125,8 +130,9 @@ namespace ExtractorSharp.Core {
         }
 
         public void TabLayer(int index) {
-            while (index >= Count)
+            while (index >= Count) {
                 FlashList.Add(new List<Layer>());
+            }
             LayerList = FlashList[index];
         }
 
@@ -144,7 +150,7 @@ namespace ExtractorSharp.Core {
             Brushes = new Dictionary<string, IBrush>();
             this["MoveTool"] = new MoveTool();
             this["Straw"] = new Straw();
-           // this["Eraser"] = new Eraser();
+            this["Eraser"] = new Eraser();
             this["Pencil"] = new Pencil();
             Brush = this["MoveTool"];
 

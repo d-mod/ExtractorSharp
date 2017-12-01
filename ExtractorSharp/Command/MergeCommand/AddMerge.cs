@@ -7,11 +7,13 @@ namespace ExtractorSharp.Command {
     /// 加入拼合
     /// </summary>
     class AddMerge : ICommand, MutipleAciton {
+        
+
         Album[] Array;
         public void Do(params object[] args) {
             Array = args as Album[];
             Program.Merger.Add(Array);
-            Messager.ShowOperate("AddSplice");
+            Messager.ShowOperate("AddMerge");
         }
 
         public void Undo() => Program.Merger.Remove(Array);
@@ -26,7 +28,8 @@ namespace ExtractorSharp.Command {
 
         public bool Changed => false;
 
-        public override string ToString() => Language.Default["AddSplice"];
+        public string Name => "AddMerge";
+        
     }
 }
 

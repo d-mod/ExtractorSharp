@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ExtractorSharp.Command.ImgCommand {
-    class PasteImg : ICommand {
+    class PasteFile : ICommand {
         public bool CanUndo => true;
 
         public bool Changed => true;
@@ -80,6 +80,6 @@ namespace ExtractorSharp.Command.ImgCommand {
             }
         }
 
-        public override string ToString() => Language.Default["Paste"];
+        public string Name => "PasteFile";
     }
 }

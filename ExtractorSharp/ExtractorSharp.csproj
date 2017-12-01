@@ -138,14 +138,15 @@
     <Compile Include="Command\ImageCommand\LineDodge.cs" />
     <Compile Include="Command\DrawCommand\PencilDraw.cs" />
     <Compile Include="Command\ImageCommand\PasteImage.cs" />
-    <Compile Include="Command\ImgCommand\CutImg.cs" />
-    <Compile Include="Command\ImgCommand\MixImg.cs" />
-    <Compile Include="Command\ImgCommand\PasteImg.cs" />
-    <Compile Include="Command\ImgCommand\RepairImg.cs" />
-    <Compile Include="Command\ImgCommand\SplitImg.cs" />
+    <Compile Include="Command\ImgCommand\CutFile.cs" />
+    <Compile Include="Command\ImgCommand\MixFile.cs" />
+    <Compile Include="Command\ImgCommand\PasteFile.cs" />
+    <Compile Include="Command\ImgCommand\RepairFile.cs" />
+    <Compile Include="Command\ImgCommand\SplitFile.cs" />
     <Compile Include="Command\LayerCommand\AddLayer.cs" />
     <Compile Include="Command\LayerCommand\RenameLayer.cs" />
     <Compile Include="Command\MergeCommand\RunMerge.cs" />
+    <Compile Include="Composition\ICommandPlugin.cs" />
     <Compile Include="Config\XmlConfig.cs" />
     <Compile Include="Config\ConfigMode.cs" />
     <Compile Include="Config\ConfigValue.cs" />
@@ -187,8 +188,8 @@
     <Compile Include="Command\ImageCommand\ChangePosition.cs" />
     <Compile Include="Command\ImageCommand\DyeImage.cs" />
     <Compile Include="Command\ImageCommand\UnCavasImage.cs" />
-    <Compile Include="Command\ImgCommand\ConvertImg.cs" />
-    <Compile Include="Command\MergeCommand\SortSplice.cs" />
+    <Compile Include="Command\ImgCommand\ConvertFile.cs" />
+    <Compile Include="Command\MergeCommand\SortMerge.cs" />
     <Compile Include="Draw\Paint\Cavas.cs" />
     <Compile Include="UI\EaseCavasBox.cs">
       <SubType>Component</SubType>
@@ -222,19 +223,19 @@
     <Compile Include="View\Dialog\CavasDialog.designer.cs" />
     <Compile Include="Command\ImageCommand\CavasImage.cs" />
     <Compile Include="Command\ImageCommand\SaveImage.cs" />
-    <Compile Include="Command\ImgCommand\SortImg.cs" />
+    <Compile Include="Command\ImgCommand\SortFile.cs" />
     <Compile Include="Command\MergeCommand\AddMerge.cs" />
     <Compile Include="Command\ImageCommand\DeleteImage.cs" />
     <Compile Include="Command\ImageCommand\HideImage.cs" />
     <Compile Include="Command\ImageCommand\LinkImage.cs" />
     <Compile Include="Command\ImageCommand\NewImage.cs" />
     <Compile Include="Command\ImageCommand\ReplaceImage.cs" />
-    <Compile Include="Command\ImgCommand\AddImg.cs" />
-    <Compile Include="Command\ImgCommand\DeleteImg.cs" />
-    <Compile Include="Command\ImgCommand\HideImg.cs" />
-    <Compile Include="Command\ImgCommand\NewImg.cs" />
-    <Compile Include="Command\ImgCommand\RenameImg.cs" />
-    <Compile Include="Command\ImgCommand\ReplaceImg.cs" />
+    <Compile Include="Command\ImgCommand\AddFile.cs" />
+    <Compile Include="Command\ImgCommand\DeleteFile.cs" />
+    <Compile Include="Command\ImgCommand\HideFile.cs" />
+    <Compile Include="Command\ImgCommand\NewFile.cs" />
+    <Compile Include="Command\ImgCommand\RenameFile.cs" />
+    <Compile Include="Command\ImgCommand\ReplaceFile.cs" />
     <Compile Include="Command\MergeCommand\ClearMerge.cs" />
     <Compile Include="Command\MergeCommand\RemoveMerge.cs" />
     <Compile Include="View\Dialog\AboutDialog.cs">
@@ -379,7 +380,7 @@
     <Compile Include="Handle\SixthHandler.cs" />
     <Compile Include="Data\Language.cs" />
     <Compile Include="Draw\Paint\Layer.cs" />
-    <Compile Include="Composition\Hoster.cs" />
+    <Compile Include="Core\Hoster.cs" />
     <Compile Include="Data\Album.cs" />
     <Compile Include="View\Dialog\ChangePositionDialog.cs">
       <SubType>Form</SubType>
@@ -621,7 +622,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Resources_4queues_1json__JSONSchema="http://json.schemastore.org/config" Resources_4alias_3weapon_1json__JSONSchema="http://json.schemastore.org/config" />
+      <UserProperties Resources_4alias_3weapon_1json__JSONSchema="http://json.schemastore.org/config" Resources_4queues_1json__JSONSchema="http://json.schemastore.org/config" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

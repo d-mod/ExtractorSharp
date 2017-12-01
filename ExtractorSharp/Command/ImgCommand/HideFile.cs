@@ -4,7 +4,7 @@ using ExtractorSharp.View;
 using System.Collections.Generic;
 
 namespace ExtractorSharp.Command.ImgCommand {
-    class HideImg : ICommand, MutipleAciton {
+    class HideFile : ICommand, MutipleAciton {
         /// <summary>
         /// 原文件对象
         /// </summary>
@@ -22,7 +22,7 @@ namespace ExtractorSharp.Command.ImgCommand {
                 Dic.Add(album, temp);
                 album.Hide();//隐藏文件
             }
-            Messager.ShowOperate("HideImg");
+            Messager.ShowOperate("HideFile");
         }
 
         public void Undo() {
@@ -47,6 +47,6 @@ namespace ExtractorSharp.Command.ImgCommand {
 
         public bool CanUndo => true;
 
-        public override string ToString() => Language.Default["HideImg"];
+        public string Name => "HideFile";
     }
 }

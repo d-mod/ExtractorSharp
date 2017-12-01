@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExtractorSharp.Command.SpliceCommand {
+namespace ExtractorSharp.Command.MergeCommand {
     class RemoveMerge:ICommand{
         Merger Merger;
         Album[] Array;
@@ -28,7 +28,8 @@ namespace ExtractorSharp.Command.SpliceCommand {
 
         public bool Changed => false;
 
-        public override string ToString() => Language.Default["RemoveMerge"];
-        
+        public string Name => "RemoveMerge";
+
+
     }
 }

@@ -3,10 +3,11 @@ using System.Drawing;
 
 namespace ExtractorSharp.Command.ImageCommand {
     class DyeImage : ICommand,SingleAction{
-        Bitmap[] Images;
+        private Bitmap[] Images;
         public int[] Indexes { set; get; }
-        Album Album;
-        Color Color;
+        private Album Album;
+        private Color Color;
+        public string Name => "DyeImage";
         public void Do(params object[] args) {
             Album = args[0] as Album;
             Color = (Color)args[1];
@@ -14,11 +15,13 @@ namespace ExtractorSharp.Command.ImageCommand {
             Images = new Bitmap[Indexes.Length];
             for (var i = 0; i < Indexes.Length; i++) {
                 var index = Indexes[i];
-                if (index > Album.List.Count - 1 || index < 0)
+                if (index > Album.List.Count - 1 || index < 0) {
                     continue;
+                }
                 var entity = Album.List[index];
-                if (entity.Type == ColorBits.LINK)
+                if (entity.Type == ColorBits.LINK) {
                     continue;
+                }
                 Images[i] = entity.Picture;
                 var data = entity.Picture.ToArray();
                 for (var j = 0; j < data.Length; j += 4) {
@@ -37,17 +40,15 @@ namespace ExtractorSharp.Command.ImageCommand {
             return result;
         }
 
-        public override string ToString() {
-            return "染色：#"+Color;
-        }
-
         public void Undo() {
             for (int i = 0; i < Indexes.Length; i++) {
-                if (Indexes[i] > Album.List.Count - 1 && Indexes[i] < 0)
+                if (Indexes[i] > Album.List.Count - 1 && Indexes[i] < 0) {
                     continue;
+                }
                 var entity = Album.List[Indexes[i]];
-                if (entity.Type == ColorBits.LINK)
+                if (entity.Type == ColorBits.LINK) {
                     continue;
+                }
                 entity.ReplaceImage(entity.Type, false, Images[i]);
             }       
         }
@@ -59,11 +60,13 @@ namespace ExtractorSharp.Command.ImageCommand {
         public void Action(Album Album ,int[] indexes) {
             for (var i = 0; i < Indexes.Length; i++) {
                 var index = Indexes[i];
-                if (index > Album.List.Count - 1 || index < 0)
+                if (index > Album.List.Count - 1 || index < 0) {
                     continue;
+                }
                 var entity = Album.List[index];
-                if (entity.Type == ColorBits.LINK)
+                if (entity.Type == ColorBits.LINK) {
                     continue;
+                }
                 var data = entity.Picture.ToArray();
                 for (var j = 0; j < data.Length; j += 4) {
                     data[j + 0] = (byte)Complie(data[j + 0], Color.B);

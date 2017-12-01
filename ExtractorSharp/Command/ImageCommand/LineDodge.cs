@@ -10,6 +10,9 @@ namespace ExtractorSharp.Command.ImageCommand {
     class LineDodge : ICommand ,SingleAction{
         private Bitmap[] Image;
         private ImageEntity[] Array;
+
+        public string Name => "LineDodge";
+
         public bool CanUndo => true;
 
         public bool Changed => true;

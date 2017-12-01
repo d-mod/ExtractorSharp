@@ -35,7 +35,7 @@ namespace ExtractorSharp.View{
             this.moveDownItem = new ToolStripMenuItem();
             this.moveUpItem = new ToolStripMenuItem();
             this.sortButton = new System.Windows.Forms.Button();
-            this.spliceButton = new System.Windows.Forms.Button();
+            this.MergeButton = new System.Windows.Forms.Button();
             this.prograss = new System.Windows.Forms.ProgressBar();
             this.useOtherCheck = new System.Windows.Forms.CheckBox();
             albumList = new ComboBox();
@@ -88,7 +88,7 @@ namespace ExtractorSharp.View{
             // 
             this.addOutItem.Name = "addOutItem";
             this.addOutItem.Size = new System.Drawing.Size(148, 22);
-            this.addOutItem.Text = Language["AddOutsideSplice"];
+            this.addOutItem.Text = Language["AddOutsideMerge"];
             // 
             // sortButton
             // 
@@ -99,14 +99,14 @@ namespace ExtractorSharp.View{
             this.sortButton.Text = Language["Sort"];
             this.sortButton.UseVisualStyleBackColor = true;
             // 
-            // spliceButton
+            // MergeButton
             // 
-            this.spliceButton.Location = new System.Drawing.Point(216, 318);
-            this.spliceButton.Name = "spliceButton";
-            this.spliceButton.Size = new System.Drawing.Size(100, 23);
-            this.spliceButton.TabIndex = 2;
-            this.spliceButton.Text = Language["Splice"];
-            this.spliceButton.UseVisualStyleBackColor = true;
+            this.MergeButton.Location = new System.Drawing.Point(216, 318);
+            this.MergeButton.Name = "MergeButton";
+            this.MergeButton.Size = new System.Drawing.Size(100, 23);
+            this.MergeButton.TabIndex = 2;
+            this.MergeButton.Text = Language["Merge"];
+            this.MergeButton.UseVisualStyleBackColor = true;
 
             this.albumList.Location = new System.Drawing.Point(160, 275);
             this.albumList.Size = new System.Drawing.Size(120,23);
@@ -132,18 +132,18 @@ namespace ExtractorSharp.View{
             this.useOtherCheck.Text = Language["UseOutsideRule"];
             this.useOtherCheck.UseVisualStyleBackColor = true;
             // 
-            // SpliceDialog
+            // MergeDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.ClientSize = new System.Drawing.Size(324, 358);
             this.Controls.Add(this.prograss);
             this.Controls.Add(this.useOtherCheck);
-            this.Controls.Add(this.spliceButton);
+            this.Controls.Add(this.MergeButton);
             this.Controls.Add(this.sortButton);
             this.Controls.Add(this.list);
             this.Controls.Add(albumList);
-            this.Name = "SpliceDialog";
-            this.Text = Language["Splice"];
+            this.Name = "MergeDialog";
+            this.Text = Language["Merge"];
             this.menu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -155,7 +155,7 @@ namespace ExtractorSharp.View{
         private ListBox list;
         private ComboBox albumList;
         private Button sortButton;
-        private Button spliceButton;
+        private Button MergeButton;
         private ProgressBar prograss;
         private ContextMenuStrip menu;
         private ToolStripMenuItem deleteItem;

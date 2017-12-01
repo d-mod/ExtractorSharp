@@ -3,13 +3,15 @@ using System.Drawing;
 
 namespace ExtractorSharp.Command.ImageCommand {
     class ChangePosition : ICommand,SingleAction{
-        Album Album;
         public int[] Indexes { set; get; }
-        int[] Ins;
-        bool[] Checkes;
-        bool relative;
-        Point[] old_Locations;
-        Size[] old_Max_Sizes;
+
+        private Album Album;
+        private int[] Ins;
+        private bool[] Checkes;
+        private bool relative;
+        private Point[] old_Locations;
+        private Size[] old_Max_Sizes;
+
         public void Do(params object[] args) {
             Album = args[0] as Album;
             Indexes = args[1] as int[];
@@ -68,23 +70,27 @@ namespace ExtractorSharp.Command.ImageCommand {
                 }
                 var entity = Album.List[i];
                 if (Checkes[0]) {
-                    if (!relative)
+                    if (!relative) {
                         entity.X = 0;
+                    }
                     entity.X += Ins[0];
                 }
                 if (Checkes[1]) {
-                    if (!relative)
+                    if (!relative) {
                         entity.Y = 0;
+                    }
                     entity.Y += Ins[1];
                 }
                 if (Checkes[2]) {
-                    if (!relative)
+                    if (!relative) {
                         entity.Cavas_Width = 0;
+                    }
                     entity.Cavas_Width += Ins[2];
                 }
                 if (Checkes[3]) {
-                    if (!relative)
+                    if (!relative) {
                         entity.Cavas_Height = 0;
+                    }
                     entity.Cavas_Height += Ins[3];
                 }
             }
@@ -94,7 +100,7 @@ namespace ExtractorSharp.Command.ImageCommand {
 
         public bool Changed => true;
 
-        public override string ToString() => Language.Default["ChangeImagePosition"];
+        public string Name => "ChangeImagePosition";
 
     }
 }

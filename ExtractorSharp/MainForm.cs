@@ -107,9 +107,9 @@ namespace ExtractorSharp {
             replaceItem.Click += ReplaceImg;
             saveAsItem.Click += SaveAsImg;
             renameItem.Click += RenameImg;
-            addSpliceItem.Click += AddSplice;
-            addOutsideSpliceItem.Click += AddOutSplice;
-            runSpliceItem.Click += DisplaySplice;
+            addMergeItem.Click += AddMerge;
+            addOutsideMergeItem.Click += AddOutMerge;
+            runMergeItem.Click += DisplayMerge;
             albumList.SelectedIndexChanged += ImageChanged;
             albumList.Deleted = DeleteImg;
             albumList.Draged = DragList;
@@ -190,7 +190,7 @@ namespace ExtractorSharp {
             previewItem.CheckedChanged += PreviewChanged;
             trackBar.ValueChanged += CheckLayerList;
             Drawer.ColorChanged += ColorChanged;
-            colorPanel.Click += ColorChanged;
+            colorPanel.MouseClick += ColorChanged;
             lineDodgeItem.Click += LineDodge;
             splitImgItem.Click += (o, e) => Controller.Do("splitImg", Controller.CheckedAlbum);
             mixImgItem.Click += (o, e) => Controller.Do("mixImg", Controller.CheckedAlbum);
@@ -250,7 +250,11 @@ namespace ExtractorSharp {
             colorPanel.BackColor = e.NewColor;
         }
 
-        private void ColorChanged(object sender, EventArgs e) {
+        private void ColorChanged(object sender, MouseEventArgs e) {
+            if (e.Button == MouseButtons.Right) {
+                Drawer.Color = Color.Empty;
+                return;
+            }
             var dialog = new ColorDialog();
             dialog.Color = Drawer.Color;
             if (dialog.ShowDialog() == DialogResult.OK) {
@@ -552,13 +556,13 @@ namespace ExtractorSharp {
 
 
 
-        private void AddOutSplice(object sender, EventArgs e) {
+        private void AddOutMerge(object sender, EventArgs e) {
             var dialog = new OpenFileDialog();
             dialog.Multiselect = true;
             dialog.Filter = "img,NPK文件|*.img;*.NPK";
             if (dialog.ShowDialog() == DialogResult.OK) {
                 var array = new List<Album>(Tools.Load(dialog.FileNames)).ToArray();
-                Controller.Do("addSplice", array);
+                Controller.Do("addMerge", array);
             }
         }
 
@@ -955,15 +959,15 @@ namespace ExtractorSharp {
             }
         }
 
-        private void AddSplice(object sender, EventArgs e) {
+        private void AddMerge(object sender, EventArgs e) {
             var array = Controller.CheckedAlbum;
             if (array.Length > 0 && CheckOgg(array)) {
-                Controller.Do("addSplice", array);
+                Controller.Do("addMerge", array);
             }
         }
 
-        private void DisplaySplice(object sender, EventArgs e) {
-            Viewer.Show("splice", Controller.SelectAlbum);
+        private void DisplayMerge(object sender, EventArgs e) {
+            Viewer.Show("Merge", Controller.SelectAlbum);
         }
 
         public void CavasFlush() => box.Invalidate();

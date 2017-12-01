@@ -16,6 +16,8 @@ namespace ExtractorSharp.Command.ImageCommand {
 
         public bool Changed => true;
 
+        public string Name => "CutImage";
+
         private Album Album;
         private int[] Indexes;
         private Controller Controller => Program.Controller;
@@ -55,7 +57,6 @@ namespace ExtractorSharp.Command.ImageCommand {
         public void Undo() {
             Controller.Clipboarder = Clipborder;
         }
-
-        public override string ToString() => Language.Default[Mode == ClipMode.Copy ? "Copy" : "Cut"];
+        
     }
 }

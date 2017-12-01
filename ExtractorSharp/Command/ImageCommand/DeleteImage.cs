@@ -7,16 +7,18 @@ namespace ExtractorSharp.Command.ImageCommand {
     /// 删除贴图
     /// </summary>
     class DeleteImage : ICommand,SingleAction {
-        Album Album;
-        ImageEntity[] Array;
+        private Album Album;
+        private ImageEntity[] Array;
         public int[] Indexes { set; get; }
+        public string Name => "DeleteImage";
         public void Do( params object[] args) {
             Album = args[0] as Album;
             Indexes = args[1] as int[];
             Array = new ImageEntity[Indexes.Length];
             for (var i = 0; i < Indexes.Length; i++) {
-                if (Indexes[i] > Album.List.Count - 1 || Indexes[i] < 0)
+                if (Indexes[i] > Album.List.Count - 1 || Indexes[i] < 0) {
                     continue;
+                }
                 Array[i] = Album.List[Indexes[i]];
             }
             foreach (var entity in Array)
@@ -32,24 +34,28 @@ namespace ExtractorSharp.Command.ImageCommand {
         public void Undo() {
             for (var i = 0; i < Indexes.Length; i++) {
                 var entity = Array[i];
-                if (Indexes[i] < Album.List.Count)
+                if (Indexes[i] < Album.List.Count) {
                     Album.List.Insert(Indexes[i], entity);
-                else {
+                } else {
                     entity.Index = Album.List.Count;
                     Album.List.Add(entity);
                 }
             }
-            if (Array.Length > 0)
+            if (Array.Length > 0) {
                 Album.AdjustIndex();
+            }
         }
 
         public void Action(Album Album, int[] indexes) {
             var array = new ImageEntity[indexes.Length];
-            for (int i = 0; i < array.Length; i++)
-                if (indexes[i] < Album.List.Count && indexes[i] > -1)
+            for (int i = 0; i < array.Length; i++) {
+                if (indexes[i] < Album.List.Count && indexes[i] > -1) {
                     array[i] = Album.List[indexes[i]];
-            foreach (var entity in array)
+                }
+            }
+            foreach (var entity in array) {
                 Album.List.Remove(entity);
+            }
             Album.AdjustIndex();//校正索引
         }
 

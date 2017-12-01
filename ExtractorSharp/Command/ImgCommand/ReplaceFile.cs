@@ -6,21 +6,20 @@ namespace ExtractorSharp.Command.ImgCommand {
     /// <summary>
     /// 替换IMG文件
     /// </summary>
-    class ReplaceImg : ICommand {
-        Album oldTarget;
-        Album Source,Target;
+    class ReplaceFile : ICommand {
+        private Album OldSource,Source,Target;
         public void Do(params object[] args) {
             Target=args[0] as Album;
             Source = args[1] as Album;
             if (Target == null || Source == null)
                 return;
-            oldTarget = new Album();
-            oldTarget.Replace(Target);
+            OldSource = new Album();
+            OldSource.Replace(Target);
             Target.Replace(Source);
             Messager.ShowOperate("ReplaceFile");
         }
 
-        public void Undo() => Target.Replace(oldTarget);
+        public void Undo() => Target.Replace(OldSource);
         
 
         public void Redo() => Do(Target, Source);        
@@ -36,7 +35,7 @@ namespace ExtractorSharp.Command.ImgCommand {
 
         public bool Changed => true;
 
-        public override string ToString() => Language.Default["ReplaceFile"];
+        public string Name => "ReplaceFile";
         
 
     }

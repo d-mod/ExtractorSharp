@@ -10,13 +10,15 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ExtractorSharp.Command.ImgCommand {
-    class SplitImg : ICommand {
+    class SplitFile : ICommand {
         private Album[] Array;
         private List<Album> List;
         private Controller Controller => Program.Controller;
         public bool CanUndo => true;
 
         public bool Changed => false;
+
+        public string Name => "SplitFile";
 
         public void Do(params object[] args) {
             Array = args as Album[];
@@ -58,7 +60,5 @@ namespace ExtractorSharp.Command.ImgCommand {
             Controller.RemoveAlbum(List.ToArray());
             Controller.AddAlbum(false, Array);
         }
-
-        public override string ToString() => Language.Default["SplitFile"];
     }
 }

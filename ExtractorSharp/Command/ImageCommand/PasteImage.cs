@@ -17,6 +17,9 @@ namespace ExtractorSharp.Command.ImageCommand {
         private int Index;
         private Controller Controller => Program.Controller;
         private Clipboarder Clipboarder;
+
+        public string Name => "PasteImage";
+
         public bool CanUndo => true;
 
         public bool Changed => true;
@@ -81,7 +84,6 @@ namespace ExtractorSharp.Command.ImageCommand {
             Target.Adjust();
             Source.Adjust();
         }
-
-        public override string ToString() => Language.Default["Paste"];
+        
     }
 }

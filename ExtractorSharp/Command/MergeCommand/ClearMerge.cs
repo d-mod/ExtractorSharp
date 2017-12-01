@@ -2,7 +2,7 @@
 using ExtractorSharp.Data;
 using ExtractorSharp.View;
 
-namespace ExtractorSharp.Command.SpliceCommand {
+namespace ExtractorSharp.Command.MergeCommand {
     class ClearMerge:ICommand{
         Merger Merger;
         Album[] Array;
@@ -22,7 +22,7 @@ namespace ExtractorSharp.Command.SpliceCommand {
 
         public bool Changed => false;
 
-        public override string ToString() => Language.Default["ClearMerge"];
+        public string Name => "ClearMerge";
         
     }
 }

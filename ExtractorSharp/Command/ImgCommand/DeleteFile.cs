@@ -4,7 +4,7 @@ using ExtractorSharp.View;
 using System.Collections.Generic;
 
 namespace ExtractorSharp.Command.ImgCommand {
-    class DeleteImg : ICommand,MutipleAciton{
+    class DeleteFile : ICommand, MutipleAciton {
         Dictionary<Album, int> Indexes1, Indexes2;
         Controller Controller => Program.Controller;
 
@@ -47,7 +47,7 @@ namespace ExtractorSharp.Command.ImgCommand {
                 }
             }
         }
-        
+
         /// <summary>
         /// 重做
         /// </summary>
@@ -70,7 +70,7 @@ namespace ExtractorSharp.Command.ImgCommand {
 
         public bool CanUndo => true;
 
-        public override string ToString() => Language.Default["DeleteFile"];
-        
+        public string Name => "DeleteFile";
+
     }
 }

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ExtractorSharp.Command.ImgCommand {
-    class CutImg : ICommand {
+    class CutFile : ICommand {
         public bool CanUndo => true;
 
         public bool Changed => false;
@@ -26,6 +26,8 @@ namespace ExtractorSharp.Command.ImgCommand {
 
         private ClipMode Mode;
 
+
+        public string Name => "CutFile";
 
 
         public void Do(params object[] args) {
@@ -64,7 +66,5 @@ namespace ExtractorSharp.Command.ImgCommand {
         public void Undo() {
             Controller.Clipboarder = Clipboarder;
         }
-
-        public override string ToString() => Language.Default["Cut"];
     }
 }

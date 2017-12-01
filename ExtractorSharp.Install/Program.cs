@@ -10,7 +10,7 @@ namespace ExtractorSharp.Install {
         static void Main(params string[] args) {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new UpdateForm(args));
+            Application.Run(new InstallForm(args));
         }
     }
 }

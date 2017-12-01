@@ -1,5 +1,5 @@
 ﻿namespace ExtractorSharp.Install {
-    partial class UpdateForm {
+    partial class InstallForm {
         /// <summary>
         /// 必需的设计器变量。
         /// </summary>

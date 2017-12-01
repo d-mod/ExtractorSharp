@@ -33,7 +33,7 @@ namespace ExtractorSharp.View{
             pathBox.Click += SelectPath;
             addListButton.Click += AddList;
             saveButton.Click += Save;
-            addSpliceButton.Click += AddSplice;
+            addMergeButton.Click += AddMerge;
             maskCheck.CheckedChanged += (o, e) => Service.Mask = maskCheck.Checked;
             banCheck.CheckedChanged += (o, e) => Service.Ban = banCheck.Checked;
             professionBox.SelectedIndexChanged += (o, e) => PartUpdate();
@@ -71,7 +71,7 @@ namespace ExtractorSharp.View{
 
                 var check = new CheckBox();
                 check.Location = new Point(15 + 185 * (i % 2), (i+2)  / 2 * 45);
-                check.Text = Language[parts[i]];
+                check.Text = parts[i];
                 check.UseVisualStyleBackColor = true;
                 Controls.Add(check);
                 partCheckes[i] = check;
@@ -220,11 +220,11 @@ namespace ExtractorSharp.View{
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void AddSplice(object sender, EventArgs e) {
+        public void AddMerge(object sender, EventArgs e) {
             ExctractImg(true,addWeaponCheck.Checked);
             if (clearCheck.Checked)
-                Controller.Do("clearSplice");
-            Controller.Do("addSplice", Service.Array);
+                Controller.Do("clearMerge");
+            Controller.Do("addMerge", Service.Array);
         }
 
 

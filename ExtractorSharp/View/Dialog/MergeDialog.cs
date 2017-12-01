@@ -22,8 +22,8 @@ namespace ExtractorSharp.View {
             list.DragDrop += ListDragDrop;
             list.DragOver += (o, e) => e.Effect = DragDropEffects.Move;
             deleteItem.Click += Remove;
-            clearItem.Click += (o, e) => Controller.Do("clearSplice");
-            spliceButton.Click += SpliceImg;
+            clearItem.Click += (o, e) => Controller.Do("clearMerge");
+            MergeButton.Click += MergeImg;
             addOutItem.Click += AddOutside;
             moveDownItem.Click += MoveDown;
             moveUpItem.Click += MoveUp;
@@ -35,7 +35,7 @@ namespace ExtractorSharp.View {
 
         private void MergeCompleted(object sender, MergeEventArgs e) {
             Program.Controller.Do("replaceImg", Album, e.Album);
-            spliceButton.Enabled = true;
+            MergeButton.Enabled = true;
             sortButton.Enabled = true;
             prograss.Visible = false;
             DialogResult = DialogResult.OK;
@@ -44,7 +44,7 @@ namespace ExtractorSharp.View {
         private void MergeProcessing(object sender, MergeEventArgs e) => prograss.Value++;
 
         private void MergeStart(object sender, MergeEventArgs e) {
-            spliceButton.Enabled = false;
+            MergeButton.Enabled = false;
             sortButton.Enabled = false;
             prograss.Show();
             prograss.Value = 0;
@@ -85,7 +85,7 @@ namespace ExtractorSharp.View {
             dialog.Multiselect = true;
             if (dialog.ShowDialog() == DialogResult.OK) {
                 var array = Tools.Load(dialog.FileNames).ToArray();
-                Program.Controller.Do("addSplice", array);
+                Program.Controller.Do("addMerge", array);
             }
         }
 
@@ -124,10 +124,10 @@ namespace ExtractorSharp.View {
         public void Remove(object sender, EventArgs e) {
             var album = list.SelectedItem as Album;
             if (album != null)
-                Program.Controller.Do("removeSplice", new Album[] { album });
+                Program.Controller.Do("removeMerge", new Album[] { album });
         }
 
-        public void SpliceImg(object sender, EventArgs e) {
+        public void MergeImg(object sender, EventArgs e) {
             if (list.Items.Count < 1) {//当拼合队列为空时
                 Messager.ShowWarnning("EmptyMergeTips");
                 return;
@@ -143,7 +143,7 @@ namespace ExtractorSharp.View {
             } else {
                 Album = albumList.SelectedItem as Album;
             }
-            Controller.Do("runSplice");      
+            Controller.Do("runMerge");      
 
         }
     }

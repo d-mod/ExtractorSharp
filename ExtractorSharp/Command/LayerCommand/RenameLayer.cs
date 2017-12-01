@@ -29,7 +29,7 @@ namespace ExtractorSharp.Command.LayerCommand {
 
         public bool Changed => false;
 
-        public override string ToString() => Language.Default["RenameLayer"];
+        public string Name => "RenameLayer";
 
     }
 }

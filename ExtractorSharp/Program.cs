@@ -64,8 +64,8 @@ namespace ExtractorSharp {
             Form.Shown += OnShown;
             RegistyDialog();
             Viewer.DialogShown += ViewerDialogShown;
-            Hoster = new Hoster();
             Merger = new Merger();
+            Hoster = new Hoster();
             Application.Run(Form);
         }
 
@@ -114,7 +114,7 @@ namespace ExtractorSharp {
         private static void RegistyDialog() {
             Viewer.Regisity("replace", typeof(ReplaceImageDialog));
             Viewer.Regisity("fit", typeof(FitRoomDialog));
-            Viewer.Regisity("splice", typeof(MergeDialog));
+            Viewer.Regisity("Merge", typeof(MergeDialog));
             Viewer.Regisity("search", typeof(SearchDialog));
             Viewer.Regisity("newImg", typeof(NewImgDialog));
             Viewer.Regisity("convert", typeof(ConvertDialog));

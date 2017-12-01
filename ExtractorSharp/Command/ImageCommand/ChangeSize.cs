@@ -12,6 +12,8 @@ namespace ExtractorSharp.Command.ImageCommand {
 
         public bool Changed => true;
 
+        public string Name => "ChangeImageSize";
+
         private Album Album;
 
         private int[] Indexes;
@@ -46,9 +48,6 @@ namespace ExtractorSharp.Command.ImageCommand {
                 entity.Location = entity.Location.Star(Scale);
             }
         }
-
-
-        public override string ToString() => Language.Default["ChangeImageSize"];
 
     }
 }

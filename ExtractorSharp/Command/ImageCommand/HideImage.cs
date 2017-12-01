@@ -7,15 +7,18 @@ namespace ExtractorSharp.Command.ImageCommand {
     /// </summary>
     class HideImage : ICommand,SingleAction{
         public int[] Indexes { set; get; }
-        Album Album;
-        ImageEntity[] Array;
+        private Album Album;
+        private ImageEntity[] Array;
+
+        public string Name => "HideImage";
         public void Do(params object[] args) {
             Album = args[0] as Album;
             Indexes = args[1] as int[];//需要修改的文件索引
             Array = new ImageEntity[Indexes.Length];
             for (var i = 0; i < Indexes.Length; i++) {//确保文件索引正确
-                if (Indexes[i] > Album.List.Count || Indexes[i] < 0)
+                if (Indexes[i] > Album.List.Count || Indexes[i] < 0) {
                     continue;
+                }
                 var entity = Album.List[Indexes[i]];
                 Array[i] = entity;//存下原文件对象
                 Album.List.Remove(entity);
@@ -38,9 +41,11 @@ namespace ExtractorSharp.Command.ImageCommand {
         }
 
         public void Action(Album Album, int[] indexes) {
-            foreach (var i in indexes)
-                if (i > -1 && i < Album.List.Count)
+            foreach (var i in indexes) {
+                if (i > -1 && i < Album.List.Count) {
                     Album.List[i] = new ImageEntity(Album);
+                }
+            }
         }
         
 

@@ -58,6 +58,6 @@ namespace ExtractorSharp.Command.ImageCommand {
 
         public bool Changed => true;
 
-        public override string ToString() => Language.Default["Cavas"];
+        public string Name => "Cavas";
     }
 }

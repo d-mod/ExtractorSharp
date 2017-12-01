@@ -7,12 +7,12 @@ namespace ExtractorSharp.Command.ImgCommand {
     /// <summary>
     /// 补帧
     /// </summary>
-    class RepairImg : ICommand,MutipleAciton{
-        Album[] Array;
-        int[] Counts;
+    class RepairFile : ICommand,MutipleAciton{
+        private Album[] Array;
+        private int[] Counts;
         public bool CanUndo => true;
         public bool Changed => true;
-
+        public string Name => "RepairFile";
 
         public void Do(params object[] args) {
             Array = args as Album[];
@@ -44,11 +44,12 @@ namespace ExtractorSharp.Command.ImgCommand {
 
 
         public void Undo() {
-            for (var i = 0; i < Array.Length; i++)
-                if (Counts[i] > 0)
+            for (var i = 0; i < Array.Length; i++) {
+                if (Counts[i] > 0) {
                     Array[i].List.RemoveRange(Array[i].List.Count - Counts[i], Counts[i]);
+                }
+            }
         }
 
-        public override string ToString() => Language.Default["RepairImg"];
     }
 }

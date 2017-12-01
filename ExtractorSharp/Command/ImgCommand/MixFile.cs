@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ExtractorSharp.Command.ImgCommand {
-    class MixImg : ICommand {
+    class MixFile : ICommand {
         private Album[] Array;
         private Album Album;
         private Controller Controller => Program.Controller;
@@ -58,6 +58,6 @@ namespace ExtractorSharp.Command.ImgCommand {
             Controller.AddAlbum(false, Array);
         }
 
-        public override string ToString() => Language.Default["MixFile"];
+        public string Name => "MixFile";
     }
 }
