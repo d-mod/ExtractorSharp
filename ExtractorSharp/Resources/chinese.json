@@ -94,6 +94,7 @@
     "RealPostion": "真实坐标",
     "LineDodge": "线性减淡",
     "Flash": "动画播放",
+
 	"AddFile":"添加文件",
     "NewFile": "新建文件",
     "DeleteFile": "删除文件",
@@ -102,6 +103,11 @@
     "RepairFile": "帧数补正",
     "SplitFile": "拆分文件",
     "MixFile": "合并文件",
+	"CutFile":"剪切文件",
+	"PasteFile":"粘贴文件",
+	"CutImage":"剪切图片",
+	"PasteImage":"粘贴图片",
+
     "Rename": "重命名",
     "ConvertVersion": "转换版本",
     "AddMerge": "加入拼合",

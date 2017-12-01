@@ -39,7 +39,7 @@ namespace ExtractorSharp.Lib {
 
 
         [DllImport("FreeImage.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "_FreeImage_Initialise@4")]
-        private static extern void Init();
+        private static extern void Init(int id);
 
         [DllImport("FreeImage.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "_FreeImage_DeInitialise@0")]
         private static extern void Close();
@@ -63,10 +63,10 @@ namespace ExtractorSharp.Lib {
         private static extern int GetFormat(IntPtr memory,int dib);
 
         public static Bitmap Load(byte[] data, Size size) {
-            Init();
+            Init(0);
             var memory = OpenMemory(data, data.Length);
-            var format = GetFormat(memory,0);
-            var handle = LoadMemory(format, memory,0);
+            var format = GetFormat(memory, 0);
+            var handle = LoadMemory(format, memory, 0);
             var bits = GetBits(handle);
             var length = size.Width * size.Height * 4;
             data = new byte[length];
