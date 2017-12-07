@@ -174,11 +174,15 @@ namespace ExtractorSharp {
         /// 加载注册表
         /// </summary>
         private static void LoadRegistry() {
-            if (Config["GamePath"].Value.Equals(string.Empty) || !Directory.Exists(Config["GamePath"].Value)) {
-                var path = Registry.CurrentUser.OpenSubKey("software\\tencent\\dnf", RegistryKeyPermissionCheck.Default, RegistryRights.ReadKey).GetValue("InstallPath").ToString();
-                Config["GamePath"] = new ConfigValue(path);
+            try {
+                if (Config["GamePath"].Value.Equals(string.Empty) || !Directory.Exists(Config["GamePath"].Value)) {
+                    var path = Registry.CurrentUser.OpenSubKey("software\\tencent\\dnf", RegistryKeyPermissionCheck.Default, RegistryRights.ReadKey).GetValue("InstallPath").ToString();
+                    Config["GamePath"] = new ConfigValue(path);
+                }
+                Config.Save();
+            } catch (Exception e) {
+                Console.Write(e);
             }
-            Config.Save();
         }
 
         /// <summary>
