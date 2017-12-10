@@ -4,7 +4,7 @@ using ExtractorSharp.View;
 using System.Collections.Generic;
 
 namespace ExtractorSharp.Command.ImgCommand {
-    class DeleteFile : ICommand, MutipleAciton {
+    class DeleteFile : MutipleAciton {
         Dictionary<Album, int> Indexes1, Indexes2;
         Controller Controller => Program.Controller;
 

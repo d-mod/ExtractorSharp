@@ -1,12 +1,7 @@
 ﻿using ExtractorSharp.Core;
 using ExtractorSharp.Data;
 using ExtractorSharp.Loose;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ExtractorSharp.Command.ImgCommand {

@@ -67,6 +67,10 @@ namespace ExtractorSharp.Install {
         private void Download(FileInfo info) {
             var uri = new Uri($"{DOWNLOAD_URL}/{info.Hash}");
             var filename = $"{Application.StartupPath}/{info.Name}";
+            var dir = Path.GetDirectoryName(filename);
+            if (!Directory.Exists(dir)) {
+                Directory.CreateDirectory(dir);
+            }
             Client.DownloadFileAsync(uri, filename);
         }
 

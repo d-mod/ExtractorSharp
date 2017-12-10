@@ -1,11 +1,10 @@
 ﻿using ExtractorSharp.Core;
 using ExtractorSharp.Data;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 
 namespace ExtractorSharp.Command.ImageCommand {
-    class ReplaceImage : ICommand,SingleAction{
+    class ReplaceImage : SingleAction {
         
         public int[] Indexes { set; get; }
         private Album Album;

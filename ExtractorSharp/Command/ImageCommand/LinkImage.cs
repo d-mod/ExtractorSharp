@@ -6,7 +6,7 @@ namespace ExtractorSharp.Command.ImageCommand {
     /// 可撤销
     /// 可宏命令
     /// </summary>
-    class LinkImage : ICommand,SingleAction{
+    class LinkImage : SingleAction {
         public int[] Indexes { set; get; }
         public string Name => "LinkImage";
         private ColorBits[] Types;

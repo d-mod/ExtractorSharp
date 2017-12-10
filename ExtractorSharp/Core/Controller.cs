@@ -302,8 +302,9 @@ namespace ExtractorSharp.Core{
         /// </summary>
         /// <param name="range"></param>
         internal void Delete(params IAction[] range) {
-            foreach (var item in range) 
+            foreach (var item in range) {
                 Macro.Remove(item);
+            }
             actArgs.Mode = QueueChangeMode.RemoveRange;
             OnActionChanged(actArgs);
         }

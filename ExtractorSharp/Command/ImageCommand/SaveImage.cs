@@ -1,13 +1,6 @@
 ﻿using ExtractorSharp.Core;
 using ExtractorSharp.Data;
-using ExtractorSharp.View;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace ExtractorSharp.Command.ImageCommand {
     /// <summary>
@@ -15,7 +8,7 @@ namespace ExtractorSharp.Command.ImageCommand {
     /// 不可撤销
     /// 可宏命令
     /// </summary>
-    class SaveImage : ICommand,SingleAction{
+    class SaveImage : SingleAction {
         public int[] Indexes { set; get; }
         private Album Album;
         private string Path;

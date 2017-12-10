@@ -1,13 +1,4 @@
-﻿using ExtractorSharp.Data;
-using ExtractorSharp.Handle;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ExtractorSharp.Command.MergeCommand {
+﻿namespace ExtractorSharp.Command.MergeCommand {
     class RunMerge : ICommand {
         public bool CanUndo => false;
 

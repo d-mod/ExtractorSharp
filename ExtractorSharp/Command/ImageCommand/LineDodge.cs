@@ -1,13 +1,8 @@
 ﻿using ExtractorSharp.Data;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExtractorSharp.Command.ImageCommand {
-    class LineDodge : ICommand ,SingleAction{
+    class LineDodge : SingleAction {
         private Bitmap[] Image;
         private ImageEntity[] Array;
 

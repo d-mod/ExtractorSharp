@@ -6,7 +6,7 @@ namespace ExtractorSharp.Command {
     /// <summary>
     /// 加入拼合
     /// </summary>
-    class AddMerge : ICommand, MutipleAciton {
+    class AddMerge : MutipleAciton {
         
 
         Album[] Array;

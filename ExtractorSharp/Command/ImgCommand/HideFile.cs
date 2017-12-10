@@ -1,10 +1,9 @@
 ﻿using ExtractorSharp.Core;
 using ExtractorSharp.Data;
-using ExtractorSharp.View;
 using System.Collections.Generic;
 
 namespace ExtractorSharp.Command.ImgCommand {
-    class HideFile : ICommand, MutipleAciton {
+    class HideFile : MutipleAciton {
         /// <summary>
         /// 原文件对象
         /// </summary>

@@ -7,7 +7,7 @@ namespace ExtractorSharp.Command.ImgCommand {
     /// <summary>
     /// 补帧
     /// </summary>
-    class RepairFile : ICommand,MutipleAciton{
+    class RepairFile : MutipleAciton {
         private Album[] Array;
         private int[] Counts;
         public bool CanUndo => true;

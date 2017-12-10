@@ -1,6 +1,5 @@
 ﻿using ExtractorSharp.Core;
 using ExtractorSharp.Data;
-using ExtractorSharp.View;
 
 namespace ExtractorSharp.Command.MergeCommand {
     class ClearMerge:ICommand{

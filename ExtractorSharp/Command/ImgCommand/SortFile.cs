@@ -23,10 +23,11 @@ namespace ExtractorSharp.Command.ImgCommand {
             var cs2 = al2.Path.ToCharArray();
             var i = Math.Min(cs1.Length, cs2.Length)-1;
             for (int j = 0; j < i; j++) {
-                if (cs1[i] < cs2[i])
+                if (cs1[i] < cs2[i]) {
                     return -1;
-                else if (cs1[i] > cs2[i])
+                } else if (cs1[i] > cs2[i]) {
                     return 1;
+                }
             }
             return 0;
         }

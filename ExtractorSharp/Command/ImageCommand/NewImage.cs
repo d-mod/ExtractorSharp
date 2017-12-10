@@ -1,6 +1,5 @@
 ﻿using ExtractorSharp.Core;
 using ExtractorSharp.Data;
-using ExtractorSharp.View;
 
 namespace ExtractorSharp.Command.ImageCommand {
     /// <summary>
@@ -8,7 +7,7 @@ namespace ExtractorSharp.Command.ImageCommand {
     /// 可撤销
     /// 可宏命令
     /// </summary>
-    class NewImage : ICommand,MutipleAciton{
+    class NewImage : MutipleAciton {
         private Album Album;
         private int Index;
         private int Count;

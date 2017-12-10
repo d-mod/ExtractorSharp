@@ -8,7 +8,7 @@ namespace ExtractorSharp.Command.ImageCommand {
     /// <summary>
     /// 去画布化
     /// </summary>
-    class UnCavasImage : ICommand, SingleAction {
+    class UnCavasImage : SingleAction {
         public int[] Indexes { set; get; }
         public string Name => "UnCavas";
         private Album Album;

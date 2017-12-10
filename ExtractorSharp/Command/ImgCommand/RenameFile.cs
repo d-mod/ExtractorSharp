@@ -1,8 +1,7 @@
 ﻿using ExtractorSharp.Core;
 using ExtractorSharp.Data;
-using ExtractorSharp.View;
 
-namespace ExtractorSharp.Command.ImgCommand{
+namespace ExtractorSharp.Command.ImgCommand {
     class RenameFile : ICommand {
         Album Album;
         /// <summary>

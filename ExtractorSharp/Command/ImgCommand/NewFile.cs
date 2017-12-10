@@ -1,10 +1,9 @@
 ﻿using ExtractorSharp.Core;
 using ExtractorSharp.Data;
 using ExtractorSharp.Handle;
-using ExtractorSharp.View;
 
 namespace ExtractorSharp.Command.ImgCommand {
-    class NewFile : ICommand,MutipleAciton{
+    class NewFile : MutipleAciton {
         private Controller Controller => Program.Controller;
         private Album Album;
         private string Path;

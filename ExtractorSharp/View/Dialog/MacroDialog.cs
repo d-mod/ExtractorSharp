@@ -1,16 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using ExtractorSharp.Command;
 using ExtractorSharp.UI;
 using ExtractorSharp.Core;
-using ExtractorSharp.Data;
+using ExtractorSharp.EventArguments;
 
 namespace ExtractorSharp.View {
     public partial class MacroDialog : EaseDialog {
@@ -21,7 +12,7 @@ namespace ExtractorSharp.View {
             recordItem.Click += Start;
             stopItem.Click += Stop;
             CancelButton = cancelButton;
-            Controller.CommandDid += DoCommand;
+            Controller.ActionChanged += DoCommand;
             runButton.Click += Run;
         }
 
@@ -31,15 +22,11 @@ namespace ExtractorSharp.View {
             Print("开始录制");
         }
 
-        private void Run(object sender,EventArgs e) {
-            var array = new Album[0];
-            if (selectImgRadio.Checked) 
-                array = Controller.CheckedAlbum;
-            else
-                array = Controller.AllAlbum;
+        private void Run(object sender, EventArgs e) {
+            var array = selectImgRadio.Checked ? Controller.CheckedAlbum : Controller.AllAlbum;
             Print("宏命令执行开始...");
-            Print("处理数量:"+array.Length);
-            Controller.Run(allImageRadio.Checked,array);
+            Print("处理数量:" + array.Length);
+            Controller.Run(allImageRadio.Checked, array);
             Print("宏命令执行完成...");
         }
 
@@ -54,17 +41,11 @@ namespace ExtractorSharp.View {
             }
         }
 
-        private void LoadScript(object sender,EventArgs e) {
 
-        }
-
-        private void SaveScript(object sender,EventArgs e) {
-
-        }
-
-        private void DoCommand(object sender,EventArgs e) {
-            if (Controller.IsRecord&&Controller.Current is IAction action)
-                Print("动作:" + action);
+        private void DoCommand(object sender, ActionEventArgs e) {
+            if (e.Mode == QueueChangeMode.Add) {
+                Print(Language["Action"] + ":" + Language[e.Action.Name]);
+            }
         }
 
         public void Print(string msg) {

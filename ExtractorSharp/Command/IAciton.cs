@@ -1,27 +1,18 @@
 ﻿using ExtractorSharp.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExtractorSharp.Command {
-    public interface IAction {
-
-    }
 
     /// <summary>
     /// 多图层操作
     /// </summary>
-    interface LayerAction : IAction {
-        void Action();
+    public interface IAction : ICommand {
     }
 
     /// <summary>
     /// 多IMG操作
     /// </summary>
-    interface MutipleAciton :IAction{
-        void Action(params Album[] Album);
+    interface MutipleAciton : IAction {
+        void Action(params Album[] array);
     }
 
     /// <summary>
@@ -29,6 +20,6 @@ namespace ExtractorSharp.Command {
     /// </summary>
     interface SingleAction : IAction {
         int[] Indexes { get; set; }
-        void  Action(Album Album, int[] Indexes);
+        void  Action(Album Album, int[] indexes);
     }
 }

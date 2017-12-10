@@ -1,7 +1,5 @@
 ﻿using ExtractorSharp.Core;
 using ExtractorSharp.Data;
-using ExtractorSharp.View;
-using System;
 using System.Drawing;
 
 namespace ExtractorSharp.Command.ImageCommand {
@@ -10,7 +8,7 @@ namespace ExtractorSharp.Command.ImageCommand {
     /// 可撤销
     /// 可宏命令
     /// </summary>
-    class CavasImage : ICommand,SingleAction {
+    class CavasImage : SingleAction {
         Album Album;
         Size Size;
         Bitmap[] Images;

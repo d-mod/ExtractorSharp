@@ -1,11 +1,10 @@
 ﻿using ExtractorSharp.Data;
-using System.Drawing;
 
 namespace ExtractorSharp.Command.ImageCommand {
     /// <summary>
     /// 
     /// </summary>
-    class HideImage : ICommand,SingleAction{
+    class HideImage : SingleAction {
         public int[] Indexes { set; get; }
         private Album Album;
         private ImageEntity[] Array;

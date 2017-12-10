@@ -1,12 +1,11 @@
 ﻿using ExtractorSharp.Core;
 using ExtractorSharp.Data;
-using ExtractorSharp.View;
 
 namespace ExtractorSharp.Command.ImageCommand {
     /// <summary>
     /// 删除贴图
     /// </summary>
-    class DeleteImage : ICommand,SingleAction {
+    class DeleteImage : SingleAction {
         private Album Album;
         private ImageEntity[] Array;
         public int[] Indexes { set; get; }

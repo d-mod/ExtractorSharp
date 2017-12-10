@@ -2,7 +2,7 @@
 using System.Drawing;
 
 namespace ExtractorSharp.Command.ImageCommand {
-    class DyeImage : ICommand,SingleAction{
+    class DyeImage : SingleAction {
         private Bitmap[] Images;
         public int[] Indexes { set; get; }
         private Album Album;
