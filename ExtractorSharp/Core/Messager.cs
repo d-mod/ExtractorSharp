@@ -55,7 +55,7 @@ namespace ExtractorSharp.Core{
         /// 操作成功时触发的消息
         /// </summary>
         /// <param name="msg"></param>
-        public static void ShowOperate(string msg) => ShowMessage(Msg_Type.Operate, Language[msg] + Language["Success"]);
+        public static void ShowOperate(string msg) => ShowMessage(Msg_Type.Operate, $"{Language[msg]}  {Language["Success"]}");
 
         /// <summary>
         /// 提示
