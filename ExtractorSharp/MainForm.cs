@@ -770,7 +770,8 @@ namespace ExtractorSharp {
             if (array.Length == 1) {
                 var dialog = new SaveFileDialog();
                 dialog.FileName = array[0].Name;
-                dialog.Filter = array[0].Version == Img_Version.OGG ? "音效文件|*.ogg;*.mp3;*.wav" : "img文件|*.img";
+                dialog.Filter = "img|*.img|ogg|*.ogg|mp3|*.mp3|wav|*.wav";
+                dialog.FilterIndex = array[0].Version != Img_Version.OGG ? 1 : 2;
                 if (dialog.ShowDialog() == DialogResult.OK) {
                     Tools.SaveFile(dialog.FileName, array[0]);
                 }
@@ -1138,13 +1139,14 @@ namespace ExtractorSharp {
         }
 
         private void SaveSingleImage(object sender, EventArgs e) {
-            var dialog = new SaveFileDialog();
-            dialog.Filter = "*.png|*.png;*.bmp;*.jpg";
             var album = Controller.SelectAlbum;
             var index = imageList.SelectedIndex;
             if (album == null || index < 0) {
                 return;
             }
+            var dialog = new SaveFileDialog();
+            dialog.FileName = album.Name.RemoveSuffix();
+            dialog.Filter = "png|*.png|bmp|*.bmp|jpg|*.jpg";
             if (dialog.ShowDialog() == DialogResult.OK) {
                 Controller.Do("saveImage", album, 0, new int[] { index }, dialog.FileName);
             }

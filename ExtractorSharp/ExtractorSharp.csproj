@@ -296,11 +296,11 @@
     <Compile Include="View\Pane\HistoryPage.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\Pane\OggPlayer.cs">
+    <Compile Include="View\Pane\AudioPlayer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="View\Pane\OggPlayer.Designer.cs">
-      <DependentUpon>OggPlayer.cs</DependentUpon>
+    <Compile Include="View\Pane\AudioPlayer.Designer.cs">
+      <DependentUpon>AudioPlayer.cs</DependentUpon>
     </Compile>
     <Compile Include="View\Dialog\PropertyDialog.cs">
       <SubType>Form</SubType>
@@ -463,6 +463,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Kritsu.snk" />
+    <None Include="packages.config" />
     <None Include="Resources\alias_weapon.json" />
     <None Include="Resources\chinese.json" />
     <None Include="Resources\queues.json" />
@@ -507,8 +508,8 @@
     <EmbeddedResource Include="View\Dialog\MacroDialog.resx">
       <DependentUpon>MacroDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\Pane\OggPlayer.resx">
-      <DependentUpon>OggPlayer.cs</DependentUpon>
+    <EmbeddedResource Include="View\Pane\AudioPlayer.resx">
+      <DependentUpon>AudioPlayer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\Dialog\PropertyDialog.resx">
       <DependentUpon>PropertyDialog.cs</DependentUpon>

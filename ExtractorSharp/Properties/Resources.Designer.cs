@@ -61,44 +61,6 @@ namespace ExtractorSharp.Properties {
         }
         
         /// <summary>
-        ///   查找类似 {
-        ///  &quot;swordman&quot;: &quot;鬼剑士(男)&quot;,
-        ///  &quot;swordman_at&quot;: &quot;鬼剑士(女)&quot;,
-        ///  &quot;fighter_at&quot;: &quot;格斗家(男)&quot;,
-        ///  &quot;fighter&quot;: &quot;格斗家(女)&quot;,
-        ///  &quot;mage_at&quot;: &quot;魔法师(男)&quot;,
-        ///  &quot;mage&quot;: &quot;魔法师(女)&quot;,
-        ///  &quot;gunner&quot;: &quot;神枪手(男)&quot;,
-        ///  &quot;gunner_at&quot;: &quot;神枪手(女)&quot;,
-        ///  &quot;priest&quot;: &quot;圣职者(男)&quot;,
-        ///  &quot;priest_at&quot;: &quot;圣职者(女)&quot;,
-        ///  &quot;thief&quot;: &quot;暗夜使者(女)&quot;,
-        ///  &quot;knight&quot;: &quot;守护者(女)&quot;,
-        ///  &quot;demoniclancer&quot;: &quot;魔枪士(男)&quot;,
-        ///
-        ///  &quot;hair&quot;: &quot;头发&quot;,
-        ///  &quot;cap&quot;: &quot;帽子&quot;,
-        ///  &quot;face&quot;: &quot;脸部&quot;,
-        ///  &quot;neck&quot;: &quot;胸部&quot;,
-        ///  &quot;coat&quot;: &quot;上衣&quot;,
-        ///  &quot;skin&quot;: &quot;皮肤&quot;,
-        ///  &quot;belt&quot;: &quot;腰带&quot;,
-        ///  &quot;pants&quot;: &quot;裤子&quot;,
-        ///  &quot;shoes&quot;: &quot;鞋子&quot;,
-        ///
-        ///
-        ///  &quot;katana&quot;: &quot;太刀&quot;,
-        ///  &quot;sswd&quot;: &quot;短剑&quot;,
-        ///  &quot;lswd&quot;: &quot;巨剑&quot;,
-        ///   [字符串的其余部... 的本地化字符串。
-        /// </summary>
-        internal static string Alias_Weapon {
-            get {
-                return ResourceManager.GetString("Alias_Weapon", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
         /// </summary>
         internal static System.Drawing.Icon aww {
@@ -120,28 +82,28 @@ namespace ExtractorSharp.Properties {
         
         /// <summary>
         ///   查找类似 {
-        ///	&quot;Name&quot; : &quot;中文(简体)&quot;,
+        ///  &quot;Name&quot; : &quot;中文(简体)&quot;,
         ///  &quot;LCID&quot;: 2052,
-        ///  &quot;Dictionary&quot;: {
-        ///    &quot;OK&quot;: &quot;确定&quot;,
-        ///    &quot;Cancel&quot;: &quot;取消&quot;,
-        ///    &quot;GamePath&quot;: &quot;游戏路径&quot;,
-        ///    &quot;Browse&quot;: &quot;浏览&quot;,
-        ///    &quot;HandleObject&quot;: &quot;处理对象&quot;,
-        ///    &quot;HandleContent&quot;: &quot;处理内容&quot;,
-        ///    &quot;HandleImg&quot;: &quot;Img处理&quot;,
-        ///    &quot;HandleImage&quot;: &quot;贴图处理&quot;,
-        ///    &quot;CheckImg&quot;: &quot;当前所选Img&quot;,
-        ///    &quot;AllImg&quot;: &quot;所有Img&quot;,
-        ///    &quot;CheckImage&quot;: &quot;当前所选贴图&quot;,
-        ///    &quot;AllImage&quot;: &quot;所有贴图&quot;,
-        ///    &quot;Width&quot;: &quot;宽&quot;,
-        ///    &quot;Height&quot;: &quot;高&quot;,
-        ///    &quot;Size&quot;: &quot;宽高&quot;,
-        ///    &quot;Position&quot;: &quot;坐标&quot;,
-        ///    &quot;CavasWidth&quot;: &quot;画布宽&quot;,
-        ///    &quot;CavasHeight&quot;: &quot;画布高&quot;,
-        ///    &quot;CavasSize [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///  &quot;Group&quot;:{
+        ///  	&quot;Dictionary&quot;: {
+        ///	    &quot;OK&quot;: &quot;确定&quot;,
+        ///	    &quot;Cancel&quot;: &quot;取消&quot;,
+        ///	    &quot;GamePath&quot;: &quot;游戏路径&quot;,
+        ///	    &quot;Browse&quot;: &quot;浏览&quot;,
+        ///	    &quot;HandleObject&quot;: &quot;处理对象&quot;,
+        ///	    &quot;HandleContent&quot;: &quot;处理内容&quot;,
+        ///	    &quot;HandleImg&quot;: &quot;Img处理&quot;,
+        ///	    &quot;HandleImage&quot;: &quot;贴图处理&quot;,
+        ///	    &quot;CheckImg&quot;: &quot;当前所选Img&quot;,
+        ///	    &quot;AllImg&quot;: &quot;所有Img&quot;,
+        ///	    &quot;CheckImage&quot;: &quot;当前所选贴图&quot;,
+        ///	    &quot;AllImage&quot;: &quot;所有贴图&quot;,
+        ///	    &quot;Width&quot;: &quot;宽&quot;,
+        ///	    &quot;Height&quot;: &quot;高&quot;,
+        ///	    &quot;Size&quot;: &quot;宽高&quot;,
+        ///	    &quot;Position&quot;: &quot;坐标&quot;,
+        ///	    &quot;CavasWidth&quot;: &quot;画布宽&quot;,
+        ///	    &quot;Cav [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Chinese {
             get {
@@ -163,10 +125,11 @@ namespace ExtractorSharp.Properties {
         ///	LCID:2052
         ///	SaveImageAllPath:false
         ///  LayerMaximum: 20
-        ///  Initialized: false
-        ///  AvatarUrl: &quot;http://kritsu.net/avatar&quot;
-        ///  ApiUrl: &quot;http://kritsu.net/avatar/image/avatar/&quot;
-        ///} 的本地化字符串。
+        ///  AvatarUrl:&quot;http://extractorsharp.kritsu.net/#/avatar&quot;,
+        ///  ResourceUrl: &quot;http://kritsu.net/avatar/image/&quot;,
+        ///  ApiUrl: &quot;http://extractorsharp.kritsu.net/api/avatar&quot;,
+        ///  UpdateUrl:&quot;http://extractorsharp.kritsu.net/api/program/update?type=release&quot;,
+        ///  UpdateExeUrl:&quot;http://static.kritsu.net/in [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Config {
             get {
@@ -263,40 +226,36 @@ namespace ExtractorSharp.Properties {
         }
         
         /// <summary>
-        ///   查找类似 {
-        ///	{
-        ///		&quot;Version&quot; : &quot;1.0.0.1&quot;,
-        ///		&quot;Info&quot; : {
-        ///			&quot;优化试衣间,新增魔枪士&quot;
-        ///		}
-        ///	},
-        ///	{
-        ///		&quot;Version&quot; : &quot;1.0.1.0&quot;,
-        ///		&quot;Info&quot; : {
-        ///			&quot;优化动画播放功能,修复内存溢出bug&quot;,
-        ///			&quot;反Ex加密,防止因为Ex加密导致路径错误&quot;
-        ///		}
-        ///	},
-        ///	{
-        ///		&quot;Version&quot; : &quot;1.0.2.0&quot;,
-        ///		&quot;Time&quot; : &quot;2017年5月12日13:42:32&quot;,
-        ///		&quot;Info&quot; : {
-        ///			&quot;新增密码保护&quot;,
-        ///			&quot;新增版本转换(不必要时不推荐进行转换)&quot;,
-        ///			&quot;新增替换贴图时对JPG,BMP等格式的支持&quot;
-        ///		}
-        ///	},
-        ///	{
-        ///		&quot;Version&quot; : &quot;1.1.0.0&quot;,
-        ///		&quot;Time&quot; : &quot;2017年5月16日20:01:00&quot;,
-        ///		&quot;Info&quot; : {
-        ///			&quot;修复载入文件夹卡死的bug&quot;,
-        ///			&quot;新增Ver5提取支持&quot;,
-        ///			&quot;新增批处理(染色,贴图替换)&quot;
-        ///		}
-        ///	},
-        ///	{
-        ///		&quot;Version&quot; : &quot;1.1.1. [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///   查找类似 [
+        ///  {
+        ///    &quot;Version&quot;: &quot;1.0.0.1&quot;,
+        ///    &quot;Info&quot;: [
+        ///      &quot;优化试衣间,新增魔枪士&quot;
+        ///    ]
+        ///  },
+        ///  {
+        ///    &quot;Version&quot;: &quot;1.0.1.0&quot;,
+        ///    &quot;Info&quot;: [
+        ///      &quot;优化动画播放功能,修复内存溢出bug&quot;,
+        ///      &quot;反Ex加密,防止因为Ex加密导致路径错误&quot;
+        ///    ]
+        ///  },
+        ///  {
+        ///    &quot;Version&quot;: &quot;1.0.2.0&quot;,
+        ///    &quot;Time&quot;: &quot;2017年5月12日13:42:32&quot;,
+        ///    &quot;Info&quot;: [
+        ///      &quot;新增密码保护&quot;,
+        ///      &quot;新增版本转换(不必要时不推荐进行转换)&quot;,
+        ///      &quot;新增替换贴图时对JPG,BMP等格式的支持&quot;
+        ///    ]
+        ///  },
+        ///  {
+        ///    &quot;Version&quot;: &quot;1.1.0.0&quot;,
+        ///    &quot;Time&quot;: &quot;2017年5月16日20:01:00&quot;,
+        ///    &quot;Info&quot;: [
+        ///      &quot;修复载入文件夹卡死的bug&quot;,
+        ///      &quot;新增Ver5提取支持&quot;,
+        ///      &quot;新增 [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Version {
             get {

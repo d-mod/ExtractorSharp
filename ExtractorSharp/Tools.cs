@@ -247,8 +247,10 @@ namespace ExtractorSharp {
         /// <param name="c"></param>
         public static string RemoveSuffix(this string s ,string c) {
             var i = s.LastIndexOf(c);
-            if (i > 0)
+            if (i > 0) {
                 return s.Substring(0, i);
+
+            }
             return s;
         }
 
@@ -258,11 +260,18 @@ namespace ExtractorSharp {
         /// <param name="c"></param>
         public static string RemovePrefix(this string s, string c) {
             var i = s.IndexOf(c);
-            if (i > 0)
+            if (i > 0) {
                 return s.Substring(i);
+            }
             return s;
         }
 
+
+        /// <summary>
+        /// 补全至4位数字的字符串
+        /// </summary>
+        /// <param name="i"></param>
+        /// <returns></returns>
         public static string Completed(this int i) {
             var str = i.ToString();
             for (var j = str.Length; j < 4; j++) {
@@ -271,13 +280,22 @@ namespace ExtractorSharp {
             return str;
         }
 
+        public static string RemoveSuffix(this string s) {
+            var i = s.IndexOf(".");
+            if (i < 0) {
+                i = s.Length;
+            }
+            return s.Substring(0,i);
+        }
+
+
         /// <summary>
         /// 搜索指定img列表中符合条件的img
         /// </summary>
         /// <param name="condition"></param>
         /// <param name="Items"></param>
         /// <returns></returns>
-        [Obsolete("")]
+        [Obsolete("过时方法")]
         public static IEnumerable<Album> Find2(IEnumerable<Album> Items, params string[] condition) {
             var isEmpty = true;
             foreach (var item in condition) {
@@ -291,7 +309,6 @@ namespace ExtractorSharp {
                     yield return item;
                 yield break;
             }
-            var temp = new List<Album>();
             foreach (var album in Items) {
                 var isMatch = true;
                 foreach (var item in condition) {
@@ -309,10 +326,12 @@ namespace ExtractorSharp {
 
         public static List<Album> Find(IEnumerable<Album> Items, bool allCheck, params string[] args) {
             var list = new List<Album>(Items.FindAll(item => {
-                if (!allCheck && args.Length == 0)
+                if (!allCheck && args.Length == 0) {
                     return true;
-                if (allCheck && !args[0].Equals(item.Name))
+                }
+                if (allCheck && !args[0].Equals(item.Name)) {
                     return false;
+                }
                 return args.All(arg => item.Path.Contains(arg));
             }));
             if (list.Count == 0) {//当搜索结果为空时,启用V6规则搜索
@@ -321,6 +340,13 @@ namespace ExtractorSharp {
             return list;
         }
 
+
+        /// <summary>
+        /// v6 匹配规则
+        /// </summary>
+        /// <param name="name1"></param>
+        /// <param name="name2"></param>
+        /// <returns></returns>
         public static bool Find(string name1, string name2) {
             var regex = new Regex("\\d+");
             var match0 = regex.Match(name1);

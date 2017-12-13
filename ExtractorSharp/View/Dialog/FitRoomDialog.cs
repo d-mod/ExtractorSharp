@@ -22,8 +22,8 @@ namespace ExtractorSharp.View{
     internal partial class FitRoomDialog : EaseDialog {
         private Controller Controller;
         private string Path => Config["ResourcePath"].Value;
-        private string[] parts;
         private FitRoomService Service { get; }
+        private int PartsCount => Service.Parts.Length;
         public FitRoomDialog() {
             Controller = Program.Controller;
             Service = new FitRoomService();
@@ -55,11 +55,9 @@ namespace ExtractorSharp.View{
         /// 初始化
         /// </summary>
         public void Init() {
-            var list = Service.Init();
-            parts = Service.GetParts();
-            partBoxes = new NumericUpDown[parts.Length];
-            partCheckes = new CheckBox[parts.Length];
-            for (var i = 0; i < parts.Length; i++) {
+            partBoxes = new NumericUpDown[PartsCount];
+            partCheckes = new CheckBox[PartsCount];
+            for (var i = 0; i < PartsCount; i++) {
                 var box = new NumericUpDown();
                 box.Location = new Point(85 + 180 * (i % 2),  (i+2) / 2 * 45);
                 box.Size = new Size(82, 21);
@@ -71,14 +69,19 @@ namespace ExtractorSharp.View{
 
                 var check = new CheckBox();
                 check.Location = new Point(15 + 185 * (i % 2), (i+2)  / 2 * 45);
-                check.Text = parts[i];
+                check.Text = Language["Alias",Service.Parts[i]];
                 check.UseVisualStyleBackColor = true;
                 Controls.Add(check);
                 partCheckes[i] = check;
             }
-            professionBox.Items.AddRange(list);
-            if (professionBox.Items.Count > 0)
+            var array = Service.ProfessionList.ToArray();
+            for(var i = 0; i < array.Length; i++) {
+                array[i] = Language["Alias", array[i]];
+            }
+            professionBox.Items.AddRange(array);
+            if (professionBox.Items.Count > 0) {
                 professionBox.SelectedIndex = 0;
+            }
             pathBox.Text = Config["GamePath"].Value;
             PartUpdate();
         }
@@ -94,13 +97,16 @@ namespace ExtractorSharp.View{
         /// 时装刷新
         /// </summary>
         public void PartUpdate() {
-            for(var i = 0; i < parts.Length; i++) {
+            for(var i = 0; i < PartsCount; i++) {
                 partBoxes[i].Value = -1;
                 partCheckes[i].Checked = false;
             }
             weaponCombo.Items.Clear();
             if (professionBox.SelectedIndex > -1) {
                 var arr = Service.GetWeapon(professionBox.SelectedIndex);
+                for(var i = 0; i < arr.Length; i++) {
+                    arr[i] = Language["Alias", arr[i]];
+                }
                 weaponCombo.Items.AddRange(arr);
                 if (arr.Length > 0) {                 //当武器种类大于0时，默认选择第一个
                     weaponCombo.SelectedIndex = 0;
@@ -124,7 +130,7 @@ namespace ExtractorSharp.View{
         private void Import(string text) {
             var arr = text.Split("%");
             professionBox.SelectedIndex = Service.SelectProfessionByName(arr[0]);
-            for (var i = 0; i < parts.Length; i++) {
+            for (var i = 0; i < PartsCount; i++) {
                 var code = int.Parse(arr[i + 1]);
                 partBoxes[i].Value = code;
                 if (code != -1) {
@@ -178,11 +184,11 @@ namespace ExtractorSharp.View{
             var index = weaponCombo.SelectedIndex;
             Service.ExtractImg(values, value, index);
         }
-        
+
 
         private int[] GetValues(bool hasSkin) {
-            var values = new int[parts.Length];
-            for (var i = 0; i < parts.Length; i++) {
+            var values = new int[PartsCount];
+            for (var i = 0; i < PartsCount; i++) {
                 var check = partCheckes[i].Checked;
                 if (i == 5) {
                     check &= hasSkin;
@@ -211,8 +217,9 @@ namespace ExtractorSharp.View{
         public void Save(object sender, EventArgs e) {
             ExctractImg();
             var dialog = new FolderBrowserDialog();
-            if (dialog.ShowDialog() == DialogResult.OK)
+            if (dialog.ShowDialog() == DialogResult.OK) {
                 Tools.SaveDirectory(dialog.SelectedPath, Service.Array);
+            }
         }
 
         /// <summary>
@@ -222,8 +229,9 @@ namespace ExtractorSharp.View{
         /// <param name="e"></param>
         public void AddMerge(object sender, EventArgs e) {
             ExctractImg(true,addWeaponCheck.Checked);
-            if (clearCheck.Checked)
+            if (clearCheck.Checked) {
                 Controller.Do("clearMerge");
+            }
             Controller.Do("addMerge", Service.Array);
         }
 

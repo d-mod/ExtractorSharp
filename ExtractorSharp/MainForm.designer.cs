@@ -6,7 +6,6 @@ using ExtractorSharp.UI;
 using ExtractorSharp.Draw;
 using ExtractorSharp.Core;
 using System.IO;
-using ExtractorSharp.Config;
 using ExtractorSharp.Data;
 
 namespace ExtractorSharp {

@@ -9,7 +9,8 @@ namespace ExtractorSharp.Data {
     /// </summary>
     public class Language {
 
-        private Dictionary<string, string> Dictionary;
+        public Dictionary<string, Dictionary<string, string>> Group { set; get; } = new Dictionary<string, Dictionary<string, string>>();
+
         /// <summary>
         /// 语言名
         /// </summary>
@@ -24,17 +25,22 @@ namespace ExtractorSharp.Data {
         /// <param name="key"></param>
         /// <returns></returns>
         public string this[string key] {
+            get => this["Dictionary", key];
+            set => this["Dictionary", key] = value;
+        }
+
+        public string this[string group, string key] {
             get {
-                if (Dictionary.ContainsKey(key)) {
-                    return Dictionary[key];
+                if (Group.ContainsKey(group) && Group[group].ContainsKey(key)) {
+                    return Group[group][key];
                 }
                 return key;
             }
-            private set {
-                if (Dictionary.ContainsKey(key)) {
-                    Dictionary.Remove(key);
+            set {
+                if (!Group.ContainsKey(group)) {
+                    Group.Add(group, new Dictionary<string, string>());
                 }
-                Dictionary.Add(key, value);
+                Group[group][key] = value;
             }
         }
 
@@ -49,26 +55,6 @@ namespace ExtractorSharp.Data {
 
         public override string ToString() => Name;
 
-        /// <summary>
-        /// 从xml对象获得语言集
-        /// </summary>
-        /// <param name="doc"></param>
-        /// <returns></returns>
-        public static Language CreateFromXml(XmlDocument doc) {
-            var lan = new Language();
-            var root = doc.DocumentElement;
-            var list = root.ChildNodes;
-            lan.Name = root.GetAttribute("Name");
-            int.TryParse(root.GetAttribute("LCID"), out int lcid);//LCID,表示地区标识符
-            lan.LCID = lcid;
-            foreach (XmlNode item in list) {
-                if (item.NodeType != XmlNodeType.Comment) {//过滤注释
-                    lan[item.Name] = item.InnerText;//根据标签名和标签内容得到key-value对
-                }
-            }
-            return lan;
-        }
-
         public static Language CreateFromJson(string json) {
             var builder = new LSBuilder();
             var obj = builder.ReadJson(json);
@@ -76,28 +62,7 @@ namespace ExtractorSharp.Data {
             obj.GetValue(ref lan);
             return lan;
         }
-         
-        /// <summary>
-        /// 从字符串获得语言集
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static Language CreateFromXml(string str) {
-            var doc = new XmlDocument();
-            doc.LoadXml(str);
-            return CreateFromXml(doc);
-        }
 
-        /// <summary>
-        /// 从流获得语言集
-        /// </summary>
-        /// <param name="stream"></param>
-        /// <returns></returns>
-        public static Language CreateFromXml(Stream stream) {
-            var doc = new XmlDocument();
-            doc.Load(stream);
-            return CreateFromXml(doc);
-        }
 
         /// <summary>
         /// 从指定路径获得语言集

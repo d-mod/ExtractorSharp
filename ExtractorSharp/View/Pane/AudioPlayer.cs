@@ -1,4 +1,5 @@
 ﻿using ExtractorSharp.Core;
+using ExtractorSharp.Data;
 using ExtractorSharp.Handle;
 using ExtractorSharp.Lib;
 using System;
@@ -9,9 +10,7 @@ namespace ExtractorSharp.View {
         private Controller Controller;
         private int handle;
         private bool isRun;
-        private int length;
-        private int position;
-        private delegate void TimerCallBack(object value);
+        private Language Language = Language.Default;
         public OggPlayer(Controller Controller) {
             this.Controller = Controller;
             InitializeComponent();

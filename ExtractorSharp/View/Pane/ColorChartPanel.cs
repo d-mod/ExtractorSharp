@@ -41,7 +41,7 @@ namespace ExtractorSharp.View.Pane {
             if (Album != null) {
                 combo.Items.Clear();
                 for (var i = 0; i < Album.Tables.Count; i++) {
-                    combo.Items.Add(Language["ColorChart"] + i);
+                    combo.Items.Add($"{Language["ColorChart"]} - {i}");
                 }
                 if (Album.TableIndex < Album.Tables.Count) {
                     combo.SelectedIndex = Album.TableIndex;

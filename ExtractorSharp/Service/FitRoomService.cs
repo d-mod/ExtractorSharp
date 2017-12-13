@@ -10,13 +10,12 @@ using ExtractorSharp.Properties;
 
 namespace ExtractorSharp.Service {
     public class FitRoomService {
-        private List<string> ProfessionList { get; set; }
-        private string Profession => ProfessionList[Index];
-        private string[] WeaponArray { set; get; }
+        public List<string> ProfessionList { get; set; }
+        public string Profession => ProfessionList[Index];
+        private string[] WeaponArray => weapon_info[Profession].Weapon.ToArray();
         private Dictionary<string, WeaponInfo> weapon_info;
         private Dictionary<string, string> replace_dic;
-        private Dictionary<string, string> alias_list;
-        private readonly string[] parts = { "hair", "cap", "face", "neck", "coat", "skin", "belt", "pants", "shoes" };
+        public string[] Parts { get; } = { "hair", "cap", "face", "neck", "coat", "skin", "belt", "pants", "shoes" };
         private int Index { set; get; }
         public bool Mask { get; set; }
         public bool Ban { get; set; }
@@ -25,7 +24,7 @@ namespace ExtractorSharp.Service {
         private readonly string API_URL = Program.Config["ApiUrl"].Value;
 
 
-        public string[] Init() {
+        public FitRoomService() {
             replace_dic = new Dictionary<string, string>();
             var builder = new LSBuilder();
             var obj = builder.ReadJson(Resources.Weapon);
@@ -46,44 +45,24 @@ namespace ExtractorSharp.Service {
                 info.Name = entry.Key;
                 info.Weapon.AddRange(info.Alias.Keys);
             }
-            alias_list = new Dictionary<string, string>();
-            var array = new string[ProfessionList.Count];
-            obj = builder.ReadJson(Resources.Alias_Weapon);
-            obj.GetValue(ref alias_list);
-            for (var i = 0; i < array.Length; i++) {
-                array[i] = alias_list[ProfessionList[i]];
-            }
-            return array;
         }
 
         public int SelectProfessionByName(string name) {
             return ProfessionList.FindIndex(item => item.Equals(name));
         }
-
-        public string[] GetParts() {
-            var array = new string[parts.Length];
-            for (var i = 0; i < array.Length; i++) {
-                array[i] = alias_list[parts[i]];
-            }
-            return array;
-        }
+        
 
         public string[] GetWeapon(int index) {
             this.Index = index;
             var profession = ProfessionList[index];
             profession = profession.Replace("_at", "");
-            WeaponArray = weapon_info[profession].Weapon.ToArray();
-            var array = new string[WeaponArray.Length];
-            for (var i = 0; i < WeaponArray.Length; i++) {
-                array[i] = alias_list[WeaponArray[i]];
-            }
-            return array;
+            return weapon_info[profession].Weapon.ToArray();
         }
 
         public void ExtractImg(int[] values, int weaponValue, int wepaonIndex) {
             var list = new List<Album>();
-            for (var i = 0; i < parts.Length; i++) {
-                var item = FindImg(Profession, parts[i], values[i]);
+            for (var i = 0; i < Parts.Length; i++) {
+                var item = FindImg(Profession, Parts[i], values[i]);
                 list.AddRange(item);
             }
             var weapon = FindWeapon(Profession, WeaponArray[wepaonIndex], weaponValue);
@@ -139,11 +118,11 @@ namespace ExtractorSharp.Service {
         /// <returns></returns>
         internal List<TempImage> LoadImage(int[] values) {
             var list = new List<TempImage>();
-            for (var i = 0; i < parts.Length; i++) {
+            for (var i = 0; i < Parts.Length; i++) {
                 if (values[i] == -1)
                     continue;
                 var value = values[i].Completed();
-                var temp = GetTempImage(parts[i], value);
+                var temp = GetTempImage(Parts[i], value);
                 list.AddRange(temp);
             }
             list.Sort((left, right) => left.Index - right.Index);

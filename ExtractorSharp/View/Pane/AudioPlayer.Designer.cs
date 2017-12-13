@@ -37,7 +37,7 @@
             this.playButton.Name = "playButton";
             this.playButton.Size = new System.Drawing.Size(76, 28);
             this.playButton.TabIndex = 1;
-            this.playButton.Text = "播放";
+            this.playButton.Text = Language["Play"];
             this.playButton.UseVisualStyleBackColor = true;
             // 
             // pauseButton
@@ -46,7 +46,7 @@
             this.pauseButton.Name = "pauseButton";
             this.pauseButton.Size = new System.Drawing.Size(76, 28);
             this.pauseButton.TabIndex = 2;
-            this.pauseButton.Text = "暂停";
+            this.pauseButton.Text = Language["Pause"];
             this.pauseButton.UseVisualStyleBackColor = true;
             // 
             // groupBox1
@@ -60,7 +60,6 @@
             this.groupBox1.Size = new System.Drawing.Size(365, 199);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "音频播放";
             // 
             // timeLabel
             // 

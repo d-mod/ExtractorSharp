@@ -43,7 +43,7 @@ namespace ExtractorSharp {
         /// 应用程序的主入口点。
         /// </summary>
         [STAThread]
-        static void Main(string[] args) { 
+        static void Main(string[] args) {
             Arguments = args;
             LoadConfig();
             LoadLanguage();
@@ -178,7 +178,7 @@ namespace ExtractorSharp {
                 if (Config["GamePath"].Value.Equals(string.Empty) || !Directory.Exists(Config["GamePath"].Value)) {
                     var path = Registry.CurrentUser.OpenSubKey("software\\tencent\\dnf", RegistryKeyPermissionCheck.Default, RegistryRights.ReadKey).GetValue("InstallPath").ToString();
                     Config["GamePath"] = new ConfigValue(path);
-                }
+                 }
                 Config.Save();
             } catch (Exception e) {
                 Console.Write(e);
@@ -277,8 +277,10 @@ namespace ExtractorSharp {
                 var rsPath = $"{dialog.SelectedPath}/ImagePacks2";
                 if (Directory.Exists(rsPath)) {
                     Config["GamePath"] = new ConfigValue(dialog.SelectedPath);
+                    Config["ResourcePath"] = new ConfigValue($"{dialog.SelectedPath}/ImagePacks2");
+                    Config.Save();
                     return true;
-                } else { 
+                } else {
                     Messager.ShowWarnning("SelectPathIsInvalid");
                 }
             }

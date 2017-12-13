@@ -17,11 +17,11 @@ namespace ExtractorSharp.View {
             box.Text = string.Empty;
             if ("debug".Equals(Mode)) {
                 Error = args[1] as string;
-                label1.Text = "程序出现了一些问题";
+                label1.Text = Language["ProgramExceptions"];
                 submitCheck.Checked = true;
                 submitCheck.Visible = true;
             } else {
-                label1.Text = "向作者提交你的建议";
+                label1.Text = Language["SubmitFeedback"];
                 submitCheck.Checked = false;
                 submitCheck.Visible = false;
             }
