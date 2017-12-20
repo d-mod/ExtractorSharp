@@ -5,7 +5,9 @@ namespace ExtractorSharp.Command.ImageCommand {
     class ChangeSize : ICommand {
         public bool CanUndo => true;
 
-        public bool Changed => true;
+        public bool IsChanged => true;
+
+        public bool IsFlush => false;
 
         public string Name => "ChangeImageSize";
 

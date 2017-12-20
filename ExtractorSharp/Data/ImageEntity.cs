@@ -1,19 +1,16 @@
 ﻿using System.Drawing;
 using ExtractorSharp.Handle;
-using ExtractorSharp.Users;
 using ExtractorSharp.Lib;
-using ExtractorSharp.Data;
-using System;
 using ExtractorSharp.Loose.Attr;
 
-namespace ExtractorSharp.Data{
+namespace ExtractorSharp.Data {
 
     public class ImageEntity{
         /// <summary>
         /// 色位
         /// </summary>
         /// 
-        public ColorBits Type = ColorBits.ARGB_1555;
+        public ColorBits Type { set; get; }= ColorBits.ARGB_1555;
         /// <summary>
         /// 贴图内容
         /// </summary>
@@ -36,12 +33,6 @@ namespace ExtractorSharp.Data{
 
         [LSIgnore]
         public bool IsOpen => _image != null;
-
-        /// <summary>
-        /// 密码
-        /// </summary>
-        [LSIgnore]
-        internal Work Work => Parent?.Work;
 
 
         [LSIgnore]
@@ -71,7 +62,7 @@ namespace ExtractorSharp.Data{
         }
         
         public int Width {
-            set =>Size.Width = value;        
+            set => Size.Width = value;   
             get => Size.Width;
             
         }
@@ -85,19 +76,15 @@ namespace ExtractorSharp.Data{
         /// 帧域宽高
         /// </summary>
         [LSIgnore]
-        public Size Cavas_Size = Size.Empty;
+        public Size Cavas_Size  = Size.Empty;
 
-
-        [LSIgnore]
         public int Cavas_Width {
-            set => Cavas_Size.Width = value;
-            get => Cavas_Size.Height;
+            set => Cavas_Size = new Size(value, Cavas_Height);
+            get => Cavas_Size.Width;
         }
-
-
-        [LSIgnore]
+     
         public int Cavas_Height {
-            set => Cavas_Size.Height = value;
+            set => Cavas_Size = new Size(Cavas_Width, value);
             get => Cavas_Size.Height;
         }
 
@@ -123,7 +110,7 @@ namespace ExtractorSharp.Data{
         /// 贴图在V2,V4时的数据
         /// </summary>
         [LSIgnore]
-        public byte[] Data = new byte[2];
+        public byte[] Data= new byte[2];
 
         /// <summary>
         /// 贴图在img中的下标
@@ -143,6 +130,7 @@ namespace ExtractorSharp.Data{
         /// <summary>
         /// 文件版本
         /// </summary>
+        [LSIgnore]
         public Img_Version Version => Parent.Version;
 
 
@@ -158,15 +146,15 @@ namespace ExtractorSharp.Data{
             Target = null;
             Type = type;
             if (isAdjust) {
-                Location.X += bmp.Width - Size.Width;
-                Location.Y += bmp.Height - Size.Height;
+                X += bmp.Width - Size.Width;
+                Y += bmp.Height - Size.Height;
             }
             Size = bmp.Size;
-            if (Cavas_Size.Height < bmp.Height) {
-                Cavas_Size.Height = bmp.Height;
+            if (Cavas_Height < bmp.Height) {
+                Cavas_Height = bmp.Height;
             }
-            if (Cavas_Size.Width < bmp.Width) {
-                Cavas_Size.Width = bmp.Width;
+            if (Cavas_Width < bmp.Width) {
+                Cavas_Width = bmp.Width;
             }
             if (Width * Height > 1) {
                 Compress = Compress.ZLIB;
@@ -178,10 +166,12 @@ namespace ExtractorSharp.Data{
         /// 去画布化
         /// </summary>
         public void UnCavasImage() {
-            if (Type == ColorBits.LINK || Compress == Compress.NONE)
+            if (Type == ColorBits.LINK || Compress == Compress.NONE) {
                 return;
-            if (Picture == null)
+            }
+            if (Picture == null) {
                 return;
+            }
             var rct = Picture.Scan();
             var image = new Bitmap(rct.Width, rct.Height);
             var g = Graphics.FromImage(image);

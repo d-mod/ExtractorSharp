@@ -3,21 +3,25 @@ using System.Drawing;
 
 namespace ExtractorSharp.Command.ImageCommand {
     class LineDodge : SingleAction {
+
         private Bitmap[] Image;
+
         private ImageEntity[] Array;
 
         public string Name => "LineDodge";
 
         public bool CanUndo => true;
 
-        public bool Changed => true;
+        public bool IsFlush => false;
 
-        public int[] Indexes { set; get; }
+        public bool IsChanged => true;
 
-        public void Action(Album Album, int[] Indexes) {
-            foreach (var i in Indexes) {
-                if (i > -1 && i < Album.List.Count) {
-                    Album[i].Picture = Album[i].Picture.LinearDodge();
+        public int[] Indices { set; get; }
+
+        public void Action(Album al, int[] indices) {
+            foreach (var i in indices) {
+                if (i > -1 && i < al.List.Count) {
+                    al[i].Picture = al[i].Picture.LinearDodge();
                 }
             }
         }

@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 using ExtractorSharp.Command;
-using ExtractorSharp.UI;
+using ExtractorSharp.Component;
 
 namespace ExtractorSharp.View.Pane {
     partial class ColorChartPanel {

@@ -228,8 +228,9 @@ namespace ExtractorSharp.Loose {
                 //数组
                 case Array a:
                     type = type.GetElementType();
-                    for (int i = 0; i < a.Length; i++)
+                    for (int i = 0; i < a.Length; i++) {
                         a.SetValue(List[i].GetValue(type), i);
+                    }
                     break;
                 //列表
                 case IList e:
@@ -254,10 +255,11 @@ namespace ExtractorSharp.Loose {
                                 break;
                             }
                         }
-                        
+
                         //判断是否成功映射
-                        if (completed)
+                        if (completed) {
                             continue;
+                        }
                         //给字段赋值
                         var fileds = type.GetFields(FILED_FLAG);
                         foreach (var f in fileds) {
@@ -372,23 +374,25 @@ namespace ExtractorSharp.Loose {
                 buf.Append("{");
                 buf.AppendLine();
                 for (var i = 0; i < List.Count; i++) {
-                    if (i != List.Count - 1)
+                    if (i != List.Count - 1) {
                         buf.AppendLine(List[i].ToString(depth) + Separator);
-                    else
+                    } else {
                         buf.AppendLine(List[i].ToString(depth));
+                    }
                 }
                 buf.AppendTab(depth);
                 buf.AppendTab(depth--);
                 buf.Append("}");
             } else {
                 //字符串
-                if (ValueType == LSType.String)
+                if (ValueType == LSType.String) {
                     //reformat 处理转义字符
                     buf.Append($"{Mark + Value.ToString().ReFormat() + Mark}");
-                else if (ValueType == LSType.Null)
+                } else if (ValueType == LSType.Null) {
                     buf.Append("null");
-                else
+                } else {
                     buf.Append(Value);
+                }
             }
             return buf.ToString();
         }

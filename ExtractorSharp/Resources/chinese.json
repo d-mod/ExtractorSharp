@@ -3,6 +3,7 @@
   "LCID": 2052,
   "Group":{
   	"Dictionary": {
+		"Apply":"应用",
 	    "OK": "确定",
 	    "Cancel": "取消",
 	    "GamePath": "游戏路径",
@@ -101,11 +102,14 @@
 	    "DeleteFile": "删除文件",
 	    "ReplaceFile": "替换文件",
 	    "HideFile": "隐藏文件贴图",
-	    "RepairFile": "帧数补正",
+	    "RepairFile": "修复文件",
 	    "SplitFile": "拆分文件",
 	    "MixFile": "合并文件",
 		"CutFile":"剪切文件",
 		"PasteFile":"粘贴文件",
+		"MoveFile":"移动文件",
+		"SaveFile":"保存文件",
+
 		"CutImage":"剪切图片",
 		"PasteImage":"粘贴图片",
 
@@ -127,6 +131,7 @@
 	    "ChangeImagePosition": "修改贴图坐标",
 	    "ChangeImageSize": "修改贴图大小",
 	    "LinkImage": "修改为链接贴图",
+		"MoveImage" : "移动贴图",
 	    "Tools": "工具",
 	    "CavasImage": "画布化",
 	    "UnCavasImage": "去画布化",
@@ -147,6 +152,7 @@
 	    "UseOutsideRule": "使用外部拼合规则",
 	    "ClearMerge": "清空拼合队列",
 	    "RemoveMerge": "移出拼合队列",
+		"MoveMerge":"移动拼合队列",
 	    "MoveUp": "向上移动",
 	    "MoveDown": "向下移动",
 	    "Name": "名称",
@@ -190,6 +196,10 @@
 	    "AddList": "加入列表",
 	    "Practice": "练习",
 
+		"Gerneral" : "常规",
+		"SaveImagePath":"贴图保存路径",
+		"Empty":"清空",
+
 	    "AutoSave": "自动保存",
 	    "GridGap": "网格间距",
 	    "SaveImageTips": "提取贴图时弹出提示",
@@ -219,7 +229,10 @@
 	    "ActionTips": "是否对所有贴图执行此处理？",
 	    "SavePathTips": "添加文件完整路径",
 	    "OutMaximum": "超出上限!",
-	    "SelectAllAndNotTips": "选择全部并不再提示"
+	    "SelectAllAndNotTips": "选择全部并不再提示",
+		"ActionRecord":"动作记录已开始!",
+		"ActionPause":"动作记录已暂停!",
+		"ActionRun":"动作执行已完成"
 	  },
 	  "Alias":{
 		  "swordman": "鬼剑士(男)",

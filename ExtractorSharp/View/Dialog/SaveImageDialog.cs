@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Windows.Forms;
-using ExtractorSharp.Command;
-using ExtractorSharp.UI;
-using ExtractorSharp.Properties;
+using ExtractorSharp.Component;
 using ExtractorSharp.Config;
-using ExtractorSharp.Core;
 using ExtractorSharp.Data;
+using ExtractorSharp.Core.Control;
 
 namespace ExtractorSharp.View {
     public partial class SaveImageDialog : EaseDialog {
         private int[] Indexes;
         private Album Album;
         private Controller Controller { get; }
-        public SaveImageDialog(){
+        public SaveImageDialog(ICommandData Data) : base(Data) {
             Controller = Program.Controller;
             InitializeComponent();
             pathBox.Click += LoadPath;

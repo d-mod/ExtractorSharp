@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Windows.Forms;
 using ExtractorSharp.Command;
-using ExtractorSharp.UI;
+using ExtractorSharp.Component;
 using ExtractorSharp.View;
 using ExtractorSharp.Core;
 using ExtractorSharp.Data;
+using ExtractorSharp.Core.Control;
+using ExtractorSharp.Config;
 
 namespace ExtractorSharp {
     public partial class NewImgDialog : EaseDialog {
         private Controller Controller;
-        public NewImgDialog() {
+        public NewImgDialog(ICommandData Data) : base(Data) {
             Controller = Program.Controller;
             InitializeComponent();
             pathBox.KeyDown += EnterDownRun;

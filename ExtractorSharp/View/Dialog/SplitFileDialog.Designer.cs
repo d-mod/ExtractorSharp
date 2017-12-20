@@ -26,8 +26,8 @@ namespace ExtractorSharp.View.Dialog {
         /// </summary>
         private void InitializeComponent() {
             this.listBox1 = new System.Windows.Forms.ListBox();
-            this.yesButton = new ExtractorSharp.UI.EaseButton();
-            this.noButton = new ExtractorSharp.UI.EaseButton();
+            this.yesButton = new ExtractorSharp.Component.EaseButton();
+            this.noButton = new ExtractorSharp.Component.EaseButton();
             this.check = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
@@ -85,8 +85,8 @@ namespace ExtractorSharp.View.Dialog {
         #endregion
 
         private System.Windows.Forms.ListBox listBox1;
-        private UI.EaseButton yesButton;
-        private UI.EaseButton noButton;
+        private Component.EaseButton yesButton;
+        private Component.EaseButton noButton;
         private System.Windows.Forms.CheckBox check;
     }
 }

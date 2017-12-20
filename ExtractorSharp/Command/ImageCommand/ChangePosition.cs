@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace ExtractorSharp.Command.ImageCommand {
     class ChangePosition : SingleAction {
-        public int[] Indexes { set; get; }
+        public int[] Indices { set; get; }
 
         private Album Album;
         private int[] Ins;
@@ -14,16 +14,16 @@ namespace ExtractorSharp.Command.ImageCommand {
 
         public void Do(params object[] args) {
             Album = args[0] as Album;
-            Indexes = args[1] as int[];
+            Indices = args[1] as int[];
             Ins = args[2] as int[];
             Checkes = args[3] as bool[];
             relative = Checkes[4];
-            old_Locations = new Point[Indexes.Length];
-            old_Max_Sizes = new Size[Indexes.Length];
-            for (var i = 0; i < Indexes.Length; i++) {
-                if (Indexes[i] > Album.List.Count - 1 || Indexes[i] < 0)
+            old_Locations = new Point[Indices.Length];
+            old_Max_Sizes = new Size[Indices.Length];
+            for (var i = 0; i < Indices.Length; i++) {
+                if (Indices[i] > Album.List.Count - 1 || Indices[i] < 0)
                     continue;
-                var entity = Album.List[Indexes[i]];
+                var entity = Album.List[Indices[i]];
                 old_Locations[i] = entity.Location;
                 old_Max_Sizes[i] = entity.Cavas_Size;
                 if (Checkes[0]) {
@@ -49,15 +49,15 @@ namespace ExtractorSharp.Command.ImageCommand {
             }
         }
 
-        public void Redo() => Do(Album, Indexes, Ins, Checkes);
+        public void Redo() => Do(Album, Indices, Ins, Checkes);
         
 
         public void Undo() {
-            for (var i = 0; i < Indexes.Length; i++) {
-                if (Indexes[i] > Album.List.Count - 1 || Indexes[i] < 0) {
+            for (var i = 0; i < Indices.Length; i++) {
+                if (Indices[i] > Album.List.Count - 1 || Indices[i] < 0) {
                     continue;
                 }
-                var entity = Album.List[Indexes[i]];
+                var entity = Album.List[Indices[i]];
                 entity.Location = old_Locations[i];
                 entity.Cavas_Size = old_Max_Sizes[i];
             }
@@ -98,7 +98,9 @@ namespace ExtractorSharp.Command.ImageCommand {
 
         public bool CanUndo => true;
 
-        public bool Changed => true;
+        public bool IsFlush => true;
+
+        public bool IsChanged => true;
 
         public string Name => "ChangeImagePosition";
 

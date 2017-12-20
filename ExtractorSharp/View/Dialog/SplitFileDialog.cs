@@ -1,4 +1,5 @@
-﻿using ExtractorSharp.UI;
+﻿using ExtractorSharp.Component;
+using ExtractorSharp.Config;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,7 +13,7 @@ using System.Windows.Forms;
 namespace ExtractorSharp.View.Dialog {
     public partial class SplitFileDialog : EaseDialog {
        
-        public SplitFileDialog() {
+        public SplitFileDialog(ICommandData Data) : base(Data) {
             InitializeComponent();
         }
     }

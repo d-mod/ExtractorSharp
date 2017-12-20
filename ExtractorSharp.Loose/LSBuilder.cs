@@ -19,6 +19,7 @@ namespace ExtractorSharp.Loose {
         public LSObject Get(string url) {
             var request = WebRequest.Create(url);
             request.Method = "GET";
+            request.Timeout = 10000;
             using (var response = request.GetResponse())
             using (var stream = response.GetResponseStream()) {
                 var obj = Read(stream);

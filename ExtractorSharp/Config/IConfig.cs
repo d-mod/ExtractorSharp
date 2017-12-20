@@ -46,5 +46,6 @@ namespace ExtractorSharp.Config {
         /// 重载
         /// </summary>
         void Reload();
+        
     }
 }

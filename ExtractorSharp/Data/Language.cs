@@ -49,6 +49,8 @@ namespace ExtractorSharp.Data {
         /// </summary>
         public static Language Default { set; get; } = new Language();
 
+        public static List<Language> List { set; get; } = new List<Language>();
+
         private Language() { }
 
         public bool Equals(Language Lan) => LCID == Lan.LCID;//根据LCID判断唯一

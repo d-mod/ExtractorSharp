@@ -1,11 +1,8 @@
 ﻿using ExtractorSharp.Data;
 using ExtractorSharp.Lib;
-using ExtractorSharp.Users;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 
 namespace ExtractorSharp.Handle {
     /// <summary>

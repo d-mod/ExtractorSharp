@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Windows.Forms;
 using ExtractorSharp.Command;
-using ExtractorSharp.UI;
+using ExtractorSharp.Component;
 using ExtractorSharp.Core;
 using ExtractorSharp.Data;
+using ExtractorSharp.Core.Control;
+using ExtractorSharp.Config;
 
 namespace ExtractorSharp.View {
     public partial class NewImageDialog : EaseDialog {
         private Album Album;
         private Controller Controller { get; }
-        public NewImageDialog() {
+        public NewImageDialog(ICommandData Data) : base(Data) {
             Controller = Program.Controller;
             InitializeComponent();
             yesButton.Click += Run;

@@ -101,8 +101,9 @@ namespace ExtractorSharp.Loose {
         }
 
         public static object CreateInstanceByPoint(this Type type, string pointname, params object[] args) {
-            if (pointname == null || pointname == "" || pointname.Equals("constructor"))
+            if (pointname == null || pointname == "" || pointname.Equals("constructor")) {
                 return type.CreateInstance(args);
+            }
             var method = type.GetMethod(pointname, Type.GetTypeArray(args));
             return method.Invoke(null, args);
         }

@@ -7,21 +7,27 @@ namespace ExtractorSharp.Command.ImageCommand {
     /// 可宏命令
     /// </summary>
     class LinkImage : SingleAction {
-        public int[] Indexes { set; get; }
+
+        public int[] Indices { set; get; }
+
         public string Name => "LinkImage";
+
         private ColorBits[] Types;
+
         private Album Album;
+
         private int Index;
+
         public void Do(params object[] args) {
             Album = args[0] as Album;
             Index = (int)args[1];
-            Indexes = args[2] as int[];
-            Types = new ColorBits[Indexes.Length];
-            for (var i = 0; i < Indexes.Length; i++) {
-                if (Index > Album.List.Count - 1 || Index < 0 || Index == Indexes[i]) {
+            Indices = args[2] as int[];
+            Types = new ColorBits[Indices.Length];
+            for (var i = 0; i < Indices.Length; i++) {
+                if (Index > Album.List.Count - 1 || Index < 0 || Index == Indices[i]) {
                     continue;
                 }
-                var entity = Album.List[Indexes[i]];
+                var entity = Album.List[Indices[i]];
                 Types[i] = entity.Type;
                 entity.Type = ColorBits.LINK;
                 entity.Target = Album.List[Index];
@@ -29,14 +35,14 @@ namespace ExtractorSharp.Command.ImageCommand {
         }
 
         public void Undo() {
-            for (int i = 0; i < Indexes.Length; i++) {
-                var entity = Album.List[Indexes[i]];
+            for (int i = 0; i < Indices.Length; i++) {
+                var entity = Album.List[Indices[i]];
                 entity.Type = Types[i];
                 entity.Target = null;
             }
         }
 
-        public void Redo() => Do(Album, Index, Indexes);
+        public void Redo() => Do(Album, Index, Indices);
         
 
         public void Action(Album Album,int[] indexes) {
@@ -51,13 +57,12 @@ namespace ExtractorSharp.Command.ImageCommand {
                 entity.Target = Album.List[Index];//指向指定文件
             }
         }
-
-        public void RunScript(string arg) { }
+        
 
         public bool CanUndo => true;
 
-        public bool Changed => true;
+        public bool IsChanged => true;
 
-        public override string ToString() => Language.Default["LinkImage"];
+        public bool IsFlush => true;
     }
 }

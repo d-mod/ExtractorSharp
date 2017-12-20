@@ -4,7 +4,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using ExtractorSharp.Command;
-using ExtractorSharp.UI;
+using ExtractorSharp.Component;
 using ExtractorSharp.Properties;
 using ExtractorSharp.Config;
 using ExtractorSharp.Core;
@@ -13,7 +13,7 @@ namespace ExtractorSharp.View {
     internal partial class ClearDialog : EaseDialog {
         private string Path => Config["ResourcePath"].Value;
         private Dictionary<string, string> Dic;
-        public ClearDialog(){
+        public ClearDialog(ICommandData Data) : base(Data) {
             InitializeComponent();
             modeBox.SelectedIndex = 0;
             pathBox.Text = Config["GamePath"].Value;
@@ -34,7 +34,7 @@ namespace ExtractorSharp.View {
                 Messager.ShowError("SelectPathIsInvalid");
                 return;
             }
-            var array = list.GetCheckItems(false);
+            var array = list.CheckedItems;
             bar.Maximum = array.Length;
             bar.Value = 0;
             bar.Visible = true;
@@ -58,12 +58,12 @@ namespace ExtractorSharp.View {
             }
             bar.Visible = false;
             string msg = "";
-            if (backupCheck.Checked)
-                msg = "成功备份" + array.Length + "个文件到" + backup;
-            else
-                msg = "成功清理" + array.Length + "个模型";
+            if (backupCheck.Checked) {
+                msg = $"成功备份{array.Length}个文件到{backup}";
+            } else {
+                msg = $"成功清理{array.Length}个模型";
+            }
             Messager.ShowMessage(Msg_Type.Operate, msg);
-            GC.Collect();
         }
 
         public void Search(object sender, EventArgs e) {

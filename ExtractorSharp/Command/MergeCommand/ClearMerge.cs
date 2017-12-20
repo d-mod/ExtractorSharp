@@ -19,7 +19,9 @@ namespace ExtractorSharp.Command.MergeCommand {
         
         public bool CanUndo => true;
 
-        public bool Changed => false;
+        public bool IsChanged => false;
+
+        public bool IsFlush => false;
 
         public string Name => "ClearMerge";
         

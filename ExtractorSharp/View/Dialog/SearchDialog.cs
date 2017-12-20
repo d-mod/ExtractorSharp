@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
-using ExtractorSharp.UI;
+using ExtractorSharp.Component;
 using System.Linq;
-using ExtractorSharp.Core;
 using ExtractorSharp.Data;
+using ExtractorSharp.Core.Control;
+using ExtractorSharp.Config;
 
 namespace ExtractorSharp {
     public partial class SearchDialog: EaseDialog {
-        bool running;
+        private bool running;
         private List<SearchResult> List;
         private Dictionary<string, string> Dic;
         private Controller Controller;
-        public SearchDialog() {
+        public SearchDialog(ICommandData Data) : base(Data) {
             InitializeComponent();
             List = new List<SearchResult>();
             Controller = Program.Controller;
@@ -37,7 +38,7 @@ namespace ExtractorSharp {
         /// 删除所选的结果
         /// </summary>
         private void DeleteResult() {
-            var array = resultList.GetCheckItems();
+            var array = resultList.CheckedItems;
             foreach (var item in array) {
                 resultList.Items.Remove(item);
                 List.Remove(item);
@@ -99,12 +100,13 @@ namespace ExtractorSharp {
         /// </summary>
         /// <returns></returns>
         private string[] GetNPK() {
-            var array = resultList.GetCheckItems();
+            var array = resultList.CheckedItems;
             var str = new string[0];
             if (array.Length > 0) {
                 var list = new HashSet<string>();
-                foreach (var result in array)
+                foreach (var result in array) {
                     list.Add(result.Path);
+                }
                 str = new string[list.Count];
                 list.CopyTo(str);
             }
@@ -207,7 +209,7 @@ namespace ExtractorSharp {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void AddList(object sender, EventArgs e) {
-            var array = resultList.GetCheckItems<SearchResult>();
+            var array = resultList.CheckedItems;
             var list = new List<Album>();
             if (displayModeBox.SelectedIndex == 1)
                 foreach (var result in array)

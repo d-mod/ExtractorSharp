@@ -1,4 +1,5 @@
 ﻿using ExtractorSharp.Core;
+using ExtractorSharp.Core.Control;
 using ExtractorSharp.Data;
 using ExtractorSharp.Handle;
 using ExtractorSharp.Lib;
@@ -28,7 +29,7 @@ namespace ExtractorSharp.View {
                 Bass.Stop(handle);
                 Bass.Close(handle);
             }
-            var ogg = Controller.SelectAlbum;
+            var ogg = Program.Data.SelectedFile;
             if (ogg != null && ogg.Version == Img_Version.OGG) {
                 ogg.Adjust();
                 groupBox1.Text = ogg.Name;

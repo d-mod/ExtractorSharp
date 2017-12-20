@@ -11,7 +11,7 @@ namespace ExtractorSharp.Command {
     /// <summary>
     /// 多IMG操作
     /// </summary>
-    interface MutipleAciton : IAction {
+    interface IMutipleAciton : IAction {
         void Action(params Album[] array);
     }
 
@@ -19,7 +19,7 @@ namespace ExtractorSharp.Command {
     /// 单IMG操作
     /// </summary>
     interface SingleAction : IAction {
-        int[] Indexes { get; set; }
+        int[] Indices { get; set; }
         void  Action(Album Album, int[] indexes);
     }
 }

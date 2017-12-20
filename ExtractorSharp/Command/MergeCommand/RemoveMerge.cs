@@ -3,8 +3,8 @@ using ExtractorSharp.Data;
 
 namespace ExtractorSharp.Command.MergeCommand {
     class RemoveMerge:ICommand{
-        Merger Merger;
-        Album[] Array;
+        private Merger Merger;
+        private Album[] Array;
         public void Do(params object[] args) {
             Array = args as Album[];
             Merger = Program.Merger;
@@ -20,7 +20,9 @@ namespace ExtractorSharp.Command.MergeCommand {
 
         public bool CanUndo => true;
 
-        public bool Changed => false;
+        public bool IsChanged => false;
+
+        public bool IsFlush => false;
 
         public string Name => "RemoveMerge";
 

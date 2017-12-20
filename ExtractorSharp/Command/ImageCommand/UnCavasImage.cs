@@ -9,21 +9,26 @@ namespace ExtractorSharp.Command.ImageCommand {
     /// 去画布化
     /// </summary>
     class UnCavasImage : SingleAction {
-        public int[] Indexes { set; get; }
+        public int[] Indices { set; get; }
+
         public string Name => "UnCavas";
+
         private Album Album;
+
         private Bitmap[] Images;
+
         private Point[] Locations;
+
         public void Do(params object[] args) {
             Album = args[0] as Album;
-            Indexes = args[1] as int[];
-            Images = new Bitmap[Indexes.Length];
-            Locations = new Point[Indexes.Length];
-            for (var i = 0; i < Indexes.Length; i++) {
-                if (Indexes[i] > Album.List.Count - 1 || Indexes[i] < 0) {
+            Indices = args[1] as int[];
+            Images = new Bitmap[Indices.Length];
+            Locations = new Point[Indices.Length];
+            for (var i = 0; i < Indices.Length; i++) {
+                if (Indices[i] > Album.List.Count - 1 || Indices[i] < 0) {
                     continue;
                 }
-                var entity = Album.List[Indexes[i]];
+                var entity = Album.List[Indices[i]];
                 Images[i] = entity.Picture;
                 Locations[i] = entity.Location;
                 entity.UnCavasImage();
@@ -31,12 +36,12 @@ namespace ExtractorSharp.Command.ImageCommand {
             Messager.ShowOperate("UnCavasImage");
         }
 
-        public void Redo() => Do(Album, Indexes);
+        public void Redo() => Do(Album, Indices);
 
 
         public void Undo() {
-            for (var i = 0; i < Indexes.Length && i < Images.Length; i++) {
-                var entity = Album.List[Indexes[i]];
+            for (var i = 0; i < Indices.Length && i < Images.Length; i++) {
+                var entity = Album.List[Indices[i]];
                 entity.ReplaceImage(entity.Type, false, Images[i]);
                 entity.Location = Locations[i];
             }
@@ -49,13 +54,12 @@ namespace ExtractorSharp.Command.ImageCommand {
                 }
             }
         }
-
-        public void RunScript(string arg) { }
+        
 
         public bool CanUndo => true;
 
-        public bool Changed => true;
+        public bool IsChanged => true;
 
-        public override string ToString() => Language.Default["UnCavasImage"];
+        public bool IsFlush => false;
     }
 }

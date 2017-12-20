@@ -112,7 +112,6 @@ namespace ExtractorSharp.View{
             this.albumList.Size = new System.Drawing.Size(120,23);
             this.albumList.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.albumList.AutoCompleteSource = AutoCompleteSource.ListItems;
-
             // 
             // prograss
             // 

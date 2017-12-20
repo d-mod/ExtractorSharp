@@ -1,4 +1,5 @@
 ﻿using ExtractorSharp.Core;
+using ExtractorSharp.Core.Control;
 using ExtractorSharp.Data;
 using ExtractorSharp.Loose;
 using System.Collections.Specialized;
@@ -9,22 +10,24 @@ namespace ExtractorSharp.Command.ImageCommand {
     public class CutImage : ICommand {
         public bool CanUndo => true;
 
-        public bool Changed => true;
+        public bool IsChanged => true;
+
+        public bool IsFlush => false;
 
         public string Name => "CutImage";
 
         private Album Album;
+
         private int[] Indexes;
-        private Controller Controller => Program.Controller;
-        private Clipboarder Clipborder;
-        private ClipMode Mode;
+
+        private Clipboarder Clipboarder;
 
         public void Do(params object[] args) {
             Album = args[0] as Album;
             Indexes = args[1] as int[];
-            Mode = (ClipMode)args[2];
-            Clipborder = Controller.Clipboarder;
-            Controller.Clipboarder = Clipboarder.CreateClipboarder(Album, Indexes, Mode);
+            var mode = (ClipMode)args[2];
+            Clipboarder = Clipboarder.Default;
+            Clipboarder.Default = Clipboarder.CreateClipboarder(Album, Indexes, mode);
 
             var arr = new string[Indexes.Length];
             var dir = $"{Program.Config["RootPath"]}/temp/clipbord_image";
@@ -50,7 +53,7 @@ namespace ExtractorSharp.Command.ImageCommand {
         }
 
         public void Undo() {
-            Controller.Clipboarder = Clipborder;
+            Clipboarder.Default = Clipboarder;
         }
         
     }

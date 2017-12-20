@@ -7,12 +7,18 @@ namespace ExtractorSharp.Command.ImageCommand {
     /// 可撤销
     /// 可宏命令
     /// </summary>
-    class NewImage : MutipleAciton {
+    class NewImage : IMutipleAciton {
+
         private Album Album;
+
         private int Index;
+
         private int Count;
+
         private ColorBits Type;
+
         public string Name => "NewImage";
+
         public void Do(params object[] args) {
             Album = args[0] as Album;
             Count = (int)args[1];
@@ -22,10 +28,11 @@ namespace ExtractorSharp.Command.ImageCommand {
             Messager.ShowOperate("NewImage");
         }
 
-        public void Action(params Album[] Array) {
-            foreach (var Album in Array) 
-                Album.NewImage(Count, Type, Index);            
-        }
+        public void Action(params Album[] array) {
+            foreach (var al in array) {
+                al.NewImage(Count, Type, Index);
+            }
+        }   
 
         /// <summary>
         /// 撤销新建贴图
@@ -35,13 +42,11 @@ namespace ExtractorSharp.Command.ImageCommand {
 
         public void Redo() => Do(Album, Count);      
 
-        public void RunScript(string arg) { }
-
         public bool CanUndo => true;
 
-        public bool Changed => true;
+        public bool IsChanged => true;
 
-        public override string ToString() => Language.Default["NewImage"];
+        public bool IsFlush => false;
         
     }
 }

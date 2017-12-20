@@ -4,17 +4,18 @@ using System.ComponentModel;
 using System.IO;
 using System.Net;
 using System.Windows.Forms;
-using ExtractorSharp.UI;
-using ExtractorSharp.Core;
+using ExtractorSharp.Component;
+using ExtractorSharp.Config;
+using ExtractorSharp.Core.Control;
 
-namespace ExtractorSharp.View.Dialog{
+namespace ExtractorSharp.View.Dialog {
     public partial class DownloadFileDialog : EaseDialog {
-        WebClient Client;
-        List<string> List;
-        bool isDownload;
-        string Temp;
-        Controller Controller;
-        public DownloadFileDialog() {
+        private WebClient Client;
+        private List<string> List;
+        private bool isDownload;
+        private string Temp;
+        private Controller Controller;
+        public DownloadFileDialog(ICommandData Data) : base(Data) {
             Controller = Program.Controller;
             InitializeComponent();
             List = new List<string>();

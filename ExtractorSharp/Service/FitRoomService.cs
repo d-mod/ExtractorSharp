@@ -12,10 +12,10 @@ namespace ExtractorSharp.Service {
     public class FitRoomService {
         public List<string> ProfessionList { get; set; }
         public string Profession => ProfessionList[Index];
-        private string[] WeaponArray => weapon_info[Profession].Weapon.ToArray();
+        private string[] WeaponArray => weapon_info[Profession.RemoveSuffix("_at")].Weapon.ToArray();
         private Dictionary<string, WeaponInfo> weapon_info;
         private Dictionary<string, string> replace_dic;
-        public string[] Parts { get; } = { "hair", "cap", "face", "neck", "coat", "skin", "belt", "pants", "shoes" };
+        public readonly string[] Parts = { "hair", "cap", "face", "neck", "coat", "skin", "belt", "pants", "shoes" };
         private int Index { set; get; }
         public bool Mask { get; set; }
         public bool Ban { get; set; }
@@ -50,7 +50,7 @@ namespace ExtractorSharp.Service {
         public int SelectProfessionByName(string name) {
             return ProfessionList.FindIndex(item => item.Equals(name));
         }
-        
+
 
         public string[] GetWeapon(int index) {
             this.Index = index;
@@ -136,7 +136,7 @@ namespace ExtractorSharp.Service {
         /// <param name="part"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        private TempImage[] GetTempImage(string part, string value){
+        private TempImage[] GetTempImage(string part, string value) {
             var tempPath = $"temp/{ ProfessionList[Index]}/{part}/{value}.json";
             var builder = new LSBuilder();
             var dir = Path.GetDirectoryName(tempPath);

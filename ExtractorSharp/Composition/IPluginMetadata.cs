@@ -22,7 +22,9 @@ namespace ExtractorSharp.Composition {
         /// 备注      
         /// </summary>
          string Description { get; }
-
+        /// <summary>
+        /// 序列号
+        /// </summary>
          string Guid { get; }
     }
     

@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using ExtractorSharp.View;
-using ExtractorSharp.UI;
+using ExtractorSharp.Component;
 using ExtractorSharp.Draw;
 using ExtractorSharp.Core;
 using System.IO;
@@ -47,16 +47,14 @@ namespace ExtractorSharp {
             newImgItem = new ToolStripMenuItem();
             hideImgItem = new ToolStripMenuItem();
             addMergeItem = new ToolStripMenuItem();
-            encryptItem = new ToolStripMenuItem();
-            deleteEncryptItem = new ToolStripMenuItem();
             addOutsideMergeItem = new ToolStripMenuItem();
             runMergeItem = new ToolStripMenuItem();
             renameItem = new ToolStripMenuItem();
 
 
-            repairImgItem = new ToolStripMenuItem();
-            splitImgItem = new ToolStripMenuItem();
-            mixImgItem = new ToolStripMenuItem();
+            repairFileItem = new ToolStripMenuItem();
+            splitFileItem = new ToolStripMenuItem();
+            mixFileItem = new ToolStripMenuItem();
 
             imageList = new EaseListBox<ImageEntity>();
             imageListMenu = imageList.ContextMenuStrip;
@@ -112,7 +110,6 @@ namespace ExtractorSharp {
             fitItem = new ToolStripMenuItem();
             aboutItem = new ToolStripMenuItem();
             sortItem = new ToolStripMenuItem();
-            macroItem = new ToolStripMenuItem();
 
             toolsMenu = new ToolStripMenuItem();
 
@@ -123,7 +120,6 @@ namespace ExtractorSharp {
 
             Messager Messager = Messager.Default;
             saveGifItem = new ToolStripMenuItem();
-            batItem = new ToolStripMenuItem();
             box = new EaseCavasBox();
             mutipleLayerItem = new ToolStripMenuItem();
             linedodgeBox = new CheckBox();
@@ -186,9 +182,9 @@ namespace ExtractorSharp {
             albumListMenu.Items.Add(replaceItem);
             albumListMenu.Items.Add(saveAsItem);
             albumListMenu.Items.AddSeparator();
-            albumListMenu.Items.Add(repairImgItem);
-            albumListMenu.Items.Add(splitImgItem);
-            albumListMenu.Items.Add(mixImgItem);
+            albumListMenu.Items.Add(repairFileItem);
+            albumListMenu.Items.Add(splitFileItem);
+            albumListMenu.Items.Add(mixFileItem);
             albumListMenu.Items.AddSeparator();
             albumListMenu.Items.Add(hideImgItem);
             albumListMenu.Items.Add(renameItem);
@@ -198,8 +194,6 @@ namespace ExtractorSharp {
             albumListMenu.Items.Add(addOutsideMergeItem);
             albumListMenu.Items.Add(runMergeItem);
             albumListMenu.Items.Add(new ToolStripSeparator());
-            albumListMenu.Items.Add(encryptItem);
-            albumListMenu.Items.Add(deleteEncryptItem);
             albumListMenu.Size = new Size(221, 268);
             replaceItem.Text = Language["ReplaceFile"];
             replaceItem.ShortcutKeys = Keys.Control | Keys.Q;
@@ -222,14 +216,12 @@ namespace ExtractorSharp {
             addMergeItem.ShortcutKeys = Keys.Control | Keys.M;
             addOutsideMergeItem.Text = Language["AddOutsideMerge"];
             addOutsideMergeItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.M;
-            encryptItem.Text = Language["Encrypt"];
-            deleteEncryptItem.Text = Language["DeletePassword"];
             runMergeItem.Text = Language["RunMerge"];
             renameItem.Text = Language["Rename"];
             renameItem.ShortcutKeys = Keys.Control | Keys.R;
-            repairImgItem.Text = Language["RepairFile"];
-            splitImgItem.Text = Language["SplitFile"];
-            mixImgItem.Text = Language["MixFile"];
+            repairFileItem.Text = Language["RepairFile"];
+            splitFileItem.Text = Language["SplitFile"];
+            mixFileItem.Text = Language["MixFile"];
             // 
             // imageList
             // 
@@ -296,12 +288,7 @@ namespace ExtractorSharp {
             mainMenu.Items.Add(viewMenu);
             mainMenu.Items.Add(toolsMenu);
             mainMenu.Items.Add(modelMenu);
-            mainMenu.Items.Add(batItem);
-            mainMenu.Items.Add(macroItem);
             mainMenu.Items.Add(aboutMenu);
-
-            batItem.Text = Language["Batch"];
-            macroItem.Text = Language["Action"];
 
             modelMenu.Text = Language["Model"];
             modelMenu.DropDownItems.Add(searchItem);
@@ -403,7 +390,7 @@ namespace ExtractorSharp {
             lockRuleItem.CheckOnClick = true;
             previewItem.Text = Language["Preview"];
             previewItem.CheckOnClick = true;
-            previewItem.Checked = ViewConfig["Preview"].Boolean;
+            previewItem.Checked = Config["Preview"].Boolean;
             gridItem.Text = Language["Grid"];
             gridItem.CheckOnClick = true;
 
@@ -441,8 +428,8 @@ namespace ExtractorSharp {
             // 
             box.Location = new Point(230, 90);
             box.Name = "box";
-            if (ViewConfig["CavasSize"].Size != Size.Empty) { 
-                box.Size = ViewConfig["CavasSize"].Size;
+            if (Config["CavasSize"].Size != Size.Empty) { 
+                box.Size = Config["CavasSize"].Size;
             }
             // 
             // displayBackBox
@@ -587,38 +574,38 @@ namespace ExtractorSharp {
             Controls.Add(previewPanel);
             MainMenuStrip = mainMenu;
             Name = "MainForm";
-            Text = $"{ProductName} Ver { Program.Version} { ViewConfig["Title"]}";
+            Text = $"{ProductName} Ver { Program.Version} { Config["Title"]}";
             AllowDrop = true;
             CheckForIllegalCrossThreadCalls = false;
-            if (!ViewConfig["StartPosition"].Value.ToLower().Equals("center")) {
+            if (!Config["StartPosition"].Value.ToLower().Equals("center")) {
                 StartPosition = FormStartPosition.Manual;
-                Location = ViewConfig["StartPosition"].Location;
+                Location = Config["StartPosition"].Location;
             }
-            if (ViewConfig["MainSize"].Size != Size.Empty) {
-                Size = ViewConfig["MainSize"].Size;
+            if (Config["MainSize"].Size != Size.Empty) {
+                Size = Config["MainSize"].Size;
             }
-            if (ViewConfig["CavasColor"].Color != Color.Empty) {
-                BackBoxColor = ViewConfig["CavasColor"].Color;
+            if (Config["CavasColor"].Color != Color.Empty) {
+                BackBoxColor = Config["CavasColor"].Color;
             }
-            if (ViewConfig["CavasImage"].Image != null) {
-                BackImage = ViewConfig["CavasImage"].Image;
+            if (Config["CavasImage"].Image != null) {
+                BackImage = Config["CavasImage"].Image;
             }
-            if (ViewConfig["MainImage"] != null) {
-                BackgroundImage = ViewConfig["MainImage"].Image;
+            if (Config["MainImage"] != null) {
+                BackgroundImage = Config["MainImage"].Image;
             }
-            if (ViewConfig["MainColor"].Color != Color.Empty) {
-                BackColor = ViewConfig["MainColor"].Color;
+            if (Config["MainColor"].Color != Color.Empty) {
+                BackColor = Config["MainColor"].Color;
             }
-            if (File.Exists(ViewConfig["MainIcon"].Value)) {
-                Icon = Icon.ExtractAssociatedIcon(ViewConfig["MainIcon"].Value);
+            if (File.Exists(Config["MainIcon"].Value)) {
+                Icon = Icon.ExtractAssociatedIcon(Config["MainIcon"].Value);
             }
-            BackgroundImageLayout = (ImageLayout)ViewConfig["MainImageLayout"].Integer;
+            BackgroundImageLayout = (ImageLayout)Config["MainImageLayout"].Integer;
             albumListMenu.ResumeLayout(false);
             imageListMenu.ResumeLayout(false);
             mainMenu.ResumeLayout(false);
             mainMenu.PerformLayout();
 
-            previewPanel.Visible = ViewConfig["Preview"].Boolean;
+            previewPanel.Visible = Config["Preview"].Boolean;
             previewPanel.BorderStyle = BorderStyle.FixedSingle;
             previewPanel.Size = new Size(100, 100);
             previewPanel.BackgroundImageLayout = ImageLayout.Zoom;
@@ -631,9 +618,9 @@ namespace ExtractorSharp {
 
         #endregion
         
-        public EaseListBox<Album> albumList;
-        public EaseListBox<ImageEntity> imageList;
-        public EaseListBox<Layer> layerList;
+        private EaseListBox<Album> albumList;
+        private EaseListBox<ImageEntity> imageList;
+        private EaseListBox<Layer> layerList;
 
         private MenuStrip mainMenu;
         private ToolStripMenuItem fileMenu; 
@@ -670,13 +657,10 @@ namespace ExtractorSharp {
 
         private ToolStripMenuItem toolsMenu;        //工具
 
-        private ToolStripMenuItem fitItem;
-        private ToolStripMenuItem batItem;          //批处理
-        private ToolStripMenuItem macroItem;
-
         private ToolStripMenuItem modelMenu;      //模型管理
         private ToolStripMenuItem clearItem;        //清理模型
         private ToolStripMenuItem searchItem;       //搜索
+        private ToolStripMenuItem fitItem;          //试衣间
         private ToolStripMenuItem otherSeverItem;     //外服资源
 
         private ContextMenuStrip albumListMenu;
@@ -694,11 +678,9 @@ namespace ExtractorSharp {
         private ToolStripMenuItem addMergeItem;    //加入拼合队列
         private ToolStripMenuItem addOutsideMergeItem;//加入外部文件到拼合队列
         private ToolStripMenuItem runMergeItem;    //执行拼合队列
-        private ToolStripMenuItem encryptItem;      //密码保护
-        private ToolStripMenuItem deleteEncryptItem;//删除密码
-        private ToolStripMenuItem repairImgItem;    //帧数补正
-        private ToolStripMenuItem splitImgItem;     //拆分文件
-        private ToolStripMenuItem mixImgItem;       //合并文件
+         private ToolStripMenuItem repairFileItem;    //帧数补正
+        private ToolStripMenuItem splitFileItem;     //拆分文件
+        private ToolStripMenuItem mixFileItem;       //合并文件
 
         private ContextMenuStrip imageListMenu;
         private ToolStripMenuItem saveImageItem;    //提取贴图到文件夹
@@ -753,7 +735,6 @@ namespace ExtractorSharp {
         private ToolStripMenuItem saveAsLayerItem;//另存为
 
         private DropPanel dropPanel;
-        private DecryptPanel decryptPanel;
         private OggPlayer player;
         private Panel previewPanel;
         private Panel colorPanel;

@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using ExtractorSharp.Command;
-using ExtractorSharp.UI;
+using ExtractorSharp.Component;
 using ExtractorSharp.Properties;
 using ExtractorSharp.Config;
 using ExtractorSharp.Core;
@@ -17,6 +17,7 @@ using ExtractorSharp.Loose;
 using ExtractorSharp.Data;
 using ExtractorSharp.Service;
 using System.Diagnostics;
+using ExtractorSharp.Core.Control;
 
 namespace ExtractorSharp.View{
     internal partial class FitRoomDialog : EaseDialog {
@@ -24,7 +25,7 @@ namespace ExtractorSharp.View{
         private string Path => Config["ResourcePath"].Value;
         private FitRoomService Service { get; }
         private int PartsCount => Service.Parts.Length;
-        public FitRoomDialog() {
+        public FitRoomDialog(ICommandData Data) : base(Data) {
             Controller = Program.Controller;
             Service = new FitRoomService();
             InitializeComponent();

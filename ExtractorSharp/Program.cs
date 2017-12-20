@@ -8,7 +8,7 @@ using System.Security.AccessControl;
 using System.Windows.Forms;
 using ExtractorSharp.Config;
 using ExtractorSharp.Core;
-using ExtractorSharp.UI;
+using ExtractorSharp.Component;
 using ExtractorSharp.Properties;
 using ExtractorSharp.View;
 using Microsoft.Win32;
@@ -17,6 +17,7 @@ using ExtractorSharp.Data;
 using ExtractorSharp.Loose;
 using System.Threading;
 using System.Text;
+using ExtractorSharp.Core.Control;
 
 namespace ExtractorSharp {
     /// <summary>
@@ -32,13 +33,13 @@ namespace ExtractorSharp {
         internal static Hoster Hoster { get; private set; }
         internal static Merger Merger { get; private set; }
         internal static Drawer Drawer { get; private set; }
-        internal static List<Language> LanguageList { get; private set; }
-    
-        internal static IConfig ViewConfig { get; private set; }
+
+        internal static ICommandData Data { set; get; }
 
         internal readonly static string Version = Assembly.GetAssembly(typeof(Program)).GetName().Version.ToString();
 
         private static string[] Arguments;
+
        /// <summary>
         /// 应用程序的主入口点。
         /// </summary>
@@ -50,7 +51,10 @@ namespace ExtractorSharp {
             if (Config["AutoUpdate"].Boolean) {
                 CheckUpdate(false);
             }
-            Application.ThreadException += ShowDebug;   
+#if (DEBUG)
+#else
+            Application.ThreadException += ShowDebug; 
+#endif
             Application.SetCompatibleTextRenderingDefault(true);           
             Application.EnableVisualStyles();
             LoadRegistry();
@@ -58,9 +62,9 @@ namespace ExtractorSharp {
             Viewer = new Viewer();
             Drawer = new Drawer();
             Form = new MainForm();
-            Controller.Main = Form;
-            Controller.AddAlbum(true, args);
             Form.Shown += OnShown;
+            Data = Form.Data;
+            Data.AddFile(true, args);
             RegistyDialog();
             Viewer.DialogShown += ViewerDialogShown;
             Merger = new Merger();
@@ -86,7 +90,7 @@ namespace ExtractorSharp {
             if (Arguments.Length == 1) {
                 var command = Arguments[0];
                 if (!command.StartsWith("esharp://")) {
-                    Controller.AddAlbum(true, command);
+                    Data.AddFile(true, new string[] { command });
                     return;
                 }
                 command = command.Replace("esharp://", "");
@@ -118,22 +122,19 @@ namespace ExtractorSharp {
             Viewer.Regisity("newImg", typeof(NewImgDialog));
             Viewer.Regisity("convert", typeof(ConvertDialog));
             Viewer.Regisity("changePosition", typeof(ChangePositonDialog));
-            Viewer.Regisity("batch", typeof(BatDialog));
             Viewer.Regisity("clear", typeof(ClearDialog));
             Viewer.Regisity("about", typeof(AboutDialog));
-            Viewer.Regisity("encrypt", typeof(EncryptDialog));
             Viewer.Regisity("debug", typeof(BugDialog));
             Viewer.Regisity("newImage", typeof(NewImageDialog));
-            Viewer.Regisity("macro", typeof(MacroDialog));
-            Viewer.Regisity("cavas", typeof(CavasDialog));
-            Viewer.Regisity("property", typeof(PropertyDialog));
+            Viewer.Regisity("cavas", typeof(CanvasDialog));
+            Viewer.Regisity("setting", typeof(SettingDialog));
             Viewer.Regisity("saveImage", typeof(SaveImageDialog));
             Viewer.Regisity("version", typeof(VersionDialog));
             Viewer.Regisity("download", typeof(DownloadFileDialog));
         }
 
         private static void ViewerDialogShown(object sender, DialogEventArgs e) {
-            e.Dialog = e.DialogType.CreateInstance() as EaseDialog;
+            e.Dialog = e.DialogType.CreateInstance(Data) as EaseDialog;
             e.Dialog.Owner = Form;
         }
 
@@ -143,13 +144,13 @@ namespace ExtractorSharp {
         /// </summary>
         private static void LoadLanguage() {
             var chinese = Language.CreateFromJson(Resources.Chinese);
-            LanguageList = new List<Language>();
-            LanguageList.Add(chinese);
+            Language.List = new List<Language>();
+            Language.List.Add(chinese);
             var path =  $"{Config["RootPath"]}/lan/";
             if (Directory.Exists(path)) {
                 foreach (var file in Directory.GetFiles(path, "*.json")) {
                     var lan = Language.CreateFromFile(file);
-                    LanguageList.Add(lan);
+                    Language.List.Add(lan);
                 }
             } else {
                 Directory.CreateDirectory(path);
@@ -158,14 +159,12 @@ namespace ExtractorSharp {
                 Config["LCID"] = new ConfigValue(Application.CurrentCulture.LCID);
                 Config.Save();
             }
-            Language.Default = LanguageList.Find(lan => lan.LCID == Config["LCID"].Integer);
+            Language.Default = Language.List.Find(lan => lan.LCID == Config["LCID"].Integer);
         }
 
         private static void LoadConfig() {
             Config = new JsonConfig();
             Config.LoadConfig(Resources.Config);
-            ViewConfig = new JsonConfig();
-            ViewConfig.LoadConfig(Resources.View);
             Config["RootPath"] = new ConfigValue(Application.StartupPath);
             Config["ResourcePath"] = new ConfigValue($"{Config["GamePath"]}/ImagePacks2");
         }

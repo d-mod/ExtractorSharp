@@ -6,35 +6,42 @@ namespace ExtractorSharp.Command.ImageCommand {
     /// 删除贴图
     /// </summary>
     class DeleteImage : SingleAction {
+
         private Album Album;
+
         private ImageEntity[] Array;
-        public int[] Indexes { set; get; }
+
+        public int[] Indices { set; get; }
+
         public string Name => "DeleteImage";
+
         public void Do( params object[] args) {
             Album = args[0] as Album;
-            Indexes = args[1] as int[];
-            Array = new ImageEntity[Indexes.Length];
-            for (var i = 0; i < Indexes.Length; i++) {
-                if (Indexes[i] > Album.List.Count - 1 || Indexes[i] < 0) {
+            Indices = args[1] as int[];
+            Array = new ImageEntity[Indices.Length];
+            for (var i = 0; i < Indices.Length; i++) {
+                if (Indices[i] > Album.List.Count - 1 || Indices[i] < 0) {
                     continue;
                 }
-                Array[i] = Album.List[Indexes[i]];
+                Array[i] = Album.List[Indices[i]];
             }
-            foreach (var entity in Array)
-                if (entity != null)
+            foreach (var entity in Array) {
+                if (entity != null) {
                     Album.List.Remove(entity);
+                }
+            }
             Album.AdjustIndex();
             Messager.ShowOperate("DeleteFile");
         }
 
-        public void Redo() => Do( Album, Indexes);
+        public void Redo() => Do( Album, Indices);
 
 
         public void Undo() {
-            for (var i = 0; i < Indexes.Length; i++) {
+            for (var i = 0; i < Indices.Length; i++) {
                 var entity = Array[i];
-                if (Indexes[i] < Album.List.Count) {
-                    Album.List.Insert(Indexes[i], entity);
+                if (Indices[i] < Album.List.Count) {
+                    Album.List.Insert(Indices[i], entity);
                 } else {
                     entity.Index = Album.List.Count;
                     Album.List.Add(entity);
@@ -57,12 +64,13 @@ namespace ExtractorSharp.Command.ImageCommand {
             }
             Album.AdjustIndex();//校正索引
         }
-
-        public void RunScript(string arg) { }
+        
 
         public bool CanUndo => true;
 
-        public bool Changed => true;
+        public bool IsChanged => true;
+
+        public bool IsFlush => false;
 
         public override string ToString() => Language.Default["DeleteImage"];
     }

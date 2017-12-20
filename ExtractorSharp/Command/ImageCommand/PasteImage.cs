@@ -1,34 +1,35 @@
 ﻿using ExtractorSharp.Core;
+using ExtractorSharp.Core.Control;
 using ExtractorSharp.Data;
 using ExtractorSharp.Loose;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace ExtractorSharp.Command.ImageCommand {
     public class PasteImage : ICommand {
+
         private Album Source,Target;
+
         private int[] Indexes;
+
         private int Index;
-        private Controller Controller => Program.Controller;
+
         private Clipboarder Clipboarder;
 
         public string Name => "PasteImage";
 
         public bool CanUndo => true;
 
-        public bool Changed => true;
+        public bool IsChanged => true;
+
+        public bool IsFlush => false;
 
 
         public void Do(params object[] args) {
             Target = args[0] as Album;
             Index = (int)args[1];
-            Clipboarder = Controller.Clipboarder;
+            Clipboarder = Clipboarder.Default;
             var array = new ImageEntity[0];
             if (Clipboarder != null) {
                 Indexes = Clipboarder.Indexes;
@@ -40,7 +41,7 @@ namespace ExtractorSharp.Command.ImageCommand {
                 }
                 if (Clipboarder.Mode == ClipMode.Cut) {
                     //如果是剪切，清空剪切板
-                    Controller.Clipboarder = null;
+                    Clipboarder.Default = null;
                     Clipboard.Clear();
                     for (var i = 0; i < array.Length; i++) {
                         Source.List.Remove(array[i]);

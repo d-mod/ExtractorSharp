@@ -1,5 +1,6 @@
 ﻿using ExtractorSharp.Core;
 using ExtractorSharp.Data;
+using System;
 using System.IO;
 
 namespace ExtractorSharp.Command.ImageCommand {
@@ -9,7 +10,7 @@ namespace ExtractorSharp.Command.ImageCommand {
     /// 可宏命令
     /// </summary>
     class SaveImage : SingleAction {
-        public int[] Indexes { set; get; }
+        public int[] Indices { set; get; }
         private Album Album;
         private string Path;
         /// <summary>
@@ -21,9 +22,9 @@ namespace ExtractorSharp.Command.ImageCommand {
         public void Do(params object[] args) {
             Album = args[0] as Album;
             Mode = (int)args[1];
-            Indexes = args[2] as int[];
+            Indices = args[2] as int[];
             Path = args[3] as string;
-            Action(Album, Indexes);
+            Action(Album, Indices);
         }
 
         public void Redo() {}
@@ -33,7 +34,6 @@ namespace ExtractorSharp.Command.ImageCommand {
         public void Action(Album album,int[] indexes) {
             if (Mode == 0) {//当保存模式为单张贴图时
                 album.List[indexes[0]].Picture.Save(Path);
-                Messager.ShowOperate("SaveFile");
             } else {//是否加入文件的路径
                 var suffix = Program.Config["SaveImageAllPath"].Boolean ? album.Path : album.Name;
                 var dir = Path.Replace('\\','/');
@@ -44,10 +44,11 @@ namespace ExtractorSharp.Command.ImageCommand {
                 if (!Directory.Exists(dir)) {
                     Directory.CreateDirectory(dir);
                 }
-                for (int i = 0; i < indexes.Length && i < album.List.Count; i++) {
-                    if (indexes[i] > album.List.Count - 1 || indexes[i] < 0) {
+                var max = Math.Min(indexes.Length, album.List.Count);
+                for (int i = 0; i < max; i++) {
+                    if (!indexes[i].Between(0,album.List.Count)) {
                         continue;
-                    }
+                    } 
                     var entity = album.List[indexes[i]];
                     var path = $"{dir}/{indexes[i]}.png";//文件名格式:文件路径/贴图索引.png
                     entity.Picture.Save(path);//保存贴图
@@ -57,13 +58,11 @@ namespace ExtractorSharp.Command.ImageCommand {
 
         public bool CanUndo => false;
 
-        public bool Changed => false;
+        public bool IsChanged => false;
+
+        public bool IsFlush => false;
 
         public string Name => "SaveImage";
-
-        public override string ToString() => Language.Default["SaveImage"];
-
-        public void RunScript(string arg) { }
 
     }
 }

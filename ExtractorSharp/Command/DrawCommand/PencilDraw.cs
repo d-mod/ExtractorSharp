@@ -17,7 +17,9 @@ namespace ExtractorSharp.Command.DrawCommand {
 
         public bool CanUndo => true;
       
-        public bool Changed => false;
+        public bool IsChanged => false;
+
+        public bool IsFlush => false;
 
         public void Do(params object[] args) {
             Entity = args[0] as ImageEntity;
@@ -53,7 +55,7 @@ namespace ExtractorSharp.Command.DrawCommand {
             image.SetPixel(Location.X, Location.Y, Color);
             Entity.Picture = image;
             Entity.Location = Entity.Location.Minus(new Point(_x, _y));
-            Program.Controller.CavasFlush();
+            Program.Data.CavasFlush();
         }
 
         public void Redo() {

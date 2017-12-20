@@ -1,27 +1,18 @@
 ﻿using ExtractorSharp.Data;
-using ExtractorSharp.Handle;
+using ExtractorSharp.Loose.Attr;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 
-namespace ExtractorSharp.Handle{
-    /// <summary>
-    /// img版本
-    /// </summary>
-    public enum Img_Version { 
-        OGG = 0x00,
-        Ver1 = 0x01,
-        Ver2 = 0x02,
-        Ver4 = 0x04,
-        Ver5 = 0x05,
-        Ver6 = 0x06,
-    }
+namespace ExtractorSharp.Handle {
     /// <summary>
     /// IMG操作类
     /// </summary>
     public abstract class Handler{
         public static Dictionary<Img_Version, Type> Dic = new Dictionary<Img_Version, Type>();
+
+        [LSIgnore]
         public Album Album;
 
 
@@ -59,25 +50,21 @@ namespace ExtractorSharp.Handle{
         /// 校正数据
         /// </summary>
         public void Adjust() {
-            foreach (var entity in Album.List)
+            foreach (var entity in Album.List) {
                 entity.Adjust();
+            }
             Album.Count = Album.List.Count;
-            var Index_Data = AdjustIndex();
-            var Work_Data = GetWorkData();
-            var Suffix_Data = AdjustSuffix();
-            Album.Info_Length += Work_Data.Length;
             var ms = new MemoryStream();
             if (Album.Version == Img_Version.OGG) {
-                ms.Write(Index_Data);
+                ms.Write(AdjustIndex());
                 ms.Close();
             } else {
                 ms.WriteString(Tools.IMG_FLAG);
                 ms.WriteLong(Album.Info_Length);
                 ms.WriteInt((int)Album.Version);
                 ms.WriteInt(Album.Count);
-                ms.Write(Index_Data);
-                ms.Write(Work_Data);
-                ms.Write(Suffix_Data);
+                ms.Write(AdjustIndex());
+                ms.Write(AdjustSuffix());
                 ms.Close();
             }
             Album.Data = ms.ToArray();
@@ -95,17 +82,6 @@ namespace ExtractorSharp.Handle{
             Dic.Add(Version, type);
         }
 
-
-        private byte[] GetWorkData() {
-            var ms = new MemoryStream();
-            if (Album.Work != null) {//加密字段
-                ms.WriteInt((int)ColorBits.LINK);
-                ms.WriteInt(Album.Count);
-                ms.Encrypt(Album.Work);
-            }
-            ms.Close();
-            return ms.ToArray();
-        }
 
         public abstract byte[] AdjustIndex();
 

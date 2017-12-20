@@ -1,21 +1,19 @@
 ﻿using System.Windows.Forms;
 using System.Drawing;
-using System.Collections.Generic;
 using System;
-using ExtractorSharp.UI;
-using ExtractorSharp.Command;
-using ExtractorSharp.Handle;
+using ExtractorSharp.Component;
 using ExtractorSharp.Core;
 using ExtractorSharp.Data;
+using ExtractorSharp.Core.Control;
+using ExtractorSharp.Config;
 
 namespace ExtractorSharp.View {
     partial class MergeDialog : EaseDialog {
         private Album Album;
         private Merger Merger;
-        private Controller Controller;
-        public MergeDialog() {
+        private Controller Controller => Program.Controller;
+        public MergeDialog(ICommandData Data) : base(Data) {
             InitializeComponent();
-            this.Controller = Program.Controller;
             this.Merger = Program.Merger;
             sortButton.Click += (o,e) => Merger.Sort(useOtherCheck.Checked);
             list.MouseDown += ListMouseDown;
@@ -60,7 +58,7 @@ namespace ExtractorSharp.View {
         private void MoveUp(object sender, EventArgs e) {
             var i = list.SelectedIndex;
             if (i > 0) {
-                Program.Merger.InterChange(i, --i);
+                Controller.Do("moveMerge", i, ++i);
                 list.SelectedIndex = i;
             }
         }
@@ -73,7 +71,7 @@ namespace ExtractorSharp.View {
         private void MoveDown(object sender, EventArgs e) {
             var i = list.SelectedIndex;
             if (i < list.Items.Count - 1 && i > -1) {
-                Merger.InterChange(i, ++i);
+                Controller.Do("moveMerge", i, ++i);
                 list.SelectedIndex = i;
             }
         }
@@ -99,23 +97,24 @@ namespace ExtractorSharp.View {
             Album = args[0] as Album;
             Flush(null,null);
             albumList.Items.Clear();
-            var array = Controller.List.ToArray();
-            albumList.Items.AddRange(array);
+            albumList.Items.AddRange(Data.FileArray);
             albumList.SelectedItem = Album;
             return ShowDialog();
         }
 
 
         public void ListMouseDown(object sender, MouseEventArgs e) {
-            if (list.Items.Count == 0 || e.Button != MouseButtons.Left || list.SelectedIndex < 0 || e.Clicks == 2)
+            if (list.Items.Count == 0 || e.Button != MouseButtons.Left || list.SelectedIndex < 0 || e.Clicks == 2) {
                 return;
+            }
             DoDragDrop(list.SelectedItem, DragDropEffects.Move);
         }
 
         public void ListDragDrop(object sender, DragEventArgs e) {
-            var source = list.SelectedIndex;
-            var target = list.IndexFromPoint(PointToClient(new Point(e.X, e.Y))) - 1;
-            Merger.InterChange(source, target);
+            var index = list.SelectedIndex;
+            var target = list.IndexFromPoint(PointToClient(new Point(e.X, e.Y)));
+            target = target < 0 ? list.Items.Count - 1 : target;
+            Controller.Do("moveMerge", index, target);
             if (target > -1) {
                 list.SelectedIndex = target;
             }
@@ -123,8 +122,9 @@ namespace ExtractorSharp.View {
 
         public void Remove(object sender, EventArgs e) {
             var album = list.SelectedItem as Album;
-            if (album != null)
+            if (album != null) {
                 Program.Controller.Do("removeMerge", new Album[] { album });
+            }
         }
 
         public void MergeImg(object sender, EventArgs e) {

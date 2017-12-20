@@ -1,4 +1,4 @@
-﻿using ExtractorSharp.UI;
+﻿using ExtractorSharp.Component;
 using System;
 using System.Collections.Generic;
 using System.Linq;

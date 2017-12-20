@@ -5,15 +5,22 @@ using System.Drawing.Drawing2D;
 namespace ExtractorSharp.Command.DrawCommand {
     class EraserDraw : ICommand {
         private ImageEntity Entity;
+
         private Point Location;
+
         private Color Color;
+
         private Bitmap Image;
+
         private int Radius;
 
         public string Name => "Eraser";
+
         public bool CanUndo => true;
 
-        public bool Changed => false;
+        public bool IsChanged => false;
+
+        public bool IsFlush => false;
 
         public void Do(params object[] args) {
             Entity = args[0] as ImageEntity;
@@ -31,7 +38,7 @@ namespace ExtractorSharp.Command.DrawCommand {
                 g.FillEllipse(brush, rect);
             }
             Entity.Picture = image;
-            Program.Controller.CavasFlush();
+            Program.Data.CavasFlush();
         }
 
         public void Redo() {

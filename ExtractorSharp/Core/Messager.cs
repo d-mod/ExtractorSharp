@@ -69,7 +69,7 @@ namespace ExtractorSharp.Core{
                     BackColor = Color.Red;
                     break;
                 case Msg_Type.Operate:
-                    BackColor = Color.FromArgb(150,200,150);
+                    BackColor = Color.LightGreen;
                     break;
                 case Msg_Type.Warning:
                     BackColor = Color.Yellow;

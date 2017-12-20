@@ -1,27 +1,25 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Reflection;
-using ExtractorSharp.Users;
 using ExtractorSharp.Handle;
-using System.Collections;
-using System;
+using ExtractorSharp.Loose.Attr;
 
-namespace ExtractorSharp.Data{
+namespace ExtractorSharp.Data {
 
     public sealed class Album {
         /// <summary>
         /// 处理器
         /// </summary>
+        [LSIgnore]
         public Handler Handler { get; set; }
         /// <summary>
         /// 文件数据长度
         /// </summary>
-        public int Length;
+        public int Length { get; set; }
         /// <summary>
         /// 文件所在偏移量
         /// </summary>
-        public int Offset;
+        public int Offset { set; get; }
         /// <summary>
         /// 贴图列表
         /// </summary>
@@ -29,11 +27,11 @@ namespace ExtractorSharp.Data{
         /// <summary>
         /// 索引信息长度
         /// </summary>
-        public long Info_Length;
+        public long Info_Length { set; get; }
         /// <summary>
         /// 文件路径
         /// </summary>
-        public string Path = "";
+        public string Path { set; get; } = string.Empty;
         public string Name {
             get {
                 return Path.GetName();
@@ -96,14 +94,6 @@ namespace ExtractorSharp.Data{
 
         private int _tabindex;
 
-        /// <summary>
-        /// 密码
-        /// </summary>
-        internal Work Work {
-            get;set;
-        }
-
-        private Work _work;
         
         public override string ToString() => Name;
 
@@ -155,7 +145,6 @@ namespace ExtractorSharp.Data{
         public void Replace(Album album) {
             album = album.Clone();
             Version = album.Version;
-            Work = album.Work;
             Tables = album.Tables;
             Handler = album.Handler;
             Handler.Album = this;
@@ -208,11 +197,6 @@ namespace ExtractorSharp.Data{
             return temp;
         }
 
-
-        public void DeleteKeyword() {
-            if (Work != null && Work.IsValid)
-                Work = null;
-        }
 
         /// <summary>
         /// 根据路径判断唯一

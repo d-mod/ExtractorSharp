@@ -1,17 +1,15 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Windows.Forms;
-using ExtractorSharp.Command;
-using ExtractorSharp.UI;
+using ExtractorSharp.Component;
 using ExtractorSharp.Properties;
 using ExtractorSharp.Loose;
 using ExtractorSharp.Data;
-using ExtractorSharp.Core;
+using ExtractorSharp.Core.Control;
+using ExtractorSharp.Config;
 
 namespace ExtractorSharp.View.Dialog {
     public partial class VersionDialog : EaseDialog {
         private Controller Controller;
-        public VersionDialog() {
+        public VersionDialog(ICommandData Data) : base(Data) {
             Controller = Program.Controller;
             InitializeComponent();
             button.Click += ButtonClose;

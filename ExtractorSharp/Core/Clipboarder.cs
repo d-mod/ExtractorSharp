@@ -15,6 +15,7 @@ namespace ExtractorSharp.Core {
         public int[] Indexes { private set; get; }
         public ClipMode Mode { private set; get; }
         public DateTime Time { private set; get; }
+        public static Clipboarder Default { set; get; }
 
         public static Clipboarder CreateClipboarder(Album album, int[] indexes,ClipMode mode) {
             return new Clipboarder() {

@@ -22,6 +22,8 @@ namespace ExtractorSharp.Config {
         public string ConfigDir { set; get; }
         public string UserPath { set; get; }   //用户配置文件路径
         private readonly LSBuilder reader;
+        
+
         /// <summary>
         /// 根据对应的指定的key，获得对应的ConfigValue
         /// </summary>
@@ -65,16 +67,19 @@ namespace ExtractorSharp.Config {
         private Dictionary<string, ConfigValue> Read(LSObject obj) {
             var config = new Dictionary<string, ConfigValue>();
             foreach (var node in obj) {
-                if(!config.ContainsKey(node.Name))
-                config.Add(node.Name, new ConfigValue(node.Value));
+                if (!config.ContainsKey(node.Name)) {
+                    config.Add(node.Name, new ConfigValue(node.Value));
+                }
             }
-            if (config.ContainsKey("UserConfig"))
+            if (config.ContainsKey("UserConfig")) {
                 UserPath = ConfigDir + config["UserConfig"].Value;
+            }
             return config;
         }
 
-        public void Save() => SaveAs(UserPath, UserConfig);
-
+        public void Save() {
+            SaveAs(UserPath, UserConfig);
+        }
 
         /// <summary>
         /// 保存配置

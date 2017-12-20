@@ -3,23 +3,25 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using ExtractorSharp.Command;
-using ExtractorSharp.UI;
+using ExtractorSharp.Component;
 using ExtractorSharp.Core;
 using ExtractorSharp.Data;
+using ExtractorSharp.Core.Control;
+using ExtractorSharp.Config;
 
 namespace ExtractorSharp.View {
     public partial class ReplaceImageDialog : EaseDialog {
+
         private Controller Controller { get; }
-        public ReplaceImageDialog(){
+        public ReplaceImageDialog(ICommandData Data) : base(Data) {
             Controller = Program.Controller;
             InitializeComponent();
             button1.Click += Replace;
             button2.Click += Cancel;
         }
-        
+
         public void Replace(object sender, EventArgs e) {
-            var array = new ImageEntity[0];
-            array = seletImageRadio.Checked ? Controller.CheckedImage : Controller.AllImage;
+            var array = seletImageRadio.Checked ? Data.CheckedImages : Data.ImageArray;
             var indexes = new int[array.Length];
             for (var i = 0; i < array.Length; i++) {
                 indexes[i] = array[i].Index;
@@ -34,7 +36,7 @@ namespace ExtractorSharp.View {
             if (array.Length == 1) {
                 var dialog = new OpenFileDialog();
                 dialog.Filter = "图片|*.jpg;*.png;*.bmp";
-                if (dialog.ShowDialog() == DialogResult.OK) { 
+                if (dialog.ShowDialog() == DialogResult.OK) {
                     path = dialog.FileName;
                 }
             } else if (fromGifBox.Checked) {
@@ -43,25 +45,25 @@ namespace ExtractorSharp.View {
                 if (dialog.ShowDialog() == DialogResult.OK) {
                     path = dialog.FileName;
                 }
-                mode = 1;   
+                mode = 1;
             } else {
                 var dialog = new FolderBrowserDialog();
                 if (dialog.ShowDialog() == DialogResult.OK) {
                     path = dialog.SelectedPath;
-                } 
+                }
                 mode = 2;
             }
-            if (!path.Equals(string.Empty)) {
-                Controller.Do("replaceImage", type, adjustPostionBox.Checked, mode, path, Controller.SelectAlbum,indexes);
+            if (!string.IsNullOrEmpty(path)) {
+                Controller.Do("replaceImage", type, adjustPostionBox.Checked, mode, path, Data.SelectedFile, indexes);
                 DialogResult = DialogResult.OK;
             }
         }
 
-        public void Cancel(object sender,EventArgs e) {
+        public void Cancel(object sender, EventArgs e) {
             DialogResult = DialogResult.OK;
         }
-        
+
     }
 
-    
+
 }

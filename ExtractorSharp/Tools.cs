@@ -1,10 +1,9 @@
 ﻿using ExtractorSharp.Core;
+using ExtractorSharp.Data;
 using ExtractorSharp.Draw;
-using ExtractorSharp.UI;
 using ExtractorSharp.Handle;
 using ExtractorSharp.Lib;
-using ExtractorSharp.Users;
-using ExtractorSharp.View;
+using ExtractorSharp.Component;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -15,10 +14,8 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
-using System.Windows.Forms;
 using System.Text.RegularExpressions;
-using Microsoft.Win32;
-using ExtractorSharp.Data;
+using System.Windows.Forms;
 
 namespace ExtractorSharp {
     /// <summary>
@@ -86,7 +83,7 @@ namespace ExtractorSharp {
         /// <param name="file"></param>
         /// <param name="names"></param>
         /// <returns></returns>
-        public static IEnumerable<Album> LoadAlbumRange(string file,IEnumerable<string> nameList) {
+        public static IEnumerable<Album> LoadAlbumRange(string file, IEnumerable<string> nameList) {
             foreach (var img in Load(file)) {
                 if (nameList.Contains(img.Name))
                     yield return img;
@@ -122,7 +119,7 @@ namespace ExtractorSharp {
             }
         }
 
-        public static void GetOriginal(Action<Album,Album> restore,params Album[] Array) {
+        public static void GetOriginal(Action<Album, Album> restore, params Album[] Array) {
             var dic = new Dictionary<string, List<string>>();//将img按NPK分类
             foreach (var item in Array) {
                 var path = item.Path;
@@ -141,11 +138,11 @@ namespace ExtractorSharp {
             for (var i = 0; i < Array.Length; i++) { //模型文件
                 foreach (var item2 in list) { //游戏原文件
                     if (Array[i].Path.Equals(item2.Path)) {
-                        restore.Invoke(item2, Array[i]);               
+                        restore.Invoke(item2, Array[i]);
                     }
                 }
             }
-            
+
         }
 
 
@@ -155,8 +152,6 @@ namespace ExtractorSharp {
         /// <param name="fileName"></param>
         /// <param name="al"></param>     
         public static void SaveFile(string fileName, Album al) {
-            if (al.Work != null && (!al.Work.IsDecrypt || !al.Work.CanExtract))
-                Messager.ShowMessage(Msg_Type.Warning, "该img已禁止提取");
             using (var stream = new FileStream(fileName, FileMode.Create)) {
                 al.Adjust();
                 stream.Write(al.Data);
@@ -169,9 +164,10 @@ namespace ExtractorSharp {
         /// <param name="path"></param>
         /// <param name="List"></param>
         public static void SaveDirectory(string path, IEnumerable<Album> List) {
-            foreach (var album in List)
+            foreach (var album in List) {
                 SaveFile(path + "/" + album.Name, album);
-        }
+            }
+        } 
 
 
         /// <summary>
@@ -192,7 +188,7 @@ namespace ExtractorSharp {
             foreach (var album in List) {
                 ms.WriteInt(album.Offset);
                 ms.WriteInt(album.Length);
-                ms.WritePath(album.Path, album?.Work?.Key);
+                ms.WritePath(album.Path);
             }
             ms.Close();
             var data = ms.ToArray();
@@ -278,6 +274,10 @@ namespace ExtractorSharp {
                 str = string.Concat(0, str);
             }
             return str;
+        }
+
+        public static bool Between(this int i, int start, int end) {
+            return i > start && i < end;
         }
 
         public static string RemoveSuffix(this string s) {
@@ -479,23 +479,14 @@ namespace ExtractorSharp {
         /// </summary>
         /// <param name="stream"></param>
         /// <param name="str"></param>
-        public static void WritePath(this Stream stream, string str, byte[] keys) {
-            var data = new byte[224];
+        public static void WritePath(this Stream stream, string str) {
+            var data = new byte[256];
             var temp = Encoding.Default.GetBytes(str);
             temp.CopyTo(data, 0);
             for (var i = 0; i < data.Length; i++) {
                 data[i] = (byte)(data[i] ^ Key[i]);
             }
-            stream.Write(data);
-            if (keys != null) {
-                keys = CompileCode(keys);
-            } else {
-                keys = new byte[32];
-                for (var i = 0; i < 32; i++) {
-                    keys[i] = (byte)(0 ^ Key[224 + i]);
-                }
-            }
-            stream.Write(keys);             
+            stream.Write(data);                    
         }
 
         /// <summary>
@@ -1074,105 +1065,6 @@ namespace ExtractorSharp {
         }
 
         #endregion
-        #region 加密
-        /// <summary>
-        /// 解密
-        /// </summary>
-        /// <param name="stream"></param>
-        /// <returns></returns>
-        internal static Work Decrpt(this Stream stream) {
-            var count_data = new byte[4];
-            stream.Read(count_data);
-            Array.Reverse(count_data);
-            var count = BitConverter.ToInt32(count_data, 0);
-            var bs = new byte[2];
-            stream.Read(bs);
-            if (bs.Check(new byte[] { 0x78, 0x9c })) {
-                if (count > 0) {
-                    var source = new byte[count];
-                    stream.Read(source);
-                    var aes = new AesCryptoServiceProvider();
-                    aes.Mode = CipherMode.ECB;
-                    aes.Key = Decrpt_Key;
-                    aes.Padding = PaddingMode.Zeros;
-                    aes.IV = new byte[16];
-                    var diff = source.Length + aes.BlockSize - source.Length % aes.BlockSize;
-                    var data = new byte[diff];
-                    Array.Copy(source, data, source.Length);
-                    data = aes.CreateDecryptor().TransformFinalBlock(data, 0, data.Length);
-                    var ms = new MemoryStream(data);
-                    var work = new Work();
-                    work.Id = ms.ReadLong();
-                    ms.Seek(4);
-                    work.Version = Encrypt_Version.Ver2;
-                    work.CanExtract = ms.ReadByte() == 1;
-                    work.CanRead = ms.ReadByte() == 1;
-                    work.Name = ms.ReadString();
-                    work.Author = ms.ReadString();
-                    work.Remark = ms.ReadString();
-                    work.Update = DateTime.Parse(ms.ReadString());
-                    work.Expire = DateTime.Parse(ms.ReadString());
-                    var key = new byte[256];
-                    ms.Read(key);
-                    work.Key = key;
-                    return work;
-                } else {
-                    var version = (Encrypt_Version)stream.ReadByte();
-                    var size = ~stream.ReadInt();
-                    count = 0 - count;
-                    var source = new byte[count];                   
-                    stream.Read(source);
-                    return DecryptManager.Decrypt(version, source);
-                }
-            }
-            return Work.CreateDefaultWork();
-        }
-
-        /// <summary>
-        /// 加密
-        /// </summary>
-        /// <param name="stream"></param>
-        /// <param name="work"></param>
-        internal static void Encrypt(this Stream stream, Work work) {
-            if (work.Version == Encrypt_Version.Ver1) //强制升级
-                work.Version = Encrypt_Version.Ver2;
-            using (var ms = new MemoryStream()) {
-                DecryptManager.Encrypt(ms, work);
-                var data=ms.ToArray();
-                var size = ~data.Length;
-                var count = -data.Length;
-                var count_data = BitConverter.GetBytes(count);
-                Array.Reverse(count_data);
-                stream.Write(count_data);
-                stream.Write(new byte[] { 0x78, 0x9c });
-                stream.WriteByte((byte)work.Version);
-                stream.WriteInt(~data.Length);
-                stream.Write(data);
-            }
-        }
-
-
-        /// <summary>
-        /// 密码加密
-        /// </summary>
-        /// 
-        /// <param name="data"></param>
-        /// <returns></returns>
-        public static byte[] Encrypt(string pwd) {
-            var source = Encoding.Unicode.GetBytes(pwd);
-            var data = new byte[256];
-            Array.Copy(source, data, source.Length);
-            var aes = new AesCryptoServiceProvider();
-            aes.Mode = CipherMode.ECB;
-            aes.Padding = PaddingMode.Zeros;
-            aes.Key = Decrpt_Key;
-            aes.IV = new byte[16];
-            Array.Reverse(data);
-            return aes.CreateDecryptor().TransformFinalBlock(data, 0, data.Length);
-        }
-        
-
-        #endregion
 
         public static bool Check(this byte[] bs1, byte[] bs2) {
             var hex1 = bs1.ToHexString();
@@ -1182,19 +1074,6 @@ namespace ExtractorSharp {
 
 
 
-        public static T[] GetCheckItems<T>(this EaseListBox<T> list) => list.GetCheckItems<T>(true);
-
-
-        public static T[] GetCheckItems<T>(this EaseListBox<T> list, bool selected) {
-            var array = new T[list.CheckedItems.Count];
-            list.CheckedItems.CopyTo(array, 0);
-            if (selected && array.Length < 2) {
-                var item = (T)list.SelectedItem;
-                if (item != null)
-                    array = new T[] { item };
-            }
-            return array;
-        }
 
         public static void InsertRange(this CheckedListBox.ObjectCollection collection, int index, object[] array) {
             var i = 0;

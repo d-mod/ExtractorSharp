@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
-using ExtractorSharp.UI;
+using ExtractorSharp.Component;
 
 namespace ExtractorSharp.View{
     partial class ChangePositonDialog {

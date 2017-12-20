@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using ExtractorSharp.EventArguments;
-using ExtractorSharp.Command;
 using ExtractorSharp.Data;
+using ExtractorSharp.Core.Control;
 using ExtractorSharp.Core;
 
 namespace ExtractorSharp.View.Pane {
@@ -30,25 +23,24 @@ namespace ExtractorSharp.View.Pane {
         }
 
         private void Delete() {
-            var range = actionList.GetCheckItems();
-            Controller.Delete(range);
+            Controller.Delete(actionList.CheckedItems);
         }
 
         private void Record(object sender, EventArgs e) {
-            if (MessageBox.Show(Language["Record"]) == DialogResult.OK) {
-                Controller.Record();
-            }
+            Messager.ShowMessage(Msg_Type.Operate, Language["ActionRecord"]);
+            Controller.Record();
         }
 
         private void Pause(object sender, EventArgs e) {
-            if (MessageBox.Show(Language["Pause"]) == DialogResult.OK) {
-                Controller.Pause();
-            }
+            Messager.ShowMessage(Msg_Type.Operate, Language["ActionPause"]);
+            Controller.Pause();          
         }
 
         private void Run(object sender, EventArgs e) {
-            var allImage = MessageBox.Show(Language["ActionTips"], "", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
-            Controller.Run(allImage, Controller.CheckedAlbum);
+           var result= MessageBox.Show(Language["ActionTips"], "", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            if (result != DialogResult.Cancel) {
+                Controller.Run(result==DialogResult.Yes, Program.Data.CheckedFiles);
+            }
         }
 
         private void Refresh(object sender, ActionEventArgs e) => Refresh();

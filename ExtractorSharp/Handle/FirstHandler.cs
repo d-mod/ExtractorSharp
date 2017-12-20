@@ -102,13 +102,13 @@ namespace ExtractorSharp.Handle {
                     continue;
                 }
                 image.Compress = (Compress)stream.ReadInt();
-                image.Size.Width = stream.ReadInt();
-                image.Size.Height = stream.ReadInt();
+                image.Width = stream.ReadInt();
+                image.Height = stream.ReadInt();
                 image.Length = stream.ReadInt();
-                image.Location.X = stream.ReadInt();
-                image.Location.Y = stream.ReadInt();
-                image.Cavas_Size.Width = stream.ReadInt();
-                image.Cavas_Size.Height = stream.ReadInt();
+                image.X = stream.ReadInt();
+                image.Y = stream.ReadInt();
+                image.Cavas_Width = stream.ReadInt();
+                image.Cavas_Height = stream.ReadInt();
                 if (image.Compress == Compress.NONE)
                     image.Length = image.Size.Width * image.Size.Height * (image.Type == ColorBits.ARGB_8888 ? 4 : 2);
                 var data = new byte[image.Length];

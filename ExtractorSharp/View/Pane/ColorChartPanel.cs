@@ -3,13 +3,14 @@ using System.Drawing;
 using System.Windows.Forms;
 using ExtractorSharp.Data;
 using ExtractorSharp.EventArguments;
-using ExtractorSharp.Core;
+using ExtractorSharp.Core.Control;
 
 namespace ExtractorSharp.View.Pane {
     public partial class ColorChartPanel : TabPage {
         private Album Album;
         private Language Language => Language.Default;
         private Controller Controller => Program.Controller;
+        private ICommandData Data => Program.Data;
         public ColorChartPanel() {
             InitializeComponent();
             Program.Drawer.ImageChanged += SelectImageChanged;
@@ -32,7 +33,7 @@ namespace ExtractorSharp.View.Pane {
                     Controller.Do("changeColor", Album, Album.TableIndex, item.Index, color);
                 }
                 Album.Refresh();
-                Controller.CavasFlush();
+                Data.CavasFlush();
             }
         }
 
@@ -53,7 +54,7 @@ namespace ExtractorSharp.View.Pane {
             if (Album != null) {
                 Album.TableIndex = combo.SelectedIndex;
                 list.Colors = Album.CurrentTable.ToArray();
-                Controller.CavasFlush();
+                Data.CavasFlush();
             }
         }
 

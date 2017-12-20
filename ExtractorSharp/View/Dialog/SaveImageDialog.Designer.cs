@@ -24,11 +24,11 @@
         /// </summary>
         private void InitializeComponent() {
             this.pathBox = new System.Windows.Forms.TextBox();
-            this.loadButton = new ExtractorSharp.UI.EaseButton();
+            this.loadButton = new ExtractorSharp.Component.EaseButton();
             this.allPathCheck = new System.Windows.Forms.CheckBox();
             this.tipsCheck = new System.Windows.Forms.CheckBox();
-            this.yesButton = new ExtractorSharp.UI.EaseButton();
-            this.cancelButton = new ExtractorSharp.UI.EaseButton();
+            this.yesButton = new ExtractorSharp.Component.EaseButton();
+            this.cancelButton = new ExtractorSharp.Component.EaseButton();
             this.SuspendLayout();
             // 
             // pathBox
@@ -102,10 +102,10 @@
         #endregion
 
         private System.Windows.Forms.TextBox pathBox;
-        private UI.EaseButton loadButton;
+        private Component.EaseButton loadButton;
         private System.Windows.Forms.CheckBox tipsCheck;
         private System.Windows.Forms.CheckBox allPathCheck;
-        private UI.EaseButton yesButton;
-        private UI.EaseButton cancelButton;
+        private Component.EaseButton yesButton;
+        private Component.EaseButton cancelButton;
     }
 }

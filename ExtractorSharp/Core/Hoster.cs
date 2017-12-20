@@ -66,13 +66,14 @@ namespace ExtractorSharp.Core{
                 var sucess = false;
                 var plugin = new Plugin(lazy.Metadata);
                 try {
-                    lazy.Value.Install();
+                    lazy.Value.Initialize();
                 } catch (Exception) {
                     sucess = false;
                 }
-                if (sucess)
+                if (sucess) {
                     yield return plugin;
-             }
+                }
+            }
         }
     }
     

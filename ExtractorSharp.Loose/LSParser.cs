@@ -12,28 +12,29 @@ namespace ExtractorSharp.Loose {
         private char[] source;
         private LSToken token = LSToken.None;
         private int index;
-        private Dictionary<LSObject, string> dictionary;
+        private Dictionary<LSObject, string> dictionary { set; get; }
 
         public LSObject Decode(string source) {
             this.source = source.ToCharArray();
             index = 0;
             dictionary = new Dictionary<LSObject, string>();
             LookAhead();
-            if (token == LSToken.LBrace||token==LSToken.LBracket)
+            if (token == LSToken.LBrace || token == LSToken.LBracket) {
                 return ParseObject();
-            return null;
+            }
+            return new LSObject();
         }
 
         private LSObject ParseObject() {
             Consume();
             var obj = new LSObject();
-            var name = "";
+            var name = new StringBuilder();
             while (true) {
                 switch (LookAhead()) {
                     case LSToken.Comma:
                         Consume();
                         //分隔符,清除name
-                        name = "";
+                        name.Clear();
                         break;
                     case LSToken.RBracket://]} 对象终止
                     case LSToken.RBrace:
@@ -56,41 +57,43 @@ namespace ExtractorSharp.Loose {
                         Consume();
                         if (LookAhead() != LSToken.Expression) {
                             var value = ParseValue();
-                            var t = obj.Add(name, value);
+                            var t = obj.Add(name.ToString(), value);
                             if (value is string s) {
                                 var match = Regex.Match(s, @"\$\{.*\}");
                                 var exp = match.Value;
-                                var index = match.Index;
-                                if (exp != string.Empty && (index < 1 || s[index - 1] != '\\'))
+                                if (exp != string.Empty && (match.Index < 1 || s[match.Index - 1] != '\\'))
                                     dictionary.Add(t, exp.Substring(2, exp.Length - 3));
                             }
-                            name = "";
+                            name.Clear();
                         }
                         break;
                     case LSToken.Dot:
                         Consume();
                         //refrence
-                        name += ".";
+                        name .Append(".");
                         break;
                     case LSToken.Expression:
                         var key = ParseExpression();
                         var current = obj.Find(key);
-                        var tp = obj.Add(name, current);
-                        if (current == null)
+                        var tp = obj.Add(name.ToString(), current);
+                        if (current == null) {
                             dictionary.Add(tp, key);
+                        }
                         current = null;
-                        name = "";
+                        name.Clear();
                         break;
                     case LSToken.Identifier:
-                        name += ParseIdentifier();
+                        name.Append(ParseIdentifier());
                         break;
                     case LSToken.Charcter:// 字符/字符串
                     case LSToken.String:
                         var val = ParseValue();
-                        if (LookAhead() == LSToken.Colon) //兼容字符串命名
-                            name = val + "";
-                        else 
+                        if (LookAhead() == LSToken.Colon) { //兼容字符串命名
+                            name.Clear();
+                            name.Append(val + "");
+                        } else {
                             obj.Add(val);
+                        }
                         break;
                     case LSToken.LBrace:
                     case LSToken.LBracket:

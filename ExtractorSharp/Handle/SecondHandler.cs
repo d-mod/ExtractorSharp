@@ -1,7 +1,5 @@
 ﻿using ExtractorSharp.Data;
 using ExtractorSharp.Lib;
-using ExtractorSharp.Users;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -111,11 +109,9 @@ namespace ExtractorSharp.Handle {
                 image.Cavas_Height = stream.ReadInt();
             }
             if (stream.Position < pos) {
-                stream.Seek(8);
-                Album.Work = stream.Decrpt(); //解密
-                stream.Seek(pos - stream.Position);
+                Album.List.Clear();
+                return;
             }
-            var canRead = true;
             foreach (var image in Album.List.ToArray()) {
                 if (image.Type == ColorBits.LINK) {
                     if (dic.ContainsKey(image) && dic[image] < Album.List.Count && dic[image] > -1 && dic[image] != image.Index) {
@@ -124,8 +120,8 @@ namespace ExtractorSharp.Handle {
                         image.Cavas_Size = image.Target.Cavas_Size;
                         image.Location = image.Target.Location;
                     } else {
-                        Album.List.Remove(image);
-                        canRead = false;
+                        Album.List.Clear();
+                        return;
                         break;
                     }
                     continue;
@@ -136,9 +132,6 @@ namespace ExtractorSharp.Handle {
                 var data = new byte[image.Length];
                 stream.Read(data);
                 image.Data = data;
-            }
-            if (!canRead) {
-                Album.Work = Work.CreateDefaultWork();
             }
         }
 

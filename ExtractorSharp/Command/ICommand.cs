@@ -25,10 +25,15 @@ namespace ExtractorSharp.Command {
         /// <returns></returns>
         bool CanUndo { get; }
         /// <summary>
-        /// 是否更改保存状态
+        /// 是否对文件有实质影响
         /// </summary>
         /// <returns></returns>
-        bool Changed { get; }
+        bool IsChanged { get; }
+
+        /// <summary>
+        /// 是否需要刷新文件列表
+        /// </summary>
+        bool IsFlush { get; }
         
     }
     

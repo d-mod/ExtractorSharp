@@ -24,7 +24,7 @@
         /// </summary>
         private void InitializeComponent() {
             this.box = new System.Windows.Forms.TextBox();
-            this.button = new ExtractorSharp.UI.EaseButton();
+            this.button = new ExtractorSharp.Component.EaseButton();
             this.SuspendLayout();
             // 
             // box
@@ -64,6 +64,6 @@
         #endregion
 
         private System.Windows.Forms.TextBox box;
-        private UI.EaseButton button;
+        private Component.EaseButton button;
     }
 }

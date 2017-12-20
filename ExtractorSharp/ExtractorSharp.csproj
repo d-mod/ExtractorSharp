@@ -118,50 +118,48 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bat\BatCavas.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Bat\BatCavas.designer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Bat\Batch.cs" />
-    <Compile Include="Bat\BatDye.cs" />
-    <Compile Include="Bat\BatReplace.cs" />
-    <Compile Include="Bat\LinearDodge.cs" />
-    <Compile Include="Bat\Linghting.cs" />
-    <Compile Include="Bat\Split.cs" />
-    <Compile Include="Command\ColorChartCommand\ChangeColor.cs" />
+    <Compile Include="Command\IFileListChange.cs" />
+    <Compile Include="Command\PaletteCommand\ChangeColor.cs" />
     <Compile Include="Command\DrawCommand\EraserDraw.cs" />
+    <Compile Include="Command\FileCommand\MoveFile.cs" />
     <Compile Include="Command\IAciton.cs" />
     <Compile Include="Command\ImageCommand\ChangeSize.cs" />
     <Compile Include="Command\ImageCommand\CutImage.cs" />
     <Compile Include="Command\ImageCommand\LineDodge.cs" />
     <Compile Include="Command\DrawCommand\PencilDraw.cs" />
+    <Compile Include="Command\ImageCommand\MoveImage.cs" />
     <Compile Include="Command\ImageCommand\PasteImage.cs" />
-    <Compile Include="Command\ImgCommand\CutFile.cs" />
-    <Compile Include="Command\ImgCommand\MixFile.cs" />
-    <Compile Include="Command\ImgCommand\PasteFile.cs" />
-    <Compile Include="Command\ImgCommand\RepairFile.cs" />
-    <Compile Include="Command\ImgCommand\SplitFile.cs" />
-    <Compile Include="Command\LayerCommand\AddLayer.cs" />
+    <Compile Include="Command\FileCommand\CutFile.cs" />
+    <Compile Include="Command\FileCommand\MixFile.cs" />
+    <Compile Include="Command\FileCommand\PasteFile.cs" />
+    <Compile Include="Command\FileCommand\RepairFile.cs" />
+    <Compile Include="Command\FileCommand\SplitFile.cs" />
     <Compile Include="Command\LayerCommand\RenameLayer.cs" />
+    <Compile Include="Command\MergeCommand\MoveMerge.cs" />
     <Compile Include="Command\MergeCommand\RunMerge.cs" />
-    <Compile Include="Composition\ICommandPlugin.cs" />
-    <Compile Include="Config\XmlConfig.cs" />
+    <Compile Include="Component\AbstractSettingPane.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Composition\IMenuItem.cs" />
+    <Compile Include="Composition\MenuItemType.cs" />
     <Compile Include="Config\ConfigMode.cs" />
     <Compile Include="Config\ConfigValue.cs" />
     <Compile Include="Config\IConfig.cs" />
     <Compile Include="Config\JsonConfig.cs" />
     <Compile Include="Core\Clipboarder.cs" />
+    <Compile Include="Core\Control\CommandHandler.cs" />
+    <Compile Include="Core\Sorter\DefaultSorter.cs" />
+    <Compile Include="Core\Sorter\ISorter.cs" />
     <Compile Include="Data\TempImage.cs" />
     <Compile Include="Data\VersionInfo.cs" />
     <Compile Include="Data\WeaponInfo.cs" />
     <Compile Include="Draw\Brush\Eraser.cs" />
     <Compile Include="Draw\Brush\Straw.cs" />
-    <Compile Include="UI\ColorList.cs">
+    <Compile Include="EventArguments\ItemDragEventArgs.cs" />
+    <Compile Include="Component\ColorList.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\ColorList.Designer.cs">
+    <Compile Include="Component\ColorList.Designer.cs">
       <DependentUpon>ColorList.cs</DependentUpon>
     </Compile>
     <Compile Include="EventArguments\ColorEventArgs.cs" />
@@ -170,7 +168,7 @@
     <Compile Include="Core\QueueChangeMode.cs" />
     <Compile Include="EventArguments\ActionEventArgs.cs" />
     <Compile Include="EventArguments\CommandEventArgs.cs" />
-    <Compile Include="Core\Controller.cs" />
+    <Compile Include="Core\Control\Controller.cs" />
     <Compile Include="EventArguments\DialogEventArgs.cs" />
     <Compile Include="Core\Drawer.cs" />
     <Compile Include="EventArguments\ImageEntityEventArgs.cs" />
@@ -182,22 +180,17 @@
     <Compile Include="Draw\Brush\MoveTool.cs" />
     <Compile Include="Draw\Brush\Pencil.cs" />
     <Compile Include="Composition\IPluginMetadata.cs" />
-    <Compile Include="Composition\ISetting.cs" />
-    <Compile Include="Composition\ITools.cs" />
     <Compile Include="Command\ICommand.cs" />
     <Compile Include="Command\ImageCommand\ChangePosition.cs" />
-    <Compile Include="Command\ImageCommand\DyeImage.cs" />
     <Compile Include="Command\ImageCommand\UnCavasImage.cs" />
-    <Compile Include="Command\ImgCommand\ConvertFile.cs" />
-    <Compile Include="Command\MergeCommand\SortMerge.cs" />
     <Compile Include="Draw\Paint\Cavas.cs" />
-    <Compile Include="UI\EaseCavasBox.cs">
+    <Compile Include="Component\EaseCavasBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\EaseTabPanel.cs">
+    <Compile Include="Component\EaseTabPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\EaseTabPanel.Designer.cs">
+    <Compile Include="Component\EaseTabPanel.Designer.cs">
       <DependentUpon>EaseTabPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Gif\AnimatedGifEncoder.cs" />
@@ -209,33 +202,32 @@
     <Compile Include="Gif\NeuQuant.cs" />
     <Compile Include="Gif\PixelUtil.cs" />
     <Compile Include="Gif\Posterize.cs" />
+    <Compile Include="Handle\Img_Version.cs" />
+    <Compile Include="Composition\ICommandData.cs" />
     <Compile Include="Lib\Bass.cs" />
     <Compile Include="Lib\FreeImage.cs" />
     <Compile Include="EventArguments\MergeEventArg.cs" />
     <Compile Include="Lib\Gif.cs" />
     <Compile Include="Service\FitRoomService.cs" />
-    <Compile Include="Users\DecryptManager.cs" />
-    <Compile Include="Users\IDecrypter.cs" />
-    <Compile Include="Users\SecondDecrypter.cs" />
-    <Compile Include="View\Dialog\CavasDialog.cs">
+    <Compile Include="View\Dialog\CanvasDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\Dialog\CavasDialog.designer.cs" />
+    <Compile Include="View\Dialog\CanvasDialog.designer.cs" />
     <Compile Include="Command\ImageCommand\CavasImage.cs" />
     <Compile Include="Command\ImageCommand\SaveImage.cs" />
-    <Compile Include="Command\ImgCommand\SortFile.cs" />
+    <Compile Include="Command\FileCommand\SortFile.cs" />
     <Compile Include="Command\MergeCommand\AddMerge.cs" />
     <Compile Include="Command\ImageCommand\DeleteImage.cs" />
     <Compile Include="Command\ImageCommand\HideImage.cs" />
     <Compile Include="Command\ImageCommand\LinkImage.cs" />
     <Compile Include="Command\ImageCommand\NewImage.cs" />
     <Compile Include="Command\ImageCommand\ReplaceImage.cs" />
-    <Compile Include="Command\ImgCommand\AddFile.cs" />
-    <Compile Include="Command\ImgCommand\DeleteFile.cs" />
-    <Compile Include="Command\ImgCommand\HideFile.cs" />
-    <Compile Include="Command\ImgCommand\NewFile.cs" />
-    <Compile Include="Command\ImgCommand\RenameFile.cs" />
-    <Compile Include="Command\ImgCommand\ReplaceFile.cs" />
+    <Compile Include="Command\FileCommand\AddFile.cs" />
+    <Compile Include="Command\FileCommand\DeleteFile.cs" />
+    <Compile Include="Command\FileCommand\HideFile.cs" />
+    <Compile Include="Command\FileCommand\NewFile.cs" />
+    <Compile Include="Command\FileCommand\RenameFile.cs" />
+    <Compile Include="Command\FileCommand\ReplaceFile.cs" />
     <Compile Include="Command\MergeCommand\ClearMerge.cs" />
     <Compile Include="Command\MergeCommand\RemoveMerge.cs" />
     <Compile Include="View\Dialog\AboutDialog.cs">
@@ -243,12 +235,6 @@
     </Compile>
     <Compile Include="View\Dialog\AboutDialog.designer.cs">
       <DependentUpon>AboutDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="View\Dialog\BatDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="View\Dialog\BatDialog.Designer.cs">
-      <DependentUpon>BatDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="View\Dialog\BugDialog.cs">
       <SubType>Form</SubType>
@@ -268,11 +254,35 @@
     <Compile Include="View\Dialog\ConvertDialog.Designer.cs">
       <DependentUpon>ConvertDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\Dialog\MacroDialog.cs">
+    <Compile Include="View\Dialog\SettingDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\Dialog\MacroDialog.Designer.cs">
-      <DependentUpon>MacroDialog.cs</DependentUpon>
+    <Compile Include="View\Dialog\SettingDialog.Designer.cs">
+      <DependentUpon>SettingDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SettingPane\FlashPane.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\SettingPane\FlashPane.Designer.cs">
+      <DependentUpon>FlashPane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SettingPane\GridPane.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\SettingPane\GridPane.Designer.cs">
+      <DependentUpon>GridPane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SettingPane\LanguagePane.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\SettingPane\LanguagePane.Designer.cs">
+      <DependentUpon>LanguagePane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SettingPane\SaveImagePane.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\SettingPane\SaveImagePane.Designer.cs">
+      <DependentUpon>SaveImagePane.cs</DependentUpon>
     </Compile>
     <Compile Include="View\Dialog\SplitFileDialog.cs">
       <SubType>Form</SubType>
@@ -302,16 +312,10 @@
     <Compile Include="View\Pane\AudioPlayer.Designer.cs">
       <DependentUpon>AudioPlayer.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\Dialog\PropertyDialog.cs">
+    <Compile Include="Component\EaseTextDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\Dialog\PropertyDialog.Designer.cs">
-      <DependentUpon>PropertyDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\EaseTextDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\EaseTextDialog.Designer.cs">
+    <Compile Include="Component\EaseTextDialog.Designer.cs">
       <DependentUpon>EaseTextDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="View\Dialog\ReplaceImageDialog.cs">
@@ -351,28 +355,28 @@
       <DependentUpon>DownloadFileDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Draw\Paint\IPaint.cs" />
-    <Compile Include="UI\EaseButton.cs">
+    <Compile Include="Component\EaseButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\EaseButton.Designer.cs">
+    <Compile Include="Component\EaseButton.Designer.cs">
       <DependentUpon>EaseButton.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\EaseForm.cs">
+    <Compile Include="Component\EaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\EaseForm.Designer.cs">
+    <Compile Include="Component\EaseForm.Designer.cs">
       <DependentUpon>EaseForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\ProgressDialog.cs">
+    <Compile Include="Component\ProgressDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\ProgressDialog.Designer.cs">
+    <Compile Include="Component\ProgressDialog.Designer.cs">
       <DependentUpon>ProgressDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\EaseDialog.cs">
+    <Compile Include="Component\EaseDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\EaseDialog.designer.cs">
+    <Compile Include="Component\EaseDialog.designer.cs">
       <DependentUpon>EaseDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Handle\FirstHandler.cs" />
@@ -395,30 +399,16 @@
       <DependentUpon>FitRoomDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Data\DDS.cs" />
-    <Compile Include="UI\EaseListBox.cs">
+    <Compile Include="Component\EaseListBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\EaseListBox.Designer.cs">
+    <Compile Include="Component\EaseListBox.Designer.cs">
       <DependentUpon>EaseListBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="View\Dialog\EncryptDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="View\Dialog\EncryptDialog.Designer.cs">
-      <DependentUpon>EncryptDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="View\Pane\DecryptPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="View\Pane\DecryptPanel.Designer.cs">
-      <DependentUpon>DecryptPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Handle\FifthHandler.cs" />
     <Compile Include="Handle\FourthHandler.cs" />
     <Compile Include="Handle\Handler.cs" />
     <Compile Include="Handle\SecondHandler.cs" />
-    <Compile Include="Settings.cs" />
-    <Compile Include="Users\Encrypt_Version.cs" />
     <Compile Include="Tools.cs" />
     <Compile Include="Data\ImageEntity.cs" />
     <Compile Include="MainForm.cs">
@@ -459,7 +449,12 @@
     <Compile Include="View\Dialog\MergeDialog.designer.cs">
       <DependentUpon>MergeDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Users\Work.cs" />
+    <Compile Include="View\SettingPane\GerneralPane.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\SettingPane\GerneralPane.Designer.cs">
+      <DependentUpon>GerneralPane.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Kritsu.snk" />
@@ -469,17 +464,11 @@
     <None Include="Resources\queues.json" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Bat\BatCavas.resx">
-      <DependentUpon>BatCavas.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="View\Dialog\CavasDialog.resx">
-      <DependentUpon>CavasDialog.cs</DependentUpon>
+    <EmbeddedResource Include="View\Dialog\CanvasDialog.resx">
+      <DependentUpon>CanvasDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\Dialog\AboutDialog.resx">
       <DependentUpon>AboutDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="View\Dialog\BatDialog.resx">
-      <DependentUpon>BatDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\Dialog\BugDialog.resx">
       <DependentUpon>BugDialog.cs</DependentUpon>
@@ -496,25 +485,16 @@
     <EmbeddedResource Include="View\Dialog\FitRoomDialog.resx">
       <DependentUpon>FitRoomDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\Dialog\EncryptDialog.resx">
-      <DependentUpon>EncryptDialog.cs</DependentUpon>
+    <EmbeddedResource Include="View\Dialog\SettingDialog.resx">
+      <DependentUpon>SettingDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\Dialog\SplitFileDialog.resx">
       <DependentUpon>SplitFileDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\Pane\DecryptPanel.resx">
-      <DependentUpon>DecryptPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="View\Dialog\MacroDialog.resx">
-      <DependentUpon>MacroDialog.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="View\Pane\AudioPlayer.resx">
       <DependentUpon>AudioPlayer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\Dialog\PropertyDialog.resx">
-      <DependentUpon>PropertyDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\EaseTextDialog.resx">
+    <EmbeddedResource Include="Component\EaseTextDialog.resx">
       <DependentUpon>EaseTextDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\Dialog\ReplaceImageDialog.resx">
@@ -535,7 +515,7 @@
     <EmbeddedResource Include="View\Dialog\DownloadFileDialog.resx">
       <DependentUpon>DownloadFileDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\ProgressDialog.resx">
+    <EmbeddedResource Include="Component\ProgressDialog.resx">
       <DependentUpon>ProgressDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
@@ -557,6 +537,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\Dialog\MergeDialog.resx">
       <DependentUpon>MergeDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SettingPane\GridPane.resx">
+      <DependentUpon>GridPane.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SettingPane\LanguagePane.resx">
+      <DependentUpon>LanguagePane.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SettingPane\SaveImagePane.resx">
+      <DependentUpon>SaveImagePane.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -613,10 +602,9 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\ExtractorSharp.Loose\ExtractorSharp.Loose.csproj">
-      <Project>{06d35140-706a-40ce-9373-6b948f092a30}</Project>
+      <Project>{06D35140-706A-40CE-9373-6B948F092A30}</Project>
       <Name>ExtractorSharp.Loose</Name>
     </ProjectReference>
   </ItemGroup>

@@ -45,7 +45,7 @@ namespace ExtractorSharp.Core{
             button.Name = "button";
             button.Size = new Size(50, 20);
             button.TabIndex = 2;
-            button.Text = "确认";
+            button.Text = Language["OK"];
             button.UseVisualStyleBackColor = true;
             // 
             // MessageForm
@@ -54,7 +54,6 @@ namespace ExtractorSharp.Core{
             Controls.Add(button);
             Controls.Add(label);
             Name = "MessageForm";
-            Text = "提示";
             ResumeLayout(false);
             Visible = false;
         }

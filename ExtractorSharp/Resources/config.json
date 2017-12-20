@@ -1,22 +1,71 @@
 {
 	UserConfig:"conf.json"
+
 	FlashSpeed:20
+
 	GamePath:""
+
 	SaveImagePath:""
+
 	SaveImageTip:true
+
 	Version:"1.6.0.1"
+
 	GridGap:100
+
 	AutoSave:false
+
 	LineLevel:0.5
+
 	LCID:2052
+
 	SaveImageAllPath:false
-  LayerMaximum: 20
-  AvatarUrl:"http://extractorsharp.kritsu.net/#/avatar",
-  ResourceUrl: "http://kritsu.net/avatar/image/",
-  ApiUrl: "http://extractorsharp.kritsu.net/api/avatar",
-  UpdateUrl:"http://extractorsharp.kritsu.net/api/program/update?type=release",
-  UpdateExeUrl:"http://static.kritsu.net/install.exe",
-  DebugUrl:"http://extractorsharp.kritsu.net/api/feedback/post"
-  UpdateExeName:"install.exe",
-  AutoUpdate: true
+
+	LayerMaximum: 20
+
+	AvatarUrl:"http://extractorsharp.kritsu.net/#/avatar",
+
+	ResourceUrl: "http://kritsu.net/avatar/image/",
+
+	ApiUrl: "http://extractorsharp.kritsu.net/api/avatar",
+
+	UpdateUrl:"http://extractorsharp.kritsu.net/api/program/update?type=release",
+	
+	UpdateExeUrl:"http://static.kritsu.net/install.exe",
+	
+	DebugUrl:"http://extractorsharp.kritsu.net/api/feedback/post"
+	
+	UpdateExeName:"install.exe",
+	
+	AutoUpdate: true
+	
+	MainColor : '180,214,221'
+	
+	MainImage : ''		
+
+	MainSize : '1368,768'		
+
+	MainImageLayout : ''		
+
+	MainIcon : ''		
+
+	FormImage : ''		
+
+	FormColor : ''		
+
+	FormImageLayout : ''		
+
+	FormIcon : ''		
+
+	CavasColor : ''		
+
+	CavasImage : ''		
+
+	CavasSize : '800,600'		
+
+	StartPosition : 'center'		
+
+	Preview : False		
+
+	Title : ''		
 }

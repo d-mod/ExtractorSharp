@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ExtractorSharp.Command;
-using ExtractorSharp.UI;
+using ExtractorSharp.Component;
 using ExtractorSharp.View;
 using System.Reflection;
 using ExtractorSharp.Core;

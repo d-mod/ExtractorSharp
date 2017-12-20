@@ -30,12 +30,12 @@ namespace ExtractorSharp.View {
             this.modeBox = new System.Windows.Forms.ComboBox();
             this.pathLabel = new System.Windows.Forms.Label();
             this.pathBox = new System.Windows.Forms.TextBox();
-            this.list = new ExtractorSharp.UI.EaseListBox<string>();
+            this.list = new ExtractorSharp.Component.EaseListBox<string>();
             this.clearButton = new System.Windows.Forms.Button();
             this.bar = new System.Windows.Forms.ProgressBar();
             this.searhButton = new System.Windows.Forms.Button();
             this.backupCheck = new System.Windows.Forms.CheckBox();
-            this.loadButton = new ExtractorSharp.UI.EaseButton();
+            this.loadButton = new ExtractorSharp.Component.EaseButton();
             this.SuspendLayout();
             // 
             // modeLabel
@@ -161,7 +161,7 @@ namespace ExtractorSharp.View {
         private System.Windows.Forms.ProgressBar bar;
         private System.Windows.Forms.Button searhButton;
         private System.Windows.Forms.CheckBox backupCheck;
-        private UI.EaseListBox<string> list;
-        private UI.EaseButton loadButton;
+        private Component.EaseListBox<string> list;
+        private Component.EaseButton loadButton;
     }
 }
