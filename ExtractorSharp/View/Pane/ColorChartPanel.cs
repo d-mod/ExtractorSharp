@@ -10,7 +10,7 @@ namespace ExtractorSharp.View.Pane {
         private Album Album;
         private Language Language => Language.Default;
         private Controller Controller => Program.Controller;
-        private ICommandData Data => Program.Data;
+        private IConnector Data => Program.Connector;
         public ColorChartPanel() {
             InitializeComponent();
             Program.Drawer.ImageChanged += SelectImageChanged;

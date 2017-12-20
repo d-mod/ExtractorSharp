@@ -16,7 +16,7 @@ namespace ExtractorSharp.View {
         private Controller Controller => Program.Controller;
         private MainForm MainForm => Program.Form;
 
-        public ChangePositonDialog(ICommandData Data) : base(Data) {
+        public ChangePositonDialog(IConnector Data) : base(Data) {
             InitializeComponent();
             yesButton.Click += ChangePosition;
         }
@@ -35,8 +35,8 @@ namespace ExtractorSharp.View {
 
 
         public void ChangePosition(object sender, EventArgs e) {
-            var indexes = Data.CheckedImageIndices;
-            var album = Data.SelectedFile;
+            var indexes = Connector.CheckedImageIndices;
+            var album = Connector.SelectedFile;
             if (allImageRadio.Checked) {
                 indexes = new int[album.List.Count];
                 for (var i = 0; i < album.List.Count; i++) {

@@ -18,6 +18,8 @@ using ExtractorSharp.Loose;
 using System.Threading;
 using System.Text;
 using ExtractorSharp.Core.Control;
+using ExtractorSharp.Handle;
+using System.ComponentModel.Composition;
 
 namespace ExtractorSharp {
     /// <summary>
@@ -34,7 +36,8 @@ namespace ExtractorSharp {
         internal static Merger Merger { get; private set; }
         internal static Drawer Drawer { get; private set; }
 
-        internal static ICommandData Data { set; get; }
+        [Export(typeof(IConnector))]
+        internal static IConnector Connector { set; get; }
 
         internal readonly static string Version = Assembly.GetAssembly(typeof(Program)).GetName().Version.ToString();
 
@@ -48,6 +51,7 @@ namespace ExtractorSharp {
             Arguments = args;
             LoadConfig();
             LoadLanguage();
+            RegistyHandler();
             if (Config["AutoUpdate"].Boolean) {
                 CheckUpdate(false);
             }
@@ -63,8 +67,8 @@ namespace ExtractorSharp {
             Drawer = new Drawer();
             Form = new MainForm();
             Form.Shown += OnShown;
-            Data = Form.Data;
-            Data.AddFile(true, args);
+            Connector = Form.Connector;
+            Connector.AddFile(true, args);
             RegistyDialog();
             Viewer.DialogShown += ViewerDialogShown;
             Merger = new Merger();
@@ -82,6 +86,8 @@ namespace ExtractorSharp {
 
 
         private static void OnShown(object sender, EventArgs e) {
+            Form.RegisityPlugin();
+            Viewer.RegisityPlugin();
             if (!Config["Version"].Value.Equals(Version)) {
                 Config["Version"] = new ConfigValue(Version);
                 Config.Save();
@@ -90,7 +96,7 @@ namespace ExtractorSharp {
             if (Arguments.Length == 1) {
                 var command = Arguments[0];
                 if (!command.StartsWith("esharp://")) {
-                    Data.AddFile(true, new string[] { command });
+                    Connector.AddFile(true, new string[] { command });
                     return;
                 }
                 command = command.Replace("esharp://", "");
@@ -116,7 +122,6 @@ namespace ExtractorSharp {
         /// </summary>
         private static void RegistyDialog() {
             Viewer.Regisity("replace", typeof(ReplaceImageDialog));
-            Viewer.Regisity("fit", typeof(FitRoomDialog));
             Viewer.Regisity("Merge", typeof(MergeDialog));
             Viewer.Regisity("search", typeof(SearchDialog));
             Viewer.Regisity("newImg", typeof(NewImgDialog));
@@ -133,8 +138,18 @@ namespace ExtractorSharp {
             Viewer.Regisity("download", typeof(DownloadFileDialog));
         }
 
+
+        private static void RegistyHandler() {
+            Handler.Regisity(Img_Version.OGG, typeof(OggHandler));
+            Handler.Regisity(Img_Version.Ver1, typeof(FirstHandler));
+            Handler.Regisity(Img_Version.Ver2, typeof(SecondHandler));
+            Handler.Regisity(Img_Version.Ver4, typeof(FourthHandler));
+            Handler.Regisity(Img_Version.Ver5, typeof(FifthHandler));
+            Handler.Regisity(Img_Version.Ver6, typeof(SixthHandler));
+        }
+
         private static void ViewerDialogShown(object sender, DialogEventArgs e) {
-            e.Dialog = e.DialogType.CreateInstance(Data) as EaseDialog;
+            e.Dialog = e.DialogType.CreateInstance(Connector) as EaseDialog;
             e.Dialog.Owner = Form;
         }
 
@@ -233,7 +248,7 @@ namespace ExtractorSharp {
             try {
                 var builder = new LSBuilder();
                 var obj = builder.Get(Config["UpdateUrl"].Value).GetValue(typeof(VersionInfo)) as VersionInfo;
-                if (obj.Version.ToIntVersion() > Version.ToIntVersion()) {//若当前版本低于最新版本时，触发更新
+                if (!obj.Version.Equals(Version)) {//若当前版本低于最新版本时，触发更新
                     if (MessageBox.Show(Language.Default["NeedUpdateTips"], "", MessageBoxButtons.OKCancel) != DialogResult.OK) {
                         return;                 //提示更新
                     }

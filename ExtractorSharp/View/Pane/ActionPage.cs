@@ -39,7 +39,7 @@ namespace ExtractorSharp.View.Pane {
         private void Run(object sender, EventArgs e) {
            var result= MessageBox.Show(Language["ActionTips"], "", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
             if (result != DialogResult.Cancel) {
-                Controller.Run(result==DialogResult.Yes, Program.Data.CheckedFiles);
+                Controller.Run(result==DialogResult.Yes, Program.Connector.CheckedFiles);
             }
         }
 

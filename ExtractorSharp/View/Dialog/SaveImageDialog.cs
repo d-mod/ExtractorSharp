@@ -10,7 +10,7 @@ namespace ExtractorSharp.View {
         private int[] Indexes;
         private Album Album;
         private Controller Controller { get; }
-        public SaveImageDialog(ICommandData Data) : base(Data) {
+        public SaveImageDialog(IConnector Data) : base(Data) {
             Controller = Program.Controller;
             InitializeComponent();
             pathBox.Click += LoadPath;

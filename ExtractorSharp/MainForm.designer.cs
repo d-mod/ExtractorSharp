@@ -106,8 +106,7 @@ namespace ExtractorSharp {
             previewItem = new ToolStripMenuItem();
 
             gridItem = new ToolStripMenuItem();
-
-            fitItem = new ToolStripMenuItem();
+            
             aboutItem = new ToolStripMenuItem();
             sortItem = new ToolStripMenuItem();
 
@@ -120,7 +119,7 @@ namespace ExtractorSharp {
 
             Messager Messager = Messager.Default;
             saveGifItem = new ToolStripMenuItem();
-            box = new EaseCavasBox();
+            box = new PictureBox();
             mutipleLayerItem = new ToolStripMenuItem();
             linedodgeBox = new CheckBox();
             realPostionBox = new CheckBox();
@@ -293,13 +292,11 @@ namespace ExtractorSharp {
             modelMenu.Text = Language["Model"];
             modelMenu.DropDownItems.Add(searchItem);
             modelMenu.DropDownItems.Add(clearItem);
-            modelMenu.DropDownItems.Add(fitItem);
             //   modelMenu.DropDownItems.Add(otherSeverItem);
             searchItem.ShortcutKeys = Keys.Control | Keys.F;
             searchItem.Text = Language["SearchModel"];
             clearItem.Text = Language["ClearModel"];
             otherSeverItem.Text = "外服资源";
-            fitItem.Text = Language["FitRoom"];
 
             aboutMenu.Text = Language["About"];
             aboutMenu.DropDownItems.Add(aboutItem);
@@ -660,7 +657,6 @@ namespace ExtractorSharp {
         private ToolStripMenuItem modelMenu;      //模型管理
         private ToolStripMenuItem clearItem;        //清理模型
         private ToolStripMenuItem searchItem;       //搜索
-        private ToolStripMenuItem fitItem;          //试衣间
         private ToolStripMenuItem otherSeverItem;     //外服资源
 
         private ContextMenuStrip albumListMenu;

@@ -11,7 +11,7 @@ using ExtractorSharp.Config;
 namespace ExtractorSharp.View {
     public partial class ConvertDialog : EaseDialog {
         private Album[] Array;
-        public ConvertDialog(ICommandData Data) : base(Data) {
+        public ConvertDialog(IConnector Data) : base(Data) {
             InitializeComponent();
             var array = new Img_Version[Handler.Dic.Count];
             Handler.Dic.Keys.CopyTo(array, 0);
@@ -47,7 +47,7 @@ namespace ExtractorSharp.View {
                     al.ConvertTo(Version);
                 }
             }
-            Data.IsSave = false;
+            Connector.IsSave = false;
             progress.Visible = false;
             DialogResult = DialogResult.OK;
         }

@@ -11,7 +11,7 @@ using ExtractorSharp.Config;
 namespace ExtractorSharp {
     public partial class NewImgDialog : EaseDialog {
         private Controller Controller;
-        public NewImgDialog(ICommandData Data) : base(Data) {
+        public NewImgDialog(IConnector Data) : base(Data) {
             Controller = Program.Controller;
             InitializeComponent();
             pathBox.KeyDown += EnterDownRun;

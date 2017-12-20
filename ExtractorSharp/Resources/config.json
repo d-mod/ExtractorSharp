@@ -55,7 +55,7 @@
 
 	FormImageLayout : ''		
 
-	FormIcon : ''		
+	FormIcon : 'aww.ico'		
 
 	CavasColor : ''		
 
@@ -68,4 +68,5 @@
 	Preview : False		
 
 	Title : ''		
+
 }

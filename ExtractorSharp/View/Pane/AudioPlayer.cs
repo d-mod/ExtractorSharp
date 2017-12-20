@@ -29,7 +29,7 @@ namespace ExtractorSharp.View {
                 Bass.Stop(handle);
                 Bass.Close(handle);
             }
-            var ogg = Program.Data.SelectedFile;
+            var ogg = Program.Connector.SelectedFile;
             if (ogg != null && ogg.Version == Img_Version.OGG) {
                 ogg.Adjust();
                 groupBox1.Text = ogg.Name;

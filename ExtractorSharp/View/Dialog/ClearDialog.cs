@@ -13,7 +13,7 @@ namespace ExtractorSharp.View {
     internal partial class ClearDialog : EaseDialog {
         private string Path => Config["ResourcePath"].Value;
         private Dictionary<string, string> Dic;
-        public ClearDialog(ICommandData Data) : base(Data) {
+        public ClearDialog(IConnector Data) : base(Data) {
             InitializeComponent();
             modeBox.SelectedIndex = 0;
             pathBox.Text = Config["GamePath"].Value;

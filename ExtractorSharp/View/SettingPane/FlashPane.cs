@@ -12,7 +12,7 @@ using ExtractorSharp.Config;
 
 namespace ExtractorSharp.View.SettingPane {
     public partial class FlashPane : AbstractSettingPane {
-        public FlashPane(ICommandData Data):base(Data) {
+        public FlashPane(IConnector Data):base(Data) {
             InitializeComponent();
             flashSpeedBar.ValueChanged += FlashSpeedBarChanged;
             flashSpeedBox.ValueChanged += FlashSpeedBoxChanged;

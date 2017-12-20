@@ -11,7 +11,7 @@ namespace ExtractorSharp.View {
     public partial class NewImageDialog : EaseDialog {
         private Album Album;
         private Controller Controller { get; }
-        public NewImageDialog(ICommandData Data) : base(Data) {
+        public NewImageDialog(IConnector Data) : base(Data) {
             Controller = Program.Controller;
             InitializeComponent();
             yesButton.Click += Run;

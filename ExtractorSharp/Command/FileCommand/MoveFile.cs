@@ -38,7 +38,7 @@ namespace ExtractorSharp.Command.FileCommand {
         public void Do(params object[] args) {
             Index = (int)args[0];
             Target = (int)args[1];
-            List = Program.Data.List;
+            List = Program.Connector.List;
             Move(Index, Target);
         }
 

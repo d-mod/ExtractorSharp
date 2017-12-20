@@ -47,9 +47,17 @@ namespace ExtractorSharp {
         /// <param name="name"></param>
         /// <param name="type"></param>
         public void Regisity(string name, Type type) {
-            if (Dic.ContainsKey(name))
+            if (Dic.ContainsKey(name)) {
                 Dic.Remove(name);
+            }
             Dic.Add(name, type);
+        }
+
+        public void RegisityPlugin() {
+            foreach (var lazy in Program.Hoster.DialogList) {
+                var dialog = lazy;
+                List.Add(dialog.Name, dialog);
+            }
         }
 
 

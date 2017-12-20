@@ -15,7 +15,7 @@ namespace ExtractorSharp.Command.ImgCommand {
 
         private int Index;
 
-        private ICommandData Data => Program.Data;
+        private IConnector Data => Program.Connector;
 
         public void Do(params object[] args) {
             Album = args[0] as Album;

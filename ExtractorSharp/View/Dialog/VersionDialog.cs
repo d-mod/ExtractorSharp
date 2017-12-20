@@ -9,7 +9,7 @@ using ExtractorSharp.Config;
 namespace ExtractorSharp.View.Dialog {
     public partial class VersionDialog : EaseDialog {
         private Controller Controller;
-        public VersionDialog(ICommandData Data) : base(Data) {
+        public VersionDialog(IConnector Data) : base(Data) {
             Controller = Program.Controller;
             InitializeComponent();
             button.Click += ButtonClose;

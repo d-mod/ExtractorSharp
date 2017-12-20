@@ -8,7 +8,7 @@ namespace ExtractorSharp.Command.ImgCommand {
     class DeleteFile : IMutipleAciton{
         private Dictionary<Album, int> Indices;
         private Controller Controller => Program.Controller;
-        private ICommandData Data => Program.Data;
+        private IConnector Data => Program.Connector;
 
         /// <summary>
         /// 执行

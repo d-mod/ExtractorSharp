@@ -25,7 +25,7 @@ namespace ExtractorSharp.Core.Control {
 
         private IConfig Config => Program.Config;
 
-        private ICommandData Data => Program.Data;
+        private IConnector Data => Program.Connector;
 
         private readonly Stack<ICommand> undoStack;
         private readonly Stack<ICommand> redoStack;

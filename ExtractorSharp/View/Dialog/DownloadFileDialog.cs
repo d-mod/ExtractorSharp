@@ -15,7 +15,7 @@ namespace ExtractorSharp.View.Dialog {
         private bool isDownload;
         private string Temp;
         private Controller Controller;
-        public DownloadFileDialog(ICommandData Data) : base(Data) {
+        public DownloadFileDialog(IConnector Data) : base(Data) {
             Controller = Program.Controller;
             InitializeComponent();
             List = new List<string>();

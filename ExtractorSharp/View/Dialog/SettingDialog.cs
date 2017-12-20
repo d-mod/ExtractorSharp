@@ -15,7 +15,7 @@ namespace ExtractorSharp.View.Dialog {
     public partial class SettingDialog : EaseDialog {
         private Dictionary<TreeNode, AbstractSettingPane> Dictionary;
         private AbstractSettingPane SelectPane { set; get; }
-        public SettingDialog(ICommandData Data) : base(Data) {
+        public SettingDialog(IConnector Data) : base(Data) {
             Dictionary = new Dictionary<TreeNode, AbstractSettingPane>();
             InitializeComponent();
             this.tree.AfterSelect += SelectNode;
@@ -40,7 +40,7 @@ namespace ExtractorSharp.View.Dialog {
             if (!typeof(AbstractSettingPane).IsAssignableFrom(type)) {
                 return;
             }
-            var control = type.CreateInstance(Data) as AbstractSettingPane;
+            var control = type.CreateInstance(Connector) as AbstractSettingPane;
             var parentArray = tree.Nodes.Find(control.Parent, false);
             TreeNode parentNode = null;
             if (parentArray.Length > 0) {

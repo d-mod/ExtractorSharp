@@ -13,7 +13,7 @@ namespace ExtractorSharp.View {
     public partial class ReplaceImageDialog : EaseDialog {
 
         private Controller Controller { get; }
-        public ReplaceImageDialog(ICommandData Data) : base(Data) {
+        public ReplaceImageDialog(IConnector Data) : base(Data) {
             Controller = Program.Controller;
             InitializeComponent();
             button1.Click += Replace;
@@ -21,7 +21,7 @@ namespace ExtractorSharp.View {
         }
 
         public void Replace(object sender, EventArgs e) {
-            var array = seletImageRadio.Checked ? Data.CheckedImages : Data.ImageArray;
+            var array = seletImageRadio.Checked ? Connector.CheckedImages : Connector.ImageArray;
             var indexes = new int[array.Length];
             for (var i = 0; i < array.Length; i++) {
                 indexes[i] = array[i].Index;
@@ -54,7 +54,7 @@ namespace ExtractorSharp.View {
                 mode = 2;
             }
             if (!string.IsNullOrEmpty(path)) {
-                Controller.Do("replaceImage", type, adjustPostionBox.Checked, mode, path, Data.SelectedFile, indexes);
+                Controller.Do("replaceImage", type, adjustPostionBox.Checked, mode, path, Connector.SelectedFile, indexes);
                 DialogResult = DialogResult.OK;
             }
         }

@@ -7,7 +7,7 @@ namespace ExtractorSharp.View {
     public partial class BugDialog : EaseDialog {
         private string Error { set; get; }
         private string Mode { set; get; }
-        public BugDialog(ICommandData Data) : base(Data) {
+        public BugDialog(IConnector Data) : base(Data) {
             InitializeComponent();
             CancelButton = cancelButton;
             yesButton.Click += Submit;

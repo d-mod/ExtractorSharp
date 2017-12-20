@@ -12,7 +12,7 @@ using ExtractorSharp.Config;
 
 namespace ExtractorSharp.View.SettingPane {
     public partial class SaveImagePane : AbstractSettingPane {
-        public SaveImagePane(ICommandData Data) :base(Data){
+        public SaveImagePane(IConnector Data) :base(Data){
             InitializeComponent();
             savePathBox.Click += Browse;
             browseButton.Click += Browse;

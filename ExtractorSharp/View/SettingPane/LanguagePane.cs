@@ -13,7 +13,7 @@ using ExtractorSharp.Data;
 
 namespace ExtractorSharp.View.SettingPane {
     public partial class LanguagePane : AbstractSettingPane {
-        public LanguagePane(ICommandData Data) :base(Data){
+        public LanguagePane(IConnector Data) :base(Data){
             InitializeComponent();
         }
 

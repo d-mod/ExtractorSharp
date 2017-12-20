@@ -15,7 +15,7 @@ namespace ExtractorSharp {
         private List<SearchResult> List;
         private Dictionary<string, string> Dic;
         private Controller Controller;
-        public SearchDialog(ICommandData Data) : base(Data) {
+        public SearchDialog(IConnector Data) : base(Data) {
             InitializeComponent();
             List = new List<SearchResult>();
             Controller = Program.Controller;
@@ -25,10 +25,8 @@ namespace ExtractorSharp {
             resultList.Cleared += ClearResult;
             resultList.Deleted += DeleteResult;
             addItem.Click += AddList;
-            browseButton.Click += SelectPath;
             patternBox.TextChanged += Filter;
             patternBox.KeyDown += KeyPressSearch;
-            pathBox.Click += SelectPath;
             addNPKItem.Click += AddNPK;
             displayModeBox.SelectedIndexChanged += ChangeMode;
             useDicBox.CheckedChanged += UseDic;
@@ -54,16 +52,7 @@ namespace ExtractorSharp {
         }
         
 
-        /// <summary>
-        /// 选择游戏路径
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void SelectPath(object sender, EventArgs e) {
-            Program.SelectPath();
-            if (Directory.Exists(Config["GamePath"].Value))
-                pathBox.Text = Config["GamePath"].Value;
-        }
+
 
         /// <summary>
         /// 切换显示模式

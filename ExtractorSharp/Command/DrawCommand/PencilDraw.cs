@@ -55,7 +55,7 @@ namespace ExtractorSharp.Command.DrawCommand {
             image.SetPixel(Location.X, Location.Y, Color);
             Entity.Picture = image;
             Entity.Location = Entity.Location.Minus(new Point(_x, _y));
-            Program.Data.CavasFlush();
+            Program.Connector.CavasFlush();
         }
 
         public void Redo() {

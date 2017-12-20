@@ -12,7 +12,7 @@ using ExtractorSharp.Config;
 
 namespace ExtractorSharp.View.SettingPane {
     public partial class GridPane : AbstractSettingPane {
-        public GridPane(ICommandData Data):base(Data){
+        public GridPane(IConnector Data):base(Data){
             InitializeComponent();
         }
 

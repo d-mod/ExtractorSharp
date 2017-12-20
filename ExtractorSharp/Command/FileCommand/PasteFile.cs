@@ -17,7 +17,7 @@ namespace ExtractorSharp.Command.ImgCommand {
 
         private Controller Controller => Program.Controller;
 
-        private ICommandData Data => Program.Data;
+        private IConnector Data => Program.Connector;
 
         private Clipboarder Clipboarder;
 

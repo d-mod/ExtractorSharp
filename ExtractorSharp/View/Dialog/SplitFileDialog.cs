@@ -13,7 +13,7 @@ using System.Windows.Forms;
 namespace ExtractorSharp.View.Dialog {
     public partial class SplitFileDialog : EaseDialog {
        
-        public SplitFileDialog(ICommandData Data) : base(Data) {
+        public SplitFileDialog(IConnector Data) : base(Data) {
             InitializeComponent();
         }
     }

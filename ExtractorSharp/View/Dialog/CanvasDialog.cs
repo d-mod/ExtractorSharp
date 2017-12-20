@@ -11,7 +11,7 @@ namespace ExtractorSharp.View {
         private Album Album;
         private int[] Indexes;
         private Size CavasSize => new Size((int)width_box.Value, (int)height_box.Value);
-        public CanvasDialog(ICommandData Data) : base(Data) {
+        public CanvasDialog(IConnector Data) : base(Data) {
             InitializeComponent();
             CancelButton = cancelButton;
             yesButton.Click += Run;

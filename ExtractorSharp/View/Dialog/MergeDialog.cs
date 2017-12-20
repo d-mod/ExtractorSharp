@@ -12,7 +12,7 @@ namespace ExtractorSharp.View {
         private Album Album;
         private Merger Merger;
         private Controller Controller => Program.Controller;
-        public MergeDialog(ICommandData Data) : base(Data) {
+        public MergeDialog(IConnector Data) : base(Data) {
             InitializeComponent();
             this.Merger = Program.Merger;
             sortButton.Click += (o,e) => Merger.Sort(useOtherCheck.Checked);
@@ -97,7 +97,7 @@ namespace ExtractorSharp.View {
             Album = args[0] as Album;
             Flush(null,null);
             albumList.Items.Clear();
-            albumList.Items.AddRange(Data.FileArray);
+            albumList.Items.AddRange(Connector.FileArray);
             albumList.SelectedItem = Album;
             return ShowDialog();
         }

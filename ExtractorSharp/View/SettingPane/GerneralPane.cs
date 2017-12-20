@@ -14,8 +14,10 @@ using ExtractorSharp.Config;
 namespace ExtractorSharp.View.SettingPane {
     public partial class GerneralPane : AbstractSettingPane {
 
-        public GerneralPane(ICommandData Data):base(Data){
+        public GerneralPane(IConnector Data):base(Data){
             InitializeComponent();
+            gamePathBox.Click += Browse;
+            browseButton.Click += Browse;
         }
 
         private void Browse(object sender, EventArgs e) {
