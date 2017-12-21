@@ -11,6 +11,9 @@ using System.Linq;
 using ExtractorSharp.Composition;
 using ExtractorSharp.Command;
 using ExtractorSharp.Component;
+using ExtractorSharp.Composition;
+using ExtractorSharp.Config;
+using ExtractorSharp.Core.Control;
 
 namespace ExtractorSharp.Core{
     /// <summary>
@@ -22,60 +25,113 @@ namespace ExtractorSharp.Core{
         /// <summary>
         /// 插件
         /// </summary>
-        [ImportMany(RequiredCreationPolicy =CreationPolicy.Shared)]
+        [ImportMany(typeof(IPlugin))]
+        private IEnumerable<Lazy<IPlugin,IMetadata>> plugins;
 
-        private IEnumerable<IPlugin> plugins;
+        [ImportMany(typeof(ICommand))]
+        private IEnumerable<Lazy<ICommand,IGuid>> commands;
 
-        [ImportMany(RequiredCreationPolicy =CreationPolicy.Shared)]
-        private IEnumerable<ICommand> commands;
+        [ImportMany(typeof(IMenuItem))]
+        private IEnumerable<Lazy<IMenuItem,IGuid>> items { set; get; }
 
-        [ImportMany(RequiredCreationPolicy =CreationPolicy.Shared)]
-        public IEnumerable<IMenuItem> ItemList { set; get; }
+        [ImportMany(typeof(EaseDialog))]
+        private IEnumerable<Lazy<EaseDialog,IGuid>> dialogs { set; get; }
 
-        [ImportMany(RequiredCreationPolicy =CreationPolicy.Shared)]
-        public IEnumerable<EaseDialog> DialogList { set; get; }
+        public Dictionary<Guid,Plugin> List { set; get; }
 
-        private List<Plugin> List;
+        private IConfig Config => Program.Config;
+
+        private Controller Controller => Program.Controller;
+
+        private MainForm MainForm => Program.Form;
+
+        private Viewer Viewer => Program.Viewer;
+
         public Hoster() {
-            Initialize();
-        }
-
-        /// <summary>
-        /// 初始化
-        /// </summary>
-        public void Initialize() {
-            var Path = $"{Program.Config["RootPath"]}/plugin";
+            var Path = $"{Config["RootPath"]}/plugin";
             if (Directory.Exists(Path)) {
                 var catalog = new AggregateCatalog(new AssemblyCatalog(Assembly.GetExecutingAssembly()));
                 catalog.Catalogs.Add(new DirectoryCatalog(Path));
                 Container = new CompositionContainer(catalog);
                 Container.ComposeParts(this);
-                List = Install(plugins).ToList();
+                Install();
             } else {
                 Directory.CreateDirectory(Path);
             }
         }
 
+ 
+        public void Install() {
+            InstallPlugin();
+            InstallCommand();
+            InstallItem();
+            InstallDialog();
+        }
 
-        /// <summary>
-        /// 安装插件
-        /// </summary>
-        /// <param name="lazys"></param>
-        /// <returns></returns>
-        public IEnumerable<Plugin> Install(IEnumerable<IPlugin> list) {
-            var guids = new HashSet<Guid>();
-            foreach (var item in list) {
-                var sucess = false;
-                try {
-                    item.Initialize();
-                } catch (Exception) {
-                    sucess = false;
+        public void InstallPlugin() {
+            List = new Dictionary<Guid, Plugin>();
+            foreach (var lazy in plugins) {
+                var meta = lazy.Metadata;
+                var guidStr = meta.Guid;
+                if (Guid.TryParse(guidStr, out Guid guid)) {
+                    if (List.ContainsKey(guid)) {
+                        continue;
+                    }
+                    var plugin = new Plugin(meta);
+                    plugin.Enable = !Config[guidStr].Boolean;
+                    List.Add(guid,plugin);
                 }
-                if (sucess) {
-                    yield return new Plugin();
+            }
+           
+        }
+
+        public void InstallCommand() {
+            foreach (var lazy in commands) {
+                var meta = lazy.Metadata;
+                if (Guid.TryParse(meta.Guid, out Guid guid)) {
+                    if (!List.ContainsKey(guid)) {
+                        continue;
+                    }
+                    var plugin = List[guid];
+                    var cmd = lazy.Value;
+                    if (plugin.Enable) {
+                        Controller.Regisity(cmd.Name,cmd.GetType());
+                    }
                 }
             }
         }
+
+        public void InstallItem() {
+            foreach (var lazy in items) {
+                var meta = lazy.Metadata;
+                if (Guid.TryParse(meta.Guid, out Guid guid)) {
+                    if (!List.ContainsKey(guid)) {
+                        continue;
+                    }
+                    var plugin = List[guid];
+                    if (plugin.Enable) {
+                        MainForm.AddMenuItem(lazy.Value);
+                    }
+                }
+            }
+        }
+
+        public void InstallDialog() {
+            foreach (var lazy in dialogs) {
+                var meta = lazy.Metadata;
+                if (Guid.TryParse(meta.Guid, out Guid guid)) {
+                    if (!List.ContainsKey(guid)) {
+                        continue;
+                    }
+                    var plugin = List[guid];
+                    var dialog = lazy.Value;
+                    if (plugin.Enable) {
+                        Viewer.Regisity(dialog.Name, dialog);
+                    }
+                }
+            }
+        }
+        
     }
     
 }

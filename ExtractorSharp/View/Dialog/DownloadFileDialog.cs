@@ -6,6 +6,7 @@ using System.Net;
 using System.Windows.Forms;
 using ExtractorSharp.Component;
 using ExtractorSharp.Config;
+using ExtractorSharp.Core;
 using ExtractorSharp.Core.Control;
 
 namespace ExtractorSharp.View.Dialog {

@@ -4,13 +4,14 @@ using System.ComponentModel.Composition;
 
 namespace ExtractorSharp.Plugin.DressingRoom {
     [Export(typeof(IMenuItem))]
-    class PluginMenuItem : IMenuItem {
+    [ExportMetadata("Guid", "57951442-F28C-4D84-8677-0DE4105BFBD1")]
+    class MenuItem : IMenuItem {
         public string Name => "DressingRoom";
-
-        public PluginItemType Parent => PluginItemType.MODEL;
-
+       
         public string Command => "dressingRoom";
 
-        public Dictionary<string, string> Children { get; }
+        public List<IMenuItem> Childrens { get; }
+
+        public MenuItemType Parent => MenuItemType.MODEL;
     }
 }

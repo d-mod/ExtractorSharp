@@ -8,6 +8,7 @@ using System.Linq;
 using ExtractorSharp.Data;
 using ExtractorSharp.Core.Control;
 using ExtractorSharp.Config;
+using ExtractorSharp.Core;
 
 namespace ExtractorSharp {
     public partial class SearchDialog: EaseDialog {

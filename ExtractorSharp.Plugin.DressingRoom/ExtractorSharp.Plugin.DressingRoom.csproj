@@ -43,21 +43,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FitRoomDialog.cs">
+    <Compile Include="MainDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FitRoomDialog.designer.cs">
-      <DependentUpon>FitRoomDialog.cs</DependentUpon>
+    <Compile Include="MainDialog.designer.cs">
+      <DependentUpon>MainDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="MainPlugin.cs" />
-    <Compile Include="PluginMenuItem.cs" />
+    <Compile Include="MenuItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Service\FitRoomService.cs" />
+    <Compile Include="DressingService.cs" />
     <Compile Include="TempImage.cs" />
     <Compile Include="WeaponInfo.cs" />
   </ItemGroup>
@@ -76,8 +76,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="FitRoomDialog.resx">
-      <DependentUpon>FitRoomDialog.cs</DependentUpon>
+    <EmbeddedResource Include="MainDialog.resx">
+      <DependentUpon>MainDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

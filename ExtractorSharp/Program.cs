@@ -86,8 +86,6 @@ namespace ExtractorSharp {
 
 
         private static void OnShown(object sender, EventArgs e) {
-            Form.RegisityPlugin();
-            Viewer.RegisityPlugin();
             if (!Config["Version"].Value.Equals(Version)) {
                 Config["Version"] = new ConfigValue(Version);
                 Config.Save();

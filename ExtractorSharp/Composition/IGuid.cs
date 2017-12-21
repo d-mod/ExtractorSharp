@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExtractorSharp.Service {
-    class IFitRoomService {
+namespace ExtractorSharp.Composition {
+    public interface IGuid {
+        string Guid { get; }
     }
 }

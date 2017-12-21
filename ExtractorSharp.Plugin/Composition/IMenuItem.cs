@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace ExtractorSharp.Composition {
     public interface IMenuItem {
@@ -7,18 +11,16 @@ namespace ExtractorSharp.Composition {
         /// </summary>
         string Name { get; }
         /// <summary>
-        /// 父菜单
-        /// </summary>
-        PluginItemType Parent { get; }
-        /// <summary>
-        /// 命令名
-        /// 首字母大写:--通过控制器执行命令
-        /// 首字母小写:--通过视图器调用窗口
+        /// 命令
         /// </summary>
         string Command { get; }
         /// <summary>
+        /// 根菜单
+        /// </summary>
+        MenuItemType Parent { get; }
+        /// <summary>
         /// 子菜单
         /// </summary>
-        Dictionary<string, string> Children { get; }
+        List<IMenuItem> Childrens { get; }
     }
 }

@@ -3,12 +3,8 @@ using ExtractorSharp.Data;
 using System;
 using System.Collections.Generic;
 
-namespace ExtractorSharp {
-    /// <summary>
-    /// 数据
-    /// </summary>
+namespace ExtractorSharp.Core {
     public interface IConnector {
-
         #region  about file
         int[] CheckedFileIndices { get; }
 
@@ -50,7 +46,7 @@ namespace ExtractorSharp {
 
         List<Language> LanguageList { get; }
 
-        string SavePath { set ; get; }
+        string SavePath { set; get; }
 
         bool IsSave { set; get; }
 
@@ -85,7 +81,7 @@ namespace ExtractorSharp {
         /// </summary>
         /// <param name="clear">是否清空列表</param>
         /// <param name="array">文件对象</param>
-        void AddFile(bool clear,params Album[] array);
+        void AddFile(bool clear, params Album[] array);
 
         void RemoveFile(params Album[] array);
 
@@ -103,6 +99,5 @@ namespace ExtractorSharp {
         void OnSaveChanged();
 
         event EventHandler SaveChanged;
-
     }
 }

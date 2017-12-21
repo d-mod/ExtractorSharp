@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 
 namespace ExtractorSharp.View{
-    partial class FitRoomDialog {
+    partial class MainDialog {
         /// <summary>
         /// Required designer variable.
         /// </summary>

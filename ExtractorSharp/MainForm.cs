@@ -108,40 +108,35 @@ namespace ExtractorSharp {
             control.Click += (o, e) => Controller.Do(name, base.Connector);
         }
 
-        public void RegisityPlugin() {
-            foreach(var item in Program.Hoster.ItemList) {
-                AddMenuItem(item);
-            }
-        }
 
         public ToolStripMenuItem AddMenuItem(IMenuItem plugin) {
             var item = new ToolStripMenuItem(Language[plugin.Name]);
             switch (plugin.Parent) {
-                case PluginItemType.MAIN:
+                case MenuItemType.MAIN:
                     mainMenu.Items.Add(item);
                     break;
-                case PluginItemType.FILE:
+                case MenuItemType.FILE:
                     fileMenu.DropDownItems.Add(item);
                     break;
-                case PluginItemType.EDIT:
+                case MenuItemType.EDIT:
                     editMenu.DropDownItems.Add(item);
                     break;
-                case PluginItemType.VIEW:
+                case MenuItemType.VIEW:
                     editMenu.DropDownItems.Add(item);
                     break;
-                case PluginItemType.MODEL:
+                case MenuItemType.MODEL:
                     modelMenu.DropDownItems.Add(item);
                     break;
-                case PluginItemType.TOOLS:
+                case MenuItemType.TOOLS:
                     toolsMenu.DropDownItems.Add(item);
                     break;
-                case PluginItemType.ABOUT:
+                case MenuItemType.ABOUT:
                     aboutMenu.DropDownItems.Add(item);
                     break;
-                case PluginItemType.FILELIST:
+                case MenuItemType.FILELIST:
                     albumListMenu.Items.Add(item);
                     break;
-                case PluginItemType.IMAGELIST:
+                case MenuItemType.IMAGELIST:
                     imageListMenu.Items.Add(item);
                     break;
                 default:
@@ -156,22 +151,28 @@ namespace ExtractorSharp {
                     AddShow(item, command);
                 }
             }
-
-            if (plugin.Children != null) {
-                foreach (var entry in plugin.Children) {
-                    var child = new ToolStripMenuItem(Language[entry.Key]);
-                    item.DropDownItems.Add(child);
-                    if (entry.Value.Length > 0) {
-                        var isCmd = char.IsUpper(entry.Value[0]);
-                        if (isCmd) {
-                            AddCommand(child, entry.Value);
-                        } else {
-                            AddShow(child, entry.Value);
-                        }
-                    }
-                }
+            if (plugin.Childrens != null) {
+                AddChildItem(plugin);
             }
             return item;
+        }
+
+        public void AddChildItem(IMenuItem item) {
+            foreach (var child in item.Childrens) {
+                var childItem = new ToolStripMenuItem(Language[child.Name]);
+                childItem.DropDownItems.Add(childItem);
+                if (child.Name.Length > 0) {
+                    var isCmd = char.IsUpper(child.Name[0]);
+                    if (isCmd) {
+                        AddCommand(childItem, child.Name);
+                    } else {
+                        AddShow(childItem, child.Name);
+                    }
+                }
+                if (item.Childrens != null) {
+                    AddChildItem(child);
+                }
+            }
         }
 
         /// <summary>

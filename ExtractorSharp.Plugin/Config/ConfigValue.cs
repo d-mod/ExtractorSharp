@@ -58,8 +58,11 @@ namespace ExtractorSharp.Config {
                 if (Object is bool bl) {
                     return bl;
                 }
-                bool.TryParse(Value, out bool rs);
-                return rs;
+                if (Value != null) {
+                    bool.TryParse(Value, out bool rs);
+                    return rs;
+                }
+                return false;
             }
         }
         /// <summary>
@@ -146,6 +149,18 @@ namespace ExtractorSharp.Config {
                         return Image.FromStream(os);
                 }
                 return null;
+            }
+        }
+
+        public Guid Guid {
+            get {
+                if (Object is Guid guid) {
+                    return guid;
+                }
+                if (Value != null && Guid.TryParse(Value, out guid)) {
+                    return guid;
+                }
+                return Guid.Empty;
             }
         }
 

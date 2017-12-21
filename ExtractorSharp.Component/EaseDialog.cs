@@ -1,7 +1,5 @@
-﻿using ExtractorSharp.Config;
+﻿using ExtractorSharp.Core;
 using ExtractorSharp.EventArguments;
-using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace ExtractorSharp.Component {

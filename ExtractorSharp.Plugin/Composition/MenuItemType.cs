@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ExtractorSharp.Composition {
-    public enum PluginItemType {
+    public enum MenuItemType {
         MAIN,
         FILE,
         EDIT,

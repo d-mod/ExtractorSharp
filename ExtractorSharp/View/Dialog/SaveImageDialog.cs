@@ -4,6 +4,7 @@ using ExtractorSharp.Component;
 using ExtractorSharp.Config;
 using ExtractorSharp.Data;
 using ExtractorSharp.Core.Control;
+using ExtractorSharp.Core;
 
 namespace ExtractorSharp.View {
     public partial class SaveImageDialog : EaseDialog {

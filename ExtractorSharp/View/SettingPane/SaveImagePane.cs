@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using ExtractorSharp.Component;
 using ExtractorSharp.Config;
+using ExtractorSharp.Core;
 
 namespace ExtractorSharp.View.SettingPane {
     public partial class SaveImagePane : AbstractSettingPane {

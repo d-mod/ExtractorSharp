@@ -10,14 +10,15 @@ using ExtractorSharp.Plugin.DressingRoom.Properties;
 using System.ComponentModel.Composition;
 
 namespace ExtractorSharp.View {
+    [ExportMetadata("Guid", "57951442-F28C-4D84-8677-0DE4105BFBD1")]
     [Export(typeof(EaseDialog))]
-    public partial class FitRoomDialog : EaseDialog {
+    public partial class MainDialog : EaseDialog {
         private string Path => Config["ResourcePath"].Value;
         private FitRoomService Service { get; }
         private int PartsCount => Service.Parts.Length;
 
         [ImportingConstructor]
-        public FitRoomDialog(IConnector Data) : base(Data) {
+        public MainDialog(IConnector Data) : base(Data) {
             Service = new FitRoomService(Config);
             InitializeComponent();
             Init();

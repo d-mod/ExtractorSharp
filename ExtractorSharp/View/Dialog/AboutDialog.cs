@@ -3,6 +3,7 @@ using System.Diagnostics;
 using ExtractorSharp.Command;
 using ExtractorSharp.Component;
 using ExtractorSharp.Config;
+using ExtractorSharp.Core;
 using ExtractorSharp.Properties;
 
 namespace ExtractorSharp.View{

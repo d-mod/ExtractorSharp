@@ -4,14 +4,15 @@ using System.Windows.Forms;
 using ExtractorSharp.Data;
 using ExtractorSharp.EventArguments;
 using ExtractorSharp.Core.Control;
+using ExtractorSharp.Core;
 
 namespace ExtractorSharp.View.Pane {
-    public partial class ColorChartPanel : TabPage {
+    public partial class PalattePanel : TabPage {
         private Album Album;
         private Language Language => Language.Default;
         private Controller Controller => Program.Controller;
         private IConnector Data => Program.Connector;
-        public ColorChartPanel() {
+        public PalattePanel() {
             InitializeComponent();
             Program.Drawer.ImageChanged += SelectImageChanged;
             combo.SelectedIndexChanged += ColorChanged;

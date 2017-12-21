@@ -4,7 +4,7 @@ using ExtractorSharp.Command;
 using ExtractorSharp.Component;
 
 namespace ExtractorSharp.View.Pane {
-    partial class ColorChartPanel {
+    partial class PalattePanel {
         /// <summary> 
         /// 必需的设计器变量。
         /// </summary>

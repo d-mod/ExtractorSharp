@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using ExtractorSharp.Component;
 using System.IO;
 using ExtractorSharp.Config;
+using ExtractorSharp.Core;
 
 namespace ExtractorSharp.View.SettingPane {
     public partial class GerneralPane : AbstractSettingPane {

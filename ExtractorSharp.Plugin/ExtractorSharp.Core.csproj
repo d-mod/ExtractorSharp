@@ -49,13 +49,9 @@
     <Compile Include="Component\Messager.designer.cs">
       <DependentUpon>Messager.cs</DependentUpon>
     </Compile>
-    <Compile Include="Composition\CommandAttribute.cs" />
-    <Compile Include="Composition\ICommandData.cs" />
+    <Compile Include="Composition\IConnector.cs" />
     <Compile Include="Composition\IMenuItem.cs" />
-    <Compile Include="Composition\IPlugin.cs" />
-    <Compile Include="Composition\IPluginMetadata.cs" />
-    <Compile Include="Composition\PluginItemAttribute.cs" />
-    <Compile Include="Composition\PluginItemType.cs" />
+    <Compile Include="Composition\MenuItemType.cs" />
     <Compile Include="Config\ConfigValue.cs" />
     <Compile Include="Config\IConfig.cs" />
     <Compile Include="Data\Album.cs" />
@@ -72,6 +68,7 @@
     <Compile Include="Gif\Posterize.cs" />
     <Compile Include="Handle\Handler.cs" />
     <Compile Include="Handle\Img_Version.cs" />
+    <Compile Include="Composition\IPlugin.cs" />
     <Compile Include="Lib\Bass.cs" />
     <Compile Include="Lib\FreeImage.cs" />
     <Compile Include="Lib\Gif.cs" />

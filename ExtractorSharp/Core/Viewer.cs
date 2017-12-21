@@ -53,11 +53,8 @@ namespace ExtractorSharp {
             Dic.Add(name, type);
         }
 
-        public void RegisityPlugin() {
-            foreach (var lazy in Program.Hoster.DialogList) {
-                var dialog = lazy;
-                List.Add(dialog.Name, dialog);
-            }
+        public void Regisity(string name,EaseDialog dialog) {
+            List.Add(name, dialog);         
         }
 
 

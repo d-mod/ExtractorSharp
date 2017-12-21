@@ -18,7 +18,7 @@ namespace ExtractorSharp.View {
             Controller = Program.Controller;
             TabPages.Add(historyPanel);
             TabPages.Add(actionPanel);
-            TabPages.Add(new ColorChartPanel());
+            TabPages.Add(new PalattePanel());
         }
 
         public override void Refresh() {

@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using ExtractorSharp.Component;
 using ExtractorSharp.Config;
+using ExtractorSharp.Core;
 
 namespace ExtractorSharp.View {
     public partial class BugDialog : EaseDialog {

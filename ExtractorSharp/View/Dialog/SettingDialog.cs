@@ -1,5 +1,6 @@
 ﻿using ExtractorSharp.Component;
 using ExtractorSharp.Config;
+using ExtractorSharp.Core;
 using ExtractorSharp.View.SettingPane;
 using System;
 using System.Collections.Generic;

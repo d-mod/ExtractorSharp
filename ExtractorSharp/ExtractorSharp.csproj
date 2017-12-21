@@ -137,6 +137,8 @@
     <Compile Include="Command\LayerCommand\RenameLayer.cs" />
     <Compile Include="Command\MergeCommand\MoveMerge.cs" />
     <Compile Include="Command\MergeCommand\RunMerge.cs" />
+    <Compile Include="Composition\IGuid.cs" />
+    <Compile Include="Composition\IMetadata.cs" />
     <Compile Include="Composition\Plugin.cs" />
     <Compile Include="Config\JsonConfig.cs" />
     <Compile Include="Core\Clipboarder.cs" />
@@ -240,23 +242,17 @@
     <Compile Include="View\SettingPane\SaveImagePane.Designer.cs">
       <DependentUpon>SaveImagePane.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\Dialog\SplitFileDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="View\Dialog\SplitFileDialog.Designer.cs">
-      <DependentUpon>SplitFileDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="View\Pane\ActionPage.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="View\Pane\ActionPage.Designer.cs">
       <DependentUpon>ActionPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\Pane\ColorChartPanel.cs">
+    <Compile Include="View\Pane\PalattePanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\Pane\ColorChartPanel.Designer.cs">
-      <DependentUpon>ColorChartPanel.cs</DependentUpon>
+    <Compile Include="View\Pane\PalattePanel.Designer.cs">
+      <DependentUpon>PalattePanel.cs</DependentUpon>
     </Compile>
     <Compile Include="View\Pane\HistoryPage.Designer.cs" />
     <Compile Include="View\Pane\HistoryPage.cs">
@@ -387,9 +383,6 @@
     <EmbeddedResource Include="View\Dialog\SettingDialog.resx">
       <DependentUpon>SettingDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\Dialog\SplitFileDialog.resx">
-      <DependentUpon>SplitFileDialog.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="View\Pane\AudioPlayer.resx">
       <DependentUpon>AudioPlayer.cs</DependentUpon>
     </EmbeddedResource>
@@ -511,7 +504,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Resources_4alias_3weapon_1json__JSONSchema="http://json.schemastore.org/config" Resources_4queues_1json__JSONSchema="http://json.schemastore.org/config" />
+      <UserProperties Resources_4queues_1json__JSONSchema="http://json.schemastore.org/config" Resources_4alias_3weapon_1json__JSONSchema="http://json.schemastore.org/config" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

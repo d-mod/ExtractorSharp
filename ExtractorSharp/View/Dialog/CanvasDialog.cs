@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using ExtractorSharp.Command;
 using ExtractorSharp.Component;
 using ExtractorSharp.Config;
+using ExtractorSharp.Core;
 using ExtractorSharp.Data;
 
 namespace ExtractorSharp.View {

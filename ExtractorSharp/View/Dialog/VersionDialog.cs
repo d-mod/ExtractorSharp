@@ -5,6 +5,7 @@ using ExtractorSharp.Loose;
 using ExtractorSharp.Data;
 using ExtractorSharp.Core.Control;
 using ExtractorSharp.Config;
+using ExtractorSharp.Core;
 
 namespace ExtractorSharp.View.Dialog {
     public partial class VersionDialog : EaseDialog {
