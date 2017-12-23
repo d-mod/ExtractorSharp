@@ -109,7 +109,9 @@ namespace ExtractorSharp.Data {
         }
 
 
-        public Album() {}
+        public Album() {
+            Tables = new List<List<Color>>();
+        }
         
         /// <summary>
         /// 重置图片

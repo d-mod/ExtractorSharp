@@ -93,7 +93,7 @@ namespace ExtractorSharp.View {
         }
 
         public void DepthClear() {
-            Dic = Dic ?? Program.LoadFileList();
+            Dic = Dic ?? Tools.LoadFileLst($"{Config["GamePath"]}/auto.lst");
             var files = Directory.GetFiles(Path);
             bar.Maximum = files.Length;
             bar.Value = 0;

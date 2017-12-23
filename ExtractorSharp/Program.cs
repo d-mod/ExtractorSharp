@@ -121,7 +121,6 @@ namespace ExtractorSharp {
         private static void RegistyDialog() {
             Viewer.Regisity("replace", typeof(ReplaceImageDialog));
             Viewer.Regisity("Merge", typeof(MergeDialog));
-            Viewer.Regisity("search", typeof(SearchDialog));
             Viewer.Regisity("newImg", typeof(NewImgDialog));
             Viewer.Regisity("convert", typeof(ConvertDialog));
             Viewer.Regisity("changePosition", typeof(ChangePositonDialog));
@@ -160,19 +159,12 @@ namespace ExtractorSharp {
             Language.List = new List<Language>();
             Language.List.Add(chinese);
             var path =  $"{Config["RootPath"]}/lan/";
-            if (Directory.Exists(path)) {
-                foreach (var file in Directory.GetFiles(path, "*.json")) {
-                    var lan = Language.CreateFromFile(file);
-                    Language.List.Add(lan);
-                }
-            } else {
-                Directory.CreateDirectory(path);
-            }
+            Language.CreateFromDir(path);
             if (Config["LCID"].Integer == -1) {
                 Config["LCID"] = new ConfigValue(Application.CurrentCulture.LCID);
                 Config.Save();
             }
-            Language.Default = Language.List.Find(lan => lan.LCID == Config["LCID"].Integer);
+            Language.Local_LCID = Config["LCID"].Integer;
         }
 
         private static void LoadConfig() {
@@ -197,45 +189,9 @@ namespace ExtractorSharp {
             }
         }
 
-        /// <summary>
-        /// 加载文件检测列表
-        /// </summary>
-        /// <returns></returns>
-        internal static Dictionary<string, string> LoadFileList() {
-            var file = $"{Config["GamePath"]}/auto.lst";
-            var dic = new Dictionary<string, string>();
-            if (File.Exists(file)) {
-                var fs = new StreamReader(file);
-                while (!fs.EndOfStream) {
-                    var str = fs.ReadLine();
-                    str = str.Replace("\"", "");
-                    var dt = str.Split(" ");
-                    if (dt.Length < 1)
-                        continue;
-                    if (dt[0].EndsWith(".NPK"))
-                        dic.Add(dt[0].GetName(), dt[1]);
-                }
-                fs.Close();
-            }
-            return dic;
-        }
+       
 
-        /// <summary>
-        /// 初始化字典
-        /// </summary>
-        internal static Dictionary<string, string> InitDictionary() {
-            var dic = new Dictionary<string, string>();
-            var file = $"{Config["RootPath"]}/dictionary.txt";
-            if (File.Exists(file)) {
-                var data = File.ReadAllText(file);
-                var builder = new LSBuilder();
-                var obj=builder.ReadProperties(data);
-                obj.GetValue(ref dic);
-            }
-            return dic;
-        }
-
-
+   
 
 
         /// <summary>

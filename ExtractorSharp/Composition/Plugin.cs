@@ -1,5 +1,7 @@
 ﻿using ExtractorSharp.Command;
 using ExtractorSharp.Component;
+using ExtractorSharp.Core.Control;
+using ExtractorSharp.Handle;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -18,24 +20,96 @@ namespace ExtractorSharp.Composition {
         /// </summary>
         public bool Enable { set; get; } = true;
 
-        public string Name { set; get; }
 
-        public Guid Guid { set; get; }
 
-        public string Author { get; }
+        [Import]
+        private Lazy<IPlugin, IMetadata> lazy;
 
-        public string Description { get; }
+        private IMetadata Metadata;
 
-        public string Versinon { get; }
+        [ImportMany(typeof(ICommand))]
+        private IEnumerable<Lazy<ICommand, IGuid>> commands;
 
-        public string Since { get; }
+        [ImportMany(typeof(IMenuItem))]
+        private IEnumerable<Lazy<IMenuItem, IGuid>> items;
 
-        public Plugin(IMetadata metadata) {
-            this.Name = metadata.Name;
-            this.Author = metadata.Author;
-            this.Description = metadata.Description;
-            this.Versinon = metadata.Version;
-            this.Since = metadata.Since;
+        [ImportMany(typeof(EaseDialog))]
+        private IEnumerable<Lazy<EaseDialog, IGuid>> dialogs;
+
+        [ImportMany(typeof(EaseDialog))]
+        private IEnumerable<Lazy<Handler, IGuid>> handlers;
+
+        public string Directory { set; get; }
+
+        public Guid Guid => Guid.Parse(Metadata.Guid);
+
+        public string Author => Metadata.Author;
+
+        public string Description => Metadata.Description;
+
+        public string Versinon => Metadata.Version;
+
+        public string Since => Metadata.Since;
+
+        public string Name => Metadata.Name;
+
+
+        private Controller Controller=>Program.Controller;
+
+        private MainForm MainForm => Program.Form;
+
+        private Viewer Viewer => Program.Viewer;
+
+        public Plugin() {}
+
+        public void Initialize() {
+            Metadata = lazy.Metadata;
+            InstallCommand();
+            InstallItem();
+            InstallDialog();
+        }
+
+        private void InstallCommand() {
+            foreach (var lazy in commands) {
+                if (Guid.TryParse(lazy.Metadata.Guid, out Guid guid)) {
+                    if (guid == this.Guid) {
+                        var cmd = lazy.Value;
+                        Controller.Regisity(cmd.Name,cmd.GetType());
+                    }
+                }
+            }
+        }
+
+        private void InstallItem() {
+            foreach (var lazy in items) {
+                if (Guid.TryParse(lazy.Metadata.Guid, out Guid guid)) {
+                    if (guid == this.Guid) {
+                        MainForm.AddMenuItem(lazy.Value);
+                    }
+                }
+            }
+        }
+
+        private void InstallDialog() {
+            foreach (var lazy in dialogs) {
+                if (Guid.TryParse(lazy.Metadata.Guid, out Guid guid)) {
+                    if (guid == this.Guid) {
+                        var dialog = lazy.Value;
+                        Viewer.Regisity(dialog.Name,dialog);
+                    }
+                }
+            }
+        }
+
+        private void InstallHandler() {
+            foreach (var lazy in handlers) {
+                if (Guid.TryParse(lazy.Metadata.Guid, out Guid guid)) {
+                    if (guid == this.Guid) {
+                        var handler = lazy.Value;
+                        Handler.Regisity(handler.Version,handler.GetType());
+                    }
+                }
+            }
         }
     }
 }

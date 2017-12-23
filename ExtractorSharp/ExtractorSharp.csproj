@@ -236,6 +236,12 @@
     <Compile Include="View\SettingPane\LanguagePane.Designer.cs">
       <DependentUpon>LanguagePane.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\SettingPane\PluginListPane.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\SettingPane\PluginListPane.Designer.cs">
+      <DependentUpon>PluginListPane.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\SettingPane\SaveImagePane.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -335,12 +341,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="View\Dialog\SearchDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="View\Dialog\SearchDialog.designer.cs">
-      <DependentUpon>SearchDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="View\Dialog\MergeDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -415,9 +415,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\Dialog\SearchDialog.resx">
-      <DependentUpon>SearchDialog.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="View\Dialog\MergeDialog.resx">
       <DependentUpon>MergeDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -426,6 +423,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\SettingPane\LanguagePane.resx">
       <DependentUpon>LanguagePane.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SettingPane\PluginListPane.resx">
+      <DependentUpon>PluginListPane.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\SettingPane\SaveImagePane.resx">
       <DependentUpon>SaveImagePane.cs</DependentUpon>
@@ -492,13 +492,13 @@
       <Project>{dce898ee-8fcb-45aa-9a53-bfeed8ed7257}</Project>
       <Name>ExtractorSharp.Component</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ExtractorSharp.Core\ExtractorSharp.Core.csproj">
+      <Project>{09014dd5-3314-437e-bb2e-6fbd0d1e7864}</Project>
+      <Name>ExtractorSharp.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ExtractorSharp.Loose\ExtractorSharp.Loose.csproj">
       <Project>{06d35140-706a-40ce-9373-6b948f092a30}</Project>
       <Name>ExtractorSharp.Loose</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ExtractorSharp.Plugin\ExtractorSharp.Core.csproj">
-      <Project>{09014dd5-3314-437e-bb2e-6fbd0d1e7864}</Project>
-      <Name>ExtractorSharp.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -115,7 +115,6 @@ namespace ExtractorSharp {
             modelMenu = new ToolStripMenuItem();
             clearItem = new ToolStripMenuItem();
             otherSeverItem = new ToolStripMenuItem();
-            searchItem = new ToolStripMenuItem();
 
             Messager Messager = Messager.Default;
             saveGifItem = new ToolStripMenuItem();
@@ -290,11 +289,7 @@ namespace ExtractorSharp {
             mainMenu.Items.Add(aboutMenu);
 
             modelMenu.Text = Language["Model"];
-            modelMenu.DropDownItems.Add(searchItem);
             modelMenu.DropDownItems.Add(clearItem);
-            //   modelMenu.DropDownItems.Add(otherSeverItem);
-            searchItem.ShortcutKeys = Keys.Control | Keys.F;
-            searchItem.Text = Language["SearchModel"];
             clearItem.Text = Language["ClearModel"];
             otherSeverItem.Text = "外服资源";
 
@@ -656,7 +651,6 @@ namespace ExtractorSharp {
 
         private ToolStripMenuItem modelMenu;      //模型管理
         private ToolStripMenuItem clearItem;        //清理模型
-        private ToolStripMenuItem searchItem;       //搜索
         private ToolStripMenuItem otherSeverItem;     //外服资源
 
         private ContextMenuStrip albumListMenu;

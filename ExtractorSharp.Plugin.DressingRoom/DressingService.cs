@@ -9,7 +9,7 @@ using ExtractorSharp.Loose;
 using ExtractorSharp.Plugin.DressingRoom.Properties;
 
 namespace ExtractorSharp.Service {
-    public class FitRoomService {
+    public class DressingService {
         public List<string> ProfessionList { get; set; }
         public string Profession => ProfessionList[Index];
         private IConfig Config { get; }
@@ -26,7 +26,7 @@ namespace ExtractorSharp.Service {
 
         public string[] Parts => parts;
 
-        public FitRoomService(IConfig Config) {
+        public DressingService(IConfig Config) {
             this.Config = Config;
             replace_dic = new Dictionary<string, string>();
             var builder = new LSBuilder();

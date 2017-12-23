@@ -5,14 +5,14 @@ using System.Windows.Forms;
 
 namespace ExtractorSharp.Component {
     public abstract class AbstractSettingPane : Panel {
-        public IConfig Config => Data.Config;
+        public IConfig Config => Connector.Config;
 
-        public Language Language => Data.Language;
+        public Language Language => Connector.Language;
 
-        public IConnector Data { set; get; }
+        public IConnector Connector { set; get; }
 
-        public AbstractSettingPane(IConnector Data) {
-            this.Data = Data;
+        public AbstractSettingPane(IConnector Connector) {
+            this.Connector = Connector;
         }
         /// <summary>
         /// <para>节点名</para>

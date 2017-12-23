@@ -11,6 +11,21 @@ namespace ExtractorSharp.Data {
 
         public Dictionary<string, Dictionary<string, string>> Group { set; get; } = new Dictionary<string, Dictionary<string, string>>();
 
+
+        public static void CreateFromDir(string dir) {
+            if (Directory.Exists(dir)) {
+                foreach (var file in Directory.GetFiles(dir, "*.json")) {
+                    var lan = CreateFromFile(file);
+                    var cur = List.Find(e => e.LCID == lan.LCID);
+                    if (cur != null) {
+                        cur.CopyFrom(lan);
+                    } else {
+                        List.Add(lan);
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// 语言名
         /// </summary>
@@ -47,7 +62,26 @@ namespace ExtractorSharp.Data {
         /// <summary>
         /// 默认类
         /// </summary>
-        public static Language Default { set; get; } = new Language();
+        public static Language Default {
+            set {
+                _default = value;
+            }
+            get {
+                if (_default != null) {
+                    return _default;
+                }
+                _default = List.Find(e => e.LCID == Local_LCID);
+                if (_default != null) {
+                    return _default;
+                }
+                return new Language();
+            }
+
+        }
+
+        public static int Local_LCID { set; get; }
+
+        private static Language _default;
 
         public static List<Language> List { set; get; } = new List<Language>();
 
@@ -56,6 +90,15 @@ namespace ExtractorSharp.Data {
         public bool Equals(Language Lan) => LCID == Lan.LCID;//根据LCID判断唯一
 
         public override string ToString() => Name;
+
+        public void CopyFrom(Language lan) {
+            foreach (var group in lan.Group.Keys) {
+                Group[group] = Group.ContainsKey(group) ? Group[group] : new Dictionary<string, string>();             
+                foreach (var key in lan.Group[group].Keys) {
+                    Group[group][key] = lan.Group[group][key];
+                }
+            }
+        }
 
         public static Language CreateFromJson(string json) {
             var builder = new LSBuilder();

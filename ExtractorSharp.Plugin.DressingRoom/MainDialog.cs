@@ -14,12 +14,12 @@ namespace ExtractorSharp.View {
     [Export(typeof(EaseDialog))]
     public partial class MainDialog : EaseDialog {
         private string Path => Config["ResourcePath"].Value;
-        private FitRoomService Service { get; }
+        private DressingService Service { get; }
         private int PartsCount => Service.Parts.Length;
 
         [ImportingConstructor]
         public MainDialog(IConnector Data) : base(Data) {
-            Service = new FitRoomService(Config);
+            Service = new DressingService(Config);
             InitializeComponent();
             Init();
             loadButton.Click += LoadModel;

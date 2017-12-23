@@ -111,13 +111,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ExtractorSharp.Plugin\ExtractorSharp.Core.csproj">
+    <None Include="Resources\aww.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ExtractorSharp.Core\ExtractorSharp.Core.csproj">
       <Project>{09014dd5-3314-437e-bb2e-6fbd0d1e7864}</Project>
       <Name>ExtractorSharp.Core</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\aww.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

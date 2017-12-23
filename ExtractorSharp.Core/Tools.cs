@@ -1119,5 +1119,28 @@ namespace ExtractorSharp {
             }
             return entity;
         }
+
+        /// <summary>
+        /// 读取文件列表
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public static Dictionary<string, string> LoadFileLst(string file) {
+            var dic = new Dictionary<string, string>();
+            if (File.Exists(file)) {
+                var fs = new StreamReader(file);
+                while (!fs.EndOfStream) {
+                    var str = fs.ReadLine();
+                    str = str.Replace("\"", "");
+                    var dt = str.Split(" ");
+                    if (dt.Length < 1)
+                        continue;
+                    if (dt[0].EndsWith(".NPK"))
+                        dic.Add(dt[0].GetName(), dt[1]);
+                }
+                fs.Close();
+            }
+            return dic;
+        }
     }
 }

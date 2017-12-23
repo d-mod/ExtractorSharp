@@ -9,6 +9,10 @@ namespace ExtractorSharp.Config {
         /// <param name="key"></param>
         /// <returns></returns>
         ConfigValue this[string key] { set;get; }
+
+
+        ConfigValue this[string group,string key] { set;get; }
+
         /// <summary>
         /// 载入
         /// </summary>

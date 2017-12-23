@@ -1,5 +1,5 @@
-﻿namespace ExtractorSharp {
-    partial class SearchDialog {
+﻿namespace ExtractorSharp.Plugin.Searcher{
+    partial class MainDialog {
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -181,7 +181,7 @@
             this.Controls.Add(this.searchButton);
             this.Controls.Add(this.dispayModeLabel);
             this.Controls.Add(this.displayModeBox);
-            this.Name = "SearchDialog";
+            this.Name = "searchModel";
             this.Text = Language["SearchModel"];
             this.ResumeLayout(false);
             this.PerformLayout();

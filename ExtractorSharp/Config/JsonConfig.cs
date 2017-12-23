@@ -21,6 +21,9 @@ namespace ExtractorSharp.Config {
 
         public string ConfigDir { set; get; }
         public string UserPath { set; get; }   //用户配置文件路径
+
+        public ConfigValue this[string group, string key] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         private readonly LSBuilder reader;
         
 

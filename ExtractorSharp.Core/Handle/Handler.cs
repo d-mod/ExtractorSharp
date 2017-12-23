@@ -15,9 +15,7 @@ namespace ExtractorSharp.Handle {
         [LSIgnore]
         public Album Album;
 
-
-        static Handler() {
-        }
+        public Img_Version Version { get; }
         /// <summary>
         /// 从流初始化(默认读取)
         /// </summary>
@@ -71,8 +69,9 @@ namespace ExtractorSharp.Handle {
         /// <param name="Version"></param>
         /// <param name="type"></param>
         public static void Regisity(Img_Version Version, Type type) {
-            if (Dic.ContainsKey(Version))
+            if (Dic.ContainsKey(Version)) {
                 Dic.Remove(Version);
+            }
             Dic.Add(Version, type);
         }
 
@@ -82,6 +81,10 @@ namespace ExtractorSharp.Handle {
         public abstract byte[] AdjustSuffix();
 
         public virtual void ConvertToVersion(Img_Version Version) { }
+
+        public Handler() {
+
+        }
 
         public Handler(Album Album) {
             this.Album = Album;

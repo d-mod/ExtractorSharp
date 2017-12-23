@@ -94,7 +94,6 @@ namespace ExtractorSharp {
             AddShow(propertyItem, "setting");
             AddShow(versionItem, "version");
             AddShow(otherSeverItem, "download");
-            AddShow(searchItem, "search");
         }
 
         public void AddShow(ToolStripMenuItem item, string name, params object[] args) => item.Click += (o, e) => Viewer.Show(name, args);
@@ -1335,7 +1334,7 @@ namespace ExtractorSharp {
 
             public List<Album> List => _list;
 
-            public bool IsSave { set; get; }
+            public bool IsSave { set; get; } = true;
 
             private readonly List<Album> _list = new List<Album>();
 

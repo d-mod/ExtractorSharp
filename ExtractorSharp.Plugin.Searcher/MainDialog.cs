@@ -6,20 +6,21 @@ using System.Windows.Forms;
 using ExtractorSharp.Component;
 using System.Linq;
 using ExtractorSharp.Data;
-using ExtractorSharp.Core.Control;
-using ExtractorSharp.Config;
 using ExtractorSharp.Core;
+using ExtractorSharp.Loose;
+using System.ComponentModel.Composition;
 
-namespace ExtractorSharp {
-    public partial class SearchDialog: EaseDialog {
+namespace ExtractorSharp.Plugin.Searcher{
+    [ExportMetadata("Guid","D72DF478-FAFF-43DF-B904-9EB338A08B54")]
+    [Export(typeof(EaseDialog))]
+    public partial class MainDialog: EaseDialog {
         private bool running;
         private List<SearchResult> List;
         private Dictionary<string, string> Dic;
-        private Controller Controller;
-        public SearchDialog(IConnector Data) : base(Data) {
+        [ImportingConstructor]
+        public MainDialog(IConnector Connector) : base(Connector) {
             InitializeComponent();
             List = new List<SearchResult>();
-            Controller = Program.Controller;
             pathBox.Text = Config["GamePath"].Value;
             searchButton.Click += Search;
             resultList.MouseDoubleClick += MouseAddList;
@@ -81,7 +82,7 @@ namespace ExtractorSharp {
         private void AddNPK(object sender, EventArgs e) {
             var array = GetNPK();
             if (array.Length > 0) {
-                Controller.Do("addImg", Tools.Load(array).ToArray(), false);
+                Connector.Do("addImg", Tools.Load(array).ToArray(), false);
             }
         }
 
@@ -144,10 +145,26 @@ namespace ExtractorSharp {
 
 
         public override DialogResult Show(params object[] args) {
-            Dic = Program.InitDictionary();
+            InitDictionary();
             UseDic(null, null);
             return ShowDialog();
         }
+
+        /// <summary>
+        /// 初始化字典
+        /// </summary>
+        private  void InitDictionary() {
+           Dic = new Dictionary<string, string>();
+            var file = $"{Config["RootPath"]}/dictionary.txt";
+            if (File.Exists(file)) {
+                var data = File.ReadAllText(file);
+                var builder = new LSBuilder();
+                var obj = builder.ReadProperties(data);
+                obj.GetValue(ref Dic);
+            }
+        }
+
+
 
         /// <summary>
         /// 二次过滤搜索结果
@@ -210,7 +227,7 @@ namespace ExtractorSharp {
                 list = new List<Album>(Tools.Find(list, allNameBox.Checked, GetPattern()));//使用find过滤出符合条件的
             }
             DialogResult = DialogResult.OK;
-            Controller.Do("addImg", list.ToArray(), false);
+            Connector.Do("addImg", list.ToArray(), false);
         }
 
         private void MouseAddList(object sender, MouseEventArgs e) {
@@ -219,7 +236,7 @@ namespace ExtractorSharp {
                 var result = resultList.Items[index] as SearchResult;
                 var al = Tools.LoadAlbum(result.Path, result.imgPath);
                 if (al != null) {
-                    Controller.Do("addImg", new Album[] { al }, false);
+                    Connector.Do("addImg", new Album[] { al }, false);
                 }
                 DialogResult = DialogResult.OK;
             }
@@ -239,9 +256,10 @@ namespace ExtractorSharp {
                 bar.Value = 0;
                 displayModeBox.Enabled = false;
                 patternBox.ReadOnly = true;
-                var modelDic = new Dictionary<string, string>();    
-                if (ignoreModelBox.Checked)
-                    modelDic = Program.LoadFileList();
+                var modelDic = new Dictionary<string, string>();
+                if (ignoreModelBox.Checked) {
+                    modelDic = Tools.LoadFileLst($"{Config["GamePath"]}/auto.lst");
+                }
                 var pattern = GetPattern();
                 foreach (var file in files) {
                     if (ignoreModelBox.Checked && !modelDic.ContainsKey(file.GetName()))
@@ -267,7 +285,7 @@ namespace ExtractorSharp {
                 patternBox.ReadOnly = false;
             }
         }
-        
+
     }
 
     /// <summary>
