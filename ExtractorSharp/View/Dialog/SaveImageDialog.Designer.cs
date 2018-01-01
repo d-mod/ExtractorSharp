@@ -24,23 +24,23 @@
         /// </summary>
         private void InitializeComponent() {
             this.pathBox = new System.Windows.Forms.TextBox();
-            this.loadButton = new ExtractorSharp.Component.EaseButton();
+            this.loadButton = new ExtractorSharp.Component.ESButton();
             this.allPathCheck = new System.Windows.Forms.CheckBox();
             this.tipsCheck = new System.Windows.Forms.CheckBox();
-            this.yesButton = new ExtractorSharp.Component.EaseButton();
-            this.cancelButton = new ExtractorSharp.Component.EaseButton();
+            this.yesButton = new ExtractorSharp.Component.ESButton();
+            this.cancelButton = new ExtractorSharp.Component.ESButton();
             this.SuspendLayout();
             // 
             // pathBox
             // 
-            this.pathBox.Location = new System.Drawing.Point(25, 26);
+            this.pathBox.Location = new System.Drawing.Point(25, 46);
             this.pathBox.Name = "pathBox";
             this.pathBox.Size = new System.Drawing.Size(192, 21);
             this.pathBox.TabIndex = 0;
             // 
             // loadButton
             // 
-            this.loadButton.Location = new System.Drawing.Point(239, 23);
+            this.loadButton.Location = new System.Drawing.Point(239, 43);
             this.loadButton.Name = "loadButton";
             this.loadButton.Size = new System.Drawing.Size(68, 24);
             this.loadButton.TabIndex = 1;
@@ -50,7 +50,7 @@
             // tipsCheck
             // 
             this.tipsCheck.AutoSize = true;
-            this.tipsCheck.Location = new System.Drawing.Point(25, 58);
+            this.tipsCheck.Location = new System.Drawing.Point(25, 73);
             this.tipsCheck.Name = "tipsCheck";
             this.tipsCheck.Size = new System.Drawing.Size(108, 16);
             this.tipsCheck.TabIndex = 2;
@@ -60,12 +60,12 @@
             //
             //
             this.allPathCheck.AutoSize = true;
-            this.allPathCheck.Location = new System.Drawing.Point(25,80);
+            this.allPathCheck.Location = new System.Drawing.Point(25,95);
             this.allPathCheck.Text = Language["SavePathTips"];
             // 
             // yesButton
             // 
-            this.yesButton.Location = new System.Drawing.Point(149, 70);
+            this.yesButton.Location = new System.Drawing.Point(149, 90);
             this.yesButton.Name = "yesButton";
             this.yesButton.Size = new System.Drawing.Size(68, 20);
             this.yesButton.TabIndex = 3;
@@ -74,7 +74,7 @@
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(239, 70);
+            this.cancelButton.Location = new System.Drawing.Point(239, 90);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(67, 20);
             this.cancelButton.TabIndex = 4;
@@ -85,7 +85,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(331, 100);
+            this.ClientSize = new System.Drawing.Size(331, 125);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.yesButton);
             this.Controls.Add(this.allPathCheck);
@@ -102,10 +102,10 @@
         #endregion
 
         private System.Windows.Forms.TextBox pathBox;
-        private Component.EaseButton loadButton;
+        private Component.ESButton loadButton;
         private System.Windows.Forms.CheckBox tipsCheck;
         private System.Windows.Forms.CheckBox allPathCheck;
-        private Component.EaseButton yesButton;
-        private Component.EaseButton cancelButton;
+        private Component.ESButton yesButton;
+        private Component.ESButton cancelButton;
     }
 }

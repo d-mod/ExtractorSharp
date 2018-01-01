@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using ExtractorSharp.Component;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace ExtractorSharp.View{
@@ -27,17 +28,17 @@ namespace ExtractorSharp.View{
         /// </summary>
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
-            this.list = new System.Windows.Forms.ListBox();
+            this.list = new ListBox();
             this.menu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.deleteItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addOutItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveDownItem = new ToolStripMenuItem();
             this.moveUpItem = new ToolStripMenuItem();
-            this.sortButton = new System.Windows.Forms.Button();
-            this.MergeButton = new System.Windows.Forms.Button();
+            this.sortButton = new ESButton();
+            this.MergeButton = new ESButton();
             this.prograss = new System.Windows.Forms.ProgressBar();
-            this.useOtherCheck = new System.Windows.Forms.CheckBox();
+            this.useOtherCheck = new CheckBox();
             albumList = new ComboBox();
             this.menu.SuspendLayout();
             this.SuspendLayout();
@@ -48,7 +49,7 @@ namespace ExtractorSharp.View{
             this.list.ContextMenuStrip = this.menu;
             this.list.FormattingEnabled = true;
             this.list.ItemHeight = 12;
-            this.list.Location = new System.Drawing.Point(32, 12);
+            this.list.Location = new System.Drawing.Point(32, 32);
             this.list.Name = "list";
             this.list.ScrollAlwaysVisible = true;
             this.list.Size = new System.Drawing.Size(259, 256);
@@ -92,7 +93,7 @@ namespace ExtractorSharp.View{
             // 
             // sortButton
             // 
-            this.sortButton.Location = new System.Drawing.Point(32, 318);
+            this.sortButton.Location = new System.Drawing.Point(32, 338);
             this.sortButton.Name = "sortButton";
             this.sortButton.Size = new System.Drawing.Size(100, 23);
             this.sortButton.TabIndex = 1;
@@ -101,21 +102,21 @@ namespace ExtractorSharp.View{
             // 
             // MergeButton
             // 
-            this.MergeButton.Location = new System.Drawing.Point(216, 318);
+            this.MergeButton.Location = new System.Drawing.Point(210, 338);
             this.MergeButton.Name = "MergeButton";
             this.MergeButton.Size = new System.Drawing.Size(100, 23);
             this.MergeButton.TabIndex = 2;
             this.MergeButton.Text = Language["Merge"];
             this.MergeButton.UseVisualStyleBackColor = true;
 
-            this.albumList.Location = new System.Drawing.Point(160, 275);
+            this.albumList.Location = new System.Drawing.Point(160, 300);
             this.albumList.Size = new System.Drawing.Size(120,23);
             this.albumList.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.albumList.AutoCompleteSource = AutoCompleteSource.ListItems;
             // 
             // prograss
             // 
-            this.prograss.Location = new System.Drawing.Point(32, 274);
+            this.prograss.Location = new System.Drawing.Point(32, 294);
             this.prograss.Name = "prograss";
             this.prograss.Size = new System.Drawing.Size(259, 38);
             this.prograss.TabIndex = 3;
@@ -124,7 +125,7 @@ namespace ExtractorSharp.View{
             // useOtherCheck
             // 
             this.useOtherCheck.AutoSize = true;
-            this.useOtherCheck.Location = new System.Drawing.Point(32, 280);
+            this.useOtherCheck.Location = new System.Drawing.Point(32, 300);
             this.useOtherCheck.Name = "useOtherCheck";
             this.useOtherCheck.Size = new System.Drawing.Size(120, 16);
             this.useOtherCheck.TabIndex = 4;
@@ -134,7 +135,7 @@ namespace ExtractorSharp.View{
             // MergeDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
-            this.ClientSize = new System.Drawing.Size(324, 358);
+            this.ClientSize = new System.Drawing.Size(324, 378);
             this.Controls.Add(this.prograss);
             this.Controls.Add(this.useOtherCheck);
             this.Controls.Add(this.MergeButton);

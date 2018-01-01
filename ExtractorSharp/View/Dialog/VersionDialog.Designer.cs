@@ -24,12 +24,12 @@
         /// </summary>
         private void InitializeComponent() {
             this.box = new System.Windows.Forms.TextBox();
-            this.button = new ExtractorSharp.Component.EaseButton();
+            this.button = new ExtractorSharp.Component.ESButton();
             this.SuspendLayout();
             // 
             // box
             // 
-            this.box.Location = new System.Drawing.Point(26, 22);
+            this.box.Location = new System.Drawing.Point(26, 42);
             this.box.Multiline = true;
             this.box.Name = "box";
             this.box.ReadOnly = true;
@@ -39,7 +39,7 @@
             // 
             // button
             // 
-            this.button.Location = new System.Drawing.Point(100, 245);
+            this.button.Location = new System.Drawing.Point(100, 265);
             this.button.Name = "button";
             this.button.Size = new System.Drawing.Size(75, 23);
             this.button.TabIndex = 1;
@@ -50,7 +50,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 277);
+            this.ClientSize = new System.Drawing.Size(284, 300);
             this.Controls.Add(this.button);
             this.Controls.Add(this.box);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -64,6 +64,6 @@
         #endregion
 
         private System.Windows.Forms.TextBox box;
-        private Component.EaseButton button;
+        private Component.ESButton button;
     }
 }

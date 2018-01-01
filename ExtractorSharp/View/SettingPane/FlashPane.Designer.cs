@@ -1,4 +1,7 @@
-﻿namespace ExtractorSharp.View.SettingPane {
+﻿using System.Drawing;
+using System.Windows.Forms;
+
+namespace ExtractorSharp.View.SettingPane {
     partial class FlashPane {
         /// <summary> 
         /// 必需的设计器变量。
@@ -23,8 +26,8 @@
         /// 使用代码编辑器修改此方法的内容。
         /// </summary>
         private void InitializeComponent() {
-            this.flashSpeedGroup = new System.Windows.Forms.GroupBox();
-            this.flashSpeedBar = new System.Windows.Forms.TrackBar();
+            this.flashSpeedGroup = new GroupBox();
+            this.flashSpeedBar = new TrackBar();
             this.flashSpeedBox = new System.Windows.Forms.NumericUpDown();
             this.flashSpeedGroup.SuspendLayout();
             this.SuspendLayout();
@@ -48,6 +51,7 @@
             //
             //
             //
+            this.flashSpeedBar.BackColor = Color.White;
             this.flashSpeedBox.Minimum = 1;
             this.flashSpeedBox.Maximum = 100;
             this.flashSpeedBox.Value = 20;
@@ -71,7 +75,7 @@
 
         #endregion
         private System.Windows.Forms.GroupBox flashGroup;
-        private System.Windows.Forms.TrackBar flashSpeedBar;
+        private TrackBar flashSpeedBar;
         private System.Windows.Forms.NumericUpDown flashSpeedBox;
         private System.Windows.Forms.GroupBox flashSpeedGroup;
     }

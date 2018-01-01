@@ -33,10 +33,10 @@ namespace ExtractorSharp.Composition {
         [ImportMany(typeof(IMenuItem))]
         private IEnumerable<Lazy<IMenuItem, IGuid>> items;
 
-        [ImportMany(typeof(EaseDialog))]
-        private IEnumerable<Lazy<EaseDialog, IGuid>> dialogs;
+        [ImportMany(typeof(ESDialog))]
+        private IEnumerable<Lazy<ESDialog, IGuid>> dialogs;
 
-        [ImportMany(typeof(EaseDialog))]
+        [ImportMany(typeof(ESDialog))]
         private IEnumerable<Lazy<Handler, IGuid>> handlers;
 
         public string Directory { set; get; }

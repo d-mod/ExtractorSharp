@@ -10,7 +10,7 @@ using ExtractorSharp.Config;
 using ExtractorSharp.Core;
 
 namespace ExtractorSharp.View {
-    internal partial class ClearDialog : EaseDialog {
+    internal partial class ClearDialog : ESDialog {
         private string Path => Config["ResourcePath"].Value;
         private Dictionary<string, string> Dic;
         public ClearDialog(IConnector Data) : base(Data) {

@@ -31,26 +31,26 @@ namespace ExtractorSharp.View{
             this.y_box = new System.Windows.Forms.NumericUpDown();
             this.max_width_box = new System.Windows.Forms.NumericUpDown();
             this.max_height_box = new System.Windows.Forms.NumericUpDown();
-            this.x_radio = new System.Windows.Forms.CheckBox();
-            this.y_radio = new System.Windows.Forms.CheckBox();
-            this.max_width_radio = new System.Windows.Forms.CheckBox();
-            this.max_height_radio = new System.Windows.Forms.CheckBox();
-            this.yesButton = new System.Windows.Forms.Button();
-            this.checkbox = new System.Windows.Forms.CheckBox();
-            this.cancelButton = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.allImageRadio = new System.Windows.Forms.RadioButton();
-            this.checkImageRadio = new System.Windows.Forms.RadioButton();
+            this.x_radio = new CheckBox();
+            this.y_radio = new CheckBox();
+            this.max_width_radio = new CheckBox();
+            this.max_height_radio = new CheckBox();
+            this.yesButton = new ESButton();
+            this.checkbox = new CheckBox();
+            this.cancelButton = new ESButton();
+            this.group = new GroupBox();
+            this.allImageRadio = new RadioButton();
+            this.checkImageRadio = new RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.x_box)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.y_box)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.max_width_box)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.max_height_box)).BeginInit();
-            this.groupBox1.SuspendLayout();
+            this.group.SuspendLayout();
             this.SuspendLayout();
             // 
             // x_box
             // 
-            this.x_box.Location = new System.Drawing.Point(127, 107);
+            this.x_box.Location = new System.Drawing.Point(127, 127);
             this.x_box.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -67,7 +67,7 @@ namespace ExtractorSharp.View{
             // 
             // y_box
             // 
-            this.y_box.Location = new System.Drawing.Point(127, 143);
+            this.y_box.Location = new System.Drawing.Point(127, 163);
             this.y_box.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -84,7 +84,7 @@ namespace ExtractorSharp.View{
             // 
             // max_width_box
             // 
-            this.max_width_box.Location = new System.Drawing.Point(127, 184);
+            this.max_width_box.Location = new System.Drawing.Point(127, 204);
             this.max_width_box.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -96,7 +96,7 @@ namespace ExtractorSharp.View{
             // 
             // max_height_box
             // 
-            this.max_height_box.Location = new System.Drawing.Point(127, 226);
+            this.max_height_box.Location = new System.Drawing.Point(127, 246);
             this.max_height_box.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -109,7 +109,7 @@ namespace ExtractorSharp.View{
             // x_radio
             // 
             this.x_radio.AutoSize = true;
-            this.x_radio.Location = new System.Drawing.Point(45, 112);
+            this.x_radio.Location = new System.Drawing.Point(45, 132);
             this.x_radio.Name = "x_radio";
             this.x_radio.Size = new System.Drawing.Size(30, 16);
             this.x_radio.TabIndex = 4;
@@ -119,7 +119,7 @@ namespace ExtractorSharp.View{
             // y_radio
             // 
             this.y_radio.AutoSize = true;
-            this.y_radio.Location = new System.Drawing.Point(44, 148);
+            this.y_radio.Location = new System.Drawing.Point(44, 168);
             this.y_radio.Name = "y_radio";
             this.y_radio.Size = new System.Drawing.Size(30, 16);
             this.y_radio.TabIndex = 5;
@@ -129,7 +129,7 @@ namespace ExtractorSharp.View{
             // max_width_radio
             // 
             this.max_width_radio.AutoSize = true;
-            this.max_width_radio.Location = new System.Drawing.Point(44, 189);
+            this.max_width_radio.Location = new System.Drawing.Point(44, 209);
             this.max_width_radio.Name = "max_width_radio";
             this.max_width_radio.Size = new System.Drawing.Size(60, 16);
             this.max_width_radio.TabIndex = 6;
@@ -139,7 +139,7 @@ namespace ExtractorSharp.View{
             // max_height_radio
             // 
             this.max_height_radio.AutoSize = true;
-            this.max_height_radio.Location = new System.Drawing.Point(44, 231);
+            this.max_height_radio.Location = new System.Drawing.Point(44, 251);
             this.max_height_radio.Name = "max_height_radio";
             this.max_height_radio.Size = new System.Drawing.Size(60, 16);
             this.max_height_radio.TabIndex = 7;
@@ -148,7 +148,7 @@ namespace ExtractorSharp.View{
             // 
             // yesButton
             // 
-            this.yesButton.Location = new System.Drawing.Point(41, 300);
+            this.yesButton.Location = new System.Drawing.Point(41, 320);
             this.yesButton.Name = "yesButton";
             this.yesButton.Size = new System.Drawing.Size(75, 23);
             this.yesButton.TabIndex = 8;
@@ -158,7 +158,7 @@ namespace ExtractorSharp.View{
             // checkbox
             // 
             this.checkbox.AutoSize = true;
-            this.checkbox.Location = new System.Drawing.Point(44, 278);
+            this.checkbox.Location = new System.Drawing.Point(44, 298);
             this.checkbox.Name = "checkbox";
             this.checkbox.Size = new System.Drawing.Size(72, 16);
             this.checkbox.TabIndex = 9;
@@ -168,7 +168,7 @@ namespace ExtractorSharp.View{
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(174, 300);
+            this.cancelButton.Location = new System.Drawing.Point(174, 320);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 10;
@@ -177,14 +177,14 @@ namespace ExtractorSharp.View{
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.allImageRadio);
-            this.groupBox1.Controls.Add(this.checkImageRadio);
-            this.groupBox1.Location = new System.Drawing.Point(45, 26);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(181, 75);
-            this.groupBox1.TabIndex = 11;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = Language["HandleObject"];
+            this.group.Controls.Add(this.allImageRadio);
+            this.group.Controls.Add(this.checkImageRadio);
+            this.group.Location = new System.Drawing.Point(45, 46);
+            this.group.Name = "groupBox1";
+            this.group.Size = new System.Drawing.Size(181, 75);
+            this.group.TabIndex = 11;
+            this.group.TabStop = false;
+            this.group.Text = Language["HandleObject"];
             // 
             // allImageRadio
             // 
@@ -213,8 +213,8 @@ namespace ExtractorSharp.View{
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(284, 349);
-            this.Controls.Add(this.groupBox1);
+            this.ClientSize = new System.Drawing.Size(284, 370);
+            this.Controls.Add(this.group);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.checkbox);
             this.Controls.Add(this.yesButton);
@@ -233,8 +233,8 @@ namespace ExtractorSharp.View{
             ((System.ComponentModel.ISupportInitialize)(this.y_box)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.max_width_box)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.max_height_box)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.group.ResumeLayout(false);
+            this.group.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -252,7 +252,7 @@ namespace ExtractorSharp.View{
         private Button yesButton;
         private CheckBox checkbox;
         private Button cancelButton;
-        private GroupBox groupBox1;
+        private GroupBox group;
         private RadioButton checkImageRadio;
         private RadioButton allImageRadio;
     }

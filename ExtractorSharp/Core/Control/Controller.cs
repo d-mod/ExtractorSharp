@@ -163,6 +163,7 @@ namespace ExtractorSharp.Core.Control {
             Regisity("changeColor", typeof(ChangeColor));
             Regisity("pencil", typeof(PencilDraw));
             Regisity("eraser", typeof(EraserDraw));
+            Regisity("moveTools", typeof(MoveToolsDraw));
         }
 
         /// <summary>

@@ -26,12 +26,12 @@ namespace ExtractorSharp.View.Dialog {
         /// </summary>
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
-            this.fileList = new ExtractorSharp.Component.EaseListBox<string>();
-            this.searchButton = new ExtractorSharp.Component.EaseButton();
+            this.fileList = new ExtractorSharp.Component.ESListBox<string>();
+            this.searchButton = new ExtractorSharp.Component.ESButton();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.pathBox = new System.Windows.Forms.TextBox();
-            this.loadButton = new ExtractorSharp.Component.EaseButton();
+            this.loadButton = new ExtractorSharp.Component.ESButton();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.bar = new ProgressBar();
@@ -151,11 +151,11 @@ namespace ExtractorSharp.View.Dialog {
         }
 
         #endregion
-        private Component.EaseButton searchButton;
+        private Component.ESButton searchButton;
         private ComboBox comboBox1;
         private Label label1;
         private TextBox pathBox;
-        private Component.EaseButton loadButton;
+        private Component.ESButton loadButton;
         private TextBox textBox2;
         private Label label2;
         private CheckedListBox fileList;

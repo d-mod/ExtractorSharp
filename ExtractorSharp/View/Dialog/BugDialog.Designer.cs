@@ -1,4 +1,6 @@
-﻿namespace ExtractorSharp.View {
+﻿using ExtractorSharp.Component;
+
+namespace ExtractorSharp.View {
     partial class BugDialog {
         /// <summary>
         /// Required designer variable.
@@ -26,15 +28,15 @@
             this.box = new System.Windows.Forms.TextBox();
             this.submitCheck = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.yesButton = new System.Windows.Forms.Button();
-            this.cancelButton = new System.Windows.Forms.Button();
+            this.yesButton = new ESButton();
+            this.cancelButton = new ESButton();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.contactLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // box
             // 
-            this.box.Location = new System.Drawing.Point(33, 51);
+            this.box.Location = new System.Drawing.Point(33, 71);
             this.box.Multiline = true;
             this.box.Name = "box";
             this.box.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -44,7 +46,7 @@
             // submitCheck
             // 
             this.submitCheck.AutoSize = true;
-            this.submitCheck.Location = new System.Drawing.Point(33, 276);
+            this.submitCheck.Location = new System.Drawing.Point(33, 300);
             this.submitCheck.Name = "submitCheck";
             this.submitCheck.Size = new System.Drawing.Size(96, 16);
             this.submitCheck.TabIndex = 1;
@@ -54,14 +56,14 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(31, 23);
+            this.label1.Location = new System.Drawing.Point(31, 45);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(29, 12);
             this.label1.TabIndex = 2;
             // 
             // yesButton
             // 
-            this.yesButton.Location = new System.Drawing.Point(143, 272);
+            this.yesButton.Location = new System.Drawing.Point(143, 295);
             this.yesButton.Name = "yesButton";
             this.yesButton.Size = new System.Drawing.Size(56, 23);
             this.yesButton.TabIndex = 3;
@@ -70,7 +72,7 @@
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(206, 272);
+            this.cancelButton.Location = new System.Drawing.Point(206, 295);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(53, 23);
             this.cancelButton.TabIndex = 4;
@@ -79,7 +81,7 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(98, 230);
+            this.textBox2.Location = new System.Drawing.Point(98, 250);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(161, 21);
             this.textBox2.TabIndex = 5;
@@ -87,7 +89,7 @@
             // contactLabel
             // 
             this.contactLabel.AutoSize = true;
-            this.contactLabel.Location = new System.Drawing.Point(31, 233);
+            this.contactLabel.Location = new System.Drawing.Point(31, 250);
             this.contactLabel.Name = "contactLabel";
             this.contactLabel.Size = new System.Drawing.Size(53, 12);
             this.contactLabel.TabIndex = 6;
@@ -97,7 +99,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(295, 307);
+            this.ClientSize = new System.Drawing.Size(295, 330);
             this.Controls.Add(this.contactLabel);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.cancelButton);

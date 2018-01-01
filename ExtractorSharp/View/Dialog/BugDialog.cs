@@ -5,7 +5,7 @@ using ExtractorSharp.Config;
 using ExtractorSharp.Core;
 
 namespace ExtractorSharp.View {
-    public partial class BugDialog : EaseDialog {
+    public partial class BugDialog : ESDialog {
         private string Error { set; get; }
         private string Mode { set; get; }
         public BugDialog(IConnector Data) : base(Data) {

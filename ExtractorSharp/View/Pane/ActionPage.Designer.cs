@@ -33,7 +33,7 @@ namespace ExtractorSharp.View.Pane {
             this.runButton = new Button();
             deleteButton = new Button();
 
-            this.actionList = new Component.EaseListBox<IAction>();
+            this.actionList = new Component.ESListBox<IAction>();
             this.actionList.Location = new System.Drawing.Point(0, 0);
             this.actionList.Name = "list";
             this.actionList.Size = new System.Drawing.Size(190, 240);
@@ -70,7 +70,7 @@ namespace ExtractorSharp.View.Pane {
 
         #endregion
 
-        private Component.EaseListBox<IAction> actionList;
+        private Component.ESListBox<IAction> actionList;
         private Button recordButton;
         private Button pauseButton;
         private Button deleteButton;

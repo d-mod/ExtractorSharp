@@ -9,7 +9,7 @@ using ExtractorSharp.Core.Control;
 using ExtractorSharp.Config;
 
 namespace ExtractorSharp {
-    public partial class NewImgDialog : EaseDialog {
+    public partial class NewImgDialog : ESDialog {
         private Controller Controller;
         public NewImgDialog(IConnector Data) : base(Data) {
             Controller = Program.Controller;

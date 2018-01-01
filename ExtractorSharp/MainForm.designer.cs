@@ -34,7 +34,7 @@ namespace ExtractorSharp {
         /// </summary>
         private void InitializeComponent() {
             components = new Container();
-            albumList = new EaseListBox<Album>();
+            albumList = new ESListBox<Album>();
             albumListMenu = albumList.ContextMenuStrip;
 
 
@@ -56,7 +56,7 @@ namespace ExtractorSharp {
             splitFileItem = new ToolStripMenuItem();
             mixFileItem = new ToolStripMenuItem();
 
-            imageList = new EaseListBox<ImageEntity>();
+            imageList = new ESListBox<ImageEntity>();
             imageListMenu = imageList.ContextMenuStrip;
             cutImageItem = new ToolStripMenuItem();
             copyImageItem = new ToolStripMenuItem();
@@ -124,15 +124,12 @@ namespace ExtractorSharp {
             realPostionBox = new CheckBox();
             onionskinBox = new CheckBox();
             displayBox = new CheckBox();
-            displayBackBox = new ComboBox();
 
-            openButton = new EaseButton();
-            closeButton = new EaseButton();
-            historyButton = new EaseButton();
-            changeBackButton = new EaseButton();
+            openButton = new ESButton();
+            closeButton = new ESButton();
+            historyButton = new ESButton();
             searchBox = new TextBox();
             pathBox = new TextBox();
-            lastSaveLabel = new Label();
 
             scaleLabel = new Label();
             scaleBox = new NumericUpDown();
@@ -144,7 +141,7 @@ namespace ExtractorSharp {
 
             trackBar = new TrackBar();
 
-            layerList = new EaseListBox<Layer>();
+            layerList = new ESListBox<Layer>();
             layerMenu = layerList.ContextMenuStrip;
             renameLayerItem = new ToolStripMenuItem();
             changeLayerPositionItem = new ToolStripMenuItem();
@@ -187,11 +184,11 @@ namespace ExtractorSharp {
             albumListMenu.Items.Add(hideImgItem);
             albumListMenu.Items.Add(renameItem);
             albumListMenu.Items.Add(convertItem);
-            albumListMenu.Items.Add(new ToolStripSeparator());
+            albumListMenu.Items.AddSeparator();
             albumListMenu.Items.Add(addMergeItem);
             albumListMenu.Items.Add(addOutsideMergeItem);
             albumListMenu.Items.Add(runMergeItem);
-            albumListMenu.Items.Add(new ToolStripSeparator());
+            albumListMenu.Items.AddSeparator();
             albumListMenu.Size = new Size(221, 268);
             replaceItem.Text = Language["ReplaceFile"];
             replaceItem.ShortcutKeys = Keys.Control | Keys.Q;
@@ -237,16 +234,16 @@ namespace ExtractorSharp {
             imageListMenu.Items.Add(copyImageItem);
             imageListMenu.Items.Add(pasteImageItem);
             imageListMenu.Items.Add(replaceImageItem);
-            imageListMenu.Items.Add(new ToolStripSeparator());
+            imageListMenu.Items.AddSeparator();
             imageListMenu.Items.Add(addLayerItem);
             imageListMenu.Items.Add(changePositionItem);
             imageListMenu.Items.Add(changeSizeItem);
-            imageListMenu.Items.Add(new ToolStripSeparator());
+            imageListMenu.Items.AddSeparator();
             imageListMenu.Items.Add(saveImageItem);
             imageListMenu.Items.Add(saveSingleImageItem);
             imageListMenu.Items.Add(saveAllImageItem);
             imageListMenu.Items.Add(saveGifItem);
-            imageListMenu.Items.Add(new ToolStripSeparator());
+            imageListMenu.Items.AddSeparator();
             imageListMenu.Items.Add(hideCheckImageItem);
             imageListMenu.Items.Add(linkImageItem);
             imageListMenu.Items.Add(toolsItem);
@@ -275,12 +272,11 @@ namespace ExtractorSharp {
             lineDodgeItem.Text = Language["LineDodge"];
             toolsItem.DropDownItems.Add(cavasImageItem);
             toolsItem.DropDownItems.Add(uncavasImageItem);
-            toolsItem.DropDownItems.Add(new ToolStripSeparator());
+            toolsItem.DropDownItems.AddSeparator();
             toolsItem.DropDownItems.Add(lineDodgeItem);
             // 
             // mainMenu
             // 
-            mainMenu.BackColor = Color.Transparent;
             mainMenu.Items.Add(fileMenu);
             mainMenu.Items.Add(editMenu);
             mainMenu.Items.Add(viewMenu);
@@ -310,10 +306,10 @@ namespace ExtractorSharp {
             // 
             fileMenu.DropDownItems.Add(openFileItem);
             fileMenu.DropDownItems.Add(addFileItem);
-            fileMenu.DropDownItems.Add(new ToolStripSeparator());
+            fileMenu.DropDownItems.AddSeparator();
             fileMenu.DropDownItems.Add(saveFileItem);
             fileMenu.DropDownItems.Add(saveAsFileItem);
-            fileMenu.DropDownItems.Add(new ToolStripSeparator());
+            fileMenu.DropDownItems.AddSeparator();
             fileMenu.DropDownItems.Add(openDirItem);
             fileMenu.DropDownItems.Add(saveDirItem);
             fileMenu.Text = Language["File"];
@@ -341,9 +337,9 @@ namespace ExtractorSharp {
             editMenu.Text = Language["Edit"];
             editMenu.DropDownItems.Add(undoItem);
             editMenu.DropDownItems.Add(redoItem);
-            editMenu.DropDownItems.Add(new ToolStripSeparator());
+            editMenu.DropDownItems.AddSeparator();
             editMenu.DropDownItems.Add(adjustPositionItem);
-            editMenu.DropDownItems.Add(new ToolStripSeparator());
+            editMenu.DropDownItems.AddSeparator();
             editMenu.DropDownItems.Add(classifyItem);
             editMenu.DropDownItems.Add(sortItem);
             undoItem.Text = Language["Undo"];
@@ -420,30 +416,10 @@ namespace ExtractorSharp {
             // 
             box.Location = new Point(230, 90);
             box.Name = "box";
+            box.BackColor = Color.Gray;
             if (Config["CavasSize"].Size != Size.Empty) { 
                 box.Size = Config["CavasSize"].Size;
             }
-            // 
-            // displayBackBox
-            // 
-            displayBackBox.Items.Add(Language["Color"]);
-            displayBackBox.Items.Add(Language["Image"]);
-            displayBackBox.Items.Add(Language["Null"]);
-            displayBackBox.Location = new Point(680, 50);
-            displayBackBox.Name = "displayBackBox";
-            displayBackBox.Size = new Size(104, 20);
-            displayBackBox.TabIndex = 12;
-            displayBackBox.SelectedIndex = 0;
-            // 
-            // changeBackButton
-            // 
-            changeBackButton.Location = new Point(550, 48);
-            changeBackButton.Name = "changeBackButton";
-            changeBackButton.AutoSize = true;
-            changeBackButton.Size = new Size(85, 25);
-            changeBackButton.TabIndex = 19;
-            changeBackButton.Text = Language["ChangeBackground"];
-            changeBackButton.UseVisualStyleBackColor = true;
             //
             //colorPanel
             //
@@ -469,7 +445,7 @@ namespace ExtractorSharp {
             // 
             // realPostionBox
             // 
-            realPostionBox.Location = new Point(1050, 50);
+            realPostionBox.Location = new Point(1050, 70);
             realPostionBox.Name = "realPostionBox";
             realPostionBox.AutoSize = true;
             realPostionBox.TabIndex = 11;
@@ -477,19 +453,19 @@ namespace ExtractorSharp {
             //
             //
             //
-            displayBox.Location = new Point(1170, 50);
+            displayBox.Location = new Point(1170, 70);
             displayBox.AutoSize = true;
             displayBox.Text = Language["Flash"];
             //
             //
             //
-            linedodgeBox.Location = new Point(1050, 30);
+            linedodgeBox.Location = new Point(1050, 50);
             linedodgeBox.AutoSize = true;
             linedodgeBox.Text = Language["LineDodge"];
             ///
             //
             //
-            onionskinBox.Location = new Point(1170, 30);
+            onionskinBox.Location = new Point(1170, 50);
             onionskinBox.AutoSize = true;
             onionskinBox.Text = Language["OnionSkin"];
             //
@@ -500,9 +476,7 @@ namespace ExtractorSharp {
             historyButton.Size = new Size(85, 25);
             historyButton.Text = Language["Other"];
             historyButton.UseVisualStyleBackColor = true;
-
-            lastSaveLabel.Location = new Point(1250, 700);
-            lastSaveLabel.Text = "lasttime:";
+            
             // 
             // searchBox
             // 
@@ -513,9 +487,8 @@ namespace ExtractorSharp {
             // 
             // MainForm
             // 
-            trackBar.Location = new Point(1050, 360);
+            trackBar.Location = new Point(1050, 370);
             trackBar.Size = new Size(240, 40);
-            trackBar.BackColor=Color.Black;
             trackBar.LargeChange = trackBar.SmallChange = 1;
 
             layerList.HorizontalScrollbar = true;
@@ -552,46 +525,20 @@ namespace ExtractorSharp {
             Controls.Add(closeButton);
             Controls.Add(pathBox);
             Controls.Add(realPostionBox);
-            Controls.Add(displayBackBox);
             Controls.Add(displayBox);
             Controls.Add(linedodgeBox);
             Controls.Add(onionskinBox);
             Controls.Add(box);
             Controls.Add(historyButton);
-            Controls.Add(changeBackButton);
             Controls.Add(colorPanel);
             Controls.Add(scaleLabel);
             Controls.Add(scaleBox);
-            Controls.Add(lastSaveLabel);
             Controls.Add(previewPanel);
             MainMenuStrip = mainMenu;
             Name = "MainForm";
             Text = $"{ProductName} Ver { Program.Version} { Config["Title"]}";
             AllowDrop = true;
-            CheckForIllegalCrossThreadCalls = false;
-            if (!Config["StartPosition"].Value.ToLower().Equals("center")) {
-                StartPosition = FormStartPosition.Manual;
-                Location = Config["StartPosition"].Location;
-            }
-            if (Config["MainSize"].Size != Size.Empty) {
-                Size = Config["MainSize"].Size;
-            }
-            if (Config["CavasColor"].Color != Color.Empty) {
-                BackBoxColor = Config["CavasColor"].Color;
-            }
-            if (Config["CavasImage"].Image != null) {
-                BackImage = Config["CavasImage"].Image;
-            }
-            if (Config["MainImage"] != null) {
-                BackgroundImage = Config["MainImage"].Image;
-            }
-            if (Config["MainColor"].Color != Color.Empty) {
-                BackColor = Config["MainColor"].Color;
-            }
-            if (File.Exists(Config["MainIcon"].Value)) {
-                Icon = Icon.ExtractAssociatedIcon(Config["MainIcon"].Value);
-            }
-            BackgroundImageLayout = (ImageLayout)Config["MainImageLayout"].Integer;
+            ClientSize = new Size(1368, 788);
             albumListMenu.ResumeLayout(false);
             imageListMenu.ResumeLayout(false);
             mainMenu.ResumeLayout(false);
@@ -610,9 +557,9 @@ namespace ExtractorSharp {
 
         #endregion
         
-        private EaseListBox<Album> albumList;
-        private EaseListBox<ImageEntity> imageList;
-        private EaseListBox<Layer> layerList;
+        private ESListBox<Album> albumList;
+        private ESListBox<ImageEntity> imageList;
+        private ESListBox<Layer> layerList;
 
         private MenuStrip mainMenu;
         private ToolStripMenuItem fileMenu; 
@@ -668,7 +615,7 @@ namespace ExtractorSharp {
         private ToolStripMenuItem addMergeItem;    //加入拼合队列
         private ToolStripMenuItem addOutsideMergeItem;//加入外部文件到拼合队列
         private ToolStripMenuItem runMergeItem;    //执行拼合队列
-         private ToolStripMenuItem repairFileItem;    //帧数补正
+        private ToolStripMenuItem repairFileItem;    //帧数补正
         private ToolStripMenuItem splitFileItem;     //拆分文件
         private ToolStripMenuItem mixFileItem;       //合并文件
 
@@ -697,8 +644,7 @@ namespace ExtractorSharp {
 
         private ColorDialog colorDialog;
 
-
-        private ComboBox displayBackBox;        //显示背景
+        
         private CheckBox realPostionBox;        //真实坐标
         private CheckBox displayBox;            //动画播放
         private CheckBox linedodgeBox;          //线性减淡
@@ -706,14 +652,12 @@ namespace ExtractorSharp {
 
         private Label scaleLabel;
         private NumericUpDown scaleBox;         //画布比例
-        private Button changeBackButton;
         private Button openButton;              //打开文件
         private Button closeButton;             //关闭文件
         private PictureBox box;
         private TextBox searchBox;
         private TextBox pathBox;
         private Button historyButton;           //历史操作
-        private Label lastSaveLabel;
         private TrackBar trackBar;
 
         private ContextMenuStrip layerMenu;

@@ -8,7 +8,7 @@ using ExtractorSharp.Core.Control;
 using ExtractorSharp.Config;
 
 namespace ExtractorSharp.View {
-    public partial class NewImageDialog : EaseDialog {
+    public partial class NewImageDialog : ESDialog {
         private Album Album;
         private Controller Controller { get; }
         public NewImageDialog(IConnector Data) : base(Data) {

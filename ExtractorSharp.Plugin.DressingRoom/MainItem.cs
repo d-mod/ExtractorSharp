@@ -1,6 +1,7 @@
 ﻿using ExtractorSharp.Composition;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Drawing;
 
 namespace ExtractorSharp.Plugin.DressingRoom {
     [Export(typeof(IMenuItem))]
@@ -13,5 +14,9 @@ namespace ExtractorSharp.Plugin.DressingRoom {
         public List<IMenuItem> Childrens { get; }
 
         public MenuItemType Parent => MenuItemType.MODEL;
+
+        public ClickType Click => ClickType.View;
+
+        public Image Image { get; }
     }
 }

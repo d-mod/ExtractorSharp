@@ -10,14 +10,14 @@ using ExtractorSharp.Core.Control;
 using ExtractorSharp.Config;
 
 namespace ExtractorSharp.View {
-    public partial class ReplaceImageDialog : EaseDialog {
+    public partial class ReplaceImageDialog : ESDialog {
 
         private Controller Controller { get; }
         public ReplaceImageDialog(IConnector Data) : base(Data) {
             Controller = Program.Controller;
             InitializeComponent();
-            button1.Click += Replace;
-            button2.Click += Cancel;
+            yesButton.Click += Replace;
+            cancelButton.Click += Cancel;
         }
 
         public void Replace(object sender, EventArgs e) {

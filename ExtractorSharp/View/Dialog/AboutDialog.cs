@@ -7,7 +7,7 @@ using ExtractorSharp.Core;
 using ExtractorSharp.Properties;
 
 namespace ExtractorSharp.View{
-    public partial class AboutDialog : EaseDialog {
+    public partial class AboutDialog : ESDialog {
         public AboutDialog(IConnector Data) : base(Data) {
             InitializeComponent();
         }

@@ -8,7 +8,7 @@ using ExtractorSharp.Core;
 using ExtractorSharp.Data;
 
 namespace ExtractorSharp.View {
-    partial class CanvasDialog : EaseDialog{
+    partial class CanvasDialog : ESDialog{
         private Album Album;
         private int[] Indexes;
         private Size CavasSize => new Size((int)width_box.Value, (int)height_box.Value);

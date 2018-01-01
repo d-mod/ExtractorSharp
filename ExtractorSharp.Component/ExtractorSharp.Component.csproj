@@ -33,6 +33,9 @@
     <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CSkin">
+      <HintPath>D:\PVFNote\PvfNotepad\bin\Debug\CSkin.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -43,6 +46,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractSettingPane.cs">
@@ -54,41 +58,47 @@
     <Compile Include="ColorList.Designer.cs">
       <DependentUpon>ColorList.cs</DependentUpon>
     </Compile>
-    <Compile Include="EaseButton.cs">
+    <Compile Include="ESButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="EaseButton.Designer.cs">
-      <DependentUpon>EaseButton.cs</DependentUpon>
+    <Compile Include="ESButton.Designer.cs">
+      <DependentUpon>ESButton.cs</DependentUpon>
     </Compile>
-    <Compile Include="EaseDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="EaseDialog.designer.cs">
-      <DependentUpon>EaseDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="EaseForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="EaseForm.Designer.cs">
-      <DependentUpon>EaseForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="EaseListBox.cs">
+    <Compile Include="ESCavasBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="EaseListBox.Designer.cs">
-      <DependentUpon>EaseListBox.cs</DependentUpon>
+    <Compile Include="ESCavasBox.Designer.cs">
+      <DependentUpon>ESCavasBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="EaseTabPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="EaseTabPanel.Designer.cs">
-      <DependentUpon>EaseTabPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="EaseTextDialog.cs">
+    <Compile Include="ESDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EaseTextDialog.Designer.cs">
-      <DependentUpon>EaseTextDialog.cs</DependentUpon>
+    <Compile Include="ESDialog.designer.cs">
+      <DependentUpon>ESDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ESForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ESForm.Designer.cs">
+      <DependentUpon>ESForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ESListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ESListBox.Designer.cs">
+      <DependentUpon>ESListBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ESTabPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ESTabPanel.Designer.cs">
+      <DependentUpon>ESTabPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ESTextDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ESTextDialog.Designer.cs">
+      <DependentUpon>ESTextDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="EventArguments\DialogDataEventArgs.cs" />
     <Compile Include="EventArguments\DialogEventArgs.cs" />
@@ -102,8 +112,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="EaseTextDialog.resx">
-      <DependentUpon>EaseTextDialog.cs</DependentUpon>
+    <EmbeddedResource Include="ESTextDialog.resx">
+      <DependentUpon>ESTextDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -118,6 +128,11 @@
       <Project>{09014dd5-3314-437e-bb2e-6fbd0d1e7864}</Project>
       <Name>ExtractorSharp.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CSkin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

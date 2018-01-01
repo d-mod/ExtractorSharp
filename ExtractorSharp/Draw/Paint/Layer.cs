@@ -17,14 +17,17 @@ namespace ExtractorSharp.Draw {
         public int Index {
             get => entity.Index; set { }
         }
-        public bool Locked;
-        public bool Visible;
+        public bool Locked { set; get; }
+        public bool Visible { set; get; }
+
+        public bool FullCanvas { set; get; }
         public string Name { get; set; }
         public ImageEntity entity;
         public Size Size { get => entity.Size; set { } }
         public Rectangle Rectangle => new Rectangle(Location, Size);
 
         public object Tag { set; get; }
+    
         public Point AbsoluteLocation;
 
         /// <summary>

@@ -8,7 +8,7 @@ using ExtractorSharp.Core.Control;
 using ExtractorSharp.Config;
 
 namespace ExtractorSharp.View {
-    partial class MergeDialog : EaseDialog {
+    partial class MergeDialog : ESDialog {
         private Album Album;
         private Merger Merger;
         private Controller Controller => Program.Controller;

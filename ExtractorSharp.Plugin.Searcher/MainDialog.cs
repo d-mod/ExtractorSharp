@@ -12,8 +12,8 @@ using System.ComponentModel.Composition;
 
 namespace ExtractorSharp.Plugin.Searcher{
     [ExportMetadata("Guid","D72DF478-FAFF-43DF-B904-9EB338A08B54")]
-    [Export(typeof(EaseDialog))]
-    public partial class MainDialog: EaseDialog {
+    [Export(typeof(ESDialog))]
+    public partial class MainDialog: ESDialog {
         private bool running;
         private List<SearchResult> List;
         private Dictionary<string, string> Dic;

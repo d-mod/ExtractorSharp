@@ -8,7 +8,7 @@ using ExtractorSharp.Config;
 using ExtractorSharp.Core;
 
 namespace ExtractorSharp.View.Dialog {
-    public partial class VersionDialog : EaseDialog {
+    public partial class VersionDialog : ESDialog {
         private Controller Controller;
         public VersionDialog(IConnector Data) : base(Data) {
             Controller = Program.Controller;

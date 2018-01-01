@@ -10,7 +10,7 @@ namespace ExtractorSharp {
     /// 窗口相关事件
     /// </summary>
     public class DialogEventArgs : EventArgs {
-        public EaseDialog Dialog { set; get; }
+        public ESDialog Dialog { set; get; }
 
         public Type DialogType { set; get; }
 

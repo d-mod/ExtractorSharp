@@ -7,7 +7,7 @@ using ExtractorSharp.Core.Control;
 using ExtractorSharp.Core;
 
 namespace ExtractorSharp.View {
-    public partial class SaveImageDialog : EaseDialog {
+    public partial class SaveImageDialog : ESDialog {
         private int[] Indexes;
         private Album Album;
         private Controller Controller { get; }

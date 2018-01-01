@@ -1,5 +1,6 @@
 ﻿using ExtractorSharp.Core;
 using ExtractorSharp.Data;
+using ExtractorSharp.Lib;
 using System.Drawing;
 using System.IO;
 
@@ -39,12 +40,13 @@ namespace ExtractorSharp.Command.ImageCommand {
                     }
                     break;
                 case 1:
-                    var gifentry = Tools.FromGif(Path);
+                    var gifentry = FreeImage.ReadGif(Path);
                     oldImages = new Bitmap[Indices.Length];
                     types = new ColorBits[Indices.Length];
                     for (int i = 0; i < Indices.Length && i < gifentry.Length; i++) {
-                        if (Indices[i] > Album.List.Count - 1 && Indices[i] < 0)
+                        if (Indices[i] > Album.List.Count - 1 && Indices[i] < 0) {
                             continue;
+                        }
                         var image = Album[Indices[i]];
                         oldImages[i] = image.Picture;
                         types[i] = image.Type;
@@ -133,7 +135,7 @@ namespace ExtractorSharp.Command.ImageCommand {
                          Album[indexes[0]].ReplaceImage(type, isAdjust, Image.FromFile(path) as Bitmap);               
                     break;
                 case 1:
-                    var gifentry = Tools.FromGif(path);
+                    var gifentry = FreeImage.ReadGif(path);
                     for (var i = 0; i < indexes.Length && i < gifentry.Length; i++) {
                         if (indexes[i] > Album.List.Count - 1 && indexes[i] < 0)
                             continue;

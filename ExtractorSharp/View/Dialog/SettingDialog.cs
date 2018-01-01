@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ExtractorSharp.View.Dialog {
-    public partial class SettingDialog : EaseDialog {
+    public partial class SettingDialog : ESDialog {
         private Dictionary<TreeNode, AbstractSettingPane> Dictionary;
         private AbstractSettingPane SelectPane { set; get; }
         public SettingDialog(IConnector Data) : base(Data) {
@@ -91,7 +91,7 @@ namespace ExtractorSharp.View.Dialog {
         }
 
         public override DialogResult Show(params object[] args) {
-            Initialize();
+            //Initialize();
             return ShowDialog();
         }
 

@@ -24,7 +24,7 @@
         /// </summary>
         private void InitializeComponent() {
             this.gamePathBox = new System.Windows.Forms.TextBox();
-            this.browseButton = new ExtractorSharp.Component.EaseButton();
+            this.browseButton = new ExtractorSharp.Component.ESButton();
             this.gamePathGroup = new System.Windows.Forms.GroupBox();
             this.autoSaveCheck = new System.Windows.Forms.CheckBox();
             this.gamePathGroup.SuspendLayout();
@@ -79,7 +79,7 @@
         #endregion
 
         private System.Windows.Forms.TextBox gamePathBox;
-        private Component.EaseButton browseButton;
+        private Component.ESButton browseButton;
         private System.Windows.Forms.GroupBox gamePathGroup;
         private System.Windows.Forms.CheckBox autoSaveCheck;
     }

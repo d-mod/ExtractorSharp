@@ -146,7 +146,7 @@ namespace ExtractorSharp {
         }
 
         private static void ViewerDialogShown(object sender, DialogEventArgs e) {
-            e.Dialog = e.DialogType.CreateInstance(Connector) as EaseDialog;
+            e.Dialog = e.DialogType.CreateInstance(Connector) as ESDialog;
             e.Dialog.Owner = Form;
         }
 

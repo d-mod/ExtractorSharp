@@ -1,4 +1,5 @@
-﻿using ExtractorSharp.Handle;
+﻿using ExtractorSharp.Component;
+using ExtractorSharp.Handle;
 
 namespace ExtractorSharp.View {
     partial class ConvertDialog {
@@ -27,8 +28,8 @@ namespace ExtractorSharp.View {
         private void InitializeComponent() {
             this.combo = new System.Windows.Forms.ComboBox();
             this.progress = new System.Windows.Forms.ProgressBar();
-            this.yesButton = new System.Windows.Forms.Button();
-            this.cancelButton = new System.Windows.Forms.Button();
+            this.yesButton = new ESButton();
+            this.cancelButton = new ESButton();
             this.SuspendLayout();
             // 
             // combo

@@ -16,9 +16,10 @@ using ExtractorSharp.Draw.Paint;
 using ExtractorSharp.Data;
 using ExtractorSharp.Core.Control;
 using ExtractorSharp.Composition;
+using ExtractorSharp.Lib;
 
 namespace ExtractorSharp {
-    public partial class MainForm : EaseForm {
+    public partial class MainForm : ESForm {
 
 
         private Image BackImage;
@@ -32,10 +33,12 @@ namespace ExtractorSharp {
             get => pathBox.Text;
         }
 
+        private Point Hotpot { set; get; }
+
         /// <summary>
         /// 当前图层
         /// </summary>
-        private IPaint CurrentLayer { set; get; } = new Cavas();
+        private IPaint CurrentLayer { set; get; } = new Canvas();
         /// <summary>
         /// 上一图层
         /// </summary>
@@ -47,14 +50,10 @@ namespace ExtractorSharp {
         /// </summary>
         private IPaint BufferLayer { set; get; }
 
-        /// <summary>
-        /// 标尺位置
-        /// </summary>
-        private Point rule_Point = Point.Empty;
-        /// <summary>
-        /// 标尺真实位置
-        /// </summary>
-        private Point rule_Real_Point = Point.Empty;
+        private IPaint Rule { set; get; }
+
+        private IPaint Grid { set; get; }
+        
         private int move_mode = -1;
         private int rule_radius = 25;
 
@@ -74,15 +73,38 @@ namespace ExtractorSharp {
             AddListenter();
             AddShow();
             AddBrush();
+            AddPaint();
         }
 
         private void AddBrush() {
             foreach (var entry in Drawer.Brushes) {
                 var item = new ToolStripMenuItem(Language[entry.Key]);
-                item.Click += (o, e) => Drawer.Select(entry.Key);
+                item.CheckOnClick = true;
+                if (Drawer.IsSelect(entry.Key)) {
+                    item.Checked = true;
+                }            
+                item.CheckedChanged += (o, e) => {
+                    Drawer.Select(entry.Key);
+                    foreach (ToolStripMenuItem i in toolsMenu.DropDownItems) {
+                        i.Checked = false;
+                    }
+                    item.Checked = true;
+                };
                 toolsMenu.DropDownItems.Add(item);
             }
         }
+
+        private void AddPaint() {
+            Rule = new Rule();
+            Grid = new Grid();
+            AddPaint(displayRuleItem, Rule);
+            AddPaint(gridItem, Grid);
+        }
+
+        private void AddPaint(ToolStripMenuItem item ,IPaint paint) {
+            item.CheckedChanged += (o, e) => paint.Visible = item.Checked;
+        }
+        
 
         /// <summary>
         /// 给不需要动态参数的窗口-菜单添加监听
@@ -108,64 +130,69 @@ namespace ExtractorSharp {
         }
 
 
-        public ToolStripMenuItem AddMenuItem(IMenuItem plugin) {
-            var item = new ToolStripMenuItem(Language[plugin.Name]);
-            switch (plugin.Parent) {
+        public ToolStripMenuItem AddMenuItem(IMenuItem item) {
+            var toolItem = new ToolStripMenuItem(Language[item.Name]);
+            switch (item.Parent) {
                 case MenuItemType.MAIN:
-                    mainMenu.Items.Add(item);
+                    mainMenu.Items.Add(toolItem);
                     break;
                 case MenuItemType.FILE:
-                    fileMenu.DropDownItems.Add(item);
+                    fileMenu.DropDownItems.Add(toolItem);
                     break;
                 case MenuItemType.EDIT:
-                    editMenu.DropDownItems.Add(item);
+                    editMenu.DropDownItems.Add(toolItem);
                     break;
                 case MenuItemType.VIEW:
-                    editMenu.DropDownItems.Add(item);
+                    editMenu.DropDownItems.Add(toolItem);
                     break;
                 case MenuItemType.MODEL:
-                    modelMenu.DropDownItems.Add(item);
+                    modelMenu.DropDownItems.Add(toolItem);
                     break;
                 case MenuItemType.TOOLS:
-                    toolsMenu.DropDownItems.Add(item);
+                    toolsMenu.DropDownItems.Add(toolItem);
                     break;
                 case MenuItemType.ABOUT:
-                    aboutMenu.DropDownItems.Add(item);
+                    aboutMenu.DropDownItems.Add(toolItem);
                     break;
                 case MenuItemType.FILELIST:
-                    albumListMenu.Items.Add(item);
+                    albumListMenu.Items.Add(toolItem);
                     break;
                 case MenuItemType.IMAGELIST:
-                    imageListMenu.Items.Add(item);
+                    imageListMenu.Items.Add(toolItem);
                     break;
                 default:
                     return null;
             }
-            if (!string.IsNullOrEmpty(plugin.Command)) {
-                var command = plugin.Command;
-                var isCmd = char.IsUpper(command[0]);
-                if (isCmd) {
-                    AddCommand(item, command);
-                } else {
-                    AddShow(item, command);
+            if (!string.IsNullOrEmpty(item.Command)) {
+                var command = item.Command;
+                switch (item.Click) {
+                    case ClickType.Command:
+                        AddCommand(toolItem, command);
+                        break;
+                    case ClickType.View:
+                        AddShow(toolItem, command);
+                        break;
                 }
             }
-            if (plugin.Childrens != null) {
-                AddChildItem(plugin);
+            if (item.Childrens != null) {
+                AddChildItem(item);
             }
-            return item;
+            return toolItem;
         }
 
         public void AddChildItem(IMenuItem item) {
             foreach (var child in item.Childrens) {
                 var childItem = new ToolStripMenuItem(Language[child.Name]);
                 childItem.DropDownItems.Add(childItem);
-                if (child.Name.Length > 0) {
-                    var isCmd = char.IsUpper(child.Name[0]);
-                    if (isCmd) {
-                        AddCommand(childItem, child.Name);
-                    } else {
-                        AddShow(childItem, child.Name);
+                if (string.IsNullOrEmpty(item.Command)) {
+                    var command = child.Command;
+                    switch (item.Click) {
+                        case ClickType.Command:
+                            AddCommand(childItem, command);
+                            break;
+                        case ClickType.View:
+                            AddShow(childItem, command);
+                            break;
                     }
                 }
                 if (item.Childrens != null) {
@@ -192,8 +219,8 @@ namespace ExtractorSharp {
             albumList.Deleted = DeleteImg;
             albumList.ItemDraged += MoveFileIndex;
             albumList.DragDrop += DragDropInput;
-            box.Paint += Painting;
-            box.MouseClick += (o, e) => Drawer.Brush.Draw(CurrentLayer, e.Location, ImageScale);
+            box.Paint += OnPainting;
+            box.MouseClick += OnMouseClick;
             box.MouseDown += OnMouseDown;
             box.MouseUp += OnMouseUp;
             box.MouseMove += OnMouseMove;
@@ -209,8 +236,6 @@ namespace ExtractorSharp {
             imageList.ItemDraged += MoveImageIndex;
             imageList.SelectedIndexChanged += SelectImageChanged;
             imageList.ItemHoverChanged += PreviewHover;
-            changeBackButton.Click += ReplaceBack;
-            displayBackBox.SelectedIndexChanged += Flush;
             changePositionItem.Click += (o, e) => Viewer.Show("changePosition", base.Connector.CheckedImages);
             changeSizeItem.Click += (o, e) => Controller.Do("changeSize", base.Connector.SelectedFile, imageList.CheckedIndices, ImageScale);
             searchBox.TextChanged += (o, e) => ListFlush();
@@ -270,7 +295,7 @@ namespace ExtractorSharp {
             copyImgItem.Click += CutImg;
             pasteImgItem.Click += PasteImg;
         }
-
+        
         /// <summary>
         /// 粘贴img
         /// </summary>
@@ -414,7 +439,7 @@ namespace ExtractorSharp {
         private void RenameLayer(object sender, EventArgs e) {
             if (mutipleLayerItem.Checked) {
                 if (layerList.SelectedItem is Layer item) {
-                    var dialog = new EaseTextDialog();
+                    var dialog = new ESTextDialog();
                     dialog.InputText = item?.ToString();
                     dialog.Text = Language["Rename"];
                     if (dialog.Show() == DialogResult.OK) {
@@ -505,9 +530,7 @@ namespace ExtractorSharp {
 
 
         private void LockRule(object sender, EventArgs e) {
-            if (!lockRuleItem.Checked) {
-                rule_Point = rule_Real_Point.Minus(CurrentLayer.Location);
-            }
+            Rule.Locked = lockRuleItem.Checked;
         }
 
 
@@ -547,6 +570,8 @@ namespace ExtractorSharp {
                 }
                 player.Close();
             }
+            e.Cancel = false;
+            base.OnFormClosing(e);
         }
 
 
@@ -562,13 +587,13 @@ namespace ExtractorSharp {
 
 
         private void AjustRule(object sender, EventArgs e) {
-            rule_Point = Point.Empty;
+            Rule.Location = CurrentLayer.Location;
             Flush(sender, e);
         }
 
         private void SelectImageChanged(object sender, EventArgs e) {
             LastLayer = CurrentLayer;//图层更新
-            CurrentLayer = new Cavas();
+            CurrentLayer = new Canvas();
             if (realPostionBox.Checked && base.Connector.SelectedImage!= null) {
                 var entity = base.Connector.SelectedImage;
                 CurrentLayer.Location = entity.Location;
@@ -885,7 +910,7 @@ namespace ExtractorSharp {
         private void RenameImg(object sender, EventArgs e) {
             var album = base.Connector.SelectedFile;
             if (album != null) {
-                var dialog = new EaseTextDialog();
+                var dialog = new ESTextDialog();
                 dialog.InputText = album.Path;
                 dialog.Text = Language["Rename"];
                 if (dialog.Show() == DialogResult.OK) {
@@ -1008,20 +1033,15 @@ namespace ExtractorSharp {
         /// <summary>
         /// 画布刷新
         /// </summary>
-        private void Painting(object sender, PaintEventArgs e) {
+        private void OnPainting(object sender, PaintEventArgs e) {
             var g = e.Graphics;
             g.InterpolationMode = InterpolationMode.NearestNeighbor;
-            if (displayBackBox.SelectedIndex == 0) {
-                g.Clear(BackBoxColor);
-            } else if (displayBackBox.SelectedIndex == 1 && BackImage != null) {
-                g.DrawImage(BackImage, 0, 0, box.Width, box.Height);
-            }
-            var entity = base.Connector.SelectedImage;//获得当前选择的贴图
+            var entity = Connector.SelectedImage;//获得当前选择的贴图
             var pos = CurrentLayer.Location;
             if (!mutipleLayerItem.Checked && entity?.Picture != null) {
                 if (entity.Type == ColorBits.LINK && entity.Target != null) {
                     entity = entity.Target;
-                }
+                }                                                   
                 var pictrue = entity.Picture;
                 var size = entity.Size.Star(ImageScale);
                 if (linedodgeBox.Checked) {
@@ -1037,55 +1057,20 @@ namespace ExtractorSharp {
             } else {//多图层模式
                 Drawer.DrawLayer(g);
             }
-            if (displayRuleItem.Checked) {//显示标尺
-                if (!lockRuleItem.Checked) {
-                    rule_Real_Point = rule_Point.Add(pos);
-                }
-                var rp = rule_Real_Point;
-                g.DrawString(Language["AbsolutePosition"] + ":" + rp.GetString(), DefaultFont, Brushes.White, new Point(rp.X + rule_radius, rp.Y - rule_radius - DefaultFont.Height));
-                g.DrawString(Language["RealativePosition"] + ":" + rule_Point.Reverse().GetString(), DefaultFont, Brushes.White, new Point(rp.X + rule_radius, rp.Y - rule_radius - DefaultFont.Height * 2));
-                g.DrawLine(Pens.White, new Point(rp.X, 0), new Point(rp.X, box.Height));
-                g.DrawLine(Pens.White, new Point(0, rp.Y), new Point(box.Width, rp.Y));
-                if (displayRuleCrossHairItem.Checked) {
-                    var x = rp.X - rule_radius;
-                    var y = rp.Y - rule_radius;
-                    g.DrawEllipse(Pens.WhiteSmoke, x, y, rule_radius * 2, rule_radius * 2);
-                }
+            
+            if (Rule.Visible) {//显示标尺        
+                Rule.Tag = CurrentLayer.Location.Minus(Rule.Location);
+                Rule.Size = box.Size;
+                Rule.Draw(g);
             }
-            if (gridItem.Checked) {//显示网格
-                var grap = Config["GridGap"].Integer;
-                for (var i = 0; i < box.Width || i < box.Height; i += grap) {
-                    if (i < box.Width) {
-                        g.DrawLine(Pens.White, new Point(i, 0), new Point(i, box.Height));
-                    }
-                    if (i < box.Height) {
-                        g.DrawLine(Pens.White, new Point(0, i), new Point(box.Width, i));
-                    }
-                }
+
+            if (Grid.Visible) {//显示网格
+                Grid.Tag = Config["GridGap"].Integer;
+                Grid.Size = box.Size;
+                Grid.Draw(g);
             }
         }
 
-
-        /// <summary>
-        /// 替换背景
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ReplaceBack(object sender, EventArgs e) {
-            if (displayBackBox.SelectedIndex == 0) {
-                if (colorDialog.ShowDialog() == DialogResult.OK) {
-                    BackBoxColor = colorDialog.Color;
-                    CavasFlush();
-                }
-            } else if (displayBackBox.SelectedIndex == 1) {
-                var dialog = new OpenFileDialog();
-                dialog.Filter = "png文件,jpg文件|*.png;*.jpg;*.jpeg";
-                if (dialog.ShowDialog() == DialogResult.OK) {
-                    BackImage = new Bitmap(dialog.FileName);
-                    CavasFlush();
-                }
-            }
-        }
 
 
 
@@ -1095,15 +1080,13 @@ namespace ExtractorSharp {
         /// 是否选择到了图片上
         /// </summary>
         /// <returns></returns>
-        private int IsSelctImage() {
+        private int IsSelctImage(Point p) {
             var entity = base.Connector.SelectedImage;
-            var p = box.PointToClient(Cursor.Position);
             if (mutipleLayerItem.Checked) {
                 return Drawer.IndexOfLayer(p);
             }
-            if (displayRuleItem.Checked && displayRuleCrossHairItem.Checked && !lockRuleItem.Checked) {//是否在圆心上
-                var rp = CurrentLayer.Location.Add(rule_Point).Minus(p);
-                if ((rp.X * rp.X + rp.Y * rp.Y) < rule_radius * rule_radius) {
+            if (Rule.Visible && !Rule.Locked) {//是否在圆心上
+                if (Rule.Contains(p)) {
                     return 1;
                 }
             }
@@ -1120,8 +1103,15 @@ namespace ExtractorSharp {
         /// <param name="e"></param>
         private void OnMouseDown(object sender, MouseEventArgs e) {
             if (e.Button == MouseButtons.Left) {
-                move_mode = IsSelctImage();
-                Drawer.CusorLocation = e.Location;
+                var point = e.Location;
+                move_mode = IsSelctImage(point);
+                Drawer.CusorLocation = point;
+            }
+        }
+
+        private void OnMouseClick(object sender, MouseEventArgs e) {
+            if (!Drawer.IsSelect("MoveTool")) {
+                Drawer.Brush.Draw(CurrentLayer, e.Location, ImageScale);
             }
         }
 
@@ -1144,13 +1134,14 @@ namespace ExtractorSharp {
         /// <param name="e"></param>
 
         private void OnMouseMove(object sender, MouseEventArgs e) {
-            if (move_mode > -1) {
+            if (e.Button== MouseButtons.Left&&move_mode > -1) {
                 var newPoint = e.Location;
+                if (!Rule.Locked) {
+                    Rule.Location = Rule.Location.Add(newPoint.Minus(Drawer.CusorLocation));
+                }
                 if (move_mode == 0) {
                     Drawer.Brush.Draw(CurrentLayer, newPoint, ImageScale);
-                } else if (move_mode == 1) {
-                    rule_Point = rule_Point.Add(newPoint.Minus(Drawer.CusorLocation));
-                } else {
+                }else if(move_mode>1){
                     Drawer.Brush.Draw(Drawer.LayerList[move_mode - 2], newPoint, ImageScale);
                 }
                 Drawer.CusorLocation = e.Location;
@@ -1216,7 +1207,7 @@ namespace ExtractorSharp {
             dialog.Filter = "gif动态图片|*.gif";
             dialog.FileName = name;
             if (dialog.ShowDialog() == DialogResult.OK) {
-                Tools.SaveGif(dialog.FileName, array);
+                FreeImage.WriteGif(dialog.FileName, array);
                 Messager.ShowOperate("SaveGif");
             }
         }
@@ -1248,7 +1239,7 @@ namespace ExtractorSharp {
             if (indexes.Length < 1) {
                 return;
             }
-            var dialog = new EaseTextDialog();
+            var dialog = new ESTextDialog();
             dialog.CanEmpty = true;
             dialog.Text = Language["LinkImage"];
             if (dialog.Show() == DialogResult.OK) {
@@ -1420,6 +1411,10 @@ namespace ExtractorSharp {
 
             public void Do(string name,params object[] args) {
                 MainForm.Controller.Do(name, args);
+            }
+
+            public void Draw(IPaint paint, Point location, decimal scale) {
+                MainForm.Drawer.Brush.Draw(paint, location, scale);
             }
         }
 

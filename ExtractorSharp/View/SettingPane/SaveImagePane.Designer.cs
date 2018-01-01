@@ -24,8 +24,8 @@
         /// </summary>
         private void InitializeComponent() {
             this.savePathBox = new System.Windows.Forms.TextBox();
-            this.browseButton = new ExtractorSharp.Component.EaseButton();
-            this.emptyButton = new Component.EaseButton();
+            this.browseButton = new ExtractorSharp.Component.ESButton();
+            this.emptyButton = new Component.ESButton();
             this.savePathGroup = new System.Windows.Forms.GroupBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.promptCheck = new System.Windows.Forms.CheckBox();
@@ -101,8 +101,8 @@
         #endregion
 
         private System.Windows.Forms.TextBox savePathBox;
-        private Component.EaseButton emptyButton;
-        private Component.EaseButton browseButton;
+        private Component.ESButton emptyButton;
+        private Component.ESButton browseButton;
         private System.Windows.Forms.GroupBox savePathGroup;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.CheckBox promptCheck;

@@ -118,11 +118,10 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Command\IFileListChange.cs" />
+    <Compile Include="Command\DrawCommand\MoveToolsDraw.cs" />
     <Compile Include="Command\PaletteCommand\ChangeColor.cs" />
     <Compile Include="Command\DrawCommand\EraserDraw.cs" />
     <Compile Include="Command\FileCommand\MoveFile.cs" />
-    <Compile Include="Command\IAciton.cs" />
     <Compile Include="Command\ImageCommand\ChangeSize.cs" />
     <Compile Include="Command\ImageCommand\CutImage.cs" />
     <Compile Include="Command\ImageCommand\LineDodge.cs" />
@@ -148,6 +147,8 @@
     <Compile Include="Data\VersionInfo.cs" />
     <Compile Include="Draw\Brush\Eraser.cs" />
     <Compile Include="Draw\Brush\Straw.cs" />
+    <Compile Include="Draw\Paint\Grid.cs" />
+    <Compile Include="Draw\Paint\Rule.cs" />
     <Compile Include="EventArguments\ColorEventArgs.cs" />
     <Compile Include="EventArguments\DrawEventArgs.cs" />
     <Compile Include="Core\QueueChangeMode.cs" />
@@ -159,13 +160,10 @@
     <Compile Include="EventArguments\MergeQueueEventArgs.cs" />
     <Compile Include="Core\Merger.cs" />
     <Compile Include="Core\Viewer.cs" />
-    <Compile Include="Draw\Brush\IBrush.cs" />
     <Compile Include="Draw\Brush\MoveTool.cs" />
     <Compile Include="Draw\Brush\Pencil.cs" />
-    <Compile Include="Command\ICommand.cs" />
     <Compile Include="Command\ImageCommand\ChangePosition.cs" />
     <Compile Include="Command\ImageCommand\UnCavasImage.cs" />
-    <Compile Include="Draw\Paint\Cavas.cs" />
     <Compile Include="EventArguments\MergeEventArg.cs" />
     <Compile Include="View\Dialog\CanvasDialog.cs">
       <SubType>Form</SubType>
@@ -306,7 +304,6 @@
     <Compile Include="View\Dialog\DownloadFileDialog.Designer.cs">
       <DependentUpon>DownloadFileDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Draw\Paint\IPaint.cs" />
     <Compile Include="Handle\FirstHandler.cs" />
     <Compile Include="Handle\OggHandler.cs" />
     <Compile Include="Handle\SixthHandler.cs" />
@@ -489,7 +486,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ExtractorSharp.Component\ExtractorSharp.Component.csproj">
-      <Project>{dce898ee-8fcb-45aa-9a53-bfeed8ed7257}</Project>
+      <Project>{DCE898EE-8FCB-45AA-9A53-BFEED8ED7257}</Project>
       <Name>ExtractorSharp.Component</Name>
     </ProjectReference>
     <ProjectReference Include="..\ExtractorSharp.Core\ExtractorSharp.Core.csproj">

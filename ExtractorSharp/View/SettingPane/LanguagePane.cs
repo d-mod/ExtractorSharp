@@ -28,7 +28,7 @@ namespace ExtractorSharp.View.SettingPane {
             }
         }
         public override void Save() {
-            Config["LCID"] = new ConfigValue((languageBox.SelectedItem as Language).LCID);
+            Config["LCID"] = new ConfigValue((languageBox.SelectedItem as Language)?.LCID);
         }
     }
 }

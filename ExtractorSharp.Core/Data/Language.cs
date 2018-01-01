@@ -1,5 +1,7 @@
 ﻿using ExtractorSharp.Loose;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Xml;
 
@@ -82,8 +84,10 @@ namespace ExtractorSharp.Data {
         public static int Local_LCID { set; get; }
 
         private static Language _default;
+        
 
         public static List<Language> List { set; get; } = new List<Language>();
+        
 
         private Language() { }
 
@@ -121,5 +125,6 @@ namespace ExtractorSharp.Data {
             obj.GetValue(ref lan);
             return lan;
         }
+
     }
 }

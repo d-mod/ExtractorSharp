@@ -1,7 +1,9 @@
 ﻿using ExtractorSharp.Config;
 using ExtractorSharp.Data;
+using ExtractorSharp.Draw;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace ExtractorSharp.Core {
     public interface IConnector {
@@ -94,6 +96,12 @@ namespace ExtractorSharp.Core {
         void Do(string name, params object[] args);
 
 
+        #endregion
+
+
+        #region draw
+
+        void Draw(IPaint paint,Point location,decimal scale);
         #endregion
 
         void OnSaveChanged();

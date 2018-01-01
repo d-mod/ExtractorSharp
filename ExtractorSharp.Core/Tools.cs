@@ -200,41 +200,6 @@ namespace ExtractorSharp {
             stream.Close();
         }
 
-        public static Bitmap[] FromGif(string path) {
-            var decoder = new ScreenToGif.Encoding.GifDecoder();
-            decoder.Read(path);
-            var array = new Bitmap[decoder.GetFrameCount()];
-            for (var i = 0; i < array.Length; i++)
-                array[i] = decoder.GetFrame(i) as Bitmap;
-            return array;
-        }
-
-        public static void SaveGif(string path,ImageEntity[] array) {
-            using (var fs = new FileStream(path, FileMode.Create)) {
-                using (var encoder = new ScreenToGif.Encoding.GifEncoder(fs)) {
-                    int w = 1;
-                    int h = 1;
-                    int x = 800;
-                    int y = 600;
-                    foreach (var entity in array) {
-                        if (entity.Width + entity.X > w)
-                            w = entity.Width + entity.X;
-                        if (entity.Height + entity.X > h)
-                            h = entity.Height + entity.Y;
-                        if (entity.X < x)
-                            x = entity.X;
-                        if (entity.Y < y)
-                            y = entity.Y;
-                    }
-                    foreach (var entity in array) {
-                        var bmp = new Bitmap(w, h);
-                        using (var g = Graphics.FromImage(bmp))
-                            g.DrawImage(entity.Picture, entity.X - x, entity.Y - y);
-                        encoder.AddFrame(bmp);
-                    }
-                }
-            }
-        }
 
         /// <summary>
         /// 移除指定开头的后缀名

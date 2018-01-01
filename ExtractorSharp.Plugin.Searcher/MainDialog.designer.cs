@@ -37,7 +37,7 @@
             this.dispayModeLabel = new System.Windows.Forms.Label();
             this.displayModeBox = new System.Windows.Forms.ComboBox();
             this.ignoreModelBox = new System.Windows.Forms.CheckBox();
-            this.resultList = new Component.EaseListBox<SearchResult>();
+            this.resultList = new Component.ESListBox<SearchResult>();
             this.addNPKItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SuspendLayout();
             // 
@@ -202,7 +202,7 @@
 
         private System.Windows.Forms.TextBox patternBox;
         private System.Windows.Forms.Label paterrnLabel;
-        private Component.EaseListBox<SearchResult> resultList;
+        private Component.ESListBox<SearchResult> resultList;
         private System.Windows.Forms.ToolStripMenuItem addItem;
         private System.Windows.Forms.ToolStripMenuItem addNPKItem;
     }

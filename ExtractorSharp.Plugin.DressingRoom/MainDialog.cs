@@ -11,8 +11,8 @@ using System.ComponentModel.Composition;
 
 namespace ExtractorSharp.View {
     [ExportMetadata("Guid", "57951442-F28C-4D84-8677-0DE4105BFBD1")]
-    [Export(typeof(EaseDialog))]
-    public partial class MainDialog : EaseDialog {
+    [Export(typeof(ESDialog))]
+    public partial class MainDialog : ESDialog {
         private string Path => Config["ResourcePath"].Value;
         private DressingService Service { get; }
         private int PartsCount => Service.Parts.Length;
@@ -107,7 +107,7 @@ namespace ExtractorSharp.View {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void LoadModel(object sender, EventArgs e) {
-            var dialog = new EaseTextDialog();
+            var dialog = new ESTextDialog();
             dialog.Text = Language["LoadModel"];
             if (dialog.ShowDialog() == DialogResult.OK) {
                 Import(dialog.InputText);

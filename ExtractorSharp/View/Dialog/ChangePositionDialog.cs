@@ -12,7 +12,7 @@ namespace ExtractorSharp.View {
     /// <summary>
     /// 修改坐标窗口
     /// </summary>
-    internal partial class ChangePositonDialog : EaseDialog {
+    internal partial class ChangePositonDialog : ESDialog {
         private Controller Controller => Program.Controller;
         private MainForm MainForm => Program.Form;
 

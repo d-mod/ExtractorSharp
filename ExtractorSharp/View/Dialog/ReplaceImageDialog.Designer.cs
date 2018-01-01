@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using ExtractorSharp.Component;
+using System.Drawing;
 
 namespace ExtractorSharp.View {
     partial class ReplaceImageDialog {
@@ -25,50 +26,50 @@ namespace ExtractorSharp.View {
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.channelBox = new System.Windows.Forms.GroupBox();
+            this.yesButton = new ESButton();
+            this.cancelButton = new ESButton();
+            this.channelGroup = new System.Windows.Forms.GroupBox();
             this._8888_Radio = new System.Windows.Forms.RadioButton();
             this._4444_Radio = new System.Windows.Forms.RadioButton();
             this._1555_Radio = new System.Windows.Forms.RadioButton();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.group = new System.Windows.Forms.GroupBox();
             this.allImageRadio = new System.Windows.Forms.RadioButton();
             this.seletImageRadio = new System.Windows.Forms.RadioButton();
             this.fromGifBox = new System.Windows.Forms.CheckBox();
             this.adjustPostionBox = new System.Windows.Forms.CheckBox();
-            this.channelBox.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.channelGroup.SuspendLayout();
+            this.group.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(42, 256);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 2;
-            this.button1.Text = Language["OK"];
-            this.button1.UseVisualStyleBackColor = true;
+            this.yesButton.Location = new System.Drawing.Point(42, 276);
+            this.yesButton.Name = "button1";
+            this.yesButton.Size = new System.Drawing.Size(75, 23);
+            this.yesButton.TabIndex = 2;
+            this.yesButton.Text = Language["OK"];
+            this.yesButton.UseVisualStyleBackColor = true;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(148, 256);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 3;
-            this.button2.Text = Language["Cancel"];
-            this.button2.UseVisualStyleBackColor = true;
+            this.cancelButton.Location = new System.Drawing.Point(148, 276);
+            this.cancelButton.Name = "button2";
+            this.cancelButton.Size = new System.Drawing.Size(75, 23);
+            this.cancelButton.TabIndex = 3;
+            this.cancelButton.Text = Language["Cancel"];
+            this.cancelButton.UseVisualStyleBackColor = true;
             // 
             // channelBox
             // 
-            this.channelBox.Controls.Add(this._8888_Radio);
-            this.channelBox.Controls.Add(this._4444_Radio);
-            this.channelBox.Controls.Add(this._1555_Radio);
-            this.channelBox.Location = new System.Drawing.Point(42, 104);
-            this.channelBox.Name = "channelBox";
-            this.channelBox.Size = new System.Drawing.Size(184, 97);
-            this.channelBox.TabIndex = 4;
-            this.channelBox.TabStop = false;
-            this.channelBox.Text = Language["ColorBits"];
+            this.channelGroup.Controls.Add(this._8888_Radio);
+            this.channelGroup.Controls.Add(this._4444_Radio);
+            this.channelGroup.Controls.Add(this._1555_Radio);
+            this.channelGroup.Location = new System.Drawing.Point(42, 124);
+            this.channelGroup.Name = "channelBox";
+            this.channelGroup.Size = new System.Drawing.Size(184, 97);
+            this.channelGroup.TabIndex = 4;
+            this.channelGroup.TabStop = false;
+            this.channelGroup.Text = Language["ColorBits"];
             // 
             // _8888_Radio
             // 
@@ -104,14 +105,14 @@ namespace ExtractorSharp.View {
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.allImageRadio);
-            this.groupBox1.Controls.Add(this.seletImageRadio);
-            this.groupBox1.Location = new System.Drawing.Point(42, 12);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(184, 72);
-            this.groupBox1.TabIndex = 5;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = Language["HandleObject"];
+            this.group.Controls.Add(this.allImageRadio);
+            this.group.Controls.Add(this.seletImageRadio);
+            this.group.Location = new System.Drawing.Point(42, 32);
+            this.group.Name = "groupBox1";
+            this.group.Size = new System.Drawing.Size(184, 72);
+            this.group.TabIndex = 5;
+            this.group.TabStop = false;
+            this.group.Text = Language["HandleObject"];
             // 
             // allImageRadio
             // 
@@ -139,7 +140,7 @@ namespace ExtractorSharp.View {
             // fromGifBox
             // 
             this.fromGifBox.AutoSize = true;
-            this.fromGifBox.Location = new System.Drawing.Point(42, 224);
+            this.fromGifBox.Location = new System.Drawing.Point(42, 244);
             this.fromGifBox.Name = "fromGifBox";
             this.fromGifBox.Size = new System.Drawing.Size(78, 16);
             this.fromGifBox.TabIndex = 6;
@@ -150,7 +151,7 @@ namespace ExtractorSharp.View {
             // 
             this.adjustPostionBox.AutoSize = true;
             this.adjustPostionBox.Checked = true;
-            this.adjustPostionBox.Location = new System.Drawing.Point(151, 224);
+            this.adjustPostionBox.Location = new System.Drawing.Point(151, 244);
             this.adjustPostionBox.Name = "adjustPostionBox";
             this.adjustPostionBox.Size = new System.Drawing.Size(72, 16);
             this.adjustPostionBox.TabIndex = 7;
@@ -161,32 +162,32 @@ namespace ExtractorSharp.View {
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(266, 305);
+            this.ClientSize = new System.Drawing.Size(266, 330);
             this.Controls.Add(this.adjustPostionBox);
             this.Controls.Add(this.fromGifBox);
-            this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.channelBox);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.group);
+            this.Controls.Add(this.channelGroup);
+            this.Controls.Add(this.cancelButton);
+            this.Controls.Add(this.yesButton);
             this.Name = "ReplaceDialog";
             this.Text = Language["ReplaceImage"];
-            this.channelBox.ResumeLayout(false);
-            this.channelBox.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.channelGroup.ResumeLayout(false);
+            this.channelGroup.PerformLayout();
+            this.group.ResumeLayout(false);
+            this.group.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.GroupBox channelBox;
+        private System.Windows.Forms.Button yesButton;
+        private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.GroupBox channelGroup;
         private System.Windows.Forms.RadioButton _1555_Radio;
         private System.Windows.Forms.RadioButton _4444_Radio;
         private System.Windows.Forms.RadioButton _8888_Radio;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox group;
         private System.Windows.Forms.RadioButton seletImageRadio;
         private System.Windows.Forms.RadioButton allImageRadio;
         private System.Windows.Forms.CheckBox fromGifBox;

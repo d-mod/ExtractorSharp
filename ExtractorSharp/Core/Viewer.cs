@@ -11,7 +11,7 @@ namespace ExtractorSharp {
     /// 窗口管理器
     /// </summary>
     public class Viewer : IDisposable {
-        private Dictionary<string, EaseDialog> List = new Dictionary<string, EaseDialog>();
+        private Dictionary<string, ESDialog> List = new Dictionary<string, ESDialog>();
         private Dictionary<string, Type> Dic;
 
         internal delegate void DialogHandler(object sender, DialogEventArgs e);
@@ -37,7 +37,7 @@ namespace ExtractorSharp {
 
         public Viewer() {
             Dic = new Dictionary<string, Type>();
-            List = new Dictionary<string, EaseDialog>();
+            List = new Dictionary<string, ESDialog>();
         }
 
 
@@ -53,7 +53,7 @@ namespace ExtractorSharp {
             Dic.Add(name, type);
         }
 
-        public void Regisity(string name,EaseDialog dialog) {
+        public void Regisity(string name,ESDialog dialog) {
             List.Add(name, dialog);         
         }
 
@@ -66,7 +66,8 @@ namespace ExtractorSharp {
         public void Show(string dialogName, params object[] args) {
             if (List.ContainsKey(dialogName)) {
                 List[dialogName].Show(args);
-            } else if (Dic.ContainsKey(dialogName)) {
+            } else
+            if (Dic.ContainsKey(dialogName)) {
                 var e = new DialogEventArgs();
                 e.DialogType = Dic[dialogName];
                 OnDialogShown(e);

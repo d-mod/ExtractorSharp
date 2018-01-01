@@ -18,7 +18,7 @@ namespace ExtractorSharp.Draw.Brush {
         public Point Location { get; set; }
 
         public void Draw(IPaint layer, Point newPoint, decimal scale) {
-            layer.Location = layer.Location.Add(newPoint.Minus(Location));
+            Program.Connector.Do("moveTools", layer, Location, newPoint);
         }
 
 

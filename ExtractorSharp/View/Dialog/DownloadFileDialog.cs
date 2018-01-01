@@ -10,7 +10,7 @@ using ExtractorSharp.Core;
 using ExtractorSharp.Core.Control;
 
 namespace ExtractorSharp.View.Dialog {
-    public partial class DownloadFileDialog : EaseDialog {
+    public partial class DownloadFileDialog : ESDialog {
         private WebClient Client;
         private List<string> List;
         private bool isDownload;

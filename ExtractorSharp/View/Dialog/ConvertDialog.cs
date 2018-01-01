@@ -9,7 +9,7 @@ using ExtractorSharp.Core.Control;
 using ExtractorSharp.Config;
 
 namespace ExtractorSharp.View {
-    public partial class ConvertDialog : EaseDialog {
+    public partial class ConvertDialog : ESDialog {
         private Album[] Array;
         public ConvertDialog(IConnector Data) : base(Data) {
             InitializeComponent();
