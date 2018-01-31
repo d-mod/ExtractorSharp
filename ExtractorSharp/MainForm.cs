@@ -683,6 +683,7 @@ namespace ExtractorSharp {
             Controller.Dispose();
             Viewer.Dispose();
             ImageFlush();
+            Connector.IsSave = true;
             pathBox.Text = string.Empty;
         }
 
@@ -1388,6 +1389,7 @@ namespace ExtractorSharp {
             public void Save(string file) {
                 Tools.WriteNPK(file, List);
                 IsSave = true;
+                Messager.ShowOperate("SaveFile");
             }
 
 

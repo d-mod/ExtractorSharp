@@ -91,7 +91,7 @@ namespace ExtractorSharp.View.Dialog {
         }
 
         public override DialogResult Show(params object[] args) {
-            //Initialize();
+            Initialize();
             return ShowDialog();
         }
 

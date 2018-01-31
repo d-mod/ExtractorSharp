@@ -32,7 +32,8 @@ namespace ExtractorSharp.Core {
         public Hoster() {
             List = new Dictionary<Guid, Plugin>();
             Catalog = new AssemblyCatalog(Assembly.GetExecutingAssembly());
-            var Path = $"{Config["RootPath"]}/plugin";
+            var rootPath = Config["RootPath"];
+            var Path = $"{rootPath}/plugin";
             if (Directory.Exists(Path)) {
                 foreach (var dir in Directory.GetDirectories(Path)) {
                     Install(dir);
@@ -59,7 +60,7 @@ namespace ExtractorSharp.Core {
                     Config.Load(confDir);
                 }
                 //载入多语言
-                var lanDir = $"{dir}\\lan";
+                var lanDir = $"{dir}/lan";
                 if (Directory.Exists(lanDir)) {
                     Language.CreateFromDir(lanDir);
                 }

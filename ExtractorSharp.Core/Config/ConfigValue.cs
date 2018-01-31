@@ -166,7 +166,7 @@ namespace ExtractorSharp.Config {
 
         public bool Saveable { set; get; } = true;
 
-        public bool NotEmpty => string.IsNullOrEmpty(Value);
+        public bool NotEmpty => !string.IsNullOrEmpty(Value);
 
         public override string ToString() => Value;
 
