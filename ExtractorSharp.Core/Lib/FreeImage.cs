@@ -184,7 +184,6 @@ namespace ExtractorSharp.Lib {
                 WriteMemory(data, data.Length, 0, memory);
                 CloseMemory(memory);
                 AppendPage(gif, dib);
-                Save(0, dib, "d:/test/" + i + ".png", 0);
             }
             var count=GetPageCount(gif);
             Save(25, gif, path, 0);

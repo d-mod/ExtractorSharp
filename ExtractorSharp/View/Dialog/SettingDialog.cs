@@ -30,6 +30,7 @@ namespace ExtractorSharp.View.Dialog {
             AddConfig(typeof(FlashPane));
             AddConfig(typeof(LanguagePane));
             AddConfig(typeof(PluginListPane));
+            AddConfig(typeof(MarketplacePane));
         }
 
 

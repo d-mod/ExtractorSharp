@@ -166,7 +166,7 @@ namespace ExtractorSharp {
             foreach (var album in List) {
                 SaveFile(path + "/" + album.Name, album);
             }
-        } 
+        }
 
 
         /// <summary>
@@ -488,7 +488,6 @@ namespace ExtractorSharp {
         /// <param name="count"></param>
         /// <returns></returns>
         public static IEnumerable<Color> ReadColorChart(this Stream stream, int count) {
-            var Table = new List<Color>();
             for (var i = 0; i < count; i++) {
                 var data = new byte[4];
                 stream.Read(data);

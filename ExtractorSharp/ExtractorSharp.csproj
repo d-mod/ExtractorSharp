@@ -138,6 +138,7 @@
     <Compile Include="Command\MergeCommand\RunMerge.cs" />
     <Compile Include="Composition\IGuid.cs" />
     <Compile Include="Composition\IMetadata.cs" />
+    <Compile Include="Composition\Metadata.cs" />
     <Compile Include="Composition\Plugin.cs" />
     <Compile Include="Config\JsonConfig.cs" />
     <Compile Include="Core\Clipboarder.cs" />
@@ -233,6 +234,12 @@
     </Compile>
     <Compile Include="View\SettingPane\LanguagePane.Designer.cs">
       <DependentUpon>LanguagePane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SettingPane\MarketplacePane.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\SettingPane\MarketplacePane.Designer.cs">
+      <DependentUpon>MarketplacePane.cs</DependentUpon>
     </Compile>
     <Compile Include="View\SettingPane\PluginListPane.cs">
       <SubType>Component</SubType>
@@ -501,7 +508,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Resources_4queues_1json__JSONSchema="http://json.schemastore.org/config" Resources_4alias_3weapon_1json__JSONSchema="http://json.schemastore.org/config" />
+      <UserProperties Resources_4alias_3weapon_1json__JSONSchema="http://json.schemastore.org/config" Resources_4queues_1json__JSONSchema="http://json.schemastore.org/config" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -17,7 +17,7 @@ namespace ExtractorSharp.View.SettingPane {
         private Hoster Hoster => Program.Hoster;
         public PluginListPane(IConnector Connector) : base(Connector) {
             InitializeComponent();
-           
+            Flush();
             browseButton.Click += BrowsePlugin;
         }
 
@@ -34,10 +34,20 @@ namespace ExtractorSharp.View.SettingPane {
                 var dir=dialog.SelectedPath;
                 if (Hoster.Install(dir)) {
                     Messager.ShowMessage(Msg_Type.Operate, "插件安装完成!");
+                    Flush();
                 } else {
                     Messager.ShowMessage(Msg_Type.Warning, "插件安装失败!");
                 }
             }
+        }
+
+     
+
+
+        public override void Initialize() {
+
+        }
+        public override void Save() {
         }
 
         private class PluginListItem : ListViewItem {
@@ -46,13 +56,6 @@ namespace ExtractorSharp.View.SettingPane {
                 this.Plugin = Plugin;
                 this.Text = Plugin.Name;
             }
-        }
-
-
-        public override void Initialize() {
-
-        }
-        public override void Save() {
         }
 
     }

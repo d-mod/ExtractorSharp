@@ -51,12 +51,14 @@ namespace ExtractorSharp.Handle {
                 ms.Write(AdjustIndex());
                 ms.Close();
             } else {
+                var index_data = AdjustIndex();
+                var suffix_data = AdjustSuffix();
                 ms.WriteString(Tools.IMG_FLAG);
                 ms.WriteLong(Album.Info_Length);
                 ms.WriteInt((int)Album.Version);
                 ms.WriteInt(Album.Count);
-                ms.Write(AdjustIndex());
-                ms.Write(AdjustSuffix());
+                ms.Write(index_data);
+                ms.Write(suffix_data);
                 ms.Close();
             }
             Album.Data = ms.ToArray();

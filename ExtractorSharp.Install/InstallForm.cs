@@ -13,26 +13,46 @@ using System.Diagnostics;
 namespace ExtractorSharp.Install {
     public partial class InstallForm : Form {
 
-        private const string UPDATE_URL ="http://extractorsharp.kritsu.net/api/program/update?type=release";
-        private const string DOWNLOAD_URL = "http://static.kritsu.net/file";
+        private const string UPDATE_URL ="http://extractorsharp.kritsu.net/api/program/update";
+        private const string DOWNLOAD_URL = "http://test.kritsu.net/plugin";
+        private const string DOWNLOAD_PLUGIN_API_URL = "http://localhost:8080/api/plugin/download";
+        private bool IsPlugin = false;
+        private Guid Guid;
         private Stack<FileInfo> Stack;
         private WebClient Client;
         public InstallForm(string[] args) {
+            CheckArgs(args);
             Client = new WebClient();
             Client.DownloadProgressChanged += ProgressChanged;
             Client.DownloadFileCompleted += ProgressCompleted;
             InitializeComponent();
             progressBar1.Maximum = 100;
-            Compare();
+            if (IsPlugin) {
+                ComparePlugin();
+            } else {
+                Compare();
+            }
+        }
+
+        private void CheckArgs(string[] args) {
+            for(var i=0;i<args.Length;i++) {
+                switch (args[i]) {
+                    case "-p":
+                        //插件
+                        IsPlugin = i < args.Length - 1 && Guid.TryParse(args[i + 1], out Guid);
+                        break;
+                }
+            }
         }
 
         private void ProgressCompleted(object sender, AsyncCompletedEventArgs e) {
             if (Stack.Count > 0) {
                 Download(Stack.Pop());
-            } else {
-                Client.Dispose();
+            } else if (!IsPlugin) {
                 Start();
             }
+            Client.Dispose();
+            System.Environment.Exit(0);
         }
 
         private void ProgressChanged(object sender, DownloadProgressChangedEventArgs e) {
@@ -40,8 +60,13 @@ namespace ExtractorSharp.Install {
         }
 
         private void Start() {
-            Process.Start($"{Application.StartupPath}/extractorsharp.exe");
-            Environment.Exit(-1);
+            var exename = $"{Application.StartupPath}/extractorsharp.exe";
+            if (File.Exists(exename)) {
+                Process.Start(exename);
+                Environment.Exit(-1);
+            } else {
+                textBox1.Text = $"未能找到主程序！/n{exename}";
+            }
         }
 
 
@@ -50,9 +75,9 @@ namespace ExtractorSharp.Install {
             var builder = new LSBuilder();
             var obj = builder.Get(UPDATE_URL);
             var version = obj.GetValue(typeof(VersionInfo)) as VersionInfo;
-            var file = version.File;
+            var files = version.Files;
             Stack = new Stack<FileInfo>();
-            foreach (var info in file) {
+            foreach (var info in files) {
                 if (!Check(info)) {
                     Stack.Push(info);
                 }
@@ -64,6 +89,25 @@ namespace ExtractorSharp.Install {
             }
         }
 
+        private void ComparePlugin() {
+            var builder = new LSBuilder();
+            var obj = builder.Get(DOWNLOAD_PLUGIN_API_URL, new Dictionary<string, object>() {
+                ["guid"] = Guid.ToString()
+            });
+            var files = obj.GetValue(typeof(List<FileInfo>)) as List<FileInfo>;
+            Stack = new Stack<FileInfo>();
+            foreach (var info in files) {
+                info.Name = $"plugin/{Guid}/{info.Name}";
+                if (!Check(info)) {
+                    Stack.Push(info);
+                }
+            }
+            if (Stack.Count > 0) {
+                Download(Stack.Pop());
+            }
+        }
+
+
         private void Download(FileInfo info) {
             var uri = new Uri($"{DOWNLOAD_URL}/{info.Hash}");
             var filename = $"{Application.StartupPath}/{info.Name}";
@@ -71,6 +115,7 @@ namespace ExtractorSharp.Install {
             if (!Directory.Exists(dir)) {
                 Directory.CreateDirectory(dir);
             }
+            textBox1.Text = $"正在下载文件\n({filename})";
             Client.DownloadFileAsync(uri, filename);
         }
 

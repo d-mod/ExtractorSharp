@@ -116,7 +116,7 @@ namespace ExtractorSharp.Handle {
         }
 
         public override Bitmap ConvertToBitmap(ImageEntity entity) {
-            if (entity.Type < ColorBits.LINK) {
+            if (entity.Type < ColorBits.LINK && entity.Length > 0) {
                 var data = entity.Data;
                 var type = entity.Type;
                 var size = entity.Width * entity.Height * (type == ColorBits.ARGB_8888 ? 4 : 2);
@@ -133,15 +133,17 @@ namespace ExtractorSharp.Handle {
                 if (Map.ContainsKey(entity)) {
                     var index = Map[entity];
                     var dds = index.DDS;
-                    var bmp = new Bitmap(entity.Width, entity.Height);                
-                    var src = new Rectangle(index.LeftUp, index.Size);
-                    var dst = new Rectangle(Point.Empty, index.Size);
-                    using (var g = Graphics.FromImage(bmp))
-                        g.DrawImage(dds.Pictrue, dst, src, GraphicsUnit.Pixel);                   
-                    bmp.RotateFlip(RotateFlipType.Rotate180FlipX);
-                    return bmp;
+                        var data = dds.Data;
+                        data = FreeImage.Uncompress(data, dds.DDS_Size);
+                        var bmp = new Bitmap(entity.Width, entity.Height);
+                        var src = new Rectangle(index.LeftUp, index.Size);
+                        var dst = new Rectangle(Point.Empty, index.Size);
+                        using (var g = Graphics.FromImage(bmp)) {
+                            g.DrawImage(dds.Pictrue, dst, src, GraphicsUnit.Pixel);
+                        }
+                        return bmp;
                 } else
-                    return new Bitmap(1, 1);            
+                    return new Bitmap(1, 1);
             }
         }
 
@@ -162,7 +164,7 @@ namespace ExtractorSharp.Handle {
             int index_count = stream.ReadInt();
             Album.Length = stream.ReadInt();
             int count = stream.ReadInt();
-            var table=new List<Color>(stream.ReadColorChart(count));
+            var table = new List<Color>(stream.ReadColorChart(count));
             Album.Tables = new List<List<Color>>();
             Album.Tables.Add(table);
             var list = new List<DDS>();
@@ -201,20 +203,7 @@ namespace ExtractorSharp.Handle {
                     Map.Add(entity, new DDS_Info(dds, leftup, rightdown));
                 } else if (entity.Type == ColorBits.LINK)
                     dic.Add(entity, stream.ReadInt());
-                else if (entity.Type == ColorBits.UNKOWN) { //ver5 c型
-                    entity.X = stream.ReadInt();
-                    entity.Y = stream.ReadInt();
-                    entity.Cavas_Width = stream.ReadInt();
-                    entity.Cavas_Height = stream.ReadInt();
-                    var index = stream.ReadInt();
-                    stream.Seek(8);
-                    var leftup = new Point(stream.ReadInt(), stream.ReadInt());
-                    var rightdown = new Point(leftup.X+entity.Width, leftup.Y+entity.Height);
-                    stream.Seek(12);
-                    entity.Width = stream.ReadInt();
-                    entity.Height = stream.ReadInt();
-                    Map.Add(entity, new DDS_Info(list[0], leftup, rightdown));
-                } else {                            //ver5 b型
+                else {
                     entity.Width = stream.ReadInt();
                     entity.Height = stream.ReadInt();
                     entity.Length = stream.ReadInt();
@@ -222,19 +211,29 @@ namespace ExtractorSharp.Handle {
                     entity.Y = stream.ReadInt();
                     entity.Cavas_Width = stream.ReadInt();
                     entity.Cavas_Height = stream.ReadInt();
-                    ver2List.Add(entity);
+                    if (entity.Length == 0) {
+                        var unknow7 = stream.ReadInt();
+                        var unknow5 = stream.ReadInt();
+                        var leftup = new Point(stream.ReadInt(), stream.ReadInt());
+                        var rightdown= new Point(stream.ReadInt(), stream.ReadInt());
+                        var unknow6 = stream.ReadInt();
+                        Map.Add(entity, new DDS_Info(list[0], leftup,rightdown));
+                    } else { 
+                        ver2List.Add(entity);
+                    }
                 }
                 entity.Index = Album.List.Count;
                 Album.List.Add(entity);
             }
-            foreach (var entity in dic.Keys)
+            foreach (var entity in dic.Keys) {
                 entity.Target = Album.List[dic[entity]];
+            }
             foreach (var dds in list) {
                 var data = new byte[dds.Size];
                 stream.Read(data);
                 dds.Data = data;
             }
-            foreach(var entity in ver2List) {
+            foreach (var entity in ver2List) {
                 var data = new byte[entity.Length];
                 stream.Read(data);
                 entity.Data = data;

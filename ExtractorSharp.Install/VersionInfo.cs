@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ExtractorSharp.Install {
     class VersionInfo {
-        public string Version { set; get; } 
+        public string Name { set; get; } 
         public string Time { set; get; }
-        public FileInfo[] File { set; get; }
+        public FileInfo[] Files { set; get; }
 
 
     }

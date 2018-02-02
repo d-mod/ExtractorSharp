@@ -199,9 +199,13 @@
 		"Gerneral" : "常规",
 		"SaveImagePath":"贴图保存路径",
 		"Empty":"清空",
+		"Refresh":"刷新",
 
 		"Plugin":"插件",
 		"PluginList":"全部插件",
+		"Marketplace":"集市",
+
+		"Install":"安装",
 
 	    "AutoSave": "自动保存",
 	    "GridGap": "网格间距",

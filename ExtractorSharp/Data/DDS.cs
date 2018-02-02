@@ -23,7 +23,20 @@ namespace ExtractorSharp.Data {
                 if (image != null)
                     return image;
                 var data = FreeImage.Uncompress(Data, DDS_Size);
-                return FreeImage.Load(data, new Size(Width, Height));
+                if (unknow == 0xe) {
+                    var ms = new MemoryStream(data);
+                    data = new byte[Width * Height * 4];
+                    for (var i = 0; i < data.Length; i += 4) {
+                        var temp = ms.ReadColor(ColorBits.ARGB_1555);
+                        temp.CopyTo(data, i);
+                    }
+                    ms.Close();
+                    return Tools.FromArray(data, new Size(Width, Height));
+                } else {
+                    var bmp = FreeImage.Load(data, new Size(Width, Height));
+                    bmp.RotateFlip(RotateFlipType.Rotate180FlipX);
+                    return bmp;
+                }
             }
             set => image = value;
         }
@@ -56,6 +69,8 @@ namespace ExtractorSharp.Data {
     }
 
     public enum DDS_Version {
-        DXT1 = 0x01
+        DXT1 = 0x01,
+        DXT3 = 0X03,
+        DXT5 = 0x05,
     }
 }

@@ -47,7 +47,7 @@ namespace ExtractorSharp.Composition {
 
         public string Description => Metadata.Description;
 
-        public string Versinon => Metadata.Version;
+        public string Version => Metadata.Version;
 
         public string Since => Metadata.Since;
 
