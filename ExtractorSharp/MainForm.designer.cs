@@ -538,7 +538,8 @@ namespace ExtractorSharp {
             Name = "MainForm";
             Text = $"{ProductName} Ver { Program.Version} { Config["Title"]}";
             AllowDrop = true;
-            ClientSize = new Size(1368, 788);
+            ClientSize = Config["MainSize"].Size;
+            BackColor = Config["MainColor"].Color;
             albumListMenu.ResumeLayout(false);
             imageListMenu.ResumeLayout(false);
             mainMenu.ResumeLayout(false);
@@ -549,7 +550,6 @@ namespace ExtractorSharp {
             previewPanel.Size = new Size(100, 100);
             previewPanel.BackgroundImageLayout = ImageLayout.Zoom;
             previewPanel.Location = new System.Drawing.Point(930, 90);
-          
             ((ISupportInitialize)(box)).EndInit();
             ResumeLayout(false);
             PerformLayout();

@@ -29,7 +29,7 @@
 
 	ApiUrl: "http://extractorsharp.kritsu.net/api/avatar",
 
-	UpdateUrl:"http://extractorsharp.kritsu.net/api/program/update?type=release",
+	UpdateUrl:"http://extractorsharp.kritsu.net/api/program/update",
 	
 	UpdateExeUrl:"http://static.kritsu.net/install.exe",
 	

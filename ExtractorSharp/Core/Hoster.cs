@@ -3,17 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Windows.Forms;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Primitives;
-using System.Linq;
-using ExtractorSharp.Composition;
-using ExtractorSharp.Command;
-using ExtractorSharp.Component;
-using ExtractorSharp.Composition;
 using ExtractorSharp.Config;
-using ExtractorSharp.Core.Control;
 using ExtractorSharp.Data;
 using ExtractorSharp.Loose;
 using System.Diagnostics;
@@ -33,10 +26,10 @@ namespace ExtractorSharp.Core {
 
         private ComposablePartCatalog Catalog { get; }
 
-        private const string MARKET_URL = "http://localhost:8080/api/plugin/list";
+        private const string MARKET_URL = "http://extractorsharp.kritsu.net/api/plugin/list";
 
 
-        private const string DOWNLOAD_URL = "http://localhost:8080/api/plugin/download";
+        private const string DOWNLOAD_URL = "http://extractorsharp.kritsu.net/api/plugin/download";
 
 
         public Hoster() {
@@ -55,8 +48,16 @@ namespace ExtractorSharp.Core {
 
         public void Download(Guid guid) {
             var name = $"{Config["RootPath"]}/{Config["UpdateExeName"]}";
-            Process pro = Process.Start(name, $" -p {guid}");
-            pro.Exited += (sender, e) => Install($"{Config["RootPath"]}/plugin/{guid}");
+            try {
+                var client = new WebClient();
+                client.DownloadFile(Config["UpdateExeUrl"].Value, name);
+                client.Dispose();
+                Process.Start(name);
+                Process pro = Process.Start(name, $" -p {guid}");
+                pro.Exited += (sender, e) => Install($"{Config["RootPath"]}/plugin/{guid}");
+            } catch(Exception e) {
+
+            }
         }
 
         public bool Install(string dir) {
@@ -98,7 +99,7 @@ namespace ExtractorSharp.Core {
                 if (obj["status"].Value.Equals("success")) {
                     NetList = obj["tag"].GetValue(typeof(List<Metadata>)) as List<Metadata>;
                 }
-            } catch (Exception) {
+            } catch (Exception e) {
 
             }
         }

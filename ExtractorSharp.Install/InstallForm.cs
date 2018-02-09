@@ -14,8 +14,8 @@ namespace ExtractorSharp.Install {
     public partial class InstallForm : Form {
 
         private const string UPDATE_URL ="http://extractorsharp.kritsu.net/api/program/update";
-        private const string DOWNLOAD_URL = "http://test.kritsu.net/plugin";
-        private const string DOWNLOAD_PLUGIN_API_URL = "http://localhost:8080/api/plugin/download";
+        private const string DOWNLOAD_URL = "http://static.kritsu.net/plugin";
+        private const string DOWNLOAD_PLUGIN_API_URL = "http://extractorsharp.kritsu.net/api/plugin/download";
         private bool IsPlugin = false;
         private Guid Guid;
         private Stack<FileInfo> Stack;

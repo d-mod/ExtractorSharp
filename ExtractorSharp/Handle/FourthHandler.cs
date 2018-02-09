@@ -23,7 +23,7 @@ namespace ExtractorSharp.Handle {
             if (table.Count > 0) {
                 using (var os = new MemoryStream()) {
                     for (var i = 0; i < data.Length; i++) {
-                        var j = (byte)data[i] % table.Count;
+                        var j = data[i] % table.Count;
                         os.WriteColor(table[j], ColorBits.ARGB_8888);
                     }
                     data = os.ToArray();

@@ -55,10 +55,7 @@ namespace ExtractorSharp {
             if (Config["AutoUpdate"].Boolean) {
                 CheckUpdate(false);
             }
-#if (DEBUG)
-#else
             Application.ThreadException += ShowDebug; 
-#endif
             Application.SetCompatibleTextRenderingDefault(true);           
             Application.EnableVisualStyles();
             LoadRegistry();
@@ -202,7 +199,7 @@ namespace ExtractorSharp {
             try {
                 var builder = new LSBuilder();
                 var obj = builder.Get(Config["UpdateUrl"].Value).GetValue(typeof(VersionInfo)) as VersionInfo;
-                if (!obj.Version.Equals(Version)) {//若当前版本低于最新版本时，触发更新
+                if (!obj.Name.Equals(Version)) {//若当前版本低于最新版本时，触发更新
                     if (MessageBox.Show(Language.Default["NeedUpdateTips"], "", MessageBoxButtons.OKCancel) != DialogResult.OK) {
                         return;                 //提示更新
                     }

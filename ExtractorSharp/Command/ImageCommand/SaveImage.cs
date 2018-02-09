@@ -31,13 +31,13 @@ namespace ExtractorSharp.Command.ImageCommand {
 
         public void Undo() {}
 
-        public void Action(Album album,int[] indexes) {
+        public void Action(Album album, int[] indexes) {
             if (Mode == 0) {//当保存模式为单张贴图时
                 album.List[indexes[0]].Picture.Save(Path);
             } else {//是否加入文件的路径
                 var suffix = Program.Config["SaveImageAllPath"].Boolean ? album.Path : album.Name;
-                var dir = Path.Replace('\\','/');
-                dir = dir.Complete("/"+suffix);
+                var dir = Path.Replace('\\', '/');
+                dir = dir.Complete("/" + suffix);
                 if (File.Exists(dir)) {//当已存在同名的文件时,文件夹加上下划线后缀
                     dir += "_";
                 }
@@ -45,10 +45,10 @@ namespace ExtractorSharp.Command.ImageCommand {
                     Directory.CreateDirectory(dir);
                 }
                 var max = Math.Min(indexes.Length, album.List.Count);
-                for (int i = 0; i < max; i++) {
-                    if (!indexes[i].Between(0,album.List.Count)) {
+                for (var i = 0; i < max; i++) {
+                    if (!indexes[i].Between(-1, album.List.Count)) {
                         continue;
-                    } 
+                    }
                     var entity = album.List[indexes[i]];
                     var path = $"{dir}/{indexes[i]}.png";//文件名格式:文件路径/贴图索引.png
                     entity.Picture.Save(path);//保存贴图
