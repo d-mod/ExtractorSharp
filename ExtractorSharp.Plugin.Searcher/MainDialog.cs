@@ -38,7 +38,7 @@ namespace ExtractorSharp.Plugin.Searcher{
         /// 删除所选的结果
         /// </summary>
         private void DeleteResult() {
-            var array = resultList.CheckedItems;
+            var array = resultList.SelectItems;
             foreach (var item in array) {
                 resultList.Items.Remove(item);
                 List.Remove(item);
@@ -91,7 +91,7 @@ namespace ExtractorSharp.Plugin.Searcher{
         /// </summary>
         /// <returns></returns>
         private string[] GetNPK() {
-            var array = resultList.CheckedItems;
+            var array = resultList.SelectItems;
             var str = new string[0];
             if (array.Length > 0) {
                 var list = new HashSet<string>();
@@ -216,7 +216,7 @@ namespace ExtractorSharp.Plugin.Searcher{
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void AddList(object sender, EventArgs e) {
-            var array = resultList.CheckedItems;
+            var array = resultList.SelectItems;
             var list = new List<Album>();
             if (displayModeBox.SelectedIndex == 1)
                 foreach (var result in array)

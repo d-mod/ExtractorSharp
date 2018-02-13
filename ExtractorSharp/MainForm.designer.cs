@@ -153,6 +153,11 @@ namespace ExtractorSharp {
             saveAsLayerItem = new ToolStripMenuItem();
             replaceLayerItem = new ToolStripMenuItem();
 
+            canvasMenu = new ContextMenuStrip();
+            canvasCutItem = new ToolStripMenuItem();
+            canvasCopyItem = new ToolStripMenuItem();
+            canvasPasteItem = new ToolStripMenuItem();
+
             previewPanel = new Panel();
             colorPanel = new Panel();
             albumListMenu.SuspendLayout();
@@ -457,7 +462,7 @@ namespace ExtractorSharp {
             //
             //
             pixelateBox.Text = Language["Pixelate"];
-            pixelateBox.Location = new Point(330, 53);
+            pixelateBox.Location = new Point(420, 47);
             pixelateBox.Checked = Config["Pixelate"].Boolean;
 
             // 
@@ -534,6 +539,18 @@ namespace ExtractorSharp {
 
             colorDialog = new ColorDialog();
 
+            canvasMenu.Items.Add(canvasCutItem);
+            canvasMenu.Items.Add(canvasCopyItem);
+            canvasMenu.Items.Add(canvasPasteItem);
+
+            canvasCutItem.Text = Language["Cut"];
+            canvasCutItem.ShortcutKeys = Keys.Control | Keys.X;
+            canvasCopyItem.Text = Language["Copy"];
+            canvasCopyItem.ShortcutKeys = Keys.Control | Keys.C;
+            canvasPasteItem.Text = Language["Paste"];
+            canvasPasteItem.ShortcutKeys = Keys.Control | Keys.V;
+
+
             AutoScaleDimensions = new SizeF(6F, 12F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(imageList);
@@ -555,6 +572,7 @@ namespace ExtractorSharp {
             Controls.Add(colorPanel);
             Controls.Add(scaleLabel);
             Controls.Add(scaleBox);
+            Controls.Add(pixelateBox);
             Controls.Add(previewPanel);
             MainMenuStrip = mainMenu;
             Name = "MainForm";
@@ -692,6 +710,12 @@ namespace ExtractorSharp {
         private ToolStripMenuItem adjustEntityPositionItem;//校正坐标
         private ToolStripMenuItem loadModelItem;    //载入模板
         private ToolStripMenuItem saveAsLayerItem;//另存为
+
+
+        private ContextMenuStrip canvasMenu;
+        private ToolStripMenuItem canvasCutItem;
+        private ToolStripMenuItem canvasCopyItem;
+        private ToolStripMenuItem canvasPasteItem;
 
         private DropPanel dropPanel;
         private OggPlayer player;

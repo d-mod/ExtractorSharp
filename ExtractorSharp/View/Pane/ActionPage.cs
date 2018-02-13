@@ -23,7 +23,7 @@ namespace ExtractorSharp.View.Pane {
         }
 
         private void Delete() {
-            Controller.Delete(actionList.CheckedItems);
+            Controller.Delete(actionList.SelectItems);
         }
 
         private void Record(object sender, EventArgs e) {

@@ -71,6 +71,8 @@
 
 	CanvasScale:100
 
+	Pixelate:true
+
 	LineDodge:false
 
 	OnionSkin:false

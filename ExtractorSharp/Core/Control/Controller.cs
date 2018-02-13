@@ -144,8 +144,10 @@ namespace ExtractorSharp.Core.Control {
             Regisity("saveImage", typeof(SaveImage));
             Regisity("changePosition", typeof(ChangePosition));
             Regisity("changeSize", typeof(ChangeSize));
+
             Regisity("cutImage", typeof(CutImage));
             Regisity("pasteImage", typeof(PasteImage));
+            Regisity("pasteSingleImage", typeof(PasteSingleImage));
             Regisity("moveImage", typeof(MoveImage));
 
             Regisity("addMerge", typeof(AddMerge));

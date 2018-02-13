@@ -239,7 +239,7 @@ namespace ExtractorSharp {
             imageList.SelectedIndexChanged += SelectImageChanged;
             imageList.ItemHoverChanged += PreviewHover;
             changePositionItem.Click += (o, e) => Viewer.Show("changePosition", base.Connector.CheckedImages);
-            changeSizeItem.Click += (o, e) => Controller.Do("changeSize", base.Connector.SelectedFile, imageList.CheckedIndices, ImageScale);
+            changeSizeItem.Click += (o, e) => Controller.Do("changeSize", base.Connector.SelectedFile, imageList.SelectIndexes, ImageScale);
             searchBox.TextChanged += (o, e) => ListFlush();
 
             newImageItem.Click += (o, e) => Viewer.Show("newImage", base.Connector.SelectedFile);
@@ -256,6 +256,7 @@ namespace ExtractorSharp {
             historyButton.Click += ShowHistory;
             scaleBox.ValueChanged += Flush;
             scaleBox.Increment = 30;
+            pixelateBox.CheckedChanged += Flush;
             sortItem.Click += Sort;
             classifyItem.CheckedChanged += Classify;
             displayRuleCrossHairItem.Click += Flush;
@@ -291,11 +292,15 @@ namespace ExtractorSharp {
             splitFileItem.Click += (o, e) => Controller.Do("splitFile", base.Connector.CheckedFiles);
             mixFileItem.Click += (o, e) => Controller.Do("mixFile", base.Connector.CheckedFiles);
             cutImageItem.Click += CutImage;
-            copyImageItem.Click += CutImage;
+            copyImageItem.Click += CopyImage;
             pasteImageItem.Click += PasteImage;
             cutImgItem.Click += CutImg;
             copyImgItem.Click += CutImg;
             pasteImgItem.Click += PasteImg;
+
+            canvasCutItem.Click += CutImage;
+            canvasCopyItem.Click += CopyImage;
+            canvasPasteItem.Click += CanvasPasteImage;
         }
         
         /// <summary>
@@ -322,6 +327,11 @@ namespace ExtractorSharp {
             Controller.Do("cutImg", base.Connector.CheckedFiles, mode);
         }
 
+        private void CopyImage(object sender,EventArgs e) {
+            CutImage(ClipMode.Copy);
+        }
+
+
 
         /// <summary>
         /// 复制/剪切图片
@@ -329,16 +339,26 @@ namespace ExtractorSharp {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void CutImage(object sender, EventArgs e) {
-            var mode = ClipMode.Copy;
-            if (sender.Equals(cutImageItem)) {
-                mode = ClipMode.Cut;
-            }
+            CutImage(ClipMode.Cut);
+        }
+
+
+        private void CutImage(ClipMode mode) {
             var al = base.Connector.SelectedFile;
             if (al != null) {
-                var indexes = base.Connector.CheckedImages;
+                var indexes = base.Connector.CheckedImageIndices;
                 Controller.Do("cutImage", al, indexes, mode);
             }
         }
+
+        private void CanvasPasteImage(object sender, EventArgs e) {
+            var al = base.Connector.SelectedFile;
+            if (al != null) {
+                var image = base.Connector.SelectedImage;
+                Controller.Do("pasteSingleImage", image, Hotpot);
+            }
+        }
+
 
         /// <summary>
         /// 粘贴图片
@@ -413,7 +433,7 @@ namespace ExtractorSharp {
 
 
         private void DeleteLayer() {
-            var array = layerList.CheckedItems;
+            var array = layerList.SelectItems;
             foreach (var item in array) {
                 Drawer.LayerList.Remove(item);
                 layerList.Items.Remove(item);
@@ -477,7 +497,7 @@ namespace ExtractorSharp {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void AdjustLayer(object sender, EventArgs e) {
-            var array = layerList.CheckedItems;
+            var array = layerList.SelectItems;
             if (array.Length > 0) {
                 foreach (var item in array) {
                     item.Adjust();
@@ -644,8 +664,10 @@ namespace ExtractorSharp {
         /// 列表刷新
         /// </summary>
         public void ListFlush() {
-            var indices = albumList.CheckedIndices;
+            var items = albumList.CheckedItems;
             var index = albumList.SelectedIndex;
+            var itemArray = new Album[items.Count];
+            items.CopyTo(itemArray, 0);
             albumList.Items.Clear();
             var condition = searchBox.Text.Trim().Split(" ");
             var array = Tools.Find(base.Connector.List, condition);
@@ -664,8 +686,8 @@ namespace ExtractorSharp {
             } else {
                 albumList.Items.AddRange(array.ToArray());
             }
-            foreach (var i in indices) {
-                if (i.Between(0,albumList.Items.Count)) {
+            for (var i = 0; i < array.Count; i++) {
+                if (itemArray.Contains(array[i])) {
                     albumList.SetItemChecked(i, true);
                 }
             }
@@ -960,24 +982,25 @@ namespace ExtractorSharp {
         public void ImageFlush(bool clear) {
             var al = albumList.SelectedItem;            //记录当前所选img
             var index = imageList.SelectedIndex;        //记录当前选择贴图
-            var indexes = imageList.CheckedIndices;
+            var items = imageList.CheckedItems;
+            var itemArray = new ImageEntity[items.Count];
+            items.CopyTo(itemArray, 0);
             if (al != null && al.Version == Img_Version.OGG) { //判断是否为ogg音频
                 player.Play();
             } else {
                 player.Visible = false;
                 imageList.Items.Clear();
-                if (al != null) {
-                    imageList.Items.AddRange(al.List.ToArray());
-                }
-                //添加贴图
-                index = (index > -1 && index < imageList.Items.Count) ? index : 0;
-                if (!clear) {
-                    foreach (var i in indexes) {
-                        if (i > -1 && i < imageList.Items.Count) {
+                var array = al?.List.ToArray();
+                if (array != null) {
+                    imageList.Items.AddRange(array);
+                    for (var i = 0; i < array.Length; i++) {
+                        if (itemArray.Contains(array[i])) {
                             imageList.SetItemChecked(i, true);
                         }
                     }
                 }
+                //添加贴图
+                index = (index > -1 && index < imageList.Items.Count) ? index : 0;      
                 if (imageList.Items.Count > 0) {
                     imageList.SelectedIndex = index;
                 } else if (imageList.Items.Count == 0) {
@@ -1058,13 +1081,13 @@ namespace ExtractorSharp {
         /// </summary>
         private void OnPainting(object sender, PaintEventArgs e) {
             var g = e.Graphics;
-            g.InterpolationMode = InterpolationMode.NearestNeighbor;
+            g.InterpolationMode = pixelateBox.Checked ? InterpolationMode.NearestNeighbor : InterpolationMode.High;
             var entity = Connector.SelectedImage;//获得当前选择的贴图
             var pos = CurrentLayer.Location;
             if (!mutipleLayerItem.Checked && entity?.Picture != null) {
                 if (entity.Type == ColorBits.LINK && entity.Target != null) {
                     entity = entity.Target;
-                }                                                   
+                }
                 var pictrue = entity.Picture;
                 var size = entity.Size.Star(ImageScale);
                 if (linedodgeBox.Checked) {
@@ -1080,7 +1103,7 @@ namespace ExtractorSharp {
             } else {//多图层模式
                 Drawer.DrawLayer(g);
             }
-            
+
             if (Rule.Visible) {//显示标尺        
                 Rule.Tag = CurrentLayer.Location.Minus(Rule.Location);
                 Rule.Size = box.Size;
@@ -1133,8 +1156,13 @@ namespace ExtractorSharp {
         }
 
         private void OnMouseClick(object sender, MouseEventArgs e) {
-            if (!Drawer.IsSelect("MoveTool")) {
-                Drawer.Brush.Draw(CurrentLayer, e.Location, ImageScale);
+            Hotpot = e.Location;
+            if (e.Button == MouseButtons.Left) {
+                if (!Drawer.IsSelect("MoveTool")) {
+                    Drawer.Brush.Draw(CurrentLayer, Hotpot, ImageScale);
+                }
+            } else if (e.Button == MouseButtons.Right) {
+                canvasMenu.Show(box, Hotpot);
             }
         }
 
@@ -1312,9 +1340,9 @@ namespace ExtractorSharp {
 
             public ImageEntity SelectedImage => MainForm.imageList.SelectedItem;
 
-            public ImageEntity[] CheckedImages => MainForm.imageList.CheckedItems;
+            public ImageEntity[] CheckedImages => MainForm.imageList.SelectItems;
 
-            public int[] CheckedImageIndices => MainForm.imageList.CheckedIndices;
+            public int[] CheckedImageIndices => MainForm.imageList.SelectIndexes;
 
             public int ImageCount => MainForm.imageList.Items.Count;
 
@@ -1329,11 +1357,11 @@ namespace ExtractorSharp {
 
             public Album[] FileArray => MainForm.albumList.AllItems;
 
-            public Album[] CheckedFiles => MainForm.albumList.CheckedItems;
+            public Album[] CheckedFiles => MainForm.albumList.SelectItems;
 
             public Album SelectedFile => MainForm.albumList.SelectedItem;
 
-            public int[] CheckedFileIndices => MainForm.albumList.CheckedIndices;
+            public int[] CheckedFileIndices => MainForm.albumList.SelectIndexes;
 
             public int FileCount => MainForm.albumList.Items.Count;
 

@@ -42,9 +42,9 @@ namespace ExtractorSharp.Component {
         protected void OnItemHover(ItemHoverEventArgs e) => ItemHoverChanged?.Invoke(this, e);
 
 
-        public new int[] CheckedIndices {
+        public int[] SelectIndexes {
             get {
-                var indexes = base.CheckedIndices;
+                var indexes = CheckedIndices;
                 var array = new int[indexes.Count];
                 indexes.CopyTo(array, 0);
                 if (array.Length > 0) {
@@ -54,10 +54,10 @@ namespace ExtractorSharp.Component {
             }
         }
 
-        public new T[] CheckedItems {
+        public T[] SelectItems {
             get {
-                var array = new T[base.CheckedItems.Count];
-                base.CheckedItems.CopyTo(array, 0);
+                var array = new T[CheckedItems.Count];
+                CheckedItems.CopyTo(array, 0);
                 if (array.Length < 2) {
                     var item = SelectedItem;
                     if (item != null) {

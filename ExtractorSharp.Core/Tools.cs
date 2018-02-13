@@ -497,6 +497,15 @@ namespace ExtractorSharp {
 
         public static List<T> ToList<T>(this IEnumerable<T> enums)=>new List<T>(enums);
 
+        public static bool Contains<T>(this IEnumerable<T> enums,T t) {
+            foreach(T item in enums) {
+                if (item.Equals(t)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         /// <summary>
         /// 安全插入 当插入的位置不在于集合的区间时，改为添加
         /// </summary>

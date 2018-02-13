@@ -34,7 +34,7 @@ namespace ExtractorSharp.View {
                 Messager.ShowError("SelectPathIsInvalid");
                 return;
             }
-            var array = list.CheckedItems;
+            var array = list.SelectItems;
             bar.Maximum = array.Length;
             bar.Value = 0;
             bar.Visible = true;

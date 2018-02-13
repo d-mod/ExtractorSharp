@@ -71,7 +71,7 @@ namespace ExtractorSharp.Command.ImageCommand {
         }
 
         public void Redo() {
-            Do(Source, Target, Index);
+            Do(Target, Index);
         }
 
         public void Undo() {
