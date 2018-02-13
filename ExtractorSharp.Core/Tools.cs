@@ -849,7 +849,7 @@ namespace ExtractorSharp {
 
 
         [Obsolete]
-        public static Bitmap Cavas1(this Bitmap bmp, Rectangle rect) {
+        public static Bitmap Canvas1(this Bitmap bmp, Rectangle rect) {
             if (rect.Width > bmp.Width && rect.Height > bmp.Height) {
                 var data = bmp.ToArray();
                 var newData = new byte[rect.Width * rect.Height * 4];
@@ -863,7 +863,7 @@ namespace ExtractorSharp {
             return bmp;
         }
 
-        public static Bitmap Cavas(this Bitmap bmp, Rectangle rect) {
+        public static Bitmap Canvas(this Bitmap bmp, Rectangle rect) {
             var image = new Bitmap(rect.Width, rect.Height);
             using (var g = Graphics.FromImage(image)) 
                 g.DrawImage(bmp, rect.X, rect.Y);
@@ -1053,8 +1053,8 @@ namespace ExtractorSharp {
             stream.WriteInt(data.Length);
             stream.WriteInt(entity.X);
             stream.WriteInt(entity.Y);
-            stream.WriteInt(entity.Cavas_Width);
-            stream.WriteInt(entity.Cavas_Height);
+            stream.WriteInt(entity.Canvas_Width);
+            stream.WriteInt(entity.Canvas_Height);
             stream.Write(data);
         }
 
@@ -1071,8 +1071,8 @@ namespace ExtractorSharp {
                 entity.Length = stream.ReadInt();
                 entity.X = stream.ReadInt();
                 entity.Y = stream.ReadInt();
-                entity.Cavas_Width = stream.ReadInt();
-                entity.Cavas_Height = stream.ReadInt();
+                entity.Canvas_Width = stream.ReadInt();
+                entity.Canvas_Height = stream.ReadInt();
                 var data = new byte[entity.Length];
                 stream.Read(data);
                 if (entity.Compress != Compress.NONE) {

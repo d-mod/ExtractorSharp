@@ -35,7 +35,9 @@ namespace ExtractorSharp.Component {
             StartPosition = FormStartPosition.CenterScreen;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = Config["FormColor"].Color;
+            if (Config != null) {
+                this.BackColor = Config["FormColor"].Color;
+            }
         }
 
         #endregion

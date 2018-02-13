@@ -10,7 +10,14 @@ namespace ExtractorSharp.Handle {
     /// IMG操作类
     /// </summary>
     public abstract class Handler{
-        public static Dictionary<Img_Version, Type> Dic = new Dictionary<Img_Version, Type>();
+        private static Dictionary<Img_Version, Type> Dic = new Dictionary<Img_Version, Type>();
+
+        public static List<Img_Version> Versions => Dic.Keys.ToList();
+
+        public static Handler CreateHandler(Img_Version version,Album album) {
+            var type = Dic[version];
+            return type.CreateInstance(album) as Handler;
+        }
 
         [LSIgnore]
         public Album Album;

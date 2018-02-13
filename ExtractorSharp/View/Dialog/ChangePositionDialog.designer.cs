@@ -133,7 +133,7 @@ namespace ExtractorSharp.View{
             this.max_width_radio.Name = "max_width_radio";
             this.max_width_radio.Size = new System.Drawing.Size(60, 16);
             this.max_width_radio.TabIndex = 6;
-            this.max_width_radio.Text = Language["CavasWidth"];
+            this.max_width_radio.Text = Language["CanvasWidth"];
             this.max_width_radio.UseVisualStyleBackColor = true;
             // 
             // max_height_radio
@@ -143,7 +143,7 @@ namespace ExtractorSharp.View{
             this.max_height_radio.Name = "max_height_radio";
             this.max_height_radio.Size = new System.Drawing.Size(60, 16);
             this.max_height_radio.TabIndex = 7;
-            this.max_height_radio.Text = Language["CavasHeight"];
+            this.max_height_radio.Text = Language["CanvasHeight"];
             this.max_height_radio.UseVisualStyleBackColor = true;
             // 
             // yesButton

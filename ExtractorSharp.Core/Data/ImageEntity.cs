@@ -76,16 +76,16 @@ namespace ExtractorSharp.Data {
         /// 帧域宽高
         /// </summary>
         [LSIgnore]
-        public Size Cavas_Size  = Size.Empty;
+        public Size Canvas_Size  = Size.Empty;
 
-        public int Cavas_Width {
-            set => Cavas_Size = new Size(value, Cavas_Height);
-            get => Cavas_Size.Width;
+        public int Canvas_Width {
+            set => Canvas_Size = new Size(value, Canvas_Height);
+            get => Canvas_Size.Width;
         }
      
-        public int Cavas_Height {
-            set => Cavas_Size = new Size(Cavas_Width, value);
-            get => Cavas_Size.Height;
+        public int Canvas_Height {
+            set => Canvas_Size = new Size(Canvas_Width, value);
+            get => Canvas_Size.Height;
         }
 
         /// <summary>
@@ -150,11 +150,11 @@ namespace ExtractorSharp.Data {
                 Y += bmp.Height - Size.Height;
             }
             Size = bmp.Size;
-            if (Cavas_Height < bmp.Height) {
-                Cavas_Height = bmp.Height;
+            if (Canvas_Height < bmp.Height) {
+                Canvas_Height = bmp.Height;
             }
-            if (Cavas_Width < bmp.Width) {
-                Cavas_Width = bmp.Width;
+            if (Canvas_Width < bmp.Width) {
+                Canvas_Width = bmp.Width;
             }
             if (Width * Height > 1) {
                 Compress = Compress.ZLIB;
@@ -165,7 +165,7 @@ namespace ExtractorSharp.Data {
         /// <summary>
         /// 去画布化
         /// </summary>
-        public void UnCavasImage() {
+        public void UnCanvasImage() {
             if (Type == ColorBits.LINK || Compress == Compress.NONE) {
                 return;
             }
@@ -187,8 +187,8 @@ namespace ExtractorSharp.Data {
         /// 画布化
         /// </summary>
         /// <param name="Target"></param>
-        public void CavasImage(Size Target) {
-            Picture = Picture.Cavas(new Rectangle(Location, Target));
+        public void CanvasImage(Size Target) {
+            Picture = Picture.Canvas(new Rectangle(Location, Target));
             Size = Target;
             Location = Point.Empty;
         }
@@ -217,7 +217,7 @@ namespace ExtractorSharp.Data {
         public override string ToString() {
             if (Type == ColorBits.LINK && Target != null)
                 return Index + "," + Language.Default["TargetIndex"] + Target.Index;
-            return Index + "," + Type + "," + Language.Default["Position"] + "(" + Location.GetString() + ")," +Language.Default["Size"] + "(" + Size.GetString() + ")," + Language.Default["CavasSize"] + "(" + Cavas_Size.GetString() + ")";
+            return Index + "," + Type + "," + Language.Default["Position"] + "(" + Location.GetString() + ")," +Language.Default["Size"] + "(" + Size.GetString() + ")," + Language.Default["CanvasSize"] + "(" + Canvas_Size.GetString() + ")";
         }
 
         public ImageEntity Clone(Album album) {
@@ -226,7 +226,7 @@ namespace ExtractorSharp.Data {
             entity.Compress = Compress;
             entity.Type = Type;
             entity.Location = Location;
-            entity.Cavas_Size = Cavas_Size;
+            entity.Canvas_Size = Canvas_Size;
             entity.Target = Target;
             return entity;
         }

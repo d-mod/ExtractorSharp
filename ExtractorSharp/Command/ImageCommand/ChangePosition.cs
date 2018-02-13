@@ -25,7 +25,7 @@ namespace ExtractorSharp.Command.ImageCommand {
                     continue;
                 var entity = Album.List[Indices[i]];
                 old_Locations[i] = entity.Location;
-                old_Max_Sizes[i] = entity.Cavas_Size;
+                old_Max_Sizes[i] = entity.Canvas_Size;
                 if (Checkes[0]) {
                     if (!relative)
                         entity.X = 0;
@@ -38,13 +38,13 @@ namespace ExtractorSharp.Command.ImageCommand {
                 }
                 if (Checkes[2]) {
                     if (!relative)
-                        entity.Cavas_Width = 0;
-                    entity.Cavas_Width += Ins[2];
+                        entity.Canvas_Width = 0;
+                    entity.Canvas_Width += Ins[2];
                 }
                 if (Checkes[3]) {
                     if (!relative)
-                        entity.Cavas_Height = 0;
-                    entity.Cavas_Height += Ins[3];
+                        entity.Canvas_Height = 0;
+                    entity.Canvas_Height += Ins[3];
                 }
             }
         }
@@ -59,7 +59,7 @@ namespace ExtractorSharp.Command.ImageCommand {
                 }
                 var entity = Album.List[Indices[i]];
                 entity.Location = old_Locations[i];
-                entity.Cavas_Size = old_Max_Sizes[i];
+                entity.Canvas_Size = old_Max_Sizes[i];
             }
         }
 
@@ -83,15 +83,15 @@ namespace ExtractorSharp.Command.ImageCommand {
                 }
                 if (Checkes[2]) {
                     if (!relative) {
-                        entity.Cavas_Width = 0;
+                        entity.Canvas_Width = 0;
                     }
-                    entity.Cavas_Width += Ins[2];
+                    entity.Canvas_Width += Ins[2];
                 }
                 if (Checkes[3]) {
                     if (!relative) {
-                        entity.Cavas_Height = 0;
+                        entity.Canvas_Height = 0;
                     }
-                    entity.Cavas_Height += Ins[3];
+                    entity.Canvas_Height += Ins[3];
                 }
             }
         }

@@ -28,7 +28,7 @@ namespace ExtractorSharp.Command.DrawCommand {
             Source = (Point)args[1];
             Dest = (Point)args[2];
             Entity.Location = Entity.Location.Add(Dest.Minus(Source));
-            Connector.CavasFlush();
+            Connector.CanvasFlush();
         }
 
         public void Redo() {

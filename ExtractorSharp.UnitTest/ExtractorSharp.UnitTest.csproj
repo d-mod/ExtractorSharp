@@ -58,17 +58,21 @@
     <Compile Include="UnitTest3.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ExtractorSharp.Loose\ExtractorSharp.Loose.csproj">
-      <Project>{06D35140-706A-40CE-9373-6B948F092A30}</Project>
-      <Name>ExtractorSharp.Loose</Name>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ExtractorSharp.Core\ExtractorSharp.Core.csproj">
+      <Project>{09014dd5-3314-437e-bb2e-6fbd0d1e7864}</Project>
+      <Name>ExtractorSharp.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExtractorSharp.Loose\ExtractorSharp.Json.csproj">
+      <Project>{06d35140-706a-40ce-9373-6b948f092a30}</Project>
+      <Name>ExtractorSharp.Json</Name>
     </ProjectReference>
     <ProjectReference Include="..\ExtractorSharp\ExtractorSharp.csproj">
       <Project>{37d3351f-80f8-4905-a06f-65c430ec5ee2}</Project>
       <Name>ExtractorSharp</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -10,6 +10,7 @@ using ExtractorSharp.Data;
 
 namespace ExtractorSharp.Draw.Brush {
     class Pencil : IBrush {
+        public string Name => "Pencil";
         public Cursor Cursor => new Cursor(Resources.pencil.GetHicon());
         public int Radius { set; get; } = 1;
         public Point Location { set; get; }

@@ -51,22 +51,38 @@
 
 	FormImage : ''		
 
-	FormColor : ''		
+	FormColor : ''	
 
 	FormImageLayout : ''		
 
 	FormIcon : 'aww.ico'		
 
-	CavasColor : ''		
+	CanvasColor : ''		
 
-	CavasImage : ''		
+	CanvasImage : ''		
 
-	CavasSize : '800,600'		
+	CanvasSize : '800,600'		
 
 	StartPosition : 'center'		
 
-	Preview : False		
+	Preview : false		
 
 	Title : ''		
+
+	CanvasScale:100
+
+	LineDodge:false
+
+	OnionSkin:false
+
+	RealPosition:false
+
+	Animation:false
+
+	Ruler:false
+
+	RuleCrosshair:false
+
+	RulerLocked:false
 
 }

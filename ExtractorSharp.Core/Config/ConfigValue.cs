@@ -11,8 +11,12 @@ namespace ExtractorSharp.Config {
     /// </summary>
     public class ConfigValue {
 
-        public ConfigValue(object obj) => Object = obj;
-
+        public ConfigValue(object obj) {
+            if (obj is Color c) {
+                obj = $"{c.R},{c.G},{c.B},{c.A}";
+            }
+            Object = obj;
+        }
         /// <summary>
         /// 空值
         /// </summary>
@@ -21,8 +25,11 @@ namespace ExtractorSharp.Config {
         /// <summary>
         /// 值
         /// </summary>
-        public string Value => Object?.ToString();
-
+        public string Value {
+            get {
+                return Object?.ToString();
+            }
+        }
         public object Object {
             get;
         }
@@ -82,7 +89,7 @@ namespace ExtractorSharp.Config {
             get {
                 if (Object is Color color)
                     return color;
-                if (Value.Length > 0) {
+                if (Value != null && Value.Length > 0) {
                     if (Value.StartsWith("#")) {
                         var argb = int.Parse(Value.Substring(1), NumberStyles.AllowHexSpecifier);
                         return Color.FromArgb(argb);

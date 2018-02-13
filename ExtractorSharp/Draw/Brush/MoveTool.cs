@@ -11,6 +11,8 @@ namespace ExtractorSharp.Draw.Brush {
     /// 移动工具
     /// </summary>
     class MoveTool : IBrush {
+        public string Name => "MoveTool";
+
         public Cursor Cursor => Cursors.Default;
 
         public Color Color { set; get; }

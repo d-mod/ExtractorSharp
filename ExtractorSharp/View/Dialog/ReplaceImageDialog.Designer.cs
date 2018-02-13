@@ -36,7 +36,7 @@ namespace ExtractorSharp.View {
             this.allImageRadio = new System.Windows.Forms.RadioButton();
             this.seletImageRadio = new System.Windows.Forms.RadioButton();
             this.fromGifBox = new System.Windows.Forms.CheckBox();
-            this.adjustPostionBox = new System.Windows.Forms.CheckBox();
+            this.adjustPositionBox = new System.Windows.Forms.CheckBox();
             this.channelGroup.SuspendLayout();
             this.group.SuspendLayout();
             this.SuspendLayout();
@@ -147,23 +147,23 @@ namespace ExtractorSharp.View {
             this.fromGifBox.Text = Language["ReplaceFromGif"];
             this.fromGifBox.UseVisualStyleBackColor = true;
             // 
-            // adjustPostionBox
+            // adjustPositionBox
             // 
-            this.adjustPostionBox.AutoSize = true;
-            this.adjustPostionBox.Checked = true;
-            this.adjustPostionBox.Location = new System.Drawing.Point(151, 244);
-            this.adjustPostionBox.Name = "adjustPostionBox";
-            this.adjustPostionBox.Size = new System.Drawing.Size(72, 16);
-            this.adjustPostionBox.TabIndex = 7;
-            this.adjustPostionBox.Text = Language["AdjustPosition"];
-            this.adjustPostionBox.UseVisualStyleBackColor = true;
+            this.adjustPositionBox.AutoSize = true;
+            this.adjustPositionBox.Checked = true;
+            this.adjustPositionBox.Location = new System.Drawing.Point(151, 244);
+            this.adjustPositionBox.Name = "adjustPositionBox";
+            this.adjustPositionBox.Size = new System.Drawing.Size(72, 16);
+            this.adjustPositionBox.TabIndex = 7;
+            this.adjustPositionBox.Text = Language["AdjustPosition"];
+            this.adjustPositionBox.UseVisualStyleBackColor = true;
             // 
             // GifListDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(266, 330);
-            this.Controls.Add(this.adjustPostionBox);
+            this.Controls.Add(this.adjustPositionBox);
             this.Controls.Add(this.fromGifBox);
             this.Controls.Add(this.group);
             this.Controls.Add(this.channelGroup);
@@ -191,6 +191,6 @@ namespace ExtractorSharp.View {
         private System.Windows.Forms.RadioButton seletImageRadio;
         private System.Windows.Forms.RadioButton allImageRadio;
         private System.Windows.Forms.CheckBox fromGifBox;
-        private System.Windows.Forms.CheckBox adjustPostionBox;
+        private System.Windows.Forms.CheckBox adjustPositionBox;
     }
 }

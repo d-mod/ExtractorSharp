@@ -38,7 +38,7 @@ namespace ExtractorSharp.Command.DrawCommand {
                 g.FillEllipse(brush, rect);
             }
             Entity.Picture = image;
-            Program.Connector.CavasFlush();
+            Program.Connector.CanvasFlush();
         }
 
         public void Redo() {

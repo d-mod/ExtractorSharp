@@ -58,7 +58,7 @@ namespace ExtractorSharp.Core {
         /// <summary>
         /// 刷新画布
         /// </summary>
-        void CavasFlush();
+        void CanvasFlush();
         /// <summary>
         /// 刷新贴图列表,同时刷新画布
         /// </summary>

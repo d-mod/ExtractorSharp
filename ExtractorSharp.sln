@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractorSharp.Host", "Extr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractorSharp", "ExtractorSharp\ExtractorSharp.csproj", "{37D3351F-80F8-4905-A06F-65C430EC5EE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractorSharp.Loose", "ExtractorSharp.Loose\ExtractorSharp.Loose.csproj", "{06D35140-706A-40CE-9373-6B948F092A30}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractorSharp.Json", "ExtractorSharp.Loose\ExtractorSharp.Json.csproj", "{06D35140-706A-40CE-9373-6B948F092A30}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractorSharp.Plugin.DressingRoom", "ExtractorSharp.Plugin.DressingRoom\ExtractorSharp.Plugin.DressingRoom.csproj", "{8D0421F7-3FBB-4822-BD3A-9441C778AE8A}"
 EndProject

@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 namespace ExtractorSharp.Draw.Brush {
     class Eraser : IBrush {
+        public string Name => "Eraser";
 
         public int Radius { set; get; } = 10;
 

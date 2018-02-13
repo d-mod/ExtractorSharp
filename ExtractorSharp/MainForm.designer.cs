@@ -87,8 +87,8 @@ namespace ExtractorSharp {
             saveDirItem = new ToolStripMenuItem();
 
             toolsItem = new ToolStripMenuItem();
-            cavasImageItem = new ToolStripMenuItem();
-            uncavasImageItem = new ToolStripMenuItem();
+            canvasImageItem = new ToolStripMenuItem();
+            uncanvasImageItem = new ToolStripMenuItem();
             lineDodgeItem = new ToolStripMenuItem();
 
             editMenu = new ToolStripMenuItem();
@@ -121,7 +121,7 @@ namespace ExtractorSharp {
             box = new PictureBox();
             mutipleLayerItem = new ToolStripMenuItem();
             linedodgeBox = new CheckBox();
-            realPostionBox = new CheckBox();
+            realPositionBox = new CheckBox();
             onionskinBox = new CheckBox();
             displayBox = new CheckBox();
 
@@ -133,6 +133,9 @@ namespace ExtractorSharp {
 
             scaleLabel = new Label();
             scaleBox = new NumericUpDown();
+            pixelateBox = new CheckBox();
+
+
             aboutMenu = new ToolStripMenuItem();
             debugItem = new ToolStripMenuItem();
             versionItem = new ToolStripMenuItem();
@@ -267,11 +270,11 @@ namespace ExtractorSharp {
             addLayerItem.Text = Language["AddLayer"];
 
             toolsItem.Text = Language["Other"];
-            cavasImageItem.Text = Language["CavasImage"];
-            uncavasImageItem.Text = Language["UnCavasImage"];
+            canvasImageItem.Text = Language["CanvasImage"];
+            uncanvasImageItem.Text = Language["UnCanvasImage"];
             lineDodgeItem.Text = Language["LineDodge"];
-            toolsItem.DropDownItems.Add(cavasImageItem);
-            toolsItem.DropDownItems.Add(uncavasImageItem);
+            toolsItem.DropDownItems.Add(canvasImageItem);
+            toolsItem.DropDownItems.Add(uncanvasImageItem);
             toolsItem.DropDownItems.AddSeparator();
             toolsItem.DropDownItems.Add(lineDodgeItem);
             // 
@@ -358,29 +361,35 @@ namespace ExtractorSharp {
             viewMenu.DropDownItems.Add(gridItem);
             viewMenu.DropDownItems.Add(previewItem);
             viewMenu.DropDownItems.Add(mutipleLayerItem);
-            ruleItem.Text = Language["Rule"];
+
+            ruleItem.Text = Language["Ruler"];
             ruleItem.DropDownItems.Add(displayRuleItem);
             ruleItem.DropDownItems.Add(displayRuleCrossHairItem);
             ruleItem.DropDownItems.Add(lockRuleItem);
             ruleItem.DropDownItems.Add(adjustRuleItem);
-            displayRuleItem.Text = Language["DisplayRule"];
+
+            displayRuleItem.Text = Language["DisplayRuler"];
+            displayRuleItem.Checked = Config["Ruler"].Boolean;
             displayRuleItem.ShortcutKeys = Keys.Control | Keys.N;
             displayRuleItem.ShowShortcutKeys = true;
             displayRuleItem.CheckOnClick = true;
-            displayRuleCrossHairItem.Text = Language["DisplayRuleCrossfair"];
+            displayRuleCrossHairItem.Text = Language["DisplayRulerCrosshair"];
+            displayRuleCrossHairItem.Checked = Config["RulerCrosshair"].Boolean;
             displayRuleCrossHairItem.ToolTipText = "显示准心可以让标尺移动";
             displayRuleCrossHairItem.CheckOnClick = true;
             displayRuleCrossHairItem.Checked = true;
-            adjustRuleItem.Text = Language["AdjustRule"];
+            adjustRuleItem.Text = Language["ResetRuler"];
             adjustRuleItem.ToolTipText = "还原标尺位置";
-            lockRuleItem.Text = Language["LockRule"];
+            lockRuleItem.Text = Language["LockRuler"];
             lockRuleItem.ToolTipText = "固定标尺，禁止移动";
             lockRuleItem.CheckOnClick = true;
+            lockRuleItem.Checked = Config["RulerLocked"].Boolean;
             previewItem.Text = Language["Preview"];
             previewItem.CheckOnClick = true;
             previewItem.Checked = Config["Preview"].Boolean;
             gridItem.Text = Language["Grid"];
             gridItem.CheckOnClick = true;
+            gridItem.Checked = Config["Grid"].Boolean;
 
 
 
@@ -417,57 +426,70 @@ namespace ExtractorSharp {
             box.Location = new Point(230, 90);
             box.Name = "box";
             box.BackColor = Color.Gray;
-            if (Config["CavasSize"].Size != Size.Empty) { 
-                box.Size = Config["CavasSize"].Size;
+            if (Config["CanvasSize"].Size != Size.Empty) { 
+                box.Size = Config["CanvasSize"].Size;
             }
             //
             //colorPanel
             //
             colorPanel.Location = new Point(800, 48);
-            colorPanel.BackColor = Color.White;
+            colorPanel.BackColor = Config["BrushColor"].Color;
             colorPanel.Size = new Size(25, 25);
             colorPanel.BorderStyle = BorderStyle.FixedSingle;
             ///
             ///
             ///
             scaleLabel.AutoSize = true;
-            scaleLabel.Text = Language["CavasScale"];
-            scaleLabel.Location = new Point(360, 53);
+            scaleLabel.Text = Language["CanvasScale"];
+            scaleLabel.Location = new Point(230, 53);
 
             ///
             ///
             ///
             scaleBox.Size = new Size(100, 40);
-            scaleBox.Location = new Point(430, 50);
+            scaleBox.Location = new Point(300, 50);
             scaleBox.Minimum = 20;
             scaleBox.Maximum = 100000;
-            scaleBox.Value = 100;
+            scaleBox.Value = Config["CanvasScale"].Integer;
+
+
+            //
+            //
+            //
+            pixelateBox.Text = Language["Pixelate"];
+            pixelateBox.Location = new Point(330, 53);
+            pixelateBox.Checked = Config["Pixelate"].Boolean;
+
             // 
-            // realPostionBox
+            // realPositionBox
             // 
-            realPostionBox.Location = new Point(1050, 70);
-            realPostionBox.Name = "realPostionBox";
-            realPostionBox.AutoSize = true;
-            realPostionBox.TabIndex = 11;
-            realPostionBox.Text = Language["RealPostion"];
+            realPositionBox.Location = new Point(1050, 70);
+            realPositionBox.Name = "realPositionBox";
+            realPositionBox.AutoSize = true;
+            realPositionBox.TabIndex = 11;
+            realPositionBox.Text = Language["RealPosition"];
+            realPositionBox.Checked = Config["RealPosition"].Boolean;
             //
             //
             //
             displayBox.Location = new Point(1170, 70);
             displayBox.AutoSize = true;
-            displayBox.Text = Language["Flash"];
+            displayBox.Text = Language["Animation"];
+            displayBox.Checked = Config["Animation"].Boolean;
             //
             //
             //
             linedodgeBox.Location = new Point(1050, 50);
             linedodgeBox.AutoSize = true;
             linedodgeBox.Text = Language["LineDodge"];
+            linedodgeBox.Checked = Config["LineDodge"].Boolean;
             ///
             //
             //
             onionskinBox.Location = new Point(1170, 50);
             onionskinBox.AutoSize = true;
             onionskinBox.Text = Language["OnionSkin"];
+            onionskinBox.Checked = Config["OnionSkin"].Boolean;
             //
             //
             //
@@ -524,7 +546,7 @@ namespace ExtractorSharp {
             Controls.Add(openButton);
             Controls.Add(closeButton);
             Controls.Add(pathBox);
-            Controls.Add(realPostionBox);
+            Controls.Add(realPositionBox);
             Controls.Add(displayBox);
             Controls.Add(linedodgeBox);
             Controls.Add(onionskinBox);
@@ -638,20 +660,23 @@ namespace ExtractorSharp {
         private ToolStripMenuItem adjustPositionItem;//校正坐标
         private ToolStripMenuItem addLayerItem; //加入图层
         private ToolStripMenuItem toolsItem;    //拓展
-        private ToolStripMenuItem cavasImageItem;//画布化贴图
-        private ToolStripMenuItem uncavasImageItem;//去画布化贴图
+        private ToolStripMenuItem canvasImageItem;//画布化贴图
+        private ToolStripMenuItem uncanvasImageItem;//去画布化贴图
         private ToolStripMenuItem lineDodgeItem;
 
         private ColorDialog colorDialog;
 
         
-        private CheckBox realPostionBox;        //真实坐标
+        private CheckBox realPositionBox;        //真实坐标
         private CheckBox displayBox;            //动画播放
         private CheckBox linedodgeBox;          //线性减淡
         private CheckBox onionskinBox;             //模拟残影
 
         private Label scaleLabel;
         private NumericUpDown scaleBox;         //画布比例
+        private CheckBox pixelateBox;              //像素化
+
+
         private Button openButton;              //打开文件
         private Button closeButton;             //关闭文件
         private PictureBox box;

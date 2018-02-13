@@ -86,8 +86,8 @@ namespace ExtractorSharp.Handle {
                 ms.WriteInt(entity.Length);
                 ms.WriteInt(entity.Location.X);
                 ms.WriteInt(entity.Location.Y);
-                ms.WriteInt(entity.Cavas_Size.Width);
-                ms.WriteInt(entity.Cavas_Size.Height);
+                ms.WriteInt(entity.Canvas_Size.Width);
+                ms.WriteInt(entity.Canvas_Size.Height);
             }
             ms.Close();
             var data = ms.ToArray();

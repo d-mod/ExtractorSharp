@@ -160,10 +160,10 @@ namespace ExtractorSharp.Core {
                         var source = al.List[i];
                         if (source.Type == ColorBits.LINK)//如果为链接贴图。则引用指向贴图的属性
                             source = source.Target;
-                        if (source.Cavas_Width > max_width)//最大画布
-                            max_width = source.Cavas_Height;
-                        if (source.Cavas_Height > max_height)
-                            max_height = source.Cavas_Height;
+                        if (source.Canvas_Width > max_width)//最大画布
+                            max_width = source.Canvas_Height;
+                        if (source.Canvas_Height > max_height)
+                            max_height = source.Canvas_Height;
                         if (source.Compress == Compress.NONE && source.Width * source.Height == 1)//将透明图层过滤
                             continue;
                         if (source.Width + source.X > width)//获得最右点坐标
@@ -187,7 +187,7 @@ namespace ExtractorSharp.Core {
                 entity.Type = type;
                 entity.Index = entitys.Count;
                 entity.Location = new Point(x, y);
-                entity.Cavas_Size = new Size(max_width, max_height);
+                entity.Canvas_Size = new Size(max_width, max_height);
                 var image = new Bitmap(width, height);
                 using (var g = Graphics.FromImage(image)) {
                     foreach (var al in Array) {

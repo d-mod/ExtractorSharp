@@ -54,7 +54,7 @@ namespace ExtractorSharp.View {
                 mode = 2;
             }
             if (!string.IsNullOrEmpty(path)) {
-                Controller.Do("replaceImage", type, adjustPostionBox.Checked, mode, path, Connector.SelectedFile, indexes);
+                Controller.Do("replaceImage", type, adjustPositionBox.Checked, mode, path, Connector.SelectedFile, indexes);
                 DialogResult = DialogResult.OK;
             }
         }

@@ -8,7 +8,7 @@ namespace ExtractorSharp.Command.ImageCommand {
     /// 可撤销
     /// 可宏命令
     /// </summary>
-    class CavasImage : SingleAction {
+    class CanvasImage : SingleAction {
         private Album Album;
 
         private Size Size;
@@ -33,9 +33,9 @@ namespace ExtractorSharp.Command.ImageCommand {
                 var entity = Album.List[Indices[i]];
                 Images[i] = entity.Picture;
                 Locations[i] = entity.Location;
-                entity.CavasImage(Size);
+                entity.CanvasImage(Size);
             }
-            Messager.ShowOperate("CavasImage");
+            Messager.ShowOperate("CavansImage");
         }
 
         public void Redo() => Do(Album, Size, Indices);
@@ -52,7 +52,7 @@ namespace ExtractorSharp.Command.ImageCommand {
         public void Action(Album Album, int[] indexes) {
             foreach (var i in indexes)
                 if (i < Album.List.Count && i > -1)
-                    Album.List[i].CavasImage(Size);
+                    Album.List[i].CanvasImage(Size);
         }
 
         public bool IsFlush => false;
@@ -61,6 +61,6 @@ namespace ExtractorSharp.Command.ImageCommand {
 
         public bool IsChanged => true;
 
-        public string Name => "Cavas";
+        public string Name => "Canvas";
     }
 }

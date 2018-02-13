@@ -11,6 +11,7 @@ namespace ExtractorSharp.Draw.Brush{
     /// 画笔
     /// </summary>
     public interface IBrush {
+        string Name { get; }
         /// <summary>
         /// 鼠标图标
         /// </summary>

@@ -55,13 +55,15 @@ namespace ExtractorSharp {
             if (Config["AutoUpdate"].Boolean) {
                 CheckUpdate(false);
             }
-            Application.ThreadException += ShowDebug; 
+           // Application.ThreadException += ShowDebug; 
             Application.SetCompatibleTextRenderingDefault(true);           
             Application.EnableVisualStyles();
             LoadRegistry();
             Controller = new Controller();
             Viewer = new Viewer();
             Drawer = new Drawer();
+            Drawer.Select(Config["Brush"].Value);
+            Drawer.Color = Config["BrushColor"].Color;
             Form = new MainForm();
             Form.Shown += OnShown;
             Connector = Form.Connector;
@@ -125,7 +127,7 @@ namespace ExtractorSharp {
             Viewer.Regisity("about", typeof(AboutDialog));
             Viewer.Regisity("debug", typeof(BugDialog));
             Viewer.Regisity("newImage", typeof(NewImageDialog));
-            Viewer.Regisity("cavas", typeof(CanvasDialog));
+            Viewer.Regisity("canvas", typeof(CanvasDialog));
             Viewer.Regisity("setting", typeof(SettingDialog));
             Viewer.Regisity("saveImage", typeof(SaveImageDialog));
             Viewer.Regisity("version", typeof(VersionDialog));
@@ -133,7 +135,7 @@ namespace ExtractorSharp {
         }
 
 
-        private static void RegistyHandler() {
+        public static void RegistyHandler() {
             Handler.Regisity(Img_Version.OGG, typeof(OggHandler));
             Handler.Regisity(Img_Version.Ver1, typeof(FirstHandler));
             Handler.Regisity(Img_Version.Ver2, typeof(SecondHandler));

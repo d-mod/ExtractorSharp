@@ -30,8 +30,8 @@ namespace ExtractorSharp.Handle {
                     ms.WriteInt(0x00);
                     ms.WriteInt(entity.Location.X);
                     ms.WriteInt(entity.Location.Y);
-                    ms.WriteInt(entity.Cavas_Size.Width);
-                    ms.WriteInt(entity.Cavas_Size.Height);
+                    ms.WriteInt(entity.Canvas_Size.Width);
+                    ms.WriteInt(entity.Canvas_Size.Height);
                     ms.WriteInt(0x00);
                     var info = Map[entity];
                     var dds_index = List.IndexOf(info.DDS);
@@ -49,8 +49,8 @@ namespace ExtractorSharp.Handle {
                     ms.WriteInt(entity.Length);
                     ms.WriteInt(entity.X);
                     ms.WriteInt(entity.Y);
-                    ms.WriteInt(entity.Cavas_Width);
-                    ms.WriteInt(entity.Cavas_Height);
+                    ms.WriteInt(entity.Canvas_Width);
+                    ms.WriteInt(entity.Canvas_Height);
                 }
             }
             ms.Close();
@@ -192,8 +192,8 @@ namespace ExtractorSharp.Handle {
                     stream.Seek(4);                      //保留，固定为0
                     entity.X = stream.ReadInt();
                     entity.Y = stream.ReadInt();
-                    entity.Cavas_Width = stream.ReadInt();
-                    entity.Cavas_Height = stream.ReadInt();
+                    entity.Canvas_Width = stream.ReadInt();
+                    entity.Canvas_Height = stream.ReadInt();
                     stream.Seek(4);
                     var index = stream.ReadInt();
                     var dds = list[index];
@@ -209,8 +209,8 @@ namespace ExtractorSharp.Handle {
                     entity.Length = stream.ReadInt();
                     entity.X = stream.ReadInt();
                     entity.Y = stream.ReadInt();
-                    entity.Cavas_Width = stream.ReadInt();
-                    entity.Cavas_Height = stream.ReadInt();
+                    entity.Canvas_Width = stream.ReadInt();
+                    entity.Canvas_Height = stream.ReadInt();
                     if (entity.Length == 0) {
                         var unknow7 = stream.ReadInt();
                         var unknow5 = stream.ReadInt();

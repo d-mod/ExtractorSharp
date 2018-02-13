@@ -7,8 +7,8 @@
     <ProjectGuid>{06D35140-706A-40CE-9373-6B948F092A30}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ExtractorSharp.Loose</RootNamespace>
-    <AssemblyName>ExtractorSharp.Loose</AssemblyName>
+    <RootNamespace>ExtractorSharp.Json</RootNamespace>
+    <AssemblyName>ExtractorSharp.Json</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

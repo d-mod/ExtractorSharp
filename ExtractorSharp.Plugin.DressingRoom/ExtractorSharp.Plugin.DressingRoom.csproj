@@ -66,9 +66,9 @@
       <Project>{dce898ee-8fcb-45aa-9a53-bfeed8ed7257}</Project>
       <Name>ExtractorSharp.Component</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ExtractorSharp.Loose\ExtractorSharp.Loose.csproj">
+    <ProjectReference Include="..\ExtractorSharp.Loose\ExtractorSharp.Json.csproj">
       <Project>{06d35140-706a-40ce-9373-6b948f092a30}</Project>
-      <Name>ExtractorSharp.Loose</Name>
+      <Name>ExtractorSharp.Json</Name>
     </ProjectReference>
     <ProjectReference Include="..\ExtractorSharp.Core\ExtractorSharp.Core.csproj">
       <Project>{09014dd5-3314-437e-bb2e-6fbd0d1e7864}</Project>

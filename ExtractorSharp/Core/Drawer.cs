@@ -72,11 +72,11 @@ namespace ExtractorSharp.Core {
         public delegate void ColorChangeHandler(object sender, ColorEventArgs e);
         public event ColorChangeHandler ColorChanged;
 
-#endregion
+        #endregion
 
 
         public IBrush Select(string key) {
-            if (Brushes.ContainsKey(key)) {
+            if (key != null && Brushes.ContainsKey(key)) {
                 Brush = Brushes[key];//切换画笔
                 var arg = new DrawEventArgs();
                 arg.Brush = Brush;

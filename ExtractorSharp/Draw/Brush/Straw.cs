@@ -12,6 +12,8 @@ namespace ExtractorSharp.Draw.Brush{
     /// 吸管
     /// </summary>
     class Straw : IBrush {
+        public string Name => "Straw";
+
         public Cursor Cursor => Cursors.Cross;
 
         public Color Color { get; set; } = Color.Aqua;

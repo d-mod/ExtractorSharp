@@ -34,7 +34,7 @@ namespace ExtractorSharp.View.Pane {
                     Controller.Do("changeColor", Album, Album.TableIndex, item.Index, color);
                 }
                 Album.Refresh();
-                Data.CavasFlush();
+                Data.CanvasFlush();
             }
         }
 
@@ -55,7 +55,7 @@ namespace ExtractorSharp.View.Pane {
             if (Album != null) {
                 Album.TableIndex = combo.SelectedIndex;
                 list.Colors = Album.CurrentTable.ToArray();
-                Data.CavasFlush();
+                Data.CanvasFlush();
             }
         }
 

@@ -69,8 +69,8 @@ namespace ExtractorSharp.Handle {
                 ms.WriteInt(entity.Length);
                 ms.WriteInt(entity.Location.X);
                 ms.WriteInt(entity.Location.Y);
-                ms.WriteInt(entity.Cavas_Size.Width);
-                ms.WriteInt(entity.Cavas_Size.Height);
+                ms.WriteInt(entity.Canvas_Size.Width);
+                ms.WriteInt(entity.Canvas_Size.Height);
             }
             ms.Close();
             var data = ms.ToArray();
@@ -107,8 +107,8 @@ namespace ExtractorSharp.Handle {
                 image.Length = stream.ReadInt();
                 image.X = stream.ReadInt();
                 image.Y = stream.ReadInt();
-                image.Cavas_Width = stream.ReadInt();
-                image.Cavas_Height = stream.ReadInt();
+                image.Canvas_Width = stream.ReadInt();
+                image.Canvas_Height = stream.ReadInt();
                 if (image.Compress == Compress.NONE)
                     image.Length = image.Size.Width * image.Size.Height * (image.Type == ColorBits.ARGB_8888 ? 4 : 2);
                 var data = new byte[image.Length];
@@ -120,7 +120,7 @@ namespace ExtractorSharp.Handle {
                     if (dic.ContainsKey(image) && dic[image] < Album.List.Count) {
                         image.Target = Album.List[dic[image]];
                         image.Size = image.Target.Size;
-                        image.Cavas_Size = image.Target.Cavas_Size;
+                        image.Canvas_Size = image.Target.Canvas_Size;
                         image.Location = image.Target.Location;
                     }
                 }

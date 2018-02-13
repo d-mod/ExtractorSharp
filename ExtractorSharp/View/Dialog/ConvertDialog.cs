@@ -13,11 +13,12 @@ namespace ExtractorSharp.View {
         private Album[] Array;
         public ConvertDialog(IConnector Data) : base(Data) {
             InitializeComponent();
-            var array = new Img_Version[Handler.Dic.Count];
-            Handler.Dic.Keys.CopyTo(array, 0);
-            foreach (var ver in array) {
-                combo.Items.Add(ver);
+            var list = Handler.Versions;
+            object[] array = new object[list.Count];
+            for(var i = 0; i < list.Count; i++) {
+                array[i] = list[i];
             }
+            combo.Items.AddRange(array);
             yesButton.Click += Convert;
         }
         

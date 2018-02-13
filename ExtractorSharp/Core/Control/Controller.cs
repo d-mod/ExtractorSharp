@@ -154,8 +154,8 @@ namespace ExtractorSharp.Core.Control {
             Regisity("runMerge", typeof(RunMerge));
             Regisity("moveMerge", typeof(MoveMerge));
 
-            Regisity("cavasImage", typeof(CavasImage));
-            Regisity("uncavasImage", typeof(UnCavasImage));
+            Regisity("canvasImage", typeof(CanvasImage));
+            Regisity("uncanvasImage", typeof(UnCanvasImage));
             Regisity("lineDodge", typeof(LineDodge));
 
             Regisity("renameLayer", typeof(RenameLayer));

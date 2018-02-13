@@ -64,7 +64,7 @@ namespace ExtractorSharp.View.SettingPane {
             // 
             this.Controls.Add(this.flashSpeedGroup);
             this.Parent = "View";
-            this.Name = "Flash";
+            this.Name = "Animation";
             this.Size = new System.Drawing.Size(329, 244);
             this.flashSpeedGroup.ResumeLayout(false);
             this.flashSpeedGroup.PerformLayout();

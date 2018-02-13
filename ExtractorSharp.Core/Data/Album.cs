@@ -111,6 +111,7 @@ namespace ExtractorSharp.Data {
 
         public Album() {
             Tables = new List<List<Color>>();
+            Handler = Handler.CreateHandler(Version,this);
         }
         
         /// <summary>
@@ -123,13 +124,7 @@ namespace ExtractorSharp.Data {
         /// </summary>
         /// <param name="stream"></param>
         public void InitHandle(Stream stream) {
-            if (!Handler.Dic.ContainsKey(Version)) {
-                return;
-            }
-            var type = Handler.Dic[Version];
-            if (type != null && typeof(Handler).IsAssignableFrom(type)) {
-                Handler = type.CreateInstance(this) as Handler;
-            }
+            Handler = Handler.CreateHandler(Version,this);
             if (Handler != null && stream != null) {
                 Handler.CreateFromStream(stream);
             }

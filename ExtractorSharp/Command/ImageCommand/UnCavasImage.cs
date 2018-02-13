@@ -8,10 +8,10 @@ namespace ExtractorSharp.Command.ImageCommand {
     /// <summary>
     /// 去画布化
     /// </summary>
-    class UnCavasImage : SingleAction {
+    class UnCanvasImage : SingleAction {
         public int[] Indices { set; get; }
 
-        public string Name => "UnCavas";
+        public string Name => "UnCanvas";
 
         private Album Album;
 
@@ -31,9 +31,9 @@ namespace ExtractorSharp.Command.ImageCommand {
                 var entity = Album.List[Indices[i]];
                 Images[i] = entity.Picture;
                 Locations[i] = entity.Location;
-                entity.UnCavasImage();
+                entity.UnCanvasImage();
             }
-            Messager.ShowOperate("UnCavasImage");
+            Messager.ShowOperate("UnCanvasImage");
         }
 
         public void Redo() => Do(Album, Indices);
@@ -50,7 +50,7 @@ namespace ExtractorSharp.Command.ImageCommand {
         public void Action(Album Album, int[] indexes) {
             foreach (var i in indexes) {
                 if (i < Album.List.Count && i > -1) {
-                    Album.List[i].UnCavasImage();
+                    Album.List[i].UnCanvasImage();
                 }
             }
         }
