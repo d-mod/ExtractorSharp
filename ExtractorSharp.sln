@@ -4,8 +4,6 @@ VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractorSharp.Avatar", "ExtractorSharp.Avatar\ExtractorSharp.Avatar.csproj", "{00B2BA4E-1D4C-4AD8-AD1E-257F8AB7F79F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractorSharp.Host", "ExtractorSharp.Host\ExtractorSharp.Host.csproj", "{EC2AAD0D-C25E-4D75-89C4-928CB2702F02}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractorSharp", "ExtractorSharp\ExtractorSharp.csproj", "{37D3351F-80F8-4905-A06F-65C430EC5EE2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractorSharp.Json", "ExtractorSharp.Loose\ExtractorSharp.Json.csproj", "{06D35140-706A-40CE-9373-6B948F092A30}"
@@ -50,22 +48,6 @@ Global
 		{00B2BA4E-1D4C-4AD8-AD1E-257F8AB7F79F}.Release|x64.Build.0 = Release|Any CPU
 		{00B2BA4E-1D4C-4AD8-AD1E-257F8AB7F79F}.Release|x86.ActiveCfg = Release|Any CPU
 		{00B2BA4E-1D4C-4AD8-AD1E-257F8AB7F79F}.Release|x86.Build.0 = Release|Any CPU
-		{EC2AAD0D-C25E-4D75-89C4-928CB2702F02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EC2AAD0D-C25E-4D75-89C4-928CB2702F02}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EC2AAD0D-C25E-4D75-89C4-928CB2702F02}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{EC2AAD0D-C25E-4D75-89C4-928CB2702F02}.Debug|ARM.Build.0 = Debug|Any CPU
-		{EC2AAD0D-C25E-4D75-89C4-928CB2702F02}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{EC2AAD0D-C25E-4D75-89C4-928CB2702F02}.Debug|x64.Build.0 = Debug|Any CPU
-		{EC2AAD0D-C25E-4D75-89C4-928CB2702F02}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{EC2AAD0D-C25E-4D75-89C4-928CB2702F02}.Debug|x86.Build.0 = Debug|Any CPU
-		{EC2AAD0D-C25E-4D75-89C4-928CB2702F02}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EC2AAD0D-C25E-4D75-89C4-928CB2702F02}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EC2AAD0D-C25E-4D75-89C4-928CB2702F02}.Release|ARM.ActiveCfg = Release|Any CPU
-		{EC2AAD0D-C25E-4D75-89C4-928CB2702F02}.Release|ARM.Build.0 = Release|Any CPU
-		{EC2AAD0D-C25E-4D75-89C4-928CB2702F02}.Release|x64.ActiveCfg = Release|Any CPU
-		{EC2AAD0D-C25E-4D75-89C4-928CB2702F02}.Release|x64.Build.0 = Release|Any CPU
-		{EC2AAD0D-C25E-4D75-89C4-928CB2702F02}.Release|x86.ActiveCfg = Release|Any CPU
-		{EC2AAD0D-C25E-4D75-89C4-928CB2702F02}.Release|x86.Build.0 = Release|Any CPU
 		{37D3351F-80F8-4905-A06F-65C430EC5EE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{37D3351F-80F8-4905-A06F-65C430EC5EE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37D3351F-80F8-4905-A06F-65C430EC5EE2}.Debug|ARM.ActiveCfg = Debug|Any CPU
