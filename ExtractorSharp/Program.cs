@@ -123,7 +123,6 @@ namespace ExtractorSharp {
             Viewer.Regisity("newImg", typeof(NewImgDialog));
             Viewer.Regisity("convert", typeof(ConvertDialog));
             Viewer.Regisity("changePosition", typeof(ChangePositonDialog));
-            Viewer.Regisity("clear", typeof(ClearDialog));
             Viewer.Regisity("about", typeof(AboutDialog));
             Viewer.Regisity("debug", typeof(BugDialog));
             Viewer.Regisity("newImage", typeof(NewImageDialog));

@@ -61,33 +61,29 @@ namespace ExtractorSharp.Core {
         }
 
         public bool Install(string dir) {
-            try {
-                var plugin = new Plugin();
-                plugin.Directory = dir;
-                //加载主程序模块和插件模块
-                var catalog = new AggregateCatalog();
-                catalog.Catalogs.Add(this.Catalog);
-                catalog.Catalogs.Add(new DirectoryCatalog(dir));
-                var container = new CompositionContainer(catalog);
-                //注入插件信息
-                container.ComposeParts(plugin);
-                //载入设置
-                var confDir = $"{dir}/conf/conf.json";
-                if (File.Exists(confDir)) {
-                    Config.Load(confDir);
-                }
-                //载入多语言
-                var lanDir = $"{dir}/lan";
-                if (Directory.Exists(lanDir)) {
-                    Language.CreateFromDir(lanDir);
-                }
-                //初始化
-                plugin.Initialize();
-                //记录插件
-                List.Add(plugin.Guid, plugin);
-            } catch (Exception e) {
-                return false;
+            var plugin = new Plugin();
+            plugin.Directory = dir;
+            //加载主程序模块和插件模块
+            var catalog = new AggregateCatalog();
+            catalog.Catalogs.Add(this.Catalog);
+            catalog.Catalogs.Add(new DirectoryCatalog(dir));
+            var container = new CompositionContainer(catalog);
+            //注入插件信息
+            container.ComposeParts(plugin);
+            //载入设置
+            var confDir = $"{dir}/conf/conf.json";
+            if (File.Exists(confDir)) {
+                Config.Load(confDir);
             }
+            //载入多语言
+            var lanDir = $"{dir}/lan";
+            if (Directory.Exists(lanDir)) {
+                Language.CreateFromDir(lanDir);
+            }
+            //初始化
+            plugin.Initialize();
+            //记录插件
+            List.Add(plugin.Guid, plugin);
             return true;
         }
 

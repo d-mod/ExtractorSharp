@@ -1,30 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.IO;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
-using ExtractorSharp.Command;
 using ExtractorSharp.Component;
-using ExtractorSharp.Properties;
-using ExtractorSharp.Config;
 using ExtractorSharp.Core;
 
 namespace ExtractorSharp.View {
-    internal partial class ClearDialog : ESDialog {
+    [ExportMetadata("Guid", "A4BB046F-ACAB-44B5-A0F0-2DD84278B43D")]
+    [Export(typeof(ESDialog))]
+    public partial class MainDialog : ESDialog {
         private string Path => Config["ResourcePath"].Value;
         private Dictionary<string, string> Dic;
-        public ClearDialog(IConnector Data) : base(Data) {
+        [ImportingConstructor]
+        public MainDialog(IConnector Data) : base(Data) {
             InitializeComponent();
             modeBox.SelectedIndex = 0;
             pathBox.Text = Config["GamePath"].Value;
             searhButton.Click += Search;
-            clearButton.Click += Clear;
+            cleanButton.Click += Clear;
             pathBox.Click += SelectPath;
             loadButton.Click += SelectPath;
         }
 
         public void SelectPath(object sender, EventArgs e) {
-            Program.SelectPath();
+            Connector.SelectPath();
             if (Directory.Exists(Config["GamePath"].Value))
                 pathBox.Text = Config["GamePath"].Value;
         }
@@ -72,14 +72,14 @@ namespace ExtractorSharp.View {
                 return;
             }
             list.Items.Clear();
-            if (modeBox.SelectedIndex == 0) 
-                SimpleClear();
-            else if (modeBox.SelectedIndex == 1)
-                DepthClear();
-            GC.Collect();
+            if (modeBox.SelectedIndex == 0) {
+                SimpleClean();
+            } else if (modeBox.SelectedIndex == 1) {
+                DepthClean();
+            }
         }
 
-        public void SimpleClear() {
+        public void SimpleClean() {
             var files = Directory.GetFiles(Path,"*.NPK");
             bar.Maximum = files.Length;
             bar.Value = 0;
@@ -92,7 +92,7 @@ namespace ExtractorSharp.View {
             bar.Visible = false;
         }
 
-        public void DepthClear() {
+        public void DepthClean() {
             Dic = Dic ?? Tools.LoadFileLst($"{Config["GamePath"]}/auto.lst");
             var files = Directory.GetFiles(Path);
             bar.Maximum = files.Length;

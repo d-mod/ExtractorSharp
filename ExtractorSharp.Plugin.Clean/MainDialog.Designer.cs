@@ -1,7 +1,7 @@
 ﻿using System.Windows.Forms;
 
 namespace ExtractorSharp.View {
-    partial class ClearDialog {
+    partial class MainDialog {
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -31,7 +31,7 @@ namespace ExtractorSharp.View {
             this.pathLabel = new System.Windows.Forms.Label();
             this.pathBox = new System.Windows.Forms.TextBox();
             this.list = new ExtractorSharp.Component.ESListBox<string>();
-            this.clearButton = new System.Windows.Forms.Button();
+            this.cleanButton = new System.Windows.Forms.Button();
             this.bar = new System.Windows.Forms.ProgressBar();
             this.searhButton = new System.Windows.Forms.Button();
             this.backupCheck = new System.Windows.Forms.CheckBox();
@@ -45,15 +45,15 @@ namespace ExtractorSharp.View {
             this.modeLabel.Name = "modeLabel";
             this.modeLabel.Size = new System.Drawing.Size(53, 12);
             this.modeLabel.TabIndex = 0;
-            this.modeLabel.Text = Language["ClearMode"];
+            this.modeLabel.Text = Language["CleanMode"];
             // 
             // modeBox
             // 
             this.modeBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.modeBox.FormattingEnabled = true;
             this.modeBox.Items.AddRange(new object[] {
-            Language["SimpleClear"],
-            Language["DepthClear"]});
+            Language["SimpleClean"],
+            Language["DepthClean"]});
             this.modeBox.Location = new System.Drawing.Point(116, 24);
             this.modeBox.Name = "modeBox";
             this.modeBox.Size = new System.Drawing.Size(212, 20);
@@ -86,12 +86,12 @@ namespace ExtractorSharp.View {
             // 
             // clearButton
             // 
-            this.clearButton.Location = new System.Drawing.Point(214, 257);
-            this.clearButton.Name = "clearButton";
-            this.clearButton.Size = new System.Drawing.Size(129, 36);
-            this.clearButton.TabIndex = 5;
-            this.clearButton.Text = Language["Clear"];
-            this.clearButton.UseVisualStyleBackColor = true;
+            this.cleanButton.Location = new System.Drawing.Point(214, 257);
+            this.cleanButton.Name = "cleanButton";
+            this.cleanButton.Size = new System.Drawing.Size(129, 36);
+            this.cleanButton.TabIndex = 5;
+            this.cleanButton.Text = Language["Clean"];
+            this.cleanButton.UseVisualStyleBackColor = true;
             // 
             // bar
             // 
@@ -113,7 +113,7 @@ namespace ExtractorSharp.View {
             // backupCheck
             // 
             this.backupCheck.AutoSize = true;
-            this.backupCheck.Location = new System.Drawing.Point(356, 277);
+            this.backupCheck.Location = new System.Drawing.Point(356, 250);
             this.backupCheck.Name = "backupCheck";
             this.backupCheck.Size = new System.Drawing.Size(72, 16);
             this.backupCheck.TabIndex = 8;
@@ -136,7 +136,7 @@ namespace ExtractorSharp.View {
             this.ClientSize = new System.Drawing.Size(448, 309);
             this.Controls.Add(this.loadButton);
             this.Controls.Add(this.bar);
-            this.Controls.Add(this.clearButton);
+            this.Controls.Add(this.cleanButton);
             this.Controls.Add(this.list);
             this.Controls.Add(this.pathBox);
             this.Controls.Add(this.pathLabel);
@@ -144,8 +144,8 @@ namespace ExtractorSharp.View {
             this.Controls.Add(this.modeLabel);
             this.Controls.Add(this.searhButton);
             this.Controls.Add(this.backupCheck);
-            this.Name = "ClearDialog";
-            this.Text = Language["ClearModel"];
+            this.Name = "cleanMod";
+            this.Text = Language["CleanMod"];
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -157,7 +157,7 @@ namespace ExtractorSharp.View {
         private System.Windows.Forms.ComboBox modeBox;
         private System.Windows.Forms.Label pathLabel;
         private System.Windows.Forms.TextBox pathBox;
-        private System.Windows.Forms.Button clearButton;
+        private System.Windows.Forms.Button cleanButton;
         private System.Windows.Forms.ProgressBar bar;
         private System.Windows.Forms.Button searhButton;
         private System.Windows.Forms.CheckBox backupCheck;

@@ -200,12 +200,6 @@
     <Compile Include="View\Dialog\BugDialog.Designer.cs">
       <DependentUpon>BugDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\Dialog\ClearDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="View\Dialog\ClearDialog.Designer.cs">
-      <DependentUpon>ClearDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="View\Dialog\ConvertDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -379,9 +373,6 @@
     <EmbeddedResource Include="View\Dialog\ChangePositionDialog.resx">
       <DependentUpon>ChangePositionDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\Dialog\ClearDialog.resx">
-      <DependentUpon>ClearDialog.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="View\Dialog\ConvertDialog.resx">
       <DependentUpon>ConvertDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -509,7 +500,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Resources_4alias_3weapon_1json__JSONSchema="http://json.schemastore.org/config" Resources_4queues_1json__JSONSchema="http://json.schemastore.org/config" />
+      <UserProperties Resources_4queues_1json__JSONSchema="http://json.schemastore.org/config" Resources_4alias_3weapon_1json__JSONSchema="http://json.schemastore.org/config" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
