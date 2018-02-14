@@ -18,12 +18,7 @@ namespace ExtractorSharp.Command.ImageCommand {
         private System.Drawing.Point OldLocation;
 
         private System.Drawing.Point Location;
-            
-
-        private int Index;
-
-        private Clipboarder Clipboarder;
-
+           
         public string Name => "PasteSingleImage";
 
         public bool CanUndo => true;
@@ -36,13 +31,11 @@ namespace ExtractorSharp.Command.ImageCommand {
         public void Do(params object[] args) {
             Entity = args[0] as ImageEntity;
             Location = (System.Drawing.Point)args[1];
-            Clipboarder = Clipboarder.Default;
-            var array = new ImageEntity[0];
+            var clipboard = Clipboarder.Default;
             Bitmap image = null;
-            if (Clipboarder != null) {
-                var source = Clipboarder.Album;
-                var indexes = Clipboarder.Indexes;
-                array = new ImageEntity[indexes.Length];
+            if (clipboard != null) {
+                var source = clipboard.Album;
+                var indexes = clipboard.Indexes;
                 if (indexes.Length > 0 && indexes[0] < source.List.Count) {
                     image = source[indexes[0]].Picture;
                 }
