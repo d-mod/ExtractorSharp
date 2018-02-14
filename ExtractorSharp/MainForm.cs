@@ -468,6 +468,7 @@ namespace ExtractorSharp {
             var array = Connector.CheckedImages;
             if (array.Length > 0) {
                 Drawer.AddLayer(array);
+                layerList.Clear();
                 layerList.Items.AddRange(Drawer.LayerList.ToArray());
                 if (!mutipleLayerItem.Checked) {
                     mutipleLayerItem.Checked = true;

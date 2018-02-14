@@ -78,9 +78,9 @@ namespace ExtractorSharp.Core {
         public IBrush Select(string key) {
             if (key != null && Brushes.ContainsKey(key)) {
                 Brush = Brushes[key];//切换画笔
-                var arg = new DrawEventArgs();
-                arg.Brush = Brush;
-                OnBrushChanged(arg);
+                OnBrushChanged(new DrawEventArgs {
+                    Brush = Brush
+                });
             }
             return Brush;
         }
@@ -92,16 +92,7 @@ namespace ExtractorSharp.Core {
         public void AddLayer(params ImageEntity[] array) {
             var list = new List<Layer>();
             foreach (var entity in array) {
-                var isContains = false;
-                foreach (Layer item in LayerList) {
-                    if (item.Index == entity.Index) {
-                        item.Replace(entity);
-                        isContains = true;
-                        break;
-                    }
-                }
-                if (!isContains)
-                    list.Add(Layer.CreateFrom(entity));
+                list.Add(Layer.CreateFrom(entity));
             }
             AddLayer(list.ToArray());
         }

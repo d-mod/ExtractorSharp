@@ -76,6 +76,54 @@ namespace ExtractorSharp.UnitTest {
             }
         }
 
+        [TestMethod]
+        public void Test03() {
+            var data = (Image.FromFile("d:/2.png") as Bitmap).ToArray();
+            data=RgbToHsv(data);
+            var fs = new FileStream("d:/t2.ps", FileMode.Create);
+            fs.Write(data);
+            fs.Close();
+        }
+
+        public byte[] RgbToHsv(byte[] data) {
+            for (var i = 0; i < data.Length; i+=4) {
+                float min, max, tmp, H, S, V;
+                float R = data[i + 0] * 1.0f / 255;
+                var G = data[i + 1] * 1.0f / 255;
+                var B = data[i + 2] * 1.0f / 255;
+                tmp = Math.Min(R, G);
+                min = Math.Min(tmp, B);
+                tmp = Math.Max(R, G);
+                max = Math.Max(tmp, B);
+                // H  
+                H = 0;
+                if (max == min) {
+                    H = 0;
+                } else if (max == R && G > B) {
+                    H = 60 * (G - B) * 1.0f / (max - min) + 0;
+                } else if (max == R && G < B) {
+                    H = 60 * (G - B) * 1.0f / (max - min) + 360;
+                } else if (max == G) {
+                    H = 60 * (B - R) * 1.0f / (max - min) + 120;
+                } else if (max == B) {
+                    H = 60 * (R - G) * 1.0f / (max - min) + 240;
+                }
+                // S  
+                if (max == 0) {
+                    S = 0;
+                } else {
+                    S = (max - min) * 1.0f / max;
+                }
+                // V  
+                V = max;
+                S *= 255;
+                V *= 255;
+                data[i + 0] = (byte)H;
+                data[i + 1] = (byte)S;
+                data[i + 2] = (byte)V;
+            }
+            return data;
+        }
 
 
         public static Dictionary<string,Color[]> GetData(string dir) {

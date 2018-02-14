@@ -883,17 +883,15 @@ namespace ExtractorSharp {
 
         public static Bitmap LinearDodge(this Bitmap bmp) {
             var data = bmp.ToArray();
-            var _r = 0;
-            var _g = 0;
-            var _b = 0;
-            var _a = 0;
-            for(var i = 0; i < data.Length; i+=4) {
+            for (var i = 0; i < data.Length; i += 4) {
                 var r = data[i];
                 var g = data[i + 1];
                 var b = data[i + 2];
                 var a = data[i + 3];
-                if (r + g + b + a < 300) {
-                    a = (byte)(a >> 6);
+                if (r + (g + b + a) / 2 < 0xff) {
+                    a = (byte)(a >> 6 & a << 3);
+                    g = (byte)(g << 1 & g >> 2);
+                    b = (byte)(b << 2 & b >> 3);
                 }
                 data[i] = r;
                 data[i + 1] = g;
@@ -902,30 +900,6 @@ namespace ExtractorSharp {
             }
             bmp = FromArray(data, bmp.Size);
             return bmp;
-        }
-
-        /// <summary>
-        /// 去除图片黑底
-        /// </summary>
-        /// <returns></returns>
-        public static Bitmap RemoveBlack(this Bitmap bmp) {
-            var ia = new ImageAttributes();
-            var c = bmp.GetPixel(0, 0);
-            ia.SetColorKey(Color.Empty, Color.Black);
-            var matrice = new ColorMatrix();
-            float[][] colorMatrixElements = {
-   new float[] {1, 1,  1,  1, 1},        // red scaling factor of 2
-   new float[] {1,  1,  1,  1, 1},        // green scaling factor of 1
-   new float[] {1,  1,  1,  1, 1},        // blue scaling factor of 1
-   new float[] {1,  1,  1,  1, 1},        // alpha scaling factor of 1
-   new float[]{ 1,1,1,1,1 },
-            };
-            ia.SetColorMatrix(new ColorMatrix(colorMatrixElements));
-            var rect = new Rectangle(Point.Empty, bmp.Size);
-            var image = new Bitmap(bmp.Width, bmp.Height);
-            using (var g = Graphics.FromImage(image))
-                g.DrawImage(bmp, rect, 0, 0, bmp.Width, bmp.Height, GraphicsUnit.Pixel, ia);
-            return image;
         }
 
         #endregion
