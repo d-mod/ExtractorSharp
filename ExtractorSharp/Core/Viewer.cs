@@ -53,8 +53,14 @@ namespace ExtractorSharp {
             Dic.Add(name, type);
         }
 
-        public void Regisity(string name,ESDialog dialog) {
-            List.Add(name, dialog);         
+        /// <summary>
+        /// 直接将命令和窗口对象绑定
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="dialog"></param>
+        public void Regisity(string name, ESDialog dialog) {
+            List.Add(name, dialog);
+            Dic.Add(name, dialog.GetType());
         }
 
 
@@ -84,8 +90,9 @@ namespace ExtractorSharp {
         /// 释放资源
         /// </summary>
         public void Dispose() {
-            foreach (var name in List.Keys)
+            foreach (var name in List.Keys) {
                 List[name].Dispose();
+            }
             List.Clear();
         }
     }

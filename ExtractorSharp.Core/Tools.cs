@@ -874,8 +874,9 @@ namespace ExtractorSharp {
 
         public static Bitmap Canvas(this Bitmap bmp, Rectangle rect) {
             var image = new Bitmap(rect.Width, rect.Height);
-            using (var g = Graphics.FromImage(image)) 
+            using (var g = Graphics.FromImage(image)) {
                 g.DrawImage(bmp, rect.X, rect.Y);
+            }
             return image;
         }
 
