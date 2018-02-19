@@ -715,6 +715,7 @@ namespace ExtractorSharp {
             Controller.Dispose();
             Viewer.Dispose();
             ImageFlush();
+            Connector.List.Clear();
             Connector.IsSave = true;
             pathBox.Text = string.Empty;
         }
