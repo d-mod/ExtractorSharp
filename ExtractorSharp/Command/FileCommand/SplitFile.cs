@@ -1,5 +1,4 @@
 ﻿using ExtractorSharp.Core;
-using ExtractorSharp.Core.Control;
 using ExtractorSharp.Data;
 using System.Collections.Generic;
 using System.IO;
@@ -12,9 +11,7 @@ namespace ExtractorSharp.Command.ImgCommand {
 
         private List<Album> List;
 
-        private Controller Controller => Program.Controller;
-
-        private IConnector Data => Program.Connector;
+        private IConnector Connector => Program.Connector;
 
 
         public bool CanUndo => true;
@@ -51,8 +48,8 @@ namespace ExtractorSharp.Command.ImgCommand {
                     ms.Seek(0, SeekOrigin.Begin);
                 }
                 ms.Close();
-                Data.RemoveFile(al);
-                Data.AddFile(false, arr);
+                Connector.RemoveFile(al);
+                Connector.AddFile(false, arr);
                 List.AddRange(arr);
             }
         }
@@ -62,8 +59,8 @@ namespace ExtractorSharp.Command.ImgCommand {
         }
 
         public void Undo() {
-            Data.RemoveFile(List.ToArray());
-            Data.AddFile(false, Array);
+            Connector.RemoveFile(List.ToArray());
+            Connector.AddFile(false, Array);
         }
     }
 }

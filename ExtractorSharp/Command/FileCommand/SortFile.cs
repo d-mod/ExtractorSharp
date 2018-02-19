@@ -1,5 +1,4 @@
 ﻿using ExtractorSharp.Core;
-using ExtractorSharp.Core.Control;
 using ExtractorSharp.Data;
 using System;
 using System.Collections.Generic;
@@ -10,12 +9,11 @@ namespace ExtractorSharp.Command.ImgCommand {
     /// </summary>
     class SortFile : ICommand {
         private List<Album> List;
-        private Controller Controller => Program.Controller;
-        private IConnector Data => Program.Connector;
+        private IConnector Connector => Program.Connector;
         public void Do(params object[] args) {
             List = new List<Album>();
-            List.AddRange(Data.List);
-            Data.List.Sort(Comparision);//排序
+            List.AddRange(Connector.List);
+            Connector.List.Sort(Comparision);//排序
         }
 
         public int Comparision(Album al1, Album al2) {
@@ -36,8 +34,8 @@ namespace ExtractorSharp.Command.ImgCommand {
         
 
         public void Undo() {
-            Data.List.Clear();
-            Data.List.AddRange(List);//将原文件数组还原到文件列表里
+            Connector.List.Clear();
+            Connector.List.AddRange(List);//将原文件数组还原到文件列表里
         }
         
         public bool CanUndo => true;

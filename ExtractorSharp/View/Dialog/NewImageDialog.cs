@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Windows.Forms;
-using ExtractorSharp.Command;
 using ExtractorSharp.Component;
 using ExtractorSharp.Core;
 using ExtractorSharp.Data;
-using ExtractorSharp.Core.Control;
-using ExtractorSharp.Config;
 
 namespace ExtractorSharp.View {
     public partial class NewImageDialog : ESDialog {
         private Album Album;
-        private Controller Controller { get; }
-        public NewImageDialog(IConnector Data) : base(Data) {
-            Controller = Program.Controller;
+        public NewImageDialog(IConnector Connector) : base(Connector) {
             InitializeComponent();
             yesButton.Click += Run;
             CancelButton = cancelButton;
@@ -40,7 +35,7 @@ namespace ExtractorSharp.View {
             else if (_8888_radio.Checked)
                 type = ColorBits.ARGB_8888;
             var index = (int)index_box.Value;
-            Controller.Do("newImage", Album, count, type, index);
+            Connector.Do("newImage", Album, count, type, index);
             DialogResult = DialogResult.OK;
         }
 

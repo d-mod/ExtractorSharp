@@ -1,20 +1,11 @@
 ﻿using System;
-using System.Drawing;
-using System.IO;
 using System.Windows.Forms;
-using ExtractorSharp.Command;
 using ExtractorSharp.Component;
 using ExtractorSharp.Core;
 using ExtractorSharp.Data;
-using ExtractorSharp.Core.Control;
-using ExtractorSharp.Config;
-
 namespace ExtractorSharp.View {
     public partial class ReplaceImageDialog : ESDialog {
-
-        private Controller Controller { get; }
-        public ReplaceImageDialog(IConnector Data) : base(Data) {
-            Controller = Program.Controller;
+        public ReplaceImageDialog(IConnector Connector) : base(Connector) {
             InitializeComponent();
             yesButton.Click += Replace;
             cancelButton.Click += Cancel;
@@ -54,7 +45,7 @@ namespace ExtractorSharp.View {
                 mode = 2;
             }
             if (!string.IsNullOrEmpty(path)) {
-                Controller.Do("replaceImage", type, adjustPositionBox.Checked, mode, path, Connector.SelectedFile, indexes);
+                Connector.Do("replaceImage", type, adjustPositionBox.Checked, mode, path, Connector.SelectedFile, indexes);
                 DialogResult = DialogResult.OK;
             }
         }

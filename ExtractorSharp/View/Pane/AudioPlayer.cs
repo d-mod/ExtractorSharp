@@ -1,5 +1,4 @@
 ﻿using ExtractorSharp.Core;
-using ExtractorSharp.Core.Control;
 using ExtractorSharp.Data;
 using ExtractorSharp.Handle;
 using ExtractorSharp.Lib;
@@ -8,12 +7,10 @@ using System.Windows.Forms;
 
 namespace ExtractorSharp.View {
     partial class OggPlayer : UserControl {
-        private Controller Controller;
         private int handle;
         private bool isRun;
         private Language Language = Language.Default;
-        public OggPlayer(Controller Controller) {
-            this.Controller = Controller;
+        public OggPlayer() {
             InitializeComponent();
             Bass.Init();
             playButton.Click += Play;
@@ -23,13 +20,12 @@ namespace ExtractorSharp.View {
         /// <summary>
         /// 显示窗口时播放
         /// </summary>
-        public void Play() {
+        public void Play(Album ogg) {
             Visible = true;
             if (handle != 0) {
                 Bass.Stop(handle);
                 Bass.Close(handle);
             }
-            var ogg = Program.Connector.SelectedFile;
             if (ogg != null && ogg.Version == Img_Version.OGG) {
                 ogg.Adjust();
                 groupBox1.Text = ogg.Name;

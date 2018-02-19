@@ -1,8 +1,5 @@
 ﻿using ExtractorSharp.Core;
-using ExtractorSharp.Core.Control;
 using ExtractorSharp.Data;
-using System;
-using System.Collections.Generic;
 
 namespace ExtractorSharp.Command.ImgCommand {
     class AddFile : ICommand{
@@ -13,26 +10,24 @@ namespace ExtractorSharp.Command.ImgCommand {
 
         private bool Clear;
 
-        private Controller Controller => Program.Controller;
-
-        private IConnector Data => Program.Connector;
+        private IConnector Connector => Program.Connector;
 
         public void Do( params object[] args) {
             Array = args[0] as Album[];
             Clear = (bool)args[1];
             if (Clear) {
-                List = Data.List.ToArray();
+                List = Connector.List.ToArray();
             }
-            Data.AddFile(Clear, Array);
+            Connector.AddFile(Clear, Array);
         }
 
         public void Redo() => Do(Array,Clear);
 
 
         public void Undo() {
-            Data.RemoveFile(List);
+            Connector.RemoveFile(List);
             if (Clear) {
-                Data.AddFile(true, List);
+                Connector.AddFile(true, List);
             }
         }
 

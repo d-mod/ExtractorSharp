@@ -12,14 +12,14 @@ namespace ExtractorSharp.View {
         private Album Album;
         private int[] Indexes;
         private Size CavasSize => new Size((int)width_box.Value, (int)height_box.Value);
-        public CanvasDialog(IConnector Data) : base(Data) {
+        public CanvasDialog(IConnector Connector) : base(Connector) {
             InitializeComponent();
             CancelButton = cancelButton;
             yesButton.Click += Run;
         }
 
         public void Run(object sender, EventArgs e) {
-            Program.Controller.Do("cavasImage", Album, CavasSize, Indexes);
+            Connector.Do("canvasImage", Album, CavasSize, Indexes);
             DialogResult = DialogResult.OK;
         }
 

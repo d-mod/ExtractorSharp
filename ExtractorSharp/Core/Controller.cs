@@ -1,30 +1,24 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using ExtractorSharp.Command;
 using ExtractorSharp.Command.ImageCommand;
 using ExtractorSharp.Command.ImgCommand;
 using ExtractorSharp.Command.LayerCommand;
 using ExtractorSharp.Command.MergeCommand;
-using ExtractorSharp.Config;
 using ExtractorSharp.EventArguments;
-using ExtractorSharp.Draw;
-using ExtractorSharp.Component;
 using ExtractorSharp.Command.PaletteCommand;
 using ExtractorSharp.Command.DrawCommand;
 using ExtractorSharp.Data;
 using ExtractorSharp.Command.FileCommand;
 
-namespace ExtractorSharp.Core.Control {
+namespace ExtractorSharp.Core {
     /// <summary>
     /// 命令控制器
     /// <see cref="ICommand"/>
     /// </summary>
     public class Controller : IDisposable {
-
-        private IConfig Config => Program.Config;
-
+        
         private IConnector Data => Program.Connector;
 
         private readonly Stack<ICommand> undoStack;
@@ -33,6 +27,8 @@ namespace ExtractorSharp.Core.Control {
         private readonly Dictionary<string, Type> Dic;
 
         private readonly CommandEventArgs cmdArgs;
+
+        public delegate void CommandHandler(object sender, CommandEventArgs e);
 
         /// <summary>
         /// 操作执行事件

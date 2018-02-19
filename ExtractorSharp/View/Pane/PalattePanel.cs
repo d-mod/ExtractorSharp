@@ -3,15 +3,13 @@ using System.Drawing;
 using System.Windows.Forms;
 using ExtractorSharp.Data;
 using ExtractorSharp.EventArguments;
-using ExtractorSharp.Core.Control;
 using ExtractorSharp.Core;
 
 namespace ExtractorSharp.View.Pane {
     public partial class PalattePanel : TabPage {
         private Album Album;
         private Language Language => Language.Default;
-        private Controller Controller => Program.Controller;
-        private IConnector Data => Program.Connector;
+        private IConnector Connector => Program.Connector;
         public PalattePanel() {
             InitializeComponent();
             Program.Drawer.ImageChanged += SelectImageChanged;
@@ -31,10 +29,10 @@ namespace ExtractorSharp.View.Pane {
                 color = dialog.Color;
                 foreach (ListViewItem item in items) {
                     list.SetColor(item, color);
-                    Controller.Do("changeColor", Album, Album.TableIndex, item.Index, color);
+                    Connector.Do("changeColor", Album, Album.TableIndex, item.Index, color);
                 }
                 Album.Refresh();
-                Data.CanvasFlush();
+                Connector.CanvasFlush();
             }
         }
 
@@ -55,7 +53,7 @@ namespace ExtractorSharp.View.Pane {
             if (Album != null) {
                 Album.TableIndex = combo.SelectedIndex;
                 list.Colors = Album.CurrentTable.ToArray();
-                Data.CanvasFlush();
+                Connector.CanvasFlush();
             }
         }
 
@@ -68,7 +66,7 @@ namespace ExtractorSharp.View.Pane {
                     index_arr[i] = arr[i].Index;
                     list.SetColor(arr[i], color);
                 }
-                Controller.Do("changeColor", Album, Album.TableIndex, index_arr, color);
+                Connector.Do("changeColor", Album, Album.TableIndex, index_arr, color);
             }
         }
     }

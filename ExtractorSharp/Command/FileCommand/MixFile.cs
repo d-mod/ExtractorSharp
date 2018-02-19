@@ -1,6 +1,5 @@
 ﻿
 using ExtractorSharp.Core;
-using ExtractorSharp.Core.Control;
 using ExtractorSharp.Data;
 using System.Collections.Generic;
 using System.Drawing;
@@ -12,9 +11,7 @@ namespace ExtractorSharp.Command.ImgCommand {
 
         private Album Album;
 
-        private Controller Controller => Program.Controller;
-
-        private IConnector Data => Program.Connector;
+        private IConnector Connector => Program.Connector;
 
         public void Do(params object[] args) {
             Array = args as Album[];
@@ -42,8 +39,8 @@ namespace ExtractorSharp.Command.ImgCommand {
                             tl.AddRange(table.GetRange(tl.Count, max - tl.Count));
                         }
                     }
-                    Data.RemoveFile(Array);
-                    Data.AddFile(false, Album);
+                    Connector.RemoveFile(Array);
+                    Connector.AddFile(false, Album);
                 }
             }
         }
@@ -53,8 +50,8 @@ namespace ExtractorSharp.Command.ImgCommand {
         }
 
         public void Undo() {
-            Data.RemoveFile(Album);
-            Data.AddFile(false, Array);
+            Connector.RemoveFile(Album);
+            Connector.AddFile(false, Array);
         }
 
 

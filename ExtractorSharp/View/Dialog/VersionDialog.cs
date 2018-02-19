@@ -3,15 +3,11 @@ using ExtractorSharp.Component;
 using ExtractorSharp.Properties;
 using ExtractorSharp.Loose;
 using ExtractorSharp.Data;
-using ExtractorSharp.Core.Control;
-using ExtractorSharp.Config;
 using ExtractorSharp.Core;
 
 namespace ExtractorSharp.View.Dialog {
     public partial class VersionDialog : ESDialog {
-        private Controller Controller;
-        public VersionDialog(IConnector Data) : base(Data) {
-            Controller = Program.Controller;
+        public VersionDialog(IConnector Connector) : base(Connector) {
             InitializeComponent();
             button.Click += ButtonClose;
             var builder = new LSBuilder();

@@ -10,13 +10,17 @@ using ExtractorSharp.Core;
 using ExtractorSharp.Loose;
 using System.ComponentModel.Composition;
 
-namespace ExtractorSharp.Plugin.Searcher{
-    [ExportMetadata("Guid","D72DF478-FAFF-43DF-B904-9EB338A08B54")]
+namespace ExtractorSharp.Plugin.Searcher {
+    [ExportMetadata("Guid", "D72DF478-FAFF-43DF-B904-9EB338A08B54")]
     [Export(typeof(ESDialog))]
-    public partial class MainDialog: ESDialog {
+    public partial class MainDialog : ESDialog {
         private bool running;
         private List<SearchResult> List;
         private Dictionary<string, string> Dic;
+        private int Count { set; get; }
+        private int Mode { set; get; }
+
+
         [ImportingConstructor]
         public MainDialog(IConnector Connector) : base(Connector) {
             InitializeComponent();
@@ -52,7 +56,7 @@ namespace ExtractorSharp.Plugin.Searcher{
             List.Clear();
             resultList.Items.Clear();
         }
-        
+
 
 
 
@@ -134,7 +138,7 @@ namespace ExtractorSharp.Plugin.Searcher{
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private  void UseDic(object sender, EventArgs e) {
+        private void UseDic(object sender, EventArgs e) {
             patternBox.AutoCompleteCustomSource.Clear();
             if (useDicBox.Checked) {
                 var keys = new string[Dic.Count];
@@ -153,8 +157,8 @@ namespace ExtractorSharp.Plugin.Searcher{
         /// <summary>
         /// 初始化字典
         /// </summary>
-        private  void InitDictionary() {
-           Dic = new Dictionary<string, string>();
+        private void InitDictionary() {
+            Dic = new Dictionary<string, string>();
             var file = $"{Config["RootPath"]}/dictionary.txt";
             if (File.Exists(file)) {
                 var data = File.ReadAllText(file);
@@ -182,9 +186,9 @@ namespace ExtractorSharp.Plugin.Searcher{
                     if (allNameBox.Checked && !pattern[0].Equals(item.Name)) {
                         return false;
                     }
-                    return pattern.All( pat => item.imgPath.Contains(pat) );
+                    return pattern.All(pat => item.imgPath.Contains(pat));
                 });
-            var array = list.Distinct().ToArray() ;
+            var array = list.Distinct().ToArray();
             resultList.Items.AddRange(array);
         }
 
@@ -205,9 +209,13 @@ namespace ExtractorSharp.Plugin.Searcher{
             resultList.Items.Clear();
             List.Clear();
             List = new List<SearchResult>();
-            var thread = new Thread(Search);//启动搜索
-            thread.IsBackground = true;
-            thread.Start();
+            if (Directory.Exists(Config["ResourcePath"].Value)) {
+                Mode = displayModeBox.SelectedIndex;
+                var thread = new Thread(Start) {
+                    IsBackground = true
+                };//启动搜索
+                thread.Start();
+            }
         }
 
         /// <summary>
@@ -240,53 +248,106 @@ namespace ExtractorSharp.Plugin.Searcher{
                 }
                 DialogResult = DialogResult.OK;
             }
-        }      
+        }
 
         protected override void OnFormClosing(FormClosingEventArgs e) {
             running = false;
             base.OnFormClosing(e);
         }
 
-
-        private  void Search() {
-            if (Directory.Exists(Config["ResourcePath"].Value)) {
-                bar.Visible = true;
-                var files = Directory.GetFiles(Config["ResourcePath"].Value);
-                bar.Maximum = files.Length;
-                bar.Value = 0;
-                displayModeBox.Enabled = false;
-                patternBox.ReadOnly = true;
-                var modelDic = new Dictionary<string, string>();
-                if (ignoreModelBox.Checked) {
-                    modelDic = Tools.LoadFileLst($"{Config["GamePath"]}/auto.lst");
-                }
-                var pattern = GetPattern();
-                foreach (var file in files) {
-                    if (ignoreModelBox.Checked && !modelDic.ContainsKey(file.GetName()))
-                        continue;
-                    var list = Tools.Load(true, file);
-                    list = Tools.Find(list,allNameBox.Checked ,pattern);                 
-                    foreach (var album in list) {
-                        var result = new SearchResult(displayModeBox.SelectedIndex, file, album.Path);
-                        if (!running) return;
-                        if (!List.Contains(result)) {
-                            resultList.Items.Add(result);
-                            List.Add(result);
-                        }
-                    }
-                    resultList.Update();
-                    if (bar.Value < bar.Maximum)
-                        bar.Value++;
-                }
-                searchButton.Text = Language["Search"];
-                bar.Visible = false;
-                running = false;
-                displayModeBox.Enabled = true;
-                patternBox.ReadOnly = false;
+        private void BeginStart() {
+            if (bar.InvokeRequired) {
+                bar.Invoke(new MethodInvoker(BeginStart));
+                return;
             }
+            if (displayModeBox.InvokeRequired) {
+                displayModeBox.Invoke(new MethodInvoker(BeginStart));
+                return;
+            }
+            if (patternBox.InvokeRequired) {
+                patternBox.Invoke(new MethodInvoker(BeginStart));
+                return;
+            }
+            bar.Visible = true;
+            displayModeBox.Enabled = false;
+            patternBox.ReadOnly = true;
+            bar.Maximum = Count;
+            bar.Value = 0;
         }
 
+        private void EndStart() {
+            if (bar.InvokeRequired) {
+                bar.Invoke(new MethodInvoker(EndStart));
+                return;
+            }
+            if (searchButton.InvokeRequired) {
+                searchButton.Invoke(new MethodInvoker(EndStart));
+                return;
+            }
+            if (displayModeBox.InvokeRequired) {
+                displayModeBox.Invoke(new MethodInvoker(EndStart));
+                return;
+            }
+            if (patternBox.InvokeRequired) {
+                patternBox.Invoke(new MethodInvoker(EndStart));
+                return;
+            }
+            searchButton.Text = Language["Search"];
+            bar.Visible = false;
+            running = false;
+            displayModeBox.Enabled = true;
+            patternBox.ReadOnly = false;
+        }
+
+
+        private void Start() {
+            var files = Directory.GetFiles(Config["ResourcePath"].Value);
+            Count = files.Length;
+            BeginStart();
+            var modelDic = new Dictionary<string, string>();
+            if (ignoreModelBox.Checked) {
+                modelDic = Tools.LoadFileLst($"{Config["GamePath"]}/auto.lst");
+            }
+            var pattern = GetPattern();
+            label: foreach (var file in files) {
+                if (ignoreModelBox.Checked && !modelDic.ContainsKey(file.GetName()))
+                    continue;
+                var list = Tools.Load(true, file);
+                list = Tools.Find(list, allNameBox.Checked, pattern);
+                var tempList = new List<SearchResult>();
+                foreach (var album in list) {
+                    var result = new SearchResult(Mode, file, album.Path);
+                    if (!running) {
+                        goto label;
+                    }
+                    if (!List.Contains(result)) {
+                        List.Add(result);
+                        tempList.Add(result);
+                    }
+                }
+                Add(tempList);
+            }
+            EndStart();
+        }
+
+        private delegate void ParamInvoke(List<SearchResult> list);
+
+        private void Add(List<SearchResult> list) {
+            if (bar.Value < bar.Maximum) {
+                if (bar.InvokeRequired) {
+                    bar.Invoke(new ParamInvoke(Add), list);
+                    return;
+                }
+                if (resultList.InvokeRequired) {
+                    resultList.Invoke(new ParamInvoke(Add), list);
+                }
+                bar.Value++;
+                resultList.Items.AddRange(list.ToArray());
+            }
+        }
     }
+
+    
 
     /// <summary>
     /// 搜索结果

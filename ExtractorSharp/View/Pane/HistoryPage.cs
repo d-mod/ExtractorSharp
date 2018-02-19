@@ -1,4 +1,4 @@
-﻿using ExtractorSharp.Core.Control;
+﻿using ExtractorSharp.Core;
 using ExtractorSharp.Data;
 using System;
 using System.Windows.Forms;
@@ -6,6 +6,7 @@ using System.Windows.Forms;
 namespace ExtractorSharp.View.Pane {
     partial class HistoryPage : TabPage {
         private Controller Controller;
+        
         public HistoryPage() {
             InitializeComponent();
             Controller = Program.Controller;

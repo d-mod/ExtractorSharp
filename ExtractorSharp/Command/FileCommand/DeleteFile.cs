@@ -1,14 +1,11 @@
 ﻿using ExtractorSharp.Core;
-using ExtractorSharp.Core.Control;
 using ExtractorSharp.Data;
-using ExtractorSharp.View;
 using System.Collections.Generic;
 
 namespace ExtractorSharp.Command.ImgCommand {
     class DeleteFile : IMutipleAciton{
         private Dictionary<Album, int> Indices;
-        private Controller Controller => Program.Controller;
-        private IConnector Data => Program.Connector;
+        private IConnector Connector => Program.Connector;
 
         /// <summary>
         /// 执行
@@ -19,22 +16,22 @@ namespace ExtractorSharp.Command.ImgCommand {
             var indices = (int[])args[0];
             var array = new Album[indices.Length];
             Indices = new Dictionary<Album, int>();
-            var all_array = Data.FileArray;
+            var all_array = Connector.FileArray;
             for(var i = 0; i < indices.Length; i++) {
                 array[i] = all_array[indices[i]];
                 Indices.Add(array[i], indices[i]);
             }
-            Data.RemoveFile(array);
+            Connector.RemoveFile(array);
         }
 
         public void Undo() {
             if (Indices.Count > 0) {
                 foreach (var album in Indices.Keys) {
                     var index1 = Indices[album];
-                    if (index1 < Data.FileCount - 1 && index1 > -1) {
-                        Data.List.Insert(index1, album);
+                    if (index1 < Connector.FileCount - 1 && index1 > -1) {
+                        Connector.List.Insert(index1, album);
                     } else {
-                        Data.List.Add(album);
+                        Connector.List.Add(album);
                     }
                 }
             }
@@ -50,7 +47,7 @@ namespace ExtractorSharp.Command.ImgCommand {
         }
 
         public void Action(params Album[] array) {
-            Data.RemoveFile(array);
+            Connector.RemoveFile(array);
         }
         
 

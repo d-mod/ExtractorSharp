@@ -1,5 +1,4 @@
 ﻿using ExtractorSharp.Core;
-using ExtractorSharp.Core.Control;
 using ExtractorSharp.Data;
 using ExtractorSharp.Loose;
 using System.IO;
@@ -15,9 +14,7 @@ namespace ExtractorSharp.Command.ImgCommand {
 
         private int Index;
 
-        private Controller Controller => Program.Controller;
-
-        private IConnector Data => Program.Connector;
+        private IConnector Connector => Program.Connector;
 
         private Clipboarder Clipboarder;
 
@@ -32,7 +29,7 @@ namespace ExtractorSharp.Command.ImgCommand {
                 if (Clipboarder.Mode == ClipMode.Cut) {
                     Clipboarder.Default = null;
                     Clipboard.Clear();
-                    Data.RemoveFile(array);
+                    Connector.RemoveFile(array);
                 }
                 for(var i=0;i<array.Length;i++) {
                     array[i] = array[i].Clone();
@@ -57,12 +54,12 @@ namespace ExtractorSharp.Command.ImgCommand {
                 }
            }
             if (array.Length > 0) {
-                if (Data.FileCount > 0) {
-                    Data.SelectedFileIndex = Data.FileCount - 1;
+                if (Connector.FileCount > 0) {
+                    Connector.SelectedFileIndex = Connector.FileCount - 1;
                 }
-                Index = Index > Data.List.Count ? Data.List.Count : Index;
+                Index = Index > Connector.List.Count ? Connector.List.Count : Index;
                 Index = Index < 0 ? 0 : Index;
-                Data.List.InsertRange(Index, array);
+                Connector.List.InsertRange(Index, array);
             }
         }
 
@@ -73,11 +70,11 @@ namespace ExtractorSharp.Command.ImgCommand {
         public void Undo() {
             Clipboarder.Default = Clipboarder;
             if (Clipboarder != null) {
-                var array = Data.List.GetRange(Index, Indexes.Length).ToArray();
-                Data.RemoveFile(array);
+                var array = Connector.List.GetRange(Index, Indexes.Length).ToArray();
+                Connector.RemoveFile(array);
                 if (Clipboarder.Mode == ClipMode.Cut) {
                     for (var i = 0; i < array.Length; i++) {
-                        Data.List.Insert(Indexes[i], array[i]);
+                        Connector.List.Insert(Indexes[i], array[i]);
                     }
                 }
             }

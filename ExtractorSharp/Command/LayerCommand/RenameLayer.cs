@@ -1,5 +1,4 @@
 ﻿using ExtractorSharp.Core;
-using ExtractorSharp.Core.Control;
 using ExtractorSharp.Draw;
 
 namespace ExtractorSharp.Command.LayerCommand {

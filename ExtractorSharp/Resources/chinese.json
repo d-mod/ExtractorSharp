@@ -74,6 +74,7 @@
 	    "DressingRoom": "试衣间",
 	    "Action": "动作",
 	    "Record": "录制",
+		"Play":"播放",
 	    "Pause": "暂停",
 	    "Continue": "继续",
 	    "LoadScript": "载入脚本",

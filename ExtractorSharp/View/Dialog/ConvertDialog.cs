@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
-using ExtractorSharp.Command;
 using ExtractorSharp.Component;
 using ExtractorSharp.Handle;
 using ExtractorSharp.Core;
 using ExtractorSharp.Data;
-using ExtractorSharp.Core.Control;
-using ExtractorSharp.Config;
 
 namespace ExtractorSharp.View {
     public partial class ConvertDialog : ESDialog {
@@ -22,9 +19,9 @@ namespace ExtractorSharp.View {
             yesButton.Click += Convert;
         }
         
-        public override DialogResult Show(params object[] array) {
-            if (array.Length > 0) {
-                Array = array as Album[];
+        public override DialogResult Show(params object[] args) {
+            if (args.Length > 0) {
+                Array = args as Album[];
                 combo.SelectedItem = Array[0].Version;
                 return ShowDialog();
             }

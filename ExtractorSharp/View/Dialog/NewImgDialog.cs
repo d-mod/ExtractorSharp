@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
-using ExtractorSharp.Command;
 using ExtractorSharp.Component;
-using ExtractorSharp.View;
 using ExtractorSharp.Core;
 using ExtractorSharp.Data;
-using ExtractorSharp.Core.Control;
-using ExtractorSharp.Config;
 
 namespace ExtractorSharp {
     public partial class NewImgDialog : ESDialog {
-        private Controller Controller;
-        public NewImgDialog(IConnector Data) : base(Data) {
-            Controller = Program.Controller;
+        public NewImgDialog(IConnector Connector) : base(Connector) {
             InitializeComponent();
             pathBox.KeyDown += EnterDownRun;
             indexBox.KeyDown += EnterDownRun;
@@ -53,7 +47,7 @@ namespace ExtractorSharp {
             var count = (int)countBox.Value;
             var index = (int)indexBox.Value;
             var album = new Album();
-            Controller.Do("newImg",album, path, count, index);
+            Connector.Do("newImg",album, path, count, index);
             pathBox.Text = pathBox.Text.Replace(path.GetName(), "");
             DialogResult = DialogResult.OK;
         }

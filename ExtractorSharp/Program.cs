@@ -17,7 +17,6 @@ using ExtractorSharp.Data;
 using ExtractorSharp.Loose;
 using System.Threading;
 using System.Text;
-using ExtractorSharp.Core.Control;
 using ExtractorSharp.Handle;
 using System.ComponentModel.Composition;
 

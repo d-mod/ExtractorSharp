@@ -1,12 +1,9 @@
 ﻿using ExtractorSharp.Core;
-using ExtractorSharp.Core.Control;
 using ExtractorSharp.Data;
 using ExtractorSharp.Handle;
 
 namespace ExtractorSharp.Command.ImgCommand {
     class NewFile : IMutipleAciton {
-        private Controller Controller => Program.Controller;
-
         private Album Album;
 
         private string Path;
@@ -15,7 +12,7 @@ namespace ExtractorSharp.Command.ImgCommand {
 
         private int Index;
 
-        private IConnector Data => Program.Connector;
+        private IConnector Connector => Program.Connector;
 
         public void Do(params object[] args) {
             Album = args[0] as Album;
@@ -32,13 +29,13 @@ namespace ExtractorSharp.Command.ImgCommand {
             }
             Album.Path = Path;
             Album.NewImage(Count, ColorBits.LINK, -1);
-            Index = Data.List.Count;
-            Data.List.Insert(Index, Album);
+            Index = Connector.List.Count;
+            Connector.List.Insert(Index, Album);
             Messager.ShowOperate("NewFile");
         }
 
         public void Undo() {
-            Data.List.Remove(Album);
+            Connector.List.Remove(Album);
         }
         
 
@@ -54,7 +51,7 @@ namespace ExtractorSharp.Command.ImgCommand {
                 }
                 Album.Path = Path;
                 Album.NewImage(Count, ColorBits.LINK, -1);
-                Data.List.Insert(Index, Album);
+                Connector.List.Insert(Index, Album);
             }
         }
 

@@ -1,13 +1,10 @@
 ﻿using ExtractorSharp.Command;
 using ExtractorSharp.Component;
-using ExtractorSharp.Core.Control;
+using ExtractorSharp.Core;
 using ExtractorSharp.Handle;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExtractorSharp.Composition {
     /// <summary>

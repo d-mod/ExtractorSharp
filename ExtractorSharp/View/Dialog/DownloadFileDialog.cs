@@ -7,17 +7,12 @@ using System.Windows.Forms;
 using ExtractorSharp.Component;
 using ExtractorSharp.Config;
 using ExtractorSharp.Core;
-using ExtractorSharp.Core.Control;
-
 namespace ExtractorSharp.View.Dialog {
     public partial class DownloadFileDialog : ESDialog {
         private WebClient Client;
         private List<string> List;
-        private bool isDownload;
         private string Temp;
-        private Controller Controller;
         public DownloadFileDialog(IConnector Data) : base(Data) {
-            Controller = Program.Controller;
             InitializeComponent();
             List = new List<string>();
             comboBox1.Items.Add(new SeverInfo("韩服正式服", "http://d-fighter.dn.nexoncdn.co.kr/samsungdnf/neople/dnf_hg/"));
@@ -50,7 +45,7 @@ namespace ExtractorSharp.View.Dialog {
             else {
                 var temp = fileList.SelectedItem as string;
                 var info = comboBox1.SelectedItem as SeverInfo;
-                var url = info.Host + "/ImagePacks2/"+"" + temp + ".spk";
+                var url = $"{info.Host}/ImagePacks2/{temp}.spk";
                 Temp = pathBox.Text + "/" + url.GetName();
                 Client.DownloadFileAsync(new Uri(url),Temp );
             }

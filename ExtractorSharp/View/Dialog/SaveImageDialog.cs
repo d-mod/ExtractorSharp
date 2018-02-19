@@ -3,16 +3,13 @@ using System.Windows.Forms;
 using ExtractorSharp.Component;
 using ExtractorSharp.Config;
 using ExtractorSharp.Data;
-using ExtractorSharp.Core.Control;
 using ExtractorSharp.Core;
 
 namespace ExtractorSharp.View {
     public partial class SaveImageDialog : ESDialog {
         private int[] Indexes;
         private Album Album;
-        private Controller Controller { get; }
-        public SaveImageDialog(IConnector Data) : base(Data) {
-            Controller = Program.Controller;
+        public SaveImageDialog(IConnector Connector) : base(Connector) {
             InitializeComponent();
             pathBox.Click += LoadPath;
             loadButton.Click += LoadPath;
@@ -28,7 +25,7 @@ namespace ExtractorSharp.View {
             if (Config["SaveImageTip"].Boolean) {
                 return ShowDialog();
             }
-            Controller.Do("saveImage", Album, 1, Indexes, pathBox.Text);
+            Connector.Do("saveImage", Album, 1, Indexes, pathBox.Text);
             return DialogResult.None;
         }
 
@@ -37,7 +34,7 @@ namespace ExtractorSharp.View {
             Config["SaveImageTip"] = new ConfigValue(!tipsCheck.Checked);
             Config["SaveImageAllPath"] = new ConfigValue(allPathCheck.Checked);
             Config.Save();
-            Controller.Do("saveImage", Album, 1, Indexes, pathBox.Text);
+            Connector.Do("saveImage", Album, 1, Indexes, pathBox.Text);
             DialogResult = DialogResult.OK;
         }
 

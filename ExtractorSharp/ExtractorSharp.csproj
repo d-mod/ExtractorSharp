@@ -143,7 +143,6 @@
     <Compile Include="Composition\Plugin.cs" />
     <Compile Include="Config\JsonConfig.cs" />
     <Compile Include="Core\Clipboarder.cs" />
-    <Compile Include="Core\Control\CommandHandler.cs" />
     <Compile Include="Core\Sorter\DefaultSorter.cs" />
     <Compile Include="Core\Sorter\ISorter.cs" />
     <Compile Include="Data\VersionInfo.cs" />
@@ -156,7 +155,7 @@
     <Compile Include="Core\QueueChangeMode.cs" />
     <Compile Include="EventArguments\ActionEventArgs.cs" />
     <Compile Include="EventArguments\CommandEventArgs.cs" />
-    <Compile Include="Core\Control\Controller.cs" />
+    <Compile Include="Core\Controller.cs" />
     <Compile Include="Core\Drawer.cs" />
     <Compile Include="EventArguments\ImageEntityEventArgs.cs" />
     <Compile Include="EventArguments\MergeQueueEventArgs.cs" />
@@ -165,13 +164,13 @@
     <Compile Include="Draw\Brush\MoveTool.cs" />
     <Compile Include="Draw\Brush\Pencil.cs" />
     <Compile Include="Command\ImageCommand\ChangePosition.cs" />
-    <Compile Include="Command\ImageCommand\UnCavasImage.cs" />
+    <Compile Include="Command\ImageCommand\UnCanvasImage.cs" />
     <Compile Include="EventArguments\MergeEventArg.cs" />
     <Compile Include="View\Dialog\CanvasDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="View\Dialog\CanvasDialog.designer.cs" />
-    <Compile Include="Command\ImageCommand\CavasImage.cs" />
+    <Compile Include="Command\ImageCommand\CanvasImage.cs" />
     <Compile Include="Command\ImageCommand\SaveImage.cs" />
     <Compile Include="Command\FileCommand\SortFile.cs" />
     <Compile Include="Command\MergeCommand\AddMerge.cs" />
@@ -500,7 +499,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Resources_4queues_1json__JSONSchema="http://json.schemastore.org/config" Resources_4alias_3weapon_1json__JSONSchema="http://json.schemastore.org/config" />
+      <UserProperties Resources_4alias_3weapon_1json__JSONSchema="http://json.schemastore.org/config" Resources_4queues_1json__JSONSchema="http://json.schemastore.org/config" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

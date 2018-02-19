@@ -4,23 +4,20 @@ using System;
 using ExtractorSharp.Component;
 using ExtractorSharp.Core;
 using ExtractorSharp.Data;
-using ExtractorSharp.Core.Control;
-using ExtractorSharp.Config;
 
 namespace ExtractorSharp.View {
     partial class MergeDialog : ESDialog {
         private Album Album;
         private Merger Merger;
-        private Controller Controller => Program.Controller;
-        public MergeDialog(IConnector Data) : base(Data) {
+        public MergeDialog(IConnector Connector) : base(Connector) {
             InitializeComponent();
             this.Merger = Program.Merger;
-            sortButton.Click += (o,e) => Merger.Sort(useOtherCheck.Checked);
+            sortButton.Click += (o, e) => Merger.Sort(useOtherCheck.Checked);
             list.MouseDown += ListMouseDown;
             list.DragDrop += ListDragDrop;
             list.DragOver += (o, e) => e.Effect = DragDropEffects.Move;
             deleteItem.Click += Remove;
-            clearItem.Click += (o, e) => Controller.Do("clearMerge");
+            clearItem.Click += (o, e) => Connector.Do("clearMerge");
             MergeButton.Click += MergeImg;
             addOutItem.Click += AddOutside;
             moveDownItem.Click += MoveDown;
@@ -58,7 +55,7 @@ namespace ExtractorSharp.View {
         private void MoveUp(object sender, EventArgs e) {
             var i = list.SelectedIndex;
             if (i > 0) {
-                Controller.Do("moveMerge", i, ++i);
+                Connector.Do("moveMerge", i, ++i);
                 list.SelectedIndex = i;
             }
         }
@@ -71,7 +68,7 @@ namespace ExtractorSharp.View {
         private void MoveDown(object sender, EventArgs e) {
             var i = list.SelectedIndex;
             if (i < list.Items.Count - 1 && i > -1) {
-                Controller.Do("moveMerge", i, ++i);
+                Connector.Do("moveMerge", i, ++i);
                 list.SelectedIndex = i;
             }
         }
@@ -83,11 +80,11 @@ namespace ExtractorSharp.View {
             dialog.Multiselect = true;
             if (dialog.ShowDialog() == DialogResult.OK) {
                 var array = Tools.Load(dialog.FileNames).ToArray();
-                Program.Controller.Do("addMerge", array);
+                Connector.Do("addMerge", array);
             }
         }
 
-        public void Flush(object sender,MergeQueueEventArgs e) {
+        public void Flush(object sender, MergeQueueEventArgs e) {
             list.Items.Clear();
             list.Items.AddRange(Merger.Queues.ToArray());
         }
@@ -95,7 +92,7 @@ namespace ExtractorSharp.View {
 
         public override DialogResult Show(params object[] args) {
             Album = args[0] as Album;
-            Flush(null,null);
+            Flush(null, null);
             albumList.Items.Clear();
             albumList.Items.AddRange(Connector.FileArray);
             albumList.SelectedItem = Album;
@@ -114,7 +111,7 @@ namespace ExtractorSharp.View {
             var index = list.SelectedIndex;
             var target = list.IndexFromPoint(PointToClient(new Point(e.X, e.Y)));
             target = target < 0 ? list.Items.Count - 1 : target;
-            Controller.Do("moveMerge", index, target);
+            Connector.Do("moveMerge", index, target);
             if (target > -1) {
                 list.SelectedIndex = target;
             }
@@ -123,7 +120,7 @@ namespace ExtractorSharp.View {
         public void Remove(object sender, EventArgs e) {
             var album = list.SelectedItem as Album;
             if (album != null) {
-                Program.Controller.Do("removeMerge", new Album[] { album });
+                Connector.Do("removeMerge", new Album[] { album });
             }
         }
 
@@ -137,13 +134,12 @@ namespace ExtractorSharp.View {
                     Messager.ShowWarnning("NotSelectImgTips");
                     return;
                 } else {
-                    Album = new Album();
-                    Controller.Do("newImg", Album, albumList.Text);
+                    Connector.Do("newImg", Album, albumList.Text);
                 }
             } else {
                 Album = albumList.SelectedItem as Album;
             }
-            Controller.Do("runMerge");      
+            Connector.Do("runMerge");
 
         }
     }

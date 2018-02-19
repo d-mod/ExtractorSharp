@@ -2,7 +2,6 @@
 using System.Windows.Forms;
 using ExtractorSharp.EventArguments;
 using ExtractorSharp.Data;
-using ExtractorSharp.Core.Control;
 using ExtractorSharp.Core;
 
 namespace ExtractorSharp.View.Pane {

@@ -35,7 +35,7 @@ namespace ExtractorSharp.Command.ImageCommand {
                 Locations[i] = entity.Location;
                 entity.CanvasImage(Size);
             }
-            Messager.ShowOperate("CavansImage");
+            Messager.ShowOperate("CanvasImage");
         }
 
         public void Redo() => Do(Album, Size, Indices);

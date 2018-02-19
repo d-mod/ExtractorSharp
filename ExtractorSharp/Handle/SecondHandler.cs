@@ -122,7 +122,6 @@ namespace ExtractorSharp.Handle {
                     } else {
                         Album.List.Clear();
                         return;
-                        break;
                     }
                     continue;
                 }
