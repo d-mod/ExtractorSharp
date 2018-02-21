@@ -55,7 +55,7 @@ namespace ExtractorSharp.View {
         private void MoveUp(object sender, EventArgs e) {
             var i = list.SelectedIndex;
             if (i > 0) {
-                Connector.Do("moveMerge", i, ++i);
+                Connector.Do("moveMerge", i, --i);
                 list.SelectedIndex = i;
             }
         }
@@ -109,7 +109,7 @@ namespace ExtractorSharp.View {
 
         public void ListDragDrop(object sender, DragEventArgs e) {
             var index = list.SelectedIndex;
-            var target = list.IndexFromPoint(PointToClient(new Point(e.X, e.Y)));
+            var target = list.IndexFromPoint(list.PointToClient(new Point(e.X, e.Y)));
             target = target < 0 ? list.Items.Count - 1 : target;
             Connector.Do("moveMerge", index, target);
             if (target > -1) {
