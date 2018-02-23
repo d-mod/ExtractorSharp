@@ -1006,7 +1006,7 @@ namespace ExtractorSharp {
         /// <param name="e"></param>
         private void AddFile(object sender, EventArgs e) {
             var dialog = new OpenFileDialog();
-            dialog.Filter = "图片资源|*.npk;*.img;|音效资源|*.mp3;*.wav;*.ogg";
+            dialog.Filter = "图片资源|*.npk;*.spk;*.img;|音效资源|*.mp3;*.wav;*.ogg";
             dialog.Multiselect = true;
             if (dialog.ShowDialog() == DialogResult.OK) {
                 Connector.AddFile(!sender.Equals(addFileItem), dialog.FileNames);

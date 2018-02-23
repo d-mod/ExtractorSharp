@@ -1,4 +1,5 @@
 ﻿using ExtractorSharp.Core;
+using ExtractorSharp.Core.Handle;
 using ExtractorSharp.Data;
 using ExtractorSharp.Handle;
 using ExtractorSharp.Lib;
@@ -558,11 +559,15 @@ namespace ExtractorSharp {
         /// <param name="bmp"></param>
         /// <returns></returns>
         public static byte[] ToArray(this Bitmap bmp) {
-            var bmpData = bmp.LockBits(new Rectangle(Point.Empty, bmp.Size), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
             var data = new byte[bmp.Width * bmp.Height * 4];
+            bmp.ToArray(data);
+            return data;
+        }
+
+        public static void ToArray(this Bitmap bmp,byte[] data) {
+            var bmpData = bmp.LockBits(new Rectangle(Point.Empty, bmp.Size), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);        
             Marshal.Copy(bmpData.Scan0, data, 0, data.Length);
             bmp.UnlockBits(bmpData);
-            return data;
         }
 
         public static Bitmap Star(this Bitmap bmp, decimal scale) {
@@ -736,6 +741,9 @@ namespace ExtractorSharp {
                 var album = new Album();
                 album.Path = file.GetName();
                 List.Add(album);
+            }else if (file.EndsWith(".spk")) {
+                stream.Seek(0, SeekOrigin.Begin);
+                return ReadSpk(stream);
             }
             for (var i = 0; i < List.Count; i++) {
                 var album = List[i];
@@ -753,7 +761,8 @@ namespace ExtractorSharp {
                     album.InitHandle(stream);
                 } else {
                     stream.Seek(album.Offset, SeekOrigin.Begin);
-                    if (album.Path.ToLower().EndsWith(".ogg")) {
+                    var name = album.Name.ToLower();
+                    if (name.EndsWith(".ogg")) {
                         album.Version = Img_Version.OGG;
                         if (i < List.Count - 1) {
                             album.Info_Length = List[i + 1].Offset - stream.Position;
@@ -765,6 +774,15 @@ namespace ExtractorSharp {
                 }
             }
             return List;
+        }
+
+
+        public static List<Album> ReadSpk(this Stream stream) {
+            var data = SpkReader.Decompress(stream);
+            var ms = new MemoryStream(data);
+            var list = ms.ReadNPK(null);
+            ms.Close();
+            return list;
         }
 
         public static string toCodeString(this int code) {
