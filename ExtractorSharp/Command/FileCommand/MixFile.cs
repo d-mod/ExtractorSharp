@@ -20,7 +20,7 @@ namespace ExtractorSharp.Command.ImgCommand {
                 var match = regex.Match(Array[0].Name);
                 if (match.Success) {
                     var code = int.Parse(match.Value);
-                    var code_str = (code / 100 * 100).toCodeString();
+                    var code_str = (code / 100 * 100).ToCodeString();
                     Album = Array[0].Clone();
                     Album.ConvertTo(Handle.Img_Version.Ver6);
                     Album.Tables.Clear();

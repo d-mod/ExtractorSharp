@@ -40,7 +40,7 @@ namespace ExtractorSharp.Command.ImgCommand {
                 var data = al.Data;
                 var ms = new MemoryStream(data);
                 for (var i = 0; i < arr.Length; i++) {
-                    var name = prefix + (code + i).toCodeString() + suffix;
+                    var name = prefix + (code + i).ToCodeString() + suffix;
                     arr[i] = ms.ReadNPK(al.Name)[0];
                     arr[i].Path = al.Path.Replace(al.Name, name);
                     arr[i].Tables.Clear();

@@ -14,12 +14,10 @@ namespace ExtractorSharp.Component {
         /// 向视图层传递数据的事件
         /// </summary>
         protected event DialogDataEvent DataSent;
-        protected DialogDataEventArgs e;
         protected delegate void DialogDataEvent(object sender,DialogDataEventArgs e);
-        protected void OnDataSent() => DataSent?.Invoke(this, e);
+        protected void OnDataSent(DialogDataEventArgs e) => DataSent?.Invoke(this, e);
 
         public ESDialog(IConnector Connector):base(Connector) {
-            e = new DialogDataEventArgs();
             InitializeComponent();
         }
 
@@ -28,10 +26,12 @@ namespace ExtractorSharp.Component {
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        public void AddAttribute(string key,object value) {
-            e.Key = key;
-            e.Value = value;
-            OnDataSent();
+        public void AddAttribute(string key, object value) {
+            var e = new DialogDataEventArgs {
+                Key = key,
+                Value = value
+            };
+            OnDataSent(e);
         }
 
 
@@ -47,7 +47,6 @@ namespace ExtractorSharp.Component {
 
         protected virtual void OnEscape() {
             DialogResult = DialogResult.Cancel;
-            this.Hide();
         }
         
 

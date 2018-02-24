@@ -105,17 +105,12 @@ namespace ExtractorSharp {
                 return List;
             }
            ;
-            try {
                 using (var stream = new FileStream(file, FileMode.Open)) {
                     if (onlyPath)
                         return stream.ReadInfo();
                     IEnumerable<Album> enums = stream.ReadNPK(file);
                     return enums;
                 }
-            } catch (IOException e) {
-                Messager.ShowMessage(Msg_Type.Error, "文件" + file + "占用，打开失败");
-                return List;
-            }
         }
 
         public static void GetOriginal(string gamePath,Action<Album, Album> restore, params Album[] Array) {
@@ -780,12 +775,12 @@ namespace ExtractorSharp {
         public static List<Album> ReadSpk(this Stream stream) {
             var data = SpkReader.Decompress(stream);
             var ms = new MemoryStream(data);
-            var list = ms.ReadNPK(null);
+            var list = ms.ReadNPK("");
             ms.Close();
             return list;
         }
 
-        public static string toCodeString(this int code) {
+        public static string ToCodeString(this int code) {
             var code_str = code + "";
             while (code_str.Length < 4) {
                 code_str = "0" + code_str;
@@ -1020,7 +1015,50 @@ namespace ExtractorSharp {
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static string[] Split(this string str, string pattern) => str.Split(pattern.ToArray(), StringSplitOptions.RemoveEmptyEntries);
+        public static string[] Split(this string str,params string[] pattern) => str.Split(pattern, StringSplitOptions.RemoveEmptyEntries);
+
+
+        public static byte[][] Split(this byte[] data, byte[] pattern) {
+            var last = 0;
+            var list = new List<byte[]>();
+            for (var i = 0; i < data.Length; i++) {
+                var j = i;
+                while (j < data.Length && j - i < pattern.Length && (data[j] == pattern[j - i])) {
+                    j++;
+                }
+                if (j - i == pattern.Length) {
+                    var temp = new byte[j - last];
+                    Array.Copy(data, last, temp, 0, temp.Length);
+                    list.Add(temp);
+                    last = j;
+                } else {
+                    i = j;
+                }
+            }
+            var arr = new byte[data.Length-last];
+            Array.Copy(data, last, arr, 0, arr.Length);
+            list.Add(arr);
+            return list.ToArray();
+        }
+
+
+
+        public static int LastIndexOf(this byte[] data, byte[] pattern) {
+            var last = data.Length - 1;
+            for (var i = data.Length - 1; i > 0; i--) {
+                var j = i;
+                while ((data[j] == pattern[j - i])) {
+                    j++;
+                }
+                if (j - i == pattern.Length) {
+                    last = j;
+                    break;
+                } else {
+                    i = j;
+                }
+            }
+            return last;
+        }
 
 
         #region set拓展

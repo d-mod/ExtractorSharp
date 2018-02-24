@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractorSharp", "ExtractorSharp\ExtractorSharp.csproj", "{37D3351F-80F8-4905-A06F-65C430EC5EE2}"
 EndProject
@@ -19,6 +19,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractorSharp.UnitTest", "ExtractorSharp.UnitTest\ExtractorSharp.UnitTest.csproj", "{DDD06F25-69C5-423B-B273-44FF069BF09B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractorSharp.Plugin.Clean", "ExtractorSharp.Plugin.Clean\ExtractorSharp.Plugin.Clean.csproj", "{A4BB046F-ACAB-44B5-A0F0-2DD84278B43D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractorSharp.Plugin.Download", "ExtractorSharp.Plugin.Download\ExtractorSharp.Plugin.Download.csproj", "{87844CF0-A062-4F34-8C3B-D8E6BDA28DAA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -176,6 +178,22 @@ Global
 		{A4BB046F-ACAB-44B5-A0F0-2DD84278B43D}.Release|x64.Build.0 = Release|Any CPU
 		{A4BB046F-ACAB-44B5-A0F0-2DD84278B43D}.Release|x86.ActiveCfg = Release|Any CPU
 		{A4BB046F-ACAB-44B5-A0F0-2DD84278B43D}.Release|x86.Build.0 = Release|Any CPU
+		{87844CF0-A062-4F34-8C3B-D8E6BDA28DAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87844CF0-A062-4F34-8C3B-D8E6BDA28DAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87844CF0-A062-4F34-8C3B-D8E6BDA28DAA}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{87844CF0-A062-4F34-8C3B-D8E6BDA28DAA}.Debug|ARM.Build.0 = Debug|Any CPU
+		{87844CF0-A062-4F34-8C3B-D8E6BDA28DAA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{87844CF0-A062-4F34-8C3B-D8E6BDA28DAA}.Debug|x64.Build.0 = Debug|Any CPU
+		{87844CF0-A062-4F34-8C3B-D8E6BDA28DAA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{87844CF0-A062-4F34-8C3B-D8E6BDA28DAA}.Debug|x86.Build.0 = Debug|Any CPU
+		{87844CF0-A062-4F34-8C3B-D8E6BDA28DAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87844CF0-A062-4F34-8C3B-D8E6BDA28DAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87844CF0-A062-4F34-8C3B-D8E6BDA28DAA}.Release|ARM.ActiveCfg = Release|Any CPU
+		{87844CF0-A062-4F34-8C3B-D8E6BDA28DAA}.Release|ARM.Build.0 = Release|Any CPU
+		{87844CF0-A062-4F34-8C3B-D8E6BDA28DAA}.Release|x64.ActiveCfg = Release|Any CPU
+		{87844CF0-A062-4F34-8C3B-D8E6BDA28DAA}.Release|x64.Build.0 = Release|Any CPU
+		{87844CF0-A062-4F34-8C3B-D8E6BDA28DAA}.Release|x86.ActiveCfg = Release|Any CPU
+		{87844CF0-A062-4F34-8C3B-D8E6BDA28DAA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
