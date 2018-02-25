@@ -348,6 +348,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Kritsu.snk" />
+    <None Include="README.md" />
     <None Include="Resources\alias_weapon.json" />
     <None Include="Resources\chinese.json" />
     <None Include="Resources\queues.json" />

@@ -85,6 +85,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="README.md" />
     <None Include="Resources\alias_weapon.json" />
     <None Include="Resources\Back.jpg" />
     <None Include="Resources\weapon.json" />

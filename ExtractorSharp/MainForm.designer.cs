@@ -457,7 +457,7 @@ namespace ExtractorSharp {
             //
             //
             pixelateBox.Text = Language["Pixelate"];
-            pixelateBox.Location = new Point(420, 47);
+            pixelateBox.Location = new Point(420, 50);
             pixelateBox.Checked = Config["Pixelate"].Boolean;
 
             // 
