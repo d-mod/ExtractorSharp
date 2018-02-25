@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using ExtractorSharp.Component;
 using ExtractorSharp.Core;
+using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Data;
 
 namespace ExtractorSharp {
@@ -40,7 +41,7 @@ namespace ExtractorSharp {
         /// <param name="e"></param>
         public void NewImg(object sender, EventArgs e) {
             var path = pathBox.Text.Trim();
-            if (path.GetName().Equals(string.Empty)) {
+            if (path.GetSuffix().Equals(string.Empty)) {
                 Messager.ShowError("FileNameCannotEmpty");
                 return;
             }
@@ -48,7 +49,7 @@ namespace ExtractorSharp {
             var index = (int)indexBox.Value;
             var album = new Album();
             Connector.Do("newImg",album, path, count, index);
-            pathBox.Text = pathBox.Text.Replace(path.GetName(), "");
+            pathBox.Text = pathBox.Text.Replace(path.GetSuffix(), "");
             DialogResult = DialogResult.OK;
         }
 

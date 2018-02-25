@@ -1,4 +1,5 @@
-﻿using ExtractorSharp.Data;
+﻿using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Data;
 using ExtractorSharp.Handle;
 using ExtractorSharp.Loose;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -51,7 +52,7 @@ namespace ExtractorSharp.UnitTest {
                 }
                 Directory.CreateDirectory(dir);
                 foreach (var part in part_array) {
-                    var list = Tools.Load($@"D:\地下城与勇士\ImagePacks2\sprite_character_{profession + (profession.Contains("_") ? "" : "_")}equipment_avatar_{part}.NPK");
+                    var list = NpkReader.Load($@"D:\地下城与勇士\ImagePacks2\sprite_character_{profession + (profession.Contains("_") ? "" : "_")}equipment_avatar_{part}.NPK");
                     var builder = new LSBuilder();
                     var obj = builder.Get($"http://localhost/api/avatar/icon?profession={profession}&part={part}");
                     var cur_list = new List<string>();
@@ -71,7 +72,7 @@ namespace ExtractorSharp.UnitTest {
                             }
                         }
                     }
-                    Tools.WriteNPK($"E:/avatar/icon_new_image/{profession}/{part}.NPK", rs);
+                    NpkReader.Save($"E:/avatar/icon_new_image/{profession}/{part}.NPK", rs);
                 }
             }
         }

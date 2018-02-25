@@ -29,9 +29,11 @@ namespace ExtractorSharp.View.Dialog {
             this.components = new System.ComponentModel.Container();
             this.fileList = new ExtractorSharp.Component.ESListBox<string>();
             this.serverList = new System.Windows.Forms.ComboBox();
+            this.typeList = new ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.keywordBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new Label();
             this.bar = new ProgressBar();
             this.tipLabel = new Label();
             downloadItem = new ToolStripMenuItem();
@@ -49,9 +51,24 @@ namespace ExtractorSharp.View.Dialog {
             // 
             this.serverList.FormattingEnabled = true;
             this.serverList.Location = new System.Drawing.Point(120, 18);
-            this.serverList.Name = "comboBox1";
             this.serverList.Size = new System.Drawing.Size(121, 20);
             this.serverList.TabIndex = 3;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(320, 21);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(29, 12);
+            this.label3.TabIndex = 8;
+            this.label3.Text = Language["ResourcesFormat"];
+
+            this.typeList.FormattingEnabled = true;
+            this.typeList.Location = new System.Drawing.Point(400, 18);
+            this.typeList.Size = new System.Drawing.Size(121, 20);
+            this.typeList.TabIndex = 3;
+            this.typeList.Items.AddRange(new string[] { Language["ImageResources"], Language["SoundResources"] });
+            this.typeList.SelectedIndex = 0;
             // 
             // label1
             // 
@@ -113,6 +130,8 @@ namespace ExtractorSharp.View.Dialog {
             this.Controls.Add(this.label1);
             this.Controls.Add(this.serverList);
             this.Controls.Add(this.fileList);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.typeList);
             this.Name = "fileDownload";
             this.Text = Language["FileDownload"];
             this.ResumeLayout(false);
@@ -128,6 +147,8 @@ namespace ExtractorSharp.View.Dialog {
         private ESListBox<string> fileList;
         private ProgressBar bar;
         private Label tipLabel;
+        private Label label3;
         private ToolStripMenuItem downloadItem;
+        private ComboBox typeList;
     }
 }

@@ -1,5 +1,5 @@
-﻿using ExtractorSharp.Data;
-using System;
+﻿using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Data;
 using System.Drawing;
 using System.IO;
 
@@ -20,13 +20,10 @@ namespace ExtractorSharp.Handle {
             return null;
         }
 
-        public override byte[] ConvertToByte(ImageEntity entity) {
-            return null;
-        }
+        public override byte[] ConvertToByte(ImageEntity entity) => new byte[0];
 
         public override void CreateFromStream(Stream stream) {
-            Data = new byte[Album.Info_Length];
-            stream.Read(Data);
+            stream.Read((int)Album.Info_Length,out Data);
             Album.Data = Data;
         }
         

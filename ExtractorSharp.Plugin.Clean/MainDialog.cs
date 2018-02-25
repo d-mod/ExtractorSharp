@@ -5,6 +5,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using ExtractorSharp.Component;
 using ExtractorSharp.Core;
+using ExtractorSharp.Core.Lib;
 
 namespace ExtractorSharp.View {
     [ExportMetadata("Guid", "A4BB046F-ACAB-44B5-A0F0-2DD84278B43D")]
@@ -85,8 +86,8 @@ namespace ExtractorSharp.View {
             bar.Value = 0;
             bar.Visible = true;
             foreach (var f in files) {
-                if (Regex.IsMatch(f.GetName().ToUpper(), @".*\(.*\)\.NPK"))
-                    list.Items.Add(f.GetName(),true);
+                if (Regex.IsMatch(f.GetSuffix().ToUpper(), @".*\(.*\)\.NPK"))
+                    list.Items.Add(f.GetSuffix(),true);
                 bar.Value++;
             }
             bar.Visible = false;
@@ -99,7 +100,7 @@ namespace ExtractorSharp.View {
             bar.Value = 0;
             bar.Visible = true;
             foreach (var f in files) {
-                var name = f.GetName();
+                var name = f.GetSuffix();
                 if (!Dic.ContainsKey(name)) 
                     list.Items.Add(name,true);
                 bar.Value++;            

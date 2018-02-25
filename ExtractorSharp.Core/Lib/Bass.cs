@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.InteropServices;
 
-namespace ExtractorSharp.Lib {
+namespace ExtractorSharp.Core.Lib {
     /// <summary>
     /// bass音效处理库封装
     /// </summary>

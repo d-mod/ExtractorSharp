@@ -1,4 +1,5 @@
 ﻿using ExtractorSharp.Core;
+using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Data;
 using System.Collections.Generic;
 using System.IO;
@@ -40,8 +41,8 @@ namespace ExtractorSharp.Command.ImgCommand {
                 var data = al.Data;
                 var ms = new MemoryStream(data);
                 for (var i = 0; i < arr.Length; i++) {
-                    var name = prefix + (code + i).ToCodeString() + suffix;
-                    arr[i] = ms.ReadNPK(al.Name)[0];
+                    var name = prefix + NpkReader.CompleteCode(code + i) + suffix;
+                    arr[i] = NpkReader.ReadNPK(ms,al.Name)[0];
                     arr[i].Path = al.Path.Replace(al.Name, name);
                     arr[i].Tables.Clear();
                     arr[i].Tables.Add(al.Tables[i]);

@@ -9,6 +9,7 @@ using ExtractorSharp.Data;
 using ExtractorSharp.Core;
 using ExtractorSharp.Loose;
 using System.ComponentModel.Composition;
+using ExtractorSharp.Core.Lib;
 
 namespace ExtractorSharp.Plugin.Searcher {
     [ExportMetadata("Guid", "D72DF478-FAFF-43DF-B904-9EB338A08B54")]
@@ -86,7 +87,7 @@ namespace ExtractorSharp.Plugin.Searcher {
         private void AddNPK(object sender, EventArgs e) {
             var array = GetNPK();
             if (array.Length > 0) {
-                Connector.Do("addImg", Tools.Load(array).ToArray(), false);
+                Connector.Do("addImg", NpkReader.Load(array).ToArray(), false);
             }
         }
 
@@ -228,11 +229,11 @@ namespace ExtractorSharp.Plugin.Searcher {
             var list = new List<Album>();
             if (displayModeBox.SelectedIndex == 1)
                 foreach (var result in array)
-                    list.AddRange(Tools.Load(result.Path));
+                    list.AddRange(NpkReader.Load(result.Path));
             else {
                 var npks = GetNPK();
-                list = Tools.Load(npks);//同一NPK的文件只需要读取一次
-                list = new List<Album>(Tools.Find(list, allNameBox.Checked, GetPattern()));//使用find过滤出符合条件的
+                list = NpkReader.Load(npks);//同一NPK的文件只需要读取一次
+                list = new List<Album>(NpkReader.Find(list, allNameBox.Checked, GetPattern()));//使用find过滤出符合条件的
             }
             DialogResult = DialogResult.OK;
             Connector.Do("addImg", list.ToArray(), false);
@@ -242,7 +243,7 @@ namespace ExtractorSharp.Plugin.Searcher {
             var index = resultList.IndexFromPoint(e.Location);
             if (index > -1) {
                 var result = resultList.Items[index] as SearchResult;
-                var al = Tools.LoadAlbum(result.Path, result.imgPath);
+                var al = NpkReader.LoadWithName(result.Path, result.imgPath);
                 if (al != null) {
                     Connector.Do("addImg", new Album[] { al }, false);
                 }
@@ -310,10 +311,10 @@ namespace ExtractorSharp.Plugin.Searcher {
             }
             var pattern = GetPattern();
             label: foreach (var file in files) {
-                if (ignoreModelBox.Checked && !modelDic.ContainsKey(file.GetName()))
+                if (ignoreModelBox.Checked && !modelDic.ContainsKey(file.GetSuffix()))
                     continue;
-                var list = Tools.Load(true, file);
-                list = Tools.Find(list, allNameBox.Checked, pattern);
+                var list = NpkReader.Load(true, file);
+                list = NpkReader.Find(list, allNameBox.Checked, pattern);
                 var tempList = new List<SearchResult>();
                 foreach (var album in list) {
                     var result = new SearchResult(Mode, file, album.Path);
@@ -360,9 +361,9 @@ namespace ExtractorSharp.Plugin.Searcher {
         public int Mode;
         public SearchResult(int Mode, string Path, string imgPath) {
             this.Path = Path;
-            this.Name = Path.GetName();
+            this.Name = Path.GetSuffix();
             this.imgPath = imgPath;
-            this.imgName = imgPath.GetName();
+            this.imgName = imgPath.GetSuffix();
             this.Mode = Mode;
         }
 

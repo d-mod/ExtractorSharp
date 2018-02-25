@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Handle;
 using ExtractorSharp.Loose.Attr;
 
@@ -34,7 +35,7 @@ namespace ExtractorSharp.Data {
         public string Path { set; get; } = string.Empty;
         public string Name {
             get {
-                return Path.GetName();
+                return Path.GetSuffix();
             }
             set {
                 Path = Path.Replace(Name, value);
@@ -187,6 +188,17 @@ namespace ExtractorSharp.Data {
                 temp.TableIndex = TableIndex;
             }
             return temp;
+        }
+
+        public void Save(Stream stream) {
+            Adjust();
+            stream.Write(Data);
+        }
+
+        public void Save(string file) {
+            using(var fs=new FileStream(file, FileMode.Create)) {
+                Save(fs);
+            }
         }
 
 

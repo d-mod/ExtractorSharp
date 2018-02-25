@@ -283,6 +283,7 @@ namespace ExtractorSharp {
             // 
             // mainMenu
             // 
+            mainMenu.BackColor = Config["MainColor"].Color;
             mainMenu.Items.Add(fileMenu);
             mainMenu.Items.Add(editMenu);
             mainMenu.Items.Add(viewMenu);

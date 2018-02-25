@@ -84,8 +84,7 @@ namespace ExtractorSharp.View{
             this.Controls.Add(this.label1);
             this.Controls.Add(this.height_box);
             this.Controls.Add(this.width_box);
-            this.Name = "BatCavas";
-            this.Text = Language["CavasImage"];
+            this.Text = Language["CanvasImage"];
             ((System.ComponentModel.ISupportInitialize)(this.width_box)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.height_box)).EndInit();
             this.ResumeLayout(false);

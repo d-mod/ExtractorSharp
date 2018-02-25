@@ -2,6 +2,7 @@
 using System;
 using ExtractorSharp.Core;
 using ExtractorSharp.Data;
+using ExtractorSharp.Core.Lib;
 
 namespace ExtractorSharp.Component {
     public partial class ESTextDialog : ESDialog {
@@ -13,7 +14,7 @@ namespace ExtractorSharp.Component {
             get => textBox.Text;
             set {
                 textBox.Text = value;
-                var name = value.GetName();
+                var name = value.GetSuffix();
                 var i = value.LastIndexOf(name);
                 if (i > -1) {
                     textBox.Select(i, name.Length);

@@ -1,4 +1,4 @@
-﻿using ExtractorSharp.Core;
+﻿using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Data;
 using System;
 using System.IO;
@@ -27,9 +27,13 @@ namespace ExtractorSharp.Command.ImageCommand {
             Action(Album, Indices);
         }
 
-        public void Redo() {}
+        public void Redo() {
+            // Method intentionally left empty.
+        }
 
-        public void Undo() {}
+        public void Undo() {
+            // Method intentionally left empty.
+        }
 
         public void Action(Album album, int[] indexes) {
             if (Mode == 0) {//当保存模式为单张贴图时
@@ -46,7 +50,7 @@ namespace ExtractorSharp.Command.ImageCommand {
                 }
                 var max = Math.Min(indexes.Length, album.List.Count);
                 for (var i = 0; i < max; i++) {
-                    if (!indexes[i].Between(-1, album.List.Count)) {
+                    if (indexes[i] < 0 || i > album.List.Count - 1) {
                         continue;
                     }
                     var entity = album.List[indexes[i]];

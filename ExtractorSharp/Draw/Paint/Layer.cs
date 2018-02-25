@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using System;
 using ExtractorSharp.Data;
+using ExtractorSharp.Core.Lib;
 
 namespace ExtractorSharp.Draw {
     /// <summary>

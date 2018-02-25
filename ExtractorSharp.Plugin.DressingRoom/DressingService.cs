@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using ExtractorSharp.Config;
+using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Data;
 using ExtractorSharp.Loose;
 using ExtractorSharp.Plugin.DressingRoom.Properties;
@@ -86,8 +87,8 @@ namespace ExtractorSharp.Service {
             if (!File.Exists(path)) {
                 return new List<Album>();
             }
-            var list = Tools.Load(path);
-            list = new List<Album>(Tools.Find(list, code.Completed()));   //检索
+            var list = NpkReader.Load(path);
+            list = NpkReader.Find(list,NpkReader.CompleteCode(code));   //检索
             part = part.Equals("skin") ? "body" : part;
             return FindImg(list, code, part);
         }
@@ -124,7 +125,7 @@ namespace ExtractorSharp.Service {
             for (var i = 0; i < Parts.Length; i++) {
                 if (values[i] == -1)
                     continue;
-                var value = values[i].Completed();
+                var value = NpkReader.CompleteCode(values[i]);
                 var temp = GetTempImage(Parts[i], value);
                 list.AddRange(temp);
             }
@@ -192,8 +193,7 @@ namespace ExtractorSharp.Service {
             if (!File.Exists(path)) {
                 return new List<Album>();
             }
-            var list = Tools.Load(path);
-            list = new List<Album>(Tools.Find(list, code.Completed()));
+            var list = NpkReader.FindAll(path, NpkReader.CompleteCode(code));
             return FindImg(list, code, type);
         }
     }

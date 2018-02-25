@@ -69,9 +69,16 @@
     <Compile Include="Handle\Handler.cs" />
     <Compile Include="Handle\Img_Version.cs" />
     <Compile Include="Composition\IPlugin.cs" />
-    <Compile Include="Handle\SpkReader.cs" />
+    <Compile Include="Lib\Arrays.cs" />
+    <Compile Include="Lib\Bitmaps.cs" />
+    <Compile Include="Lib\Colors.cs" />
+    <Compile Include="Lib\Drawings.cs" />
+    <Compile Include="Lib\NpkReader.cs" />
+    <Compile Include="Lib\SpkReader.cs" />
     <Compile Include="Lib\Bass.cs" />
     <Compile Include="Lib\FreeImage.cs" />
+    <Compile Include="Lib\Streams.cs" />
+    <Compile Include="Lib\Strings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools.cs" />
   </ItemGroup>

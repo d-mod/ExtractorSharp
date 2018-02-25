@@ -16,6 +16,8 @@
 	    "AllImg": "所有Img",
 	    "CheckImage": "当前所选贴图",
 	    "AllImage": "所有贴图",
+		"ImageResources":"图片资源",
+		"SoundResources":"音效资源",
 	    "Width": "宽",
 	    "Height": "高",
 	    "Size": "宽高",

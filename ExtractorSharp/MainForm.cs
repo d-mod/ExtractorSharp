@@ -1,21 +1,23 @@
-﻿using System;
+﻿using ExtractorSharp.Component;
+using ExtractorSharp.Composition;
+using ExtractorSharp.Config;
+using ExtractorSharp.Core;
+using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Data;
+using ExtractorSharp.Draw;
+using ExtractorSharp.Draw.Paint;
+using ExtractorSharp.EventArguments;
+using ExtractorSharp.Handle;
+using ExtractorSharp.View;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
-using ExtractorSharp.View;
-using ExtractorSharp.Component;
-using ExtractorSharp.Handle;
-using ExtractorSharp.Draw;
-using ExtractorSharp.Config;
-using ExtractorSharp.Core;
-using System.Drawing.Drawing2D;
-using ExtractorSharp.EventArguments;
-using ExtractorSharp.Draw.Paint;
-using ExtractorSharp.Data;
-using ExtractorSharp.Composition;
-using ExtractorSharp.Lib;
 
 namespace ExtractorSharp {
     public partial class MainForm : ESForm {
@@ -658,7 +660,7 @@ namespace ExtractorSharp {
             items.CopyTo(itemArray, 0);
             albumList.Items.Clear();
             var condition = searchBox.Text.Trim().Split(" ");
-            var array = Tools.Find(Connector.List, condition);
+            var array = NpkReader.Find(Connector.List, condition);
             if (classifyItem.Checked) {
                 var path = "";
                 foreach (var al in array) {
@@ -680,7 +682,7 @@ namespace ExtractorSharp {
                 }
             }
             if (albumList.Items.Count > 0) {
-                if (!index.Between(0, albumList.Items.Count)) {
+                if (index < 1 || index > albumList.Items.Count - 1) {
                     index = Math.Min(index, albumList.Items.Count - 1);
                     index = Math.Max(index, 0);
                 }
@@ -695,7 +697,7 @@ namespace ExtractorSharp {
             dialog.Multiselect = true;
             dialog.Filter = "img,npk文件|*.img;*.npk";
             if (dialog.ShowDialog() == DialogResult.OK) {
-                var array = Tools.Load(dialog.FileNames).ToArray();
+                var array = NpkReader.Load(dialog.FileNames).ToArray();
                 Connector.Do("addMerge", array);
             }
         }
@@ -849,7 +851,7 @@ namespace ExtractorSharp {
             var item = Connector.SelectedFile;
             if (item != null) {
                 var dialog = new OpenFileDialog();
-                dialog.Filter = "图片资源|*.img|音效资源|*.ogg;*.wav;*.mp3|全部文件|*.*";
+                dialog.Filter = $"{Language["ImageResources"]}|*.img|{Language["SoundResources"]}|*.ogg;*.wav;*.mp3|{Language["AllFormat"]}|*.*";
                 if (item.Version == Img_Version.OGG) {
                     dialog.FilterIndex = 2;
                 } else if (item.Name.EndsWith(".img")) {
@@ -858,7 +860,7 @@ namespace ExtractorSharp {
                     dialog.FilterIndex = 3;
                 }
                 if (dialog.ShowDialog() == DialogResult.OK) {
-                    var list = new List<Album>(Tools.Load(dialog.FileName));
+                    var list = NpkReader.Load(dialog.FileName);
                     if (list.Count > 0) {
                         Connector.Do("replaceImg", item, list[0]);
                     }
@@ -879,12 +881,14 @@ namespace ExtractorSharp {
                 dialog.Filter = "img|*.img|ogg|*.ogg|mp3|*.mp3|wav|*.wav";
                 dialog.FilterIndex = array[0].Version != Img_Version.OGG ? 1 : 2;
                 if (dialog.ShowDialog() == DialogResult.OK) {
-                    Tools.SaveFile(dialog.FileName, array[0]);
+                    array[0].Save(dialog.FileName);
                 }
             } else if (array.Length > 1) {
                 var dialog = new FolderBrowserDialog();
                 if (dialog.ShowDialog() == DialogResult.OK) {
-                    Tools.SaveDirectory(dialog.SelectedPath, array);
+                    foreach(var img in array) {
+                        img.Save($"{dialog.SelectedPath}/{img.Name}");
+                    }
                 }
             }
         }
@@ -1033,7 +1037,7 @@ namespace ExtractorSharp {
         private void OutputFile(object sender, EventArgs e) {
             var dialog = new SaveFileDialog();
             dialog.Filter = "npk文件|*.npk";
-            dialog.FileName = Path.GetName();
+            dialog.FileName = Path.GetSuffix();
             if (dialog.ShowDialog() == DialogResult.OK) {
                 Connector.Save(dialog.FileName);
             }
@@ -1046,7 +1050,9 @@ namespace ExtractorSharp {
         private void OutputDirectory(object sender, EventArgs e) {
             var dialog = new FolderBrowserDialog();
             if (dialog.ShowDialog() == DialogResult.OK) {
-                Tools.SaveDirectory(dialog.SelectedPath, Connector.List);
+                foreach (var img in Connector.List) {
+                    img.Save($"{dialog.SelectedPath}/{img.Name}");
+                }
             }
         }
 
@@ -1391,7 +1397,7 @@ namespace ExtractorSharp {
                     SavePath = args.Find(item => item.ToLower().EndsWith(".npk")) ?? string.Empty;
                 }
                 if (args.Length > 0) {
-                    MainForm.Controller.Do("addImg", Tools.Load(args).ToArray(), clear);
+                    MainForm.Controller.Do("addImg", NpkReader.Load(args).ToArray(), clear);
                 }
             }
 
@@ -1424,7 +1430,7 @@ namespace ExtractorSharp {
             }
 
             public void Save(string file) {
-                Tools.WriteNPK(file, List);
+                NpkReader.Save(file, List);
                 IsSave = true;
                 Messager.ShowOperate("SaveFile");
             }
@@ -1433,7 +1439,7 @@ namespace ExtractorSharp {
 
             public void SelectPath() {
                 var dir = SavePath;
-                var path = SavePath.GetName();
+                var path = SavePath.GetSuffix();
                 if (path != string.Empty) {
                     dir = dir.Replace(path, "");
                 }

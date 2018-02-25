@@ -1,8 +1,7 @@
 ﻿using ExtractorSharp.Core;
-using ExtractorSharp.Data;
+using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Draw;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 
 namespace ExtractorSharp.Command.DrawCommand {
     class MoveToolsDraw : ICommand {

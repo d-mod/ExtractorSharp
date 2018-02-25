@@ -1,4 +1,5 @@
-﻿using ExtractorSharp.Data;
+﻿using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Data;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

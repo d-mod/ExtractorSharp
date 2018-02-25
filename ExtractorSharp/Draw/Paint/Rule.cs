@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Data;
 
 namespace ExtractorSharp.Draw.Paint {

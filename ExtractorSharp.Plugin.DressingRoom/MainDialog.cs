@@ -8,6 +8,7 @@ using ExtractorSharp.Service;
 using System.Diagnostics;
 using ExtractorSharp.Plugin.DressingRoom.Properties;
 using System.ComponentModel.Composition;
+using ExtractorSharp.Core.Lib;
 
 namespace ExtractorSharp.View {
     [ExportMetadata("Guid", "57951442-F28C-4D84-8677-0DE4105BFBD1")]
@@ -205,7 +206,7 @@ namespace ExtractorSharp.View {
             ExctractImg();
             var dialog = new FolderBrowserDialog();
             if (dialog.ShowDialog() == DialogResult.OK) {
-                Tools.SaveDirectory(dialog.SelectedPath, Service.Array);
+                NpkReader.SaveToDirectory(dialog.SelectedPath, Service.Array);
             }
         }
 

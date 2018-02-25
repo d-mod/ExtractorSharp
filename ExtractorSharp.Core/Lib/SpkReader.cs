@@ -1,16 +1,14 @@
-﻿using ExtractorSharp.Loose;
-using ICSharpCode.SharpZipLib.BZip2;
-using System;
-using System.Collections.Generic;
+﻿using ICSharpCode.SharpZipLib.BZip2;
 using System.IO;
 using System.Linq;
-using System.Text;
 
-namespace ExtractorSharp.Core.Handle {
-    public class SpkReader {
+namespace ExtractorSharp.Core.Lib {
+    public static class SpkReader {
         private static byte[] HEADER = { 0x42, 0x5a, 0x68, 0x39, 0x31, 0x41, 0x59, 0x26, 0x53, 0x59 };
         private static byte[] MARK = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x0e, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xef, 0xf1, 0xff };
         private static byte[] TAIL = { 0x01, 0x00, 0x00, 0x00 };
+       
+        
         /// <summary>
         /// 解压spk
         /// <see href="https://musoucrow.github.io/2017/07/21/spk_analysis/"/>
@@ -29,7 +27,7 @@ namespace ExtractorSharp.Core.Handle {
                 ms.Write(comrpessData);
                 if (list.Length > 1) {
                     for (var j = 1; j < list.Length - 1; j++) {
-                        ms.Write(list[j].Sub(32, list[j].Length));
+                        ms.Write(list[j].Sub(32));
                     }
                     var last = list.Last();
                     var pos = last.LastIndexOf(TAIL);
@@ -42,18 +40,15 @@ namespace ExtractorSharp.Core.Handle {
             ms.Close();
             return ms.ToArray();
         }
-    
-
-     
 
         private static byte[] Decompress(byte[] data) {
-                var ms = new MemoryStream(data);
-                var os = new MemoryStream();
-                BZip2.Decompress(ms, os, false);
-                ms.Close();
-                os.Close();
-                return os.ToArray();
-            }
-        
+            var ms = new MemoryStream(data);
+            var os = new MemoryStream();
+            BZip2.Decompress(ms, os, false);
+            ms.Close();
+            os.Close();
+            return os.ToArray();
+        }
+
     }
 }

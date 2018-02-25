@@ -4,6 +4,7 @@ using System;
 using ExtractorSharp.Component;
 using ExtractorSharp.Core;
 using ExtractorSharp.Data;
+using ExtractorSharp.Core.Lib;
 
 namespace ExtractorSharp.View {
     partial class MergeDialog : ESDialog {
@@ -79,7 +80,7 @@ namespace ExtractorSharp.View {
             dialog.Filter = "NPK文件,img文件 | *.NPK; *.img";
             dialog.Multiselect = true;
             if (dialog.ShowDialog() == DialogResult.OK) {
-                var array = Tools.Load(dialog.FileNames).ToArray();
+                var array = NpkReader.Load(dialog.FileNames).ToArray();
                 Connector.Do("addMerge", array);
             }
         }

@@ -46,7 +46,7 @@ namespace ExtractorSharp.Core {
             }
         }
 
-        public void Download(Guid guid) {
+        public bool Download(Guid guid) {
             var name = $"{Config["RootPath"]}/{Config["UpdateExeName"]}";
             try {
                 var client = new WebClient();
@@ -56,8 +56,9 @@ namespace ExtractorSharp.Core {
                 Process pro = Process.Start(name, $" -p {guid}");
                 pro.Exited += (sender, e) => Install($"{Config["RootPath"]}/plugin/{guid}");
             } catch(Exception e) {
-
+                return false;
             }
+            return true;
         }
 
         public bool Install(string dir) {
@@ -81,7 +82,11 @@ namespace ExtractorSharp.Core {
                 Language.CreateFromDir(lanDir);
             }
             //初始化
-            plugin.Initialize();
+            try {
+                plugin.Initialize();
+            } catch(Exception) {
+                return false;
+            }
             //记录插件
             List.Add(plugin.Guid, plugin);
             return true;

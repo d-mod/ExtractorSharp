@@ -1,5 +1,5 @@
-﻿using ExtractorSharp.Data;
-using ExtractorSharp.Lib;
+﻿using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Data;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -13,22 +13,23 @@ namespace ExtractorSharp.Handle {
             var type = entity.Type;
             var size = entity.Width * entity.Height * (type == ColorBits.ARGB_8888 ? 4 : 2);
             if (entity.Compress == Compress.ZLIB) {
-                data = FreeImage.Uncompress(data, size);
+                data = FreeImage.Decompress(data, size);
             }
-            var ms = new MemoryStream(data);
-            data = new byte[entity.Width * entity.Height * 4];
-            for (var i = 0; i < data.Length; i += 4) {
-                var temp = ms.ReadColor(type);
-                temp.CopyTo(data, i);
+            using (var ms = new MemoryStream(data)) {
+                data = new byte[entity.Size.Width * entity.Size.Height * 4];
+                for (var i = 0; i < data.Length; i += 4) {
+                    var temp = Colors.ReadColor(ms, type);
+                    temp.CopyTo(data, i);
+                }
             }
-            return Tools.FromArray(data, entity.Size);
+            return Bitmaps.FromArray(data, entity.Size);
         }
 
         public override byte[] ConvertToByte(ImageEntity entity) {
-            var stream = new MemoryStream();
-            stream.WriteImage(entity);
-            stream.Close();
-            return stream.ToArray();
+            using (var ms = new MemoryStream()) {
+                NpkReader.WriteImage(ms, entity);
+                return ms.ToArray();
+            }
         }
 
         public override void NewImage(int count, ColorBits type, int index) {

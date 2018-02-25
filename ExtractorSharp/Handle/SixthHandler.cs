@@ -1,9 +1,9 @@
-﻿using ExtractorSharp.Data;
-using ExtractorSharp.Lib;
-using System;
+﻿using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Data;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 
 namespace ExtractorSharp.Handle {
     class SixthHandler :SecondHandler{
@@ -14,17 +14,17 @@ namespace ExtractorSharp.Handle {
             if (entity.Compress != Compress.ZLIB) {
                 return base.ConvertToBitmap(entity);
             }
-            data = FreeImage.Uncompress(data, size);
+            data = FreeImage.Decompress(data, size);
             var table = Album.CurrentTable;
             if (table.Count > 0) {
                 using (var os = new MemoryStream()) {
                     foreach (var i in data) {
-                        os.WriteColor(table[i % table.Count], ColorBits.ARGB_8888);
+                        Colors.WriteColor(os,table[i % table.Count],ColorBits.ARGB_8888);
                     }
                     data = os.ToArray();
                 }
             }
-            return Tools.FromArray(data, entity.Size);
+            return Bitmaps.FromArray(data, entity.Size);
         }
 
 
@@ -96,7 +96,7 @@ namespace ExtractorSharp.Handle {
             ms.WriteInt(Album.Tables.Count);
             foreach(var table in Album.Tables) {
                 ms.WriteInt(table.Count);
-                ms.WriteColorChart(table.ToArray());
+                Colors.WritePalette(ms,table.ToArray());
             }
             ms.Write(data);
             ms.Close();
@@ -118,7 +118,7 @@ namespace ExtractorSharp.Handle {
             Album.Tables = new List<List<Color>>();
             for (int i = 0; i < size; i++) {
                 var count = stream.ReadInt();
-                var table = stream.ReadColorChart(count);
+                var table = Colors.ReadPalette(stream,count);
                 Album.Tables.Add(table.ToList());
             }
             base.CreateFromStream(stream);

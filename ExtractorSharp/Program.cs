@@ -129,8 +129,7 @@ namespace ExtractorSharp {
             Viewer.Regisity("setting", typeof(SettingDialog));
             Viewer.Regisity("saveImage", typeof(SaveImageDialog));
             Viewer.Regisity("version", typeof(VersionDialog));
-            Viewer.Regisity("download", typeof(DownloadFileDialog));
-        }
+         }
 
 
         public static void RegistyHandler() {

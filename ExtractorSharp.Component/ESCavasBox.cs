@@ -13,6 +13,7 @@ using ExtractorSharp.Config;
 using System.Drawing.Drawing2D;
 using ExtractorSharp.Draw;
 using ExtractorSharp.Draw.Paint;
+using ExtractorSharp.Core.Lib;
 
 namespace ExtractorSharp.Component {
     public partial class ESCavasBox : PictureBox {

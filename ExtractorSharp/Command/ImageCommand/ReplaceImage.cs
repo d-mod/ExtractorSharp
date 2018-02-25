@@ -1,6 +1,6 @@
 ﻿using ExtractorSharp.Core;
+using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Data;
-using ExtractorSharp.Lib;
 using System.Drawing;
 using System.IO;
 

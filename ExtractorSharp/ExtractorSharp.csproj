@@ -299,12 +299,6 @@
     <Compile Include="View\Dialog\VersionDialog.Designer.cs">
       <DependentUpon>VersionDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\Dialog\DownloadFileDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="View\Dialog\DownloadFileDialog.Designer.cs">
-      <DependentUpon>DownloadFileDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="Handle\FirstHandler.cs" />
     <Compile Include="Handle\OggHandler.cs" />
     <Compile Include="Handle\SixthHandler.cs" />
@@ -354,7 +348,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Kritsu.snk" />
-    <None Include="packages.config" />
     <None Include="Resources\alias_weapon.json" />
     <None Include="Resources\chinese.json" />
     <None Include="Resources\queues.json" />
@@ -395,9 +388,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\Dialog\VersionDialog.resx">
       <DependentUpon>VersionDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="View\Dialog\DownloadFileDialog.resx">
-      <DependentUpon>DownloadFileDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -499,7 +489,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Resources_4alias_3weapon_1json__JSONSchema="http://json.schemastore.org/config" Resources_4queues_1json__JSONSchema="http://json.schemastore.org/config" />
+      <UserProperties Resources_4queues_1json__JSONSchema="http://json.schemastore.org/config" Resources_4alias_3weapon_1json__JSONSchema="http://json.schemastore.org/config" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

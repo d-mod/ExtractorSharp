@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
+using System.IO;
+using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Handle;
-using ExtractorSharp.Lib;
 using ExtractorSharp.Loose.Attr;
 
 namespace ExtractorSharp.Data {
@@ -134,6 +135,10 @@ namespace ExtractorSharp.Data {
         public Img_Version Version => Parent.Version;
 
 
+        public void Load() {
+            _image = Parent.ConvertToBitmap(this);//使用父容器
+        }
+
         /// <summary>
         /// 替换贴图
         /// </summary>
@@ -221,14 +226,32 @@ namespace ExtractorSharp.Data {
         }
 
         public ImageEntity Clone(Album album) {
-            var entity = new ImageEntity(album);
-            entity.Picture = Picture;
-            entity.Compress = Compress;
-            entity.Type = Type;
-            entity.Location = Location;
-            entity.Canvas_Size = Canvas_Size;
-            entity.Target = Target;
-            return entity;
+            return new ImageEntity(album) {
+                Picture = Picture,
+                Compress = Compress,
+                Type = Type,
+                Location = Location,
+                Canvas_Size = Canvas_Size,
+                Target = Target
+            };
+        }
+
+        public void Save(Stream stream) {
+            var data = Picture.ToArray();
+            if (Compress != Compress.NONE) {
+                data = FreeImage.Compress(data);
+            }
+            stream.WriteString("");
+            stream.WriteInt((int)Type);
+            stream.WriteInt((int)Compress);
+            stream.WriteInt(Width);
+            stream.WriteInt(Height);
+            stream.WriteInt(data.Length);
+            stream.WriteInt(X);
+            stream.WriteInt(Y);
+            stream.WriteInt(Canvas_Width);
+            stream.WriteInt(Canvas_Height);
+            stream.Write(data);
         }
     }
 

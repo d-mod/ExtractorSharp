@@ -1,11 +1,10 @@
 ﻿using ExtractorSharp.Data;
 using System;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace ExtractorSharp.Lib {
+namespace ExtractorSharp.Core.Lib {
     /// <summary>
     /// FreeImage图片处理库封装
     /// </summary>
@@ -35,7 +34,7 @@ namespace ExtractorSharp.Lib {
         /// <param name="data"></param>
         /// <param name="size"></param>
         /// <returns></returns>
-        public static byte[] Uncompress(byte[] data, int size) {
+        public static byte[] Decompress(byte[] data, int size) {
             var target = new byte[size];
             Uncompress(target, ref size, data, data.Length);
             return target;
@@ -140,7 +139,7 @@ namespace ExtractorSharp.Lib {
             var length = size.Width * size.Height * 4;
             data = new byte[length];
             Marshal.Copy(bits, data, 0, data.Length);
-            return Tools.FromArray(data, size);
+            return Bitmaps.FromArray(data, size);
         }
 
 
@@ -165,7 +164,7 @@ namespace ExtractorSharp.Lib {
                 data = new byte[length];
                 Marshal.Copy(bits, data, 0, data.Length);
                 UnlockPage(handle, page, 1);
-                array[i] = Tools.FromArray(data, new Size(width, height));
+                array[i] = Bitmaps.FromArray(data, new Size(width, height));
             }
             return array;
         }
@@ -197,7 +196,6 @@ namespace ExtractorSharp.Lib {
                 var data = bmp.ToArray();
                 var dib = FromArray(data, w, h, 4 * w, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 1);
                 AppendPage(gif, dib);
-                var count = GetPageCount(gif);
                 Unload(dib);
             }
             CloseMultiBitmap(gif, 0);

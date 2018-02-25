@@ -1,7 +1,6 @@
-﻿using ExtractorSharp.Core;
+﻿using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Data;
 using ExtractorSharp.Handle;
-using ExtractorSharp.Lib;
 using System;
 using System.Windows.Forms;
 

@@ -72,10 +72,10 @@ namespace ExtractorSharp {
         public void Show(string dialogName, params object[] args) {
             if (List.ContainsKey(dialogName)) {
                 List[dialogName].Show(args);
-            } else
-            if (Dic.ContainsKey(dialogName)) {
-                var e = new DialogEventArgs();
-                e.DialogType = Dic[dialogName];
+            } else if (Dic.ContainsKey(dialogName)) {
+                var e = new DialogEventArgs {
+                    DialogType = Dic[dialogName]
+                };
                 OnDialogShown(e);
                 if (e.Dialog != null) {
                     e.Dialog.Show(args);

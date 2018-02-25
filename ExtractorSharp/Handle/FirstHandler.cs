@@ -1,12 +1,8 @@
-﻿using ExtractorSharp.Data;
-using ExtractorSharp.Lib;
-using System;
+﻿using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Data;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExtractorSharp.Handle {
     class FirstHandler :Handler{
@@ -16,22 +12,24 @@ namespace ExtractorSharp.Handle {
             var data = entity.Data;
             var type = entity.Type;
             var size = entity.Width * entity.Height * (type == ColorBits.ARGB_8888 ? 4 : 2);
-            if (entity.Compress == Compress.ZLIB)
-                data = FreeImage.Uncompress(data, size);
-            var ms = new MemoryStream(data);
-            data = new byte[entity.Size.Width * entity.Size.Height * 4];
-            for (var i = 0; i < data.Length; i += 4) {
-                var temp = ms.ReadColor(type);
-                temp.CopyTo(data, i);
+            if (entity.Compress == Compress.ZLIB) {
+                data = FreeImage.Decompress(data, size);
             }
-            return Tools.FromArray(data, entity.Size);
+            using (var ms = new MemoryStream(data)) {
+                data = new byte[entity.Size.Width * entity.Size.Height * 4];
+                for (var i = 0; i < data.Length; i += 4) {
+                    var temp = Colors.ReadColor(ms, type);
+                    temp.CopyTo(data, i);
+                }
+            }
+            return Bitmaps.FromArray(data, entity.Size);
         }
 
         public override byte[] ConvertToByte(ImageEntity entity) {
-            var stream = new MemoryStream();
-            stream.WriteImage(entity);
-            stream.Close();
-            return stream.ToArray();
+            using (var ms = new MemoryStream()) {
+                NpkReader.WriteImage(ms, entity);
+                return ms.ToArray();
+            }
         }
 
         public override void NewImage(int count, ColorBits type, int index) {

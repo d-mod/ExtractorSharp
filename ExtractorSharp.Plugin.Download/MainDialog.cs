@@ -6,6 +6,8 @@ using System.Linq;
 using System.Net;
 using ExtractorSharp.Component;
 using ExtractorSharp.Core;
+using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Data;
 using ExtractorSharp.Loose;
 
 namespace ExtractorSharp.View.Dialog {
@@ -14,7 +16,8 @@ namespace ExtractorSharp.View.Dialog {
     public partial class MainDialog : ESDialog {
         private List<string> List;
         private List<string> Queues;
-        private List<string> Computed;
+        private Dictionary<string,byte[]> Computed;
+        private string[] typeArray = { NpkReader.IMAGE_DIR,NpkReader.SOUND_DIR};
 
 
         [ImportingConstructor]
@@ -22,9 +25,10 @@ namespace ExtractorSharp.View.Dialog {
             InitializeComponent();
             List = new List<string>();
             Queues = new List<string>();
-            Computed = new List<string>();
+            Computed = new Dictionary<string,byte[]>();
             keywordBox.TextChanged += (o, e) => ListFlush();
             serverList.SelectedIndexChanged += Search;
+            typeList.SelectedIndexChanged += Search;
             downloadItem.Click += Download;
             LoadServerList();
         }
@@ -58,7 +62,7 @@ namespace ExtractorSharp.View.Dialog {
                 }
             }
             if (fileList.Items.Count > 0) {
-                if (!index.Between(0, fileList.Items.Count)) {
+                if (index < 1 || index > fileList.Items.Count - 1) {
                     index = Math.Min(index, fileList.Items.Count - 1);
                     index = Math.Max(index, 0);
                 }
@@ -77,24 +81,29 @@ namespace ExtractorSharp.View.Dialog {
             }
             for (var i = 0; i < temp.Length; i++) {
                 using (var client = new WebClient()) {
-                    var url = $"{info.Host}/ImagePacks2/{temp[i]}.spk";
+                    var url = $"{info.Host}/{typeArray[typeList.SelectedIndex]}/{temp[i]}.spk";
                     var file = $"{dir}/{temp[i]}.spk";
                     Queues.Add(file);
-                    Computed.Add(file);
-                    client.DownloadFileAsync(new Uri(url),file );
+                    client.DownloadDataAsync(new Uri(url));
                     client.DownloadProgressChanged += DownloadProgress;
-                    client.DownloadFileCompleted += (o,ev)=>DownloadComplete(file);
+                    client.DownloadDataCompleted += (o, ev) => {
+                        Queues.Remove(file);
+                        Computed.Add(file, ev.Result);
+                        if (Queues.Count == 0) {
+                            bar.Value = 0;
+                            var list = new List<Album>();
+                            foreach (var entry in Computed) {
+                                using (var ms = new MemoryStream(entry.Value)) {
+                                    list.AddRange(NpkReader.ReadNPK(ms, entry.Key));
+                                }
+                            }
+                            Connector.Do("addImg", list.ToArray(), false);
+                        }
+                    };
                 }
             }
         }
 
-        private void DownloadComplete(string file) {
-            Queues.Remove(file);
-            if (Queues.Count == 0) {
-                bar.Value = 0;
-                Connector.Do("addImg", Tools.Load(Computed.ToArray()).ToArray(), false);
-            }
-        }
 
         private void DownloadProgress(object sender, DownloadProgressChangedEventArgs e) {
             bar.Value = e.ProgressPercentage;
@@ -105,23 +114,19 @@ namespace ExtractorSharp.View.Dialog {
             List.Clear();
             var info = serverList.SelectedItem as SeverInfo;
             using (var client = new WebClient()) {
-                var rs = client.DownloadData(info.Host + "package.lst");
-                using (var ms = new MemoryStream(rs)) {
-                    ms.Seek(56);
-                    while (ms.Position < ms.Length) {
-                        var name = ms.ReadString();
-                        if (name.EndsWith(".NPK")) {
-                            List.Add(name);
-                        }
-                        if (ms.Position + 48 < ms.Length) {
-                            ms.Seek(48);
-                        } else {
-                            break;
-                        }
-                    }
-                }
+                var uri = new Uri($"{info.Host}/package.lst");
+                client.DownloadStringAsync(uri);
+                client.DownloadProgressChanged += (o, ex) => bar.Value = ex.ProgressPercentage;
+                client.DownloadStringCompleted += (o, ex) => {
+                    bar.Value = 0;
+                    var rs = ex.Result;
+                    var array = rs.Split("\0");
+                    var pattern = typeList.SelectedIndex == 0 ? ".NPK" : ".npk";
+                    List = Array.FindAll(array, item => item.EndsWith(pattern)).ToList();              
+                    ListFlush();
+                };
+                 
             }
-            ListFlush();
         }
 
         private class SeverInfo {

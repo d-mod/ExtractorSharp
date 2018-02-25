@@ -1,9 +1,11 @@
-﻿using ExtractorSharp.Data;
+﻿using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Data;
 using ExtractorSharp.Loose.Attr;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 
 namespace ExtractorSharp.Handle {
     /// <summary>
@@ -60,7 +62,7 @@ namespace ExtractorSharp.Handle {
             } else {
                 var index_data = AdjustIndex();
                 var suffix_data = AdjustSuffix();
-                ms.WriteString(Tools.IMG_FLAG);
+                ms.WriteString(NpkReader.IMG_FLAG);
                 ms.WriteLong(Album.Info_Length);
                 ms.WriteInt((int)Album.Version);
                 ms.WriteInt(Album.Count);

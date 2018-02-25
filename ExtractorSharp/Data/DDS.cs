@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
-using System.Security.Cryptography;
-using ExtractorSharp.Handle;
-using ExtractorSharp.Lib;
+using ExtractorSharp.Core.Lib;
 
-namespace ExtractorSharp.Data { 
+namespace ExtractorSharp.Data {
     /// <summary>
     /// DDS文件信息
     /// </summary>
@@ -22,16 +20,16 @@ namespace ExtractorSharp.Data {
             get {
                 if (image != null)
                     return image;
-                var data = FreeImage.Uncompress(Data, DDS_Size);
+                var data = FreeImage.Decompress(Data, DDS_Size);
                 if (unknow == 0xe) {
                     var ms = new MemoryStream(data);
                     data = new byte[Width * Height * 4];
                     for (var i = 0; i < data.Length; i += 4) {
-                        var temp = ms.ReadColor(ColorBits.ARGB_1555);
+                        var temp = Colors.ReadColor(ms,ColorBits.ARGB_1555);
                         temp.CopyTo(data, i);
                     }
                     ms.Close();
-                    return Tools.FromArray(data, new Size(Width, Height));
+                    return Bitmaps.FromArray(data, new Size(Width, Height));
                 } else {
                     var bmp = FreeImage.Load(data, new Size(Width, Height));
                     bmp.RotateFlip(RotateFlipType.Rotate180FlipX);

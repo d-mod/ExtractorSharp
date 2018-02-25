@@ -1,4 +1,5 @@
 ﻿using ExtractorSharp.Core;
+using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Data;
 using ExtractorSharp.Loose;
 using System.Collections.Specialized;
@@ -39,7 +40,7 @@ namespace ExtractorSharp.Command.ImgCommand {
             var path_arr = new string[Array.Length];
             for (var i = 0; i < Array.Length; i++) {
                 path_arr[i] = $"{dir}/{Array[i].Name}";
-                Tools.SaveFile(path_arr[i], Array[i]);
+                Array[i].Save(path_arr[i]);
                 var json_path = path_arr[i].RemoveSuffix(".ogg");
                 json_path = json_path.RemoveSuffix(".img");
                 json_path = $"{json_path}.json";

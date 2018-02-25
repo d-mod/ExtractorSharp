@@ -1,4 +1,5 @@
 ﻿using ExtractorSharp.Core;
+using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Data;
 using ExtractorSharp.Loose;
 using System.IO;
@@ -38,7 +39,7 @@ namespace ExtractorSharp.Command.ImgCommand {
                 var collection = Clipboard.GetFileDropList();
                 var file_arr = new string[collection.Count];
                 collection.CopyTo(file_arr, 0);
-                array = Tools.Load(file_arr).ToArray();
+                array = NpkReader.Load(file_arr).ToArray();
                 var builder = new LSBuilder();
                 for (var i = 0; i < array.Length; i++) {
                     var name = file_arr[i].RemoveSuffix(".img");
