@@ -1,4 +1,4 @@
-﻿namespace ExtractorSharp.Loose {
+﻿namespace ExtractorSharp.Json {
     /// <summary>
     /// EScript 值类型
     /// </summary>

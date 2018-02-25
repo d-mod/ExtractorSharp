@@ -1,7 +1,6 @@
 ﻿using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Data;
-using ExtractorSharp.Handle;
-using ExtractorSharp.Loose;
+using ExtractorSharp.Json;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -10,9 +9,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace ExtractorSharp.UnitTest {
     [TestClass]

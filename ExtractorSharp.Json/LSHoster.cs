@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ExtractorSharp.Loose.Converter;
+using ExtractorSharp.Json.Converter;
 
-namespace ExtractorSharp.Loose {
+namespace ExtractorSharp.Json {
     class LSHoster {
-        public static Dictionary<LSType, List<IConverter>> Dictionary { get; } = new Dictionary<LSType, List<Loose.Converter.IConverter>>();
+        public static Dictionary<LSType, List<IConverter>> Dictionary { get; } = new Dictionary<LSType, List<Json.Converter.IConverter>>();
 
         /// <summary>
         /// 添加转换器

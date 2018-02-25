@@ -1,11 +1,11 @@
-﻿using ExtractorSharp.Loose.Attr;
+﻿using ExtractorSharp.Json.Attr;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace ExtractorSharp.Loose {
+namespace ExtractorSharp.Json {
     public static class LSTools {
         private static Dictionary<char, char> escapes;
         private static Dictionary<char, string> reescapes;

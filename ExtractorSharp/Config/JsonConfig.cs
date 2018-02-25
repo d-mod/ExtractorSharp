@@ -1,4 +1,4 @@
-﻿using ExtractorSharp.Loose;
+﻿using ExtractorSharp.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;

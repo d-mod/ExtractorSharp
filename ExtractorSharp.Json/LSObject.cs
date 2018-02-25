@@ -1,4 +1,4 @@
-﻿using ExtractorSharp.Loose.Attr;
+﻿using ExtractorSharp.Json.Attr;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace ExtractorSharp.Loose {
+namespace ExtractorSharp.Json {
     /// <summary>
     /// Json对象
     /// </summary>

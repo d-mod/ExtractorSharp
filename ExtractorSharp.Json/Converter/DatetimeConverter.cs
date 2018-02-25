@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExtractorSharp.Loose.Converter {
+namespace ExtractorSharp.Json.Converter {
     class DatetimeConverter : IConverter
     {
         public LSType Type => LSType.String;

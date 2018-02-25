@@ -8,7 +8,7 @@ using ExtractorSharp.Component;
 using ExtractorSharp.Core;
 using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Data;
-using ExtractorSharp.Loose;
+using ExtractorSharp.Json;
 
 namespace ExtractorSharp.View.Dialog {
     [ExportMetadata("Guid", "87844cf0-a062-4f34-8c3b-d8e6bda28daa")]
@@ -80,26 +80,30 @@ namespace ExtractorSharp.View.Dialog {
                 Directory.CreateDirectory(dir);
             }
             for (var i = 0; i < temp.Length; i++) {
-                using (var client = new WebClient()) {
-                    var url = $"{info.Host}/{typeArray[typeList.SelectedIndex]}/{temp[i]}.spk";
-                    var file = $"{dir}/{temp[i]}.spk";
-                    Queues.Add(file);
-                    client.DownloadDataAsync(new Uri(url));
-                    client.DownloadProgressChanged += DownloadProgress;
-                    client.DownloadDataCompleted += (o, ev) => {
-                        Queues.Remove(file);
-                        Computed.Add(file, ev.Result);
-                        if (Queues.Count == 0) {
-                            bar.Value = 0;
-                            var list = new List<Album>();
-                            foreach (var entry in Computed) {
-                                using (var ms = new MemoryStream(entry.Value)) {
-                                    list.AddRange(NpkReader.ReadNPK(ms, entry.Key));
+                try {
+                    using (var client = new WebClient()) {
+                        var url = $"{info.Host}/{typeArray[typeList.SelectedIndex]}/{temp[i]}.spk";
+                        var file = $"{dir}/{temp[i]}.spk";
+                        Queues.Add(file);
+                        client.DownloadDataAsync(new Uri(url));
+                        client.DownloadProgressChanged += DownloadProgress;
+                        client.DownloadDataCompleted += (o, ev) => {
+                            Queues.Remove(file);
+                            Computed.Add(file, ev.Result);
+                            if (Queues.Count == 0) {
+                                bar.Value = 0;
+                                var list = new List<Album>();
+                                foreach (var entry in Computed) {
+                                    using (var ms = new MemoryStream(entry.Value)) {
+                                        list.AddRange(NpkReader.ReadNPK(ms, entry.Key));
+                                    }
                                 }
+                                Connector.Do("addImg", list.ToArray(), false);
                             }
-                            Connector.Do("addImg", list.ToArray(), false);
-                        }
-                    };
+                        };
+                    }
+                } catch (Exception) {
+                    Messager.ShowError("NetError");
                 }
             }
         }
@@ -113,19 +117,23 @@ namespace ExtractorSharp.View.Dialog {
         private void Search(object sender, EventArgs e) {
             List.Clear();
             var info = serverList.SelectedItem as SeverInfo;
-            using (var client = new WebClient()) {
-                var uri = new Uri($"{info.Host}/package.lst");
-                client.DownloadStringAsync(uri);
-                client.DownloadProgressChanged += (o, ex) => bar.Value = ex.ProgressPercentage;
-                client.DownloadStringCompleted += (o, ex) => {
-                    bar.Value = 0;
-                    var rs = ex.Result;
-                    var array = rs.Split("\0");
-                    var pattern = typeList.SelectedIndex == 0 ? ".NPK" : ".npk";
-                    List = Array.FindAll(array, item => item.EndsWith(pattern)).ToList();              
-                    ListFlush();
-                };
-                 
+            try {
+                using (var client = new WebClient()) {
+                    var uri = new Uri($"{info.Host}/package.lst");
+                    client.DownloadStringAsync(uri);
+                    client.DownloadProgressChanged += (o, ex) => bar.Value = ex.ProgressPercentage;
+                    client.DownloadStringCompleted += (o, ex) => {
+                        bar.Value = 0;
+                        var rs = ex.Result;
+                        var array = rs.Split("\0");
+                        var pattern = typeList.SelectedIndex == 0 ? ".NPK" : ".npk";
+                        List = Array.FindAll(array, item => item.EndsWith(pattern)).ToList();
+                        ListFlush();
+                    };
+
+                }
+            } catch (Exception) {
+                Messager.ShowError(Language["NetError"]);
             }
         }
 

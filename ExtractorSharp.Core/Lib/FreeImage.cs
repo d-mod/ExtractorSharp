@@ -120,13 +120,19 @@ namespace ExtractorSharp.Core.Lib {
         private static extern void UnlockPage(IntPtr handle, IntPtr page, int able);
 
         [DllImport("FreeImage.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "_FreeImage_AppendPage@8")]
-        private static extern void AppendPage(IntPtr bitmap, IntPtr page);
+        private static extern bool AppendPage(IntPtr bitmap, IntPtr page);
 
         [DllImport("FreeImage.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "_FreeImage_Save@16")]
         private static extern bool Save(int fif, IntPtr dib, string filename, int flag);
 
+        [DllImport("FreeImage.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "_FreeImage_ConvertTo8Bits@4")]
+        private static extern bool ConvertTo8Bits(IntPtr dib);
+
         [DllImport("FreeImage.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "_FreeImage_ConvertTo24Bits@4")]
-        private static extern void ConvertTo24Bits(IntPtr dib);
+        private static extern bool ConvertTo24Bits(IntPtr dib);
+
+        [DllImport("FreeImage.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "_FreeImage_ConvertToGreyscale@4")]
+        private static extern bool ConvertToGreyscale(IntPtr dib);
 
         [DllImport("FreeImage.dll",CallingConvention =CallingConvention.StdCall,EntryPoint = "_FreeImage_ColorQuantize@8")]
         private static extern void ColorQuantize(IntPtr dib, int quantize);
@@ -172,19 +178,23 @@ namespace ExtractorSharp.Core.Lib {
 
         public static void WriteGif(string path, ImageEntity[] array) {
             var gif = OpenMultiBitmap(25, path, true, false, true, 0);
-            int w = 1;
-            int h = 1;
-            int x = 800;
-            int y = 600;
+            var w = 1;
+            var h = 1;
+            var x = 800;
+            var y = 600;
             foreach (var entity in array) {
-                if (entity.Width + entity.X > w)
+                if (entity.Width + entity.X > w) {
                     w = entity.Width + entity.X;
-                if (entity.Height + entity.Y > h)
+                }
+                if (entity.Height + entity.Y > h) {
                     h = entity.Height + entity.Y;
-                if (entity.X < x)
+                }
+                if (entity.X < x) {
                     x = entity.X;
-                if (entity.Y < y)
+                }
+                if (entity.Y < y) {
                     y = entity.Y;
+                }
             }
             w -= x;
             h -= y;
@@ -196,44 +206,11 @@ namespace ExtractorSharp.Core.Lib {
                 var data = bmp.ToArray();
                 var dib = FromArray(data, w, h, 4 * w, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 1);
                 AppendPage(gif, dib);
-                Unload(dib);
             }
             CloseMultiBitmap(gif, 0);
         }
 
-        public static void WriteGif2(string path, ImageEntity[] array) {
-            var gif = OpenMultiBitmap(25,path,true,false,true, 2);
-            int w = 1;
-            int h = 1;
-            int x = 800;
-            int y = 600;
-            foreach (var entity in array) {
-                if (entity.Width + entity.X > w)
-                    w = entity.Width + entity.X;
-                if (entity.Height + entity.Y > h)
-                    h = entity.Height + entity.Y;
-                if (entity.X < x)
-                    x = entity.X;
-                if (entity.Y < y)
-                    y = entity.Y;
-            }
-            w -= x;
-            h -= y;
-            for (var i = 0; i < array.Length; i++) {
-                var dib = Allocate(w,h, 32, 8, 8, 8);
-                var memory = OpenMemory(new byte[0], 0);
-                SaveToMemory(0, dib, memory, 0);
-                var bmp = new Bitmap(w, h);
-                using (var g = Graphics.FromImage(bmp)) {
-                    g.DrawImage(array[i].Picture, array[i].X - x, array[i].Y - y);
-                }
-                var data = bmp.ToArray();
-                WriteMemory(data, data.Length, 0, memory);
-                CloseMemory(memory);
-                AppendPage(gif, dib);
-            }
-            CloseMultiBitmap(gif, 0);
-        }
+    
     }
 }
  

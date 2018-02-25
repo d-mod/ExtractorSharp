@@ -1,9 +1,9 @@
 ﻿using System;
 using ExtractorSharp.Component;
 using ExtractorSharp.Properties;
-using ExtractorSharp.Loose;
 using ExtractorSharp.Data;
 using ExtractorSharp.Core;
+using ExtractorSharp.Json;
 
 namespace ExtractorSharp.View.Dialog {
     public partial class VersionDialog : ESDialog {

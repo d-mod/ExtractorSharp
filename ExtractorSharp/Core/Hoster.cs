@@ -8,7 +8,7 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Primitives;
 using ExtractorSharp.Config;
 using ExtractorSharp.Data;
-using ExtractorSharp.Loose;
+using ExtractorSharp.Json;
 using System.Diagnostics;
 using System.Net;
 

@@ -1,4 +1,4 @@
-﻿namespace ExtractorSharp.Loose {
+﻿namespace ExtractorSharp.Json {
     enum LSToken {
         None = -1,           // Used to denote no Lookahead available
         LBrace,

@@ -1,6 +1,6 @@
 ﻿using ExtractorSharp.Core;
 using ExtractorSharp.Data;
-using ExtractorSharp.Loose;
+using ExtractorSharp.Json;
 using System.Collections.Specialized;
 using System.IO;
 using System.Windows.Forms;

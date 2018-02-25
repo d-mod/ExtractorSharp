@@ -10,6 +10,7 @@ using ExtractorSharp.Core;
 using ExtractorSharp.Loose;
 using System.ComponentModel.Composition;
 using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Json;
 
 namespace ExtractorSharp.Plugin.Searcher {
     [ExportMetadata("Guid", "D72DF478-FAFF-43DF-B904-9EB338A08B54")]

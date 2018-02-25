@@ -3,7 +3,7 @@ using System.Drawing;
 using System.IO;
 using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Handle;
-using ExtractorSharp.Loose.Attr;
+using ExtractorSharp.Json.Attr;
 
 namespace ExtractorSharp.Data {
 

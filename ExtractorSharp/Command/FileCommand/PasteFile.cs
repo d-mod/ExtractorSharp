@@ -1,7 +1,7 @@
 ﻿using ExtractorSharp.Core;
 using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Data;
-using ExtractorSharp.Loose;
+using ExtractorSharp.Json;
 using System.IO;
 using System.Windows.Forms;
 

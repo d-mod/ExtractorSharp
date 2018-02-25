@@ -83,18 +83,18 @@
     <Compile Include="Tools.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ExtractorSharp.Loose\ExtractorSharp.Json.csproj">
-      <Project>{06d35140-706a-40ce-9373-6b948f092a30}</Project>
-      <Name>ExtractorSharp.Json</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Component\Messager.resx">
       <DependentUpon>Messager.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ExtractorSharp.Json\ExtractorSharp.Json.csproj">
+      <Project>{06D35140-706A-40CE-9373-6B948F092A30}</Project>
+      <Name>ExtractorSharp.Json</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

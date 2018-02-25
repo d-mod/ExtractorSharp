@@ -1,11 +1,8 @@
-﻿using ExtractorSharp.Loose;
-using System.Collections;
+﻿using ExtractorSharp.Json;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
-using System.Xml;
 
-namespace ExtractorSharp.Data { 
+namespace ExtractorSharp.Data {
     /// <summary>
     /// 语言
     /// </summary>

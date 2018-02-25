@@ -5,7 +5,7 @@ using System.Net;
 using System.Text;
 using System.Xml;
 
-namespace ExtractorSharp.Loose {
+namespace ExtractorSharp.Json {
     public class LSBuilder {
 
         private LSParser parser;

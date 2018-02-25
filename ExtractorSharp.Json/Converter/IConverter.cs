@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExtractorSharp.Loose.Converter {
+namespace ExtractorSharp.Json.Converter {
     /// <summary>
     /// 转换器
     /// </summary>

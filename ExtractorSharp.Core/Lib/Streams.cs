@@ -93,6 +93,16 @@ namespace ExtractorSharp.Core.Lib {
             stream.WriteByte(0);
         }
 
+        public static byte[] ReadToEnd(this Stream stream) {
+            var buf = new byte[stream.Length - stream.Position];
+            stream.Read(buf, 0, buf.Length);
+            return buf;
+        }
+        public static void ReadToEnd(this Stream stream,out byte[] buf) {
+            buf = new byte[stream.Length - stream.Position];
+            stream.Read(buf, 0, buf.Length);
+        }
+
         #endregion
     }
 }

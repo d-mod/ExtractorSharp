@@ -1,6 +1,6 @@
 ﻿using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Data;
-using ExtractorSharp.Loose.Attr;
+using ExtractorSharp.Json.Attr;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using ExtractorSharp.Config;
 using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Data;
-using ExtractorSharp.Loose;
+using ExtractorSharp.Json;
 using ExtractorSharp.Plugin.DressingRoom.Properties;
 
 namespace ExtractorSharp.Service {

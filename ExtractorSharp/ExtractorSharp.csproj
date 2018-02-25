@@ -481,15 +481,15 @@
       <Project>{09014dd5-3314-437e-bb2e-6fbd0d1e7864}</Project>
       <Name>ExtractorSharp.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ExtractorSharp.Loose\ExtractorSharp.Json.csproj">
-      <Project>{06d35140-706a-40ce-9373-6b948f092a30}</Project>
+    <ProjectReference Include="..\ExtractorSharp.Json\ExtractorSharp.Json.csproj">
+      <Project>{06D35140-706A-40CE-9373-6B948F092A30}</Project>
       <Name>ExtractorSharp.Json</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Resources_4queues_1json__JSONSchema="http://json.schemastore.org/config" Resources_4alias_3weapon_1json__JSONSchema="http://json.schemastore.org/config" />
+      <UserProperties Resources_4alias_3weapon_1json__JSONSchema="http://json.schemastore.org/config" Resources_4queues_1json__JSONSchema="http://json.schemastore.org/config" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

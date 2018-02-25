@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace ExtractorSharp.Loose {
+namespace ExtractorSharp.Json {
     /// <summary>
     /// Json对象
     /// </summary>
