@@ -46,19 +46,20 @@ namespace ExtractorSharp.View {
             partBoxes = new NumericUpDown[PartsCount];
             partCheckes = new CheckBox[PartsCount];
             for (var i = 0; i < PartsCount; i++) {
-                var box = new NumericUpDown();
-                box.Location = new Point(85 + 180 * (i % 2),  (i+2) / 2 * 45);
-                box.Size = new Size(82, 21);
-                box.TabIndex = i;
-                box.Minimum = -1;
-                box.Maximum = 99999;
+                var box = new NumericUpDown {
+                    Location = new Point(85 + 180 * (i % 2), (i + 2) / 2 * 45),
+                    Size = new Size(82, 21),
+                    TabIndex = i,
+                    Minimum = -1,
+                    Maximum = 99999
+                };
                 Controls.Add(box);
                 partBoxes[i] = box;
-
-                var check = new CheckBox();
-                check.Location = new Point(15 + 185 * (i % 2), (i+2)  / 2 * 45);
-                check.Text = Language["Alias",Service.Parts[i]];
-                check.UseVisualStyleBackColor = true;
+                var check = new CheckBox {
+                    Location = new Point(15 + 185 * (i % 2), (i + 2) / 2 * 45),
+                    Text = Language["Alias", Service.Parts[i]],
+                    UseVisualStyleBackColor = true
+                };
                 Controls.Add(check);
                 partCheckes[i] = check;
             }

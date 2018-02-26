@@ -54,7 +54,7 @@ namespace ExtractorSharp {
             if (Config["AutoUpdate"].Boolean) {
                 CheckUpdate(false);
             }
-            Application.ThreadException += ShowDebug; 
+            //Application.ThreadException += ShowDebug; 
             Application.SetCompatibleTextRenderingDefault(true);           
             Application.EnableVisualStyles();
             LoadRegistry();

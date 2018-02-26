@@ -61,11 +61,11 @@ namespace ExtractorSharp.Core.Lib {
             var cs1 = s1.ToCharArray();
             var cs2 = s2.ToCharArray();
             var r1 = string.Empty;
-            var builder = new StringBuilder();
+            var r2 = new StringBuilder();
             for (int i = cs1.Length - 1, j = 0; i > 0 && j < cs2.Length; i--, j++) {
                 r1 = cs1[i] + r1;
-                builder.Append(cs2[i]);
-                if (r1.Equals(builder.ToString())) {
+                r2.Append(cs2[j]);
+                if (r1.Equals(r2.ToString())) {
                     s2 = s2.Substring(j + 1);
                     break;
                 }

@@ -7,7 +7,6 @@ using ExtractorSharp.Component;
 using System.Linq;
 using ExtractorSharp.Data;
 using ExtractorSharp.Core;
-using ExtractorSharp.Loose;
 using System.ComponentModel.Composition;
 using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Json;
