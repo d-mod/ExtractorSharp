@@ -13,6 +13,9 @@ namespace ExtractorSharp.Command.ImageCommand {
         public int[] Indices { set; get; }
         private Album Album;
         private string Path;
+        private int Increment = 0;
+        private string Prefix = string.Empty;
+        private int Digit = 0;
         /// <summary>
         /// 提取模式
         /// <para>0.单张贴图</para>
@@ -24,6 +27,11 @@ namespace ExtractorSharp.Command.ImageCommand {
             Mode = (int)args[1];
             Indices = args[2] as int[];
             Path = args[3] as string;
+            if (args.Length > 3) {
+                Prefix = args[4] as string;
+                Increment = (int)args[5];
+                Digit = (int)args[6];
+            }
             Action(Album, Indices);
         }
 
@@ -54,7 +62,11 @@ namespace ExtractorSharp.Command.ImageCommand {
                         continue;
                     }
                     var entity = album.List[indexes[i]];
-                    var path = $"{dir}/{indexes[i]}.png";//文件名格式:文件路径/贴图索引.png
+                    var name = (Increment==-1?Indices[i]:Increment+i).ToString();
+                    while (name.Length < Digit) {
+                        name = "0" + name;
+                    }
+                    var path = $"{dir}/{Prefix}{name}.png";//文件名格式:文件路径/贴图索引.png
                     entity.Picture.Save(path);//保存贴图
                 }
             }

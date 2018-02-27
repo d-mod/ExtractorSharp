@@ -1,4 +1,6 @@
-﻿namespace ExtractorSharp.View {
+﻿using System.Windows.Forms;
+
+namespace ExtractorSharp.View {
     partial class SaveImageDialog {
         /// <summary>
         /// Required designer variable.
@@ -29,20 +31,28 @@
             this.tipsCheck = new System.Windows.Forms.CheckBox();
             this.yesButton = new ExtractorSharp.Component.ESButton();
             this.cancelButton = new ExtractorSharp.Component.ESButton();
+            pathLabel = new Label();
+            nameLabel = new Label();
+            nameBox = new TextBox();
             this.SuspendLayout();
+
+            pathLabel.Location = new System.Drawing.Point(25, 10);
+            pathLabel.Text = Language["SavePath"];
+            
+
             // 
             // pathBox
             // 
-            this.pathBox.Location = new System.Drawing.Point(25, 46);
+            this.pathBox.Location = new System.Drawing.Point(25, 35);
             this.pathBox.Name = "pathBox";
             this.pathBox.Size = new System.Drawing.Size(192, 21);
             this.pathBox.TabIndex = 0;
             // 
             // loadButton
             // 
-            this.loadButton.Location = new System.Drawing.Point(239, 43);
+            this.loadButton.Location = new System.Drawing.Point(239, 32);
             this.loadButton.Name = "loadButton";
-            this.loadButton.Size = new System.Drawing.Size(68, 24);
+            this.loadButton.Size = new System.Drawing.Size(75, 27);
             this.loadButton.TabIndex = 1;
             this.loadButton.Text = Language["Browse"];
             this.loadButton.UseVisualStyleBackColor = true;
@@ -50,7 +60,7 @@
             // tipsCheck
             // 
             this.tipsCheck.AutoSize = true;
-            this.tipsCheck.Location = new System.Drawing.Point(25, 73);
+            this.tipsCheck.Location = new System.Drawing.Point(25, 120);
             this.tipsCheck.Name = "tipsCheck";
             this.tipsCheck.Size = new System.Drawing.Size(108, 16);
             this.tipsCheck.TabIndex = 2;
@@ -60,23 +70,31 @@
             //
             //
             this.allPathCheck.AutoSize = true;
-            this.allPathCheck.Location = new System.Drawing.Point(25,95);
+            this.allPathCheck.Location = new System.Drawing.Point(150,120);
             this.allPathCheck.Text = Language["SavePathTips"];
+
+
+            nameLabel.Location = new System.Drawing.Point(25,65);
+            nameLabel.Text = Language["AutoIncrement"];
+
+            nameBox.Location = new System.Drawing.Point(25, 90);
+            nameBox.Size = new System.Drawing.Size(192, 21);
+
             // 
             // yesButton
             // 
-            this.yesButton.Location = new System.Drawing.Point(149, 90);
+            this.yesButton.Location = new System.Drawing.Point(25, 145);
             this.yesButton.Name = "yesButton";
-            this.yesButton.Size = new System.Drawing.Size(68, 20);
+            this.yesButton.Size = new System.Drawing.Size(100, 27);
             this.yesButton.TabIndex = 3;
             this.yesButton.Text = Language["OK"];
             this.yesButton.UseVisualStyleBackColor = true;
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(239, 90);
+            this.cancelButton.Location = new System.Drawing.Point(200, 145);
             this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(67, 20);
+            this.cancelButton.Size = new System.Drawing.Size(100, 27);
             this.cancelButton.TabIndex = 4;
             this.cancelButton.Text = Language["Cancel"];
             this.cancelButton.UseVisualStyleBackColor = true;
@@ -85,13 +103,16 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(331, 125);
+            this.ClientSize = new System.Drawing.Size(330, 190);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.yesButton);
             this.Controls.Add(this.allPathCheck);
             this.Controls.Add(this.tipsCheck);
             this.Controls.Add(this.loadButton);
+            this.Controls.Add(this.pathLabel);
             this.Controls.Add(this.pathBox);
+            this.Controls.Add(this.nameLabel);
+            this.Controls.Add(this.nameBox);
             this.Name = "SaveImageDialog";
             this.Text = Language["SaveImage"];
             this.ResumeLayout(false);
@@ -107,5 +128,8 @@
         private System.Windows.Forms.CheckBox allPathCheck;
         private Component.ESButton yesButton;
         private Component.ESButton cancelButton;
+        private Label pathLabel;
+        private Label nameLabel;
+        private TextBox nameBox;
     }
 }

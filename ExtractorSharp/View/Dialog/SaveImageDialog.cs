@@ -4,6 +4,7 @@ using ExtractorSharp.Component;
 using ExtractorSharp.Config;
 using ExtractorSharp.Data;
 using ExtractorSharp.Core;
+using System.Text.RegularExpressions;
 
 namespace ExtractorSharp.View {
     public partial class SaveImageDialog : ESDialog {
@@ -25,16 +26,31 @@ namespace ExtractorSharp.View {
             if (Config["SaveImageTip"].Boolean) {
                 return ShowDialog();
             }
-            Connector.Do("saveImage", Album, 1, Indexes, pathBox.Text);
+            Save();
             return DialogResult.None;
         }
 
-        public void Replace(object sender,EventArgs e) {
-            Config["SaveImagePath"]= new ConfigValue( pathBox.Text);
+        private void Save() {
+            var name = nameBox.Text;
+            var match = Regex.Match(name, @"\d+$",RegexOptions.Compiled);
+            var value = match.Value;
+            var incre = -1;
+            var prefix = name;
+            var digit = 0;      
+            if (match.Success) {
+                incre = int.Parse(value);
+                prefix = prefix.Remove(match.Index, match.Length);
+                digit = value.Length;
+            }
+            Connector.Do("saveImage", Album, 1, Indexes, pathBox.Text, prefix, incre, digit);
+        }
+
+        private void Replace(object sender, EventArgs e) {
+            Config["SaveImagePath"] = new ConfigValue(pathBox.Text);
             Config["SaveImageTip"] = new ConfigValue(!tipsCheck.Checked);
             Config["SaveImageAllPath"] = new ConfigValue(allPathCheck.Checked);
             Config.Save();
-            Connector.Do("saveImage", Album, 1, Indexes, pathBox.Text);
+            Save();
             DialogResult = DialogResult.OK;
         }
 

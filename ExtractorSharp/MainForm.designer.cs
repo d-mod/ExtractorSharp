@@ -37,7 +37,7 @@ namespace ExtractorSharp {
             albumList = new ESListBox<Album>();
             albumListMenu = albumList.ContextMenuStrip;
 
-
+            editImgItem = new ToolStripMenuItem();
             cutImgItem = new ToolStripMenuItem();
             copyImgItem = new ToolStripMenuItem();
             pasteImgItem = new ToolStripMenuItem();
@@ -58,6 +58,8 @@ namespace ExtractorSharp {
 
             imageList = new ESListBox<ImageEntity>();
             imageListMenu = imageList.ContextMenuStrip;
+
+            editImageItem = new ToolStripMenuItem();
             cutImageItem = new ToolStripMenuItem();
             copyImageItem = new ToolStripMenuItem();
             pasteImageItem = new ToolStripMenuItem();
@@ -85,8 +87,7 @@ namespace ExtractorSharp {
             openDirItem = new ToolStripMenuItem();
             saveAsFileItem = new ToolStripMenuItem();
             saveDirItem = new ToolStripMenuItem();
-
-            toolsItem = new ToolStripMenuItem();
+            
             canvasImageItem = new ToolStripMenuItem();
             uncanvasImageItem = new ToolStripMenuItem();
             lineDodgeItem = new ToolStripMenuItem();
@@ -156,6 +157,13 @@ namespace ExtractorSharp {
             canvasCopyItem = new ToolStripMenuItem();
             canvasPasteItem = new ToolStripMenuItem();
 
+
+            selectItem = new ToolStripMenuItem();
+            selectAllHideItem = new ToolStripMenuItem();
+            selectAllLinkItem = new ToolStripMenuItem();
+            selectThisLinkItm = new ToolStripMenuItem();
+            selectThisTargetItem = new ToolStripMenuItem();
+
             previewPanel = new Panel();
             colorPanel = new Panel();
             albumListMenu.SuspendLayout();
@@ -175,10 +183,8 @@ namespace ExtractorSharp {
             // 
             // albumListMenu
             // 
+            albumListMenu.Items.Add(editImgItem);
             albumListMenu.Items.Add(newImgItem);
-            albumListMenu.Items.Add(cutImgItem);
-            albumListMenu.Items.Add(copyImgItem);
-            albumListMenu.Items.Add(pasteImgItem);
             albumListMenu.Items.AddSeparator();
             albumListMenu.Items.Add(replaceItem);
             albumListMenu.Items.Add(saveAsItem);
@@ -196,6 +202,13 @@ namespace ExtractorSharp {
             albumListMenu.Items.Add(runMergeItem);
             albumListMenu.Items.AddSeparator();
             albumListMenu.Size = new Size(221, 268);
+
+            editImgItem.Text = Language["Edit"];
+
+            editImgItem.DropDownItems.Add(cutImgItem);
+            editImgItem.DropDownItems.Add(copyImgItem);
+            editImgItem.DropDownItems.Add(pasteImgItem);
+
             replaceItem.Text = Language["ReplaceFile"];
             replaceItem.ShortcutKeys = Keys.Control | Keys.Q;
 
@@ -235,13 +248,13 @@ namespace ExtractorSharp {
             // 
             // imageListMenu
             // 
+            imageListMenu.Items.Add(selectItem);
+            imageListMenu.Items.AddSeparator();
+            imageListMenu.Items.Add(editImageItem);
+            imageListMenu.Items.AddSeparator();
             imageListMenu.Items.Add(newImageItem);
-            imageListMenu.Items.Add(cutImageItem);
-            imageListMenu.Items.Add(copyImageItem);
-            imageListMenu.Items.Add(pasteImageItem);
             imageListMenu.Items.Add(replaceImageItem);
             imageListMenu.Items.AddSeparator();
-            imageListMenu.Items.Add(addLayerItem);
             imageListMenu.Items.Add(changePositionItem);
             imageListMenu.Items.Add(changeSizeItem);
             imageListMenu.Items.AddSeparator();
@@ -252,13 +265,25 @@ namespace ExtractorSharp {
             imageListMenu.Items.AddSeparator();
             imageListMenu.Items.Add(hideCheckImageItem);
             imageListMenu.Items.Add(linkImageItem);
-            imageListMenu.Items.Add(toolsItem);
+            imageListMenu.Items.Add(addLayerItem);
             imageListMenu.Name = "imageListMenu";
             imageListMenu.Size = new Size(161, 202);
+
+            editImageItem.Text = Language["Edit"];
+
+            editImageItem.DropDownItems.Add(cutImageItem);
+            editImageItem.DropDownItems.Add(copyImageItem);
+            editImageItem.DropDownItems.Add(pasteImageItem);
+            editImageItem.DropDownItems.AddSeparator();
+            editImageItem.DropDownItems.Add(canvasImageItem);
+            editImageItem.DropDownItems.Add(uncanvasImageItem);
+            editImageItem.DropDownItems.AddSeparator();
+            editImageItem.DropDownItems.Add(lineDodgeItem);
 
             cutImageItem.Text = Language["Cut"];
             copyImageItem.Text = Language["Copy"];
             pasteImageItem.Text = Language["Paste"];
+
 
             saveImageItem.Text = Language["SaveImage"];
             saveSingleImageItem.Text = Language["SaveAs"];
@@ -272,14 +297,22 @@ namespace ExtractorSharp {
             newImageItem.Text = Language["NewImage"];
             addLayerItem.Text = Language["AddLayer"];
 
-            toolsItem.Text = Language["Other"];
+
+            selectItem.Text = Language["Select"];
+            selectAllHideItem.Text = Language["SelectHide"];
+            selectAllLinkItem.Text = Language["SelectLink"];
+            selectThisLinkItm.Text = Language["SelectThisLink"];
+            selectThisTargetItem.Text = Language["SelectThisTarget"];
+
+            selectItem.DropDownItems.Add(selectAllHideItem);
+            selectItem.DropDownItems.Add(selectAllLinkItem);
+            selectItem.DropDownItems.Add(selectThisLinkItm);
+            selectItem.DropDownItems.Add(selectThisTargetItem);
+        
             canvasImageItem.Text = Language["CanvasImage"];
             uncanvasImageItem.Text = Language["UnCanvasImage"];
             lineDodgeItem.Text = Language["LineDodge"];
-            toolsItem.DropDownItems.Add(canvasImageItem);
-            toolsItem.DropDownItems.Add(uncanvasImageItem);
-            toolsItem.DropDownItems.AddSeparator();
-            toolsItem.DropDownItems.Add(lineDodgeItem);
+
             // 
             // mainMenu
             // 
@@ -637,6 +670,7 @@ namespace ExtractorSharp {
         private ToolStripMenuItem newImgItem;       //新建文件
         private ToolStripMenuItem replaceItem;      //替换
 
+        private ToolStripMenuItem editImgItem;      
         private ToolStripMenuItem cutImgItem;       //剪切
         private ToolStripMenuItem copyImgItem;      //复制
         private ToolStripMenuItem pasteImgItem;     //粘贴
@@ -653,6 +687,12 @@ namespace ExtractorSharp {
         private ToolStripMenuItem mixFileItem;       //合并文件
 
         private ContextMenuStrip imageListMenu;
+
+        private ToolStripMenuItem editImageItem;
+        private ToolStripMenuItem cutImageItem;     //剪切
+        private ToolStripMenuItem copyImageItem;    //复制
+        private ToolStripMenuItem pasteImageItem;   //粘贴
+
         private ToolStripMenuItem saveImageItem;    //提取贴图到文件夹
         private ToolStripMenuItem saveSingleImageItem;   //提取贴图
         private ToolStripMenuItem saveAllImageItem; //提取所有贴图
@@ -664,13 +704,9 @@ namespace ExtractorSharp {
         private ToolStripMenuItem linkImageItem;     //修改为链接贴图
         private ToolStripMenuItem newImageItem; //新建贴图;
 
-        private ToolStripMenuItem cutImageItem;     //剪切
-        private ToolStripMenuItem copyImageItem;    //复制
-        private ToolStripMenuItem pasteImageItem;   //粘贴
 
         private ToolStripMenuItem adjustPositionItem;//校正坐标
         private ToolStripMenuItem addLayerItem; //加入图层
-        private ToolStripMenuItem toolsItem;    //拓展
         private ToolStripMenuItem canvasImageItem;//画布化贴图
         private ToolStripMenuItem uncanvasImageItem;//去画布化贴图
         private ToolStripMenuItem lineDodgeItem;
@@ -709,6 +745,12 @@ namespace ExtractorSharp {
         private ToolStripMenuItem canvasCutItem;
         private ToolStripMenuItem canvasCopyItem;
         private ToolStripMenuItem canvasPasteItem;
+
+        private ToolStripMenuItem selectItem;
+        private ToolStripMenuItem selectAllLinkItem;
+        private ToolStripMenuItem selectThisLinkItm;
+        private ToolStripMenuItem selectThisTargetItem;
+        private ToolStripMenuItem selectAllHideItem;
 
         private DropPanel dropPanel;
         private OggPlayer player;

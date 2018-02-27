@@ -90,16 +90,19 @@ namespace ExtractorSharp.Component {
 
         public ESListBox() {
             InitializeComponent();
-            deleteItem.Click += (sender,e)=>Deleted?.Invoke();
-            clearItem.Click += (sender, e) => Clear();
-            checkAllItem.Click += CheckAll;
-            checkAllItem.ShortcutKeys =Keys.Control| Keys.A;
+            deleteItem.Click += (o, e) => Deleted?.Invoke();
+            clearItem.Click += (o, e) => Clear();
+            checkAllItem.Click += (o, e) => CheckAll();
+            checkAllItem.ShortcutKeys = Keys.Control | Keys.A;
             reverseCheckItem.Click += ReverseCheck;
             reverseCheckItem.ShortcutKeys = Keys.Control | Keys.D;
             deleteItem.ShortcutKeys = Keys.Delete;
+            unCheckAllItem.Click += (o, e) => UnCheckAll();
+            unCheckAllItem.ShortcutKeys = Keys.Control | Keys.F;
             DragOver += ListDragOver;
             DragDrop += ListDragDrop;
         }
+
 
         protected override void OnMouseHover(EventArgs e) {
             base.OnMouseHover(e);
@@ -153,12 +156,7 @@ namespace ExtractorSharp.Component {
             DoDragDrop(SelectedItem, DragDropEffects.Move);
         }
 
-
-
-        private void CheckAll(object sender,EventArgs e) {
-            CheckAll();
-        }
-
+        
         public void CheckAll() {
             for (var i = 0; i < Items.Count; i++) {
                 SetItemChecked(i, true);
@@ -181,13 +179,22 @@ namespace ExtractorSharp.Component {
             }
         }
 
+
+        public void Filter(Predicate<T> predicate) {
+            for (var i = 0; i < Items.Count; i++) {
+                if (predicate.Invoke((T)Items[i])) {
+                    SetItemChecked(i, true);
+                }
+            }
+        }
+
         protected override void OnDragEnter(DragEventArgs e) {
             if (e.Data.GetDataPresent(DataFormats.Serializable)) {
                 e.Effect = DragDropEffects.Move;
             } else {
                 e.Effect = DragDropEffects.None;
             }
-        }
+        }      
 
         public void Clear() {
             Items.Clear();

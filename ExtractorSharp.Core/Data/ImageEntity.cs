@@ -6,12 +6,12 @@ using ExtractorSharp.Json.Attr;
 
 namespace ExtractorSharp.Data {
 
-    public class ImageEntity{
+    public class ImageEntity {
         /// <summary>
         /// 色位
         /// </summary>
         /// 
-        public ColorBits Type { set; get; }= ColorBits.ARGB_1555;
+        public ColorBits Type { set; get; } = ColorBits.ARGB_1555;
         /// <summary>
         /// 贴图内容
         /// </summary>
@@ -51,23 +51,23 @@ namespace ExtractorSharp.Data {
         /// </summary>
         [LSIgnore]
         public Point Location;
-        
+
         public int X {
             set => Location.X = value;
             get => Location.X;
         }
-        
+
         public int Y {
             set => Location.Y = value;
-            get => Location.Y;     
+            get => Location.Y;
         }
-        
+
         public int Width {
-            set => Size.Width = value;   
+            set => Size.Width = value;
             get => Size.Width;
-            
+
         }
-        
+
         public int Height {
             set => Size.Height = value;
             get => Size.Height;
@@ -77,13 +77,13 @@ namespace ExtractorSharp.Data {
         /// 帧域宽高
         /// </summary>
         [LSIgnore]
-        public Size Canvas_Size  = Size.Empty;
+        public Size Canvas_Size = Size.Empty;
 
         public int Canvas_Width {
             set => Canvas_Size = new Size(value, Canvas_Height);
             get => Canvas_Size.Width;
         }
-     
+
         public int Canvas_Height {
             set => Canvas_Size = new Size(Canvas_Width, value);
             get => Canvas_Size.Height;
@@ -111,7 +111,7 @@ namespace ExtractorSharp.Data {
         /// 贴图在V2,V4时的数据
         /// </summary>
         [LSIgnore]
-        public byte[] Data= new byte[2];
+        public byte[] Data = new byte[2];
 
         /// <summary>
         /// 贴图在img中的下标
@@ -127,12 +127,14 @@ namespace ExtractorSharp.Data {
         public ImageEntity() { }
 
         public ImageEntity(Album Parent) => this.Parent = Parent;
-        
+
         /// <summary>
         /// 文件版本
         /// </summary>
         [LSIgnore]
         public Img_Version Version => Parent.Version;
+
+        public bool Hidden => Width * Height == 1 && Compress == Compress.NONE;
 
 
         public void Load() {
@@ -211,8 +213,9 @@ namespace ExtractorSharp.Data {
             if (!IsOpen)
                 return;
             Data = Parent.ConvertToByte(this);
-            if (Compress == Compress.ZLIB)
+            if (Compress == Compress.ZLIB) { 
                 Data = FreeImage.Compress(Data);
+                }
             Length = Data.Length;            //不压缩时，按原长度保存
         }
 
@@ -222,7 +225,7 @@ namespace ExtractorSharp.Data {
         public override string ToString() {
             if (Type == ColorBits.LINK && Target != null)
                 return Index + "," + Language.Default["TargetIndex"] + Target.Index;
-            return Index + "," + Type + "," + Language.Default["Position"] + "(" + Location.GetString() + ")," +Language.Default["Size"] + "(" + Size.GetString() + ")," + Language.Default["CanvasSize"] + "(" + Canvas_Size.GetString() + ")";
+            return Index + "," + Type + "," + Language.Default["Position"] + "(" + Location.GetString() + ")," + Language.Default["Size"] + "(" + Size.GetString() + ")," + Language.Default["CanvasSize"] + "(" + Canvas_Size.GetString() + ")";
         }
 
         public ImageEntity Clone(Album album) {
@@ -266,7 +269,7 @@ namespace ExtractorSharp.Data {
         DXT_1 = 0x12,
         DXT_3 = 0x13,
         DXT_5 = 0x14,
-        UNKOWN=0x00,
+        UNKOWN = 0x00,
     }
     /// <summary>
     /// 压缩类型
@@ -275,7 +278,7 @@ namespace ExtractorSharp.Data {
         ZLIB = 0x06,
         NONE = 0x05,
         DDS_ZLIB = 0x07,
-        UNKNOW=0x01
+        UNKNOW = 0x01
     }
 
 }

@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace ExtractorSharp.Core.Sorter {
-    class DefaultSorter : ISorter{
+    class DefaultSorter : ISorter {
         public string Name { get => "default"; set => _name = value; }
         private string _name;
 
-        public int Comparer(Album a1,Album a2) {
+        public int Comparer(Album a1, Album a2) {
             var index1 = IndexOf(a1.Name);
             var index2 = IndexOf(a2.Name);
             if (index1 == index2) {
@@ -22,7 +22,7 @@ namespace ExtractorSharp.Core.Sorter {
 
         public object Data { set; get; }
 
-        public Type Type { get; }= typeof(Dictionary<string, int>);
+        public Type Type { get; } = typeof(Dictionary<string, int>);
 
         public Dictionary<string, int> Dictionary => Data as Dictionary<string, int>;
 

@@ -29,14 +29,17 @@ namespace ExtractorSharp.Component {
             ContextMenuStrip = new ContextMenuStrip();
             checkAllItem = new ToolStripMenuItem();
             reverseCheckItem = new ToolStripMenuItem();
+            unCheckAllItem = new ToolStripMenuItem();
             deleteItem = new ToolStripMenuItem();
             clearItem = new ToolStripMenuItem();
             checkAllItem.Text = Language["CheckAll"];
             reverseCheckItem.Text = Language["ReverseCheck"];
+            unCheckAllItem.Text = Language["UnCheckAll"];
             deleteItem.Text = Language["DeleteCheck"];
             clearItem.Text = Language["ClearList"];
             ContextMenuStrip.Items.Add(checkAllItem);
             ContextMenuStrip.Items.Add(reverseCheckItem);
+            ContextMenuStrip.Items.Add(unCheckAllItem);
             ContextMenuStrip.Items.Add(new ToolStripSeparator());
             ContextMenuStrip.Items.Add(deleteItem);
             CanClear = true;
@@ -47,6 +50,7 @@ namespace ExtractorSharp.Component {
         
         private ToolStripMenuItem checkAllItem;
         private ToolStripMenuItem reverseCheckItem;
+        private ToolStripMenuItem unCheckAllItem;
         private ToolStripMenuItem deleteItem;
         private ToolStripMenuItem clearItem;
 

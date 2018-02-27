@@ -35,7 +35,7 @@ namespace ExtractorSharp.Command.ImgCommand {
 
         public bool CanUndo => true;
 
-        public bool IsChanged => true;
+        public bool IsChanged => false;
 
         public bool IsFlush => true;
     }

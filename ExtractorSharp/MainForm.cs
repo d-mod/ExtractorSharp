@@ -252,8 +252,8 @@ namespace ExtractorSharp {
             displayRuleItem.Click += Flush;
             adjustRuleItem.Click += AjustRule;
             openButton.Click += AddFile;
-            pathBox.TextChanged += ChangePath;
-            pathBox.Click += SelectPath;
+            pathBox.TextChanged += (o, e) => pathBox.SelectionStart = pathBox.Text.Length;//光标移到最后，以便显示名称
+            pathBox.Click += SelectSavePath;
             openFileItem.Click += AddFile;
             saveFileItem.Click += (o, e) => Connector.Save();
             canvasImageItem.Click += CanvasImage;
@@ -290,8 +290,31 @@ namespace ExtractorSharp {
             canvasCutItem.Click += CutImage;
             canvasCopyItem.Click += CopyImage;
             canvasPasteItem.Click += CanvasPasteImage;
+
+            selectAllHideItem.Click += (o, e) => imageList.Filter(sprite => sprite.Hidden);    
+            selectAllLinkItem.Click += (o, e) => imageList.Filter(sprite => sprite.Type == ColorBits.LINK);
+            selectThisLinkItm.Click += SelectThisLink;
+            selectThisTargetItem.Click += SelectThisTarget;
         }
-        
+
+        private void SelectThisLink(object sender, EventArgs e) {
+            var cur = imageList.SelectedItem;
+            if (cur != null && cur.Type != ColorBits.LINK) {
+                imageList.Filter(sprite => sprite.Type == ColorBits.LINK && cur.Equals(sprite.Target));
+            }
+        }
+
+        private void SelectThisTarget(object sender, EventArgs e) {
+            var cur = imageList.SelectedItem;
+            if (cur != null && cur.Type == ColorBits.LINK) {
+                for(var i = 0; i < imageList.Items.Count; i++) {
+                    if (imageList.Items[i].Equals(cur.Target)) {
+                        imageList.SelectedIndex = i;
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// 粘贴img
         /// </summary>
@@ -609,13 +632,12 @@ namespace ExtractorSharp {
 
 
 
-        private void SelectPath(object sender, EventArgs e) {
-            Connector.SelectPath();
+        private void SelectSavePath(object sender, EventArgs e) {
+            var con = Connector as MainConnector;
+            con.SelectSavePath();
+            pathBox.Text = con.SavePath;
         }
-
-        private void ChangePath(object sender, EventArgs e) {
-            pathBox.SelectionStart = pathBox.Text.Length;
-        }
+        
 
 
         private void AjustRule(object sender, EventArgs e) {
@@ -1421,7 +1443,7 @@ namespace ExtractorSharp {
             }
             public void Save() {
                 if (SavePath.Trim().Length == 0) {
-                    SelectPath();
+                    SelectSavePath();
                 }
                 if (SavePath.Trim().Length == 0) {
                     return;
@@ -1435,9 +1457,7 @@ namespace ExtractorSharp {
                 Messager.ShowOperate("SaveFile");
             }
 
-
-
-            public void SelectPath() {
+            public void SelectSavePath() {
                 var dir = SavePath;
                 var path = SavePath.GetSuffix();
                 if (path != string.Empty) {
@@ -1448,10 +1468,18 @@ namespace ExtractorSharp {
                 dialog.FileName = path;
                 dialog.Filter = "npk文件|*.npk";
                 if (dialog.ShowDialog() == DialogResult.OK) {
-                    SavePath = dialog.FileName;                 
+                    SavePath = dialog.FileName;
                     OnSaveChanged();
                 }
+            }
 
+            public void SelectPath() {
+                var dialog = new FolderBrowserDialog();
+                dialog.SelectedPath = Config["GamePath"].Value;
+                if (dialog.ShowDialog() == DialogResult.OK) {
+                    Config["GamePath"] = new ConfigValue(dialog.SelectedPath);
+                    Config.Save();
+                }
             }
 
             public void Do(string name,params object[] args) {
