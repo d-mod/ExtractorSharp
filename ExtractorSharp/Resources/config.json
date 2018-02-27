@@ -87,4 +87,6 @@
 
 	RulerLocked:false
 
+	Profile:'release'
+
 }
