@@ -15,14 +15,7 @@ namespace ExtractorSharp.Handle {
             if (entity.Compress == Compress.ZLIB) {
                 data = FreeImage.Decompress(data, size);
             }
-            using (var ms = new MemoryStream(data)) {
-                data = new byte[entity.Size.Width * entity.Size.Height * 4];
-                for (var i = 0; i < data.Length; i += 4) {
-                    var temp = Colors.ReadColor(ms, type);
-                    temp.CopyTo(data, i);
-                }
-            }
-            return Bitmaps.FromArray(data, entity.Size);
+            return Bitmaps.FromArray(data, entity.Size,type);
         }
 
         public override byte[] ConvertToByte(ImageEntity entity) {

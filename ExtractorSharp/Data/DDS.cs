@@ -15,29 +15,22 @@ namespace ExtractorSharp.Data {
         public int DDS_Size;
         public byte[] Data;
         public DDS_Version Version;
-        public int unknow = 0x12;
+        public ColorBits Type = ColorBits.DXT_1;
         public Bitmap Pictrue {
             get {
                 if (image != null)
                     return image;
                 var data = FreeImage.Decompress(Data, DDS_Size);
-                if (unknow == 0xe) {
-                    var ms = new MemoryStream(data);
-                    data = new byte[Width * Height * 4];
-                    for (var i = 0; i < data.Length; i += 4) {
-                        var temp = Colors.ReadColor(ms,ColorBits.ARGB_1555);
-                        temp.CopyTo(data, i);
-                    }
-                    ms.Close();
-                    return Bitmaps.FromArray(data, new Size(Width, Height));
-                } else {
-                    var bmp = FreeImage.Load(data, new Size(Width, Height));
-                    bmp.RotateFlip(RotateFlipType.Rotate180FlipX);
-                    return bmp;
+                if (Type < ColorBits.DXT_1) {
+                    return Bitmaps.FromArray(data, new Size(Width, Height), Type);
                 }
+                var bmp = FreeImage.Load(data, new Size(Width, Height));
+                bmp.RotateFlip(RotateFlipType.Rotate180FlipX);
+                return bmp;
             }
             set => image = value;
         }
+
         private Bitmap image;
 
         internal static DDS CreateFromBitmap(Bitmap picture, Compress compress) => throw new NotImplementedException();
@@ -56,14 +49,11 @@ namespace ExtractorSharp.Data {
         /// <summary>
         /// 大小
         /// </summary>
-        public Size Size;
+        public Size Size => new Size(RightDown.X - LeftUp.X, RightDown.Y - LeftUp.Y);
 
-        public DDS_Info(DDS DDS,Point LeftUp,Point RightDown) {
-            this.DDS = DDS;
-            this.LeftUp = LeftUp;
-            this.RightDown = RightDown;
-            Size = new Size(RightDown.X - LeftUp.X, RightDown.Y - LeftUp.Y);
-        }
+        public int Top;
+        
+        public Rectangle Rectangle => new Rectangle(LeftUp, Size);
     }
 
     public enum DDS_Version {

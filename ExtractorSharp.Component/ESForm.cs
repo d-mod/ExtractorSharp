@@ -1,12 +1,9 @@
-﻿using CCWin;
-using ExtractorSharp.Config;
+﻿using ExtractorSharp.Config;
 using ExtractorSharp.Core;
 using ExtractorSharp.Data;
 using System;
-using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Windows.Threading;
 
 namespace ExtractorSharp.Component {
     public partial class ESForm : Form {

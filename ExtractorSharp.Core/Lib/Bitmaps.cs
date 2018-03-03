@@ -1,6 +1,8 @@
-﻿using System;
+﻿using ExtractorSharp.Data;
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Runtime.InteropServices;
 
 namespace ExtractorSharp.Core.Lib {
@@ -83,11 +85,11 @@ namespace ExtractorSharp.Core.Lib {
         /// <param name="bmp"></param>
         /// <returns></returns>
         public static byte[] ToArray(this Bitmap bmp) {
-            ToArray(bmp,out byte[] data);
+            ToArray(bmp, out byte[] data);
             return data;
         }
 
-        public static void ToArray(this Bitmap bmp,out byte[] data) {
+        public static void ToArray(this Bitmap bmp, out byte[] data) {
             data = new byte[bmp.Width * bmp.Height * 4];
             var bmpData = bmp.LockBits(new Rectangle(Point.Empty, bmp.Size), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
             Marshal.Copy(bmpData.Scan0, data, 0, data.Length);
@@ -107,6 +109,24 @@ namespace ExtractorSharp.Core.Lib {
             Marshal.Copy(data, 0, bmpData.Scan0, data.Length);
             bmp.UnlockBits(bmpData);
             return bmp;
+        }
+
+        /// <summary>
+        /// 将rgb数组转换为Bitmap
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
+        public static Bitmap FromArray(byte[] data, Size size, ColorBits bits) {
+            var ms = new MemoryStream(data);
+            data = new byte[size.Width * size.Height * 4];
+            for (var i = 0; i < data.Length; i += 4) {
+                var temp = Colors.ReadColor(ms, bits);
+                temp.CopyTo(data, i);
+            }
+            ms.Close();
+            return Bitmaps.FromArray(data, size);
         }
     }
 }

@@ -1,7 +1,4 @@
-﻿using CCWin;
-using ExtractorSharp.Config;
-using ExtractorSharp.Core;
-using ExtractorSharp.Data;
+﻿using ExtractorSharp.Core;
 using ExtractorSharp.EventArguments;
 using System.Windows.Forms;
 
