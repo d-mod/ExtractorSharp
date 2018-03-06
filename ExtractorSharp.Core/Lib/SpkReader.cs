@@ -9,6 +9,12 @@ namespace ExtractorSharp.Core.Lib {
         private static byte[] TAIL = { 0x01, 0x00, 0x00, 0x00 };
 
 
+        public static byte[] Decompress(byte[] bs) {
+            using (var ms = new MemoryStream(bs)) {
+                return Decompress(ms);
+            }
+        }
+
         /// <summary>
         /// 解压spk
         /// <see href="https://musoucrow.github.io/2017/07/21/spk_analysis/"/>

@@ -37,7 +37,7 @@ namespace ExtractorSharp.View {
             this.SuspendLayout();
 
             pathLabel.Location = new System.Drawing.Point(25, 10);
-            pathLabel.Text = Language["SavePath"];
+            pathLabel.Text = Language["SaveImagePath"];
             
 
             // 

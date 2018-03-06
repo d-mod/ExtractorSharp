@@ -2,7 +2,7 @@
 	Name:"default",
 	Rules:{
 	  'body': 0
-	  "bodyh": 0
+	  'bodyh': 0
 	  'bgloveb': 650
 	  'bglovea': 2150
 	  'bglovec': 2790

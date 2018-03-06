@@ -1,6 +1,7 @@
 ﻿using ExtractorSharp.Component;
 using ExtractorSharp.Config;
 using ExtractorSharp.Core;
+using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Data;
 using ExtractorSharp.Handle;
 using ExtractorSharp.Json;
@@ -80,6 +81,14 @@ namespace ExtractorSharp {
             var log = $"{e.Exception.Message};\r\n{e.Exception.StackTrace}";
             var data = Encoding.Default.GetBytes(log);
             log = Convert.ToBase64String(data);
+            var dir = $"{Config["RootPath"]}/log";
+            if (!Directory.Exists(dir)) {
+                Directory.CreateDirectory(dir);
+            }      
+            var current = $"{dir}/{DateTime.Now.ToString("yyyyMMddHHmmss")}.log";
+            using (var fs = new FileStream(current, FileMode.Create)) {
+                fs.Write(data);
+            }
             Viewer.Show("debug", "debug", log);
         }
 
@@ -249,32 +258,6 @@ namespace ExtractorSharp {
                 } else {
                     Messager.ShowWarnning("SelectPathIsInvalid");
                 }
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// 提交bug
-        /// </summary>
-        /// <param name="remark"></param>
-        /// <param name="contact"></param>
-        /// <param name="buglog"></param>
-        /// <returns></returns>
-        internal static bool UploadBug(string remark, string contact, string log,string type) {
-            try {
-                var data = new Dictionary<string, object>() {
-                    { "remark",remark },
-                    { "contact",contact},
-                    { "log", log },
-                    { "type",type},
-                    { "version",Version}
-                };
-                var builder = new LSBuilder();
-                var resultObj=builder.Post(Config["DebugUrl"].Value,data);
-                var result = (bool)resultObj.GetValue(typeof(bool));
-                return result;
-            } catch (Exception e) {
-                Console.Write(e.StackTrace);
             }
             return false;
         }

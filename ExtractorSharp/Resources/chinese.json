@@ -216,6 +216,7 @@
 		"Install":"安装",
 
 	    "AutoSave": "自动保存",
+		"AutoIncrement":"自动递增",
 	    "GridGap": "网格间距",
 	    "SaveImageTips": "提取贴图时弹出提示",
 	    "FlashSpeed": "动画播放速度",

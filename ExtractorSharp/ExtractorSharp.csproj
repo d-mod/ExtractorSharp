@@ -349,7 +349,6 @@
   <ItemGroup>
     <None Include="Kritsu.snk" />
     <None Include="README.md" />
-    <None Include="Resources\alias_weapon.json" />
     <None Include="Resources\chinese.json" />
     <None Include="Resources\queues.json" />
   </ItemGroup>
@@ -433,9 +432,6 @@
     <None Include="Resources\ExtractorSharp.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Back.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="bass.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -449,7 +445,6 @@
     <Content Include="aww.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\Shell.exe" />
     <None Include="Resources\pencil.png" />
     <None Include="Resources\pause.png" />
     <None Include="Resources\run.png" />
@@ -457,9 +452,6 @@
     <None Include="Resources\delete.png" />
     <None Include="Resources\config.json" />
     <None Include="Resources\version.json" />
-    <None Include="Resources\view.json" />
-    <None Include="Resources\weapon.json" />
-    <None Include="Resources\UpdateLog.txt" />
     <None Include="Resources\button.png" />
   </ItemGroup>
   <ItemGroup>
@@ -490,7 +482,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Resources_4alias_3weapon_1json__JSONSchema="http://json.schemastore.org/config" Resources_4queues_1json__JSONSchema="http://json.schemastore.org/config" />
+      <UserProperties Resources_4queues_1json__JSONSchema="http://json.schemastore.org/config" Resources_4alias_3weapon_1json__JSONSchema="http://json.schemastore.org/config" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

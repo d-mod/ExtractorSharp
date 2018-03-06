@@ -71,21 +71,12 @@ namespace ExtractorSharp.Properties {
         }
         
         /// <summary>
-        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
-        /// </summary>
-        internal static System.Drawing.Bitmap Back {
-            get {
-                object obj = ResourceManager.GetObject("Back", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 {
         ///  &quot;Name&quot; : &quot;中文(简体)&quot;,
         ///  &quot;LCID&quot;: 2052,
         ///  &quot;Group&quot;:{
         ///  	&quot;Dictionary&quot;: {
+        ///		&quot;Apply&quot;:&quot;应用&quot;,
         ///	    &quot;OK&quot;: &quot;确定&quot;,
         ///	    &quot;Cancel&quot;: &quot;取消&quot;,
         ///	    &quot;GamePath&quot;: &quot;游戏路径&quot;,
@@ -98,12 +89,11 @@ namespace ExtractorSharp.Properties {
         ///	    &quot;AllImg&quot;: &quot;所有Img&quot;,
         ///	    &quot;CheckImage&quot;: &quot;当前所选贴图&quot;,
         ///	    &quot;AllImage&quot;: &quot;所有贴图&quot;,
+        ///		&quot;ImageResources&quot;:&quot;图片资源&quot;,
+        ///		&quot;SoundResources&quot;:&quot;音效资源&quot;,
         ///	    &quot;Width&quot;: &quot;宽&quot;,
         ///	    &quot;Height&quot;: &quot;高&quot;,
-        ///	    &quot;Size&quot;: &quot;宽高&quot;,
-        ///	    &quot;Position&quot;: &quot;坐标&quot;,
-        ///	    &quot;CavasWidth&quot;: &quot;画布宽&quot;,
-        ///	    &quot;Cav [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///	    &quot;S [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Chinese {
             get {
@@ -114,22 +104,38 @@ namespace ExtractorSharp.Properties {
         /// <summary>
         ///   查找类似 {
         ///	UserConfig:&quot;conf.json&quot;
+        ///
         ///	FlashSpeed:20
+        ///
         ///	GamePath:&quot;&quot;
+        ///
         ///	SaveImagePath:&quot;&quot;
+        ///
         ///	SaveImageTip:true
+        ///
         ///	Version:&quot;1.6.0.1&quot;
+        ///
         ///	GridGap:100
+        ///
         ///	AutoSave:false
+        ///
         ///	LineLevel:0.5
+        ///
         ///	LCID:2052
+        ///
         ///	SaveImageAllPath:false
-        ///  LayerMaximum: 20
-        ///  AvatarUrl:&quot;http://extractorsharp.kritsu.net/#/avatar&quot;,
-        ///  ResourceUrl: &quot;http://kritsu.net/avatar/image/&quot;,
-        ///  ApiUrl: &quot;http://extractorsharp.kritsu.net/api/avatar&quot;,
-        ///  UpdateUrl:&quot;http://extractorsharp.kritsu.net/api/program/update?type=release&quot;,
-        ///  UpdateExeUrl:&quot;http://static.kritsu.net/in [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///
+        ///	LayerMaximum: 20
+        ///
+        ///	AvatarUrl:&quot;http://extractorsharp.kritsu.net/#/avatar&quot;,
+        ///
+        ///	ResourceUrl: &quot;http://kritsu.net/avatar/image/&quot;,
+        ///
+        ///	ApiUrl: &quot;http://extractorsharp.kritsu.net/api/avatar&quot;,
+        ///
+        ///	UpdateUrl:&quot;http://extractorsharp.kritsu.net/api/program/update&quot;,
+        ///	
+        ///	UpdateExeUrl:&quot;http://static [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Config {
             get {
@@ -169,35 +175,34 @@ namespace ExtractorSharp.Properties {
         
         /// <summary>
         ///   查找类似 {
-        ///  &apos;body&apos;: 0
-        ///  &quot;bodyh&quot;: 0
-        ///  &apos;bgloveb&apos;: 650
-        ///  &apos;bglovea&apos;: 2150
-        ///  &apos;bglovec&apos;: 2790
-        ///  &apos;revc&apos;: 2790
-        ///  &apos;bglovex&apos;: 1350
-        ///  &apos;revb&apos;: 650
-        ///  &apos;gauntletx&apos;: 1350
-        ///  &apos;clawc&apos;: 2790
-        ///  &apos;clawb&apos;: 650
-        ///  &apos;clawa&apos;: 2150
-        ///  &apos;shoesb&apos;: 1200
-        ///  &apos;shoesc&apos;: 1600
-        ///  &apos;shoesa&apos;: 1400
-        ///  &apos;shoesf&apos;: 2880
-        ///  &apos;shoesg&apos;: 1450
-        ///  &apos;gauntletb&apos;: 650
-        ///  &apos;gauntletc&apos;: 2790
-        ///  &apos;gauntleta&apos;: 2150
-        ///  &apos;clawx&apos;: 1350
-        ///  &apos;sswdc&apos;: 4200
-        ///  &apos;boneclawb&apos;: 650
-        ///  &apos;boneclawa&apos;: 2150
-        ///  &apos;sswdb&apos;: 650
-        ///  &apos;faceg&apos;: 2750
-        ///  &apos;boneclawc&apos;: 2790
-        ///  &apos;faceh&apos;: 150
-        ///  &apos;facef [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///	Name:&quot;default&quot;,
+        ///	Rules:{
+        ///	  &apos;body&apos;: 0
+        ///	  &apos;bodyh&apos;: 0
+        ///	  &apos;bgloveb&apos;: 650
+        ///	  &apos;bglovea&apos;: 2150
+        ///	  &apos;bglovec&apos;: 2790
+        ///	  &apos;revc&apos;: 2790
+        ///	  &apos;bglovex&apos;: 1350
+        ///	  &apos;revb&apos;: 650
+        ///	  &apos;gauntletx&apos;: 1350
+        ///	  &apos;clawc&apos;: 2790
+        ///	  &apos;clawb&apos;: 650
+        ///	  &apos;clawa&apos;: 2150
+        ///	  &apos;shoesb&apos;: 1200
+        ///	  &apos;shoesc&apos;: 1600
+        ///	  &apos;shoesa&apos;: 1400
+        ///	  &apos;shoesf&apos;: 2880
+        ///	  &apos;shoesg&apos;: 1450
+        ///	  &apos;gauntletb&apos;: 650
+        ///	  &apos;gauntletc&apos;: 2790
+        ///	  &apos;gauntleta&apos;: 2150
+        ///	  &apos;clawx&apos;: 1350
+        ///	  &apos;sswdc&apos;: 4200
+        ///	  &apos;boneclawb&apos;: 650
+        ///	  &apos;boneclawa&apos;: 2150
+        ///	  &apos;sswdb&apos;: 650
+        ///	  &apos;faceg [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Queue {
             get {
@@ -260,73 +265,6 @@ namespace ExtractorSharp.Properties {
         internal static string Version {
             get {
                 return ResourceManager.GetString("Version", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 {
-        ///	UserConfig : &apos;view.json&apos;		
-        ///	MainColor : &apos;180,214,221&apos;		
-        ///	MainImage : &apos;&apos;		
-        ///	MainSize : &apos;1368,768&apos;		
-        ///	MainImageLayout : &apos;&apos;		
-        ///	MainIcon : &apos;&apos;		
-        ///	FormImage : &apos;&apos;		
-        ///	FormColor : &apos;&apos;		
-        ///	FormImageLayout : &apos;&apos;		
-        ///	FormIcon : &apos;&apos;		
-        ///	CavasColor : &apos;&apos;		
-        ///	CavasImage : &apos;&apos;		
-        ///	CavasSize : &apos;800,600&apos;		
-        ///	StartPosition : &apos;center&apos;		
-        ///	Preview : False		
-        ///	Title : &apos;&apos;		
-        ///} 的本地化字符串。
-        /// </summary>
-        internal static string View {
-            get {
-                return ResourceManager.GetString("View", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 {
-        ///  &quot;swordman&quot;: {
-        ///    &quot;hasAt&quot;: true,
-        ///    &quot;weapon&quot;: [
-        ///      &quot;katana&quot;,
-        ///      &quot;lkatana&quot;,
-        ///      &quot;sswd&quot;,
-        ///      &quot;lswd&quot;,
-        ///      &quot;lswd_teen&quot;,
-        ///      &quot;lgswd&quot;,
-        ///      &quot;mswd&quot;,
-        ///      &quot;club&quot;,
-        ///      &quot;gemswd&quot;,
-        ///      &quot;beamswd&quot;
-        ///    ],
-        ///    //
-        ///    &quot;alias&quot;: {
-        ///      &quot;bswd&quot;: &quot;boneswd&quot;
-        ///    }
-        ///  },
-        ///  &quot;fighter&quot;: {
-        ///    &quot;hasAt&quot;: true,
-        ///    &quot;weapon&quot;: [
-        ///      &quot;arm&quot;,
-        ///      &quot;tonfa&quot;,
-        ///      &quot;lkatana&quot;,
-        ///      &quot;glove&quot;,
-        ///      &quot;knuckle&quot;,
-        ///      &quot;claw&quot;,
-        ///      &quot;gauntlet&quot;
-        ///    ],
-        ///    &quot;alias&quot;: {
-        ///      &quot;bglove&quot;: &quot;boneglove&quot;, [字符串的其余部分被截断]&quot;; 的本地化字符串。
-        /// </summary>
-        internal static string Weapon {
-            get {
-                return ResourceManager.GetString("Weapon", resourceCulture);
             }
         }
     }
