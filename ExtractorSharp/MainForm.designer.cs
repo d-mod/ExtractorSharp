@@ -485,7 +485,6 @@ namespace ExtractorSharp {
             scaleBox.Location = new Point(300, 50);
             scaleBox.Minimum = 20;
             scaleBox.Maximum = 100000;
-            scaleBox.Value = Config["CanvasScale"].Integer;
 
 
             //
@@ -493,7 +492,6 @@ namespace ExtractorSharp {
             //
             pixelateBox.Text = Language["Pixelate"];
             pixelateBox.Location = new Point(420, 50);
-            pixelateBox.Checked = Config["Pixelate"].Boolean;
 
             // 
             // realPositionBox
@@ -503,28 +501,24 @@ namespace ExtractorSharp {
             realPositionBox.AutoSize = true;
             realPositionBox.TabIndex = 11;
             realPositionBox.Text = Language["RealPosition"];
-            realPositionBox.Checked = Config["RealPosition"].Boolean;
             //
             //
             //
             displayBox.Location = new Point(1170, 70);
             displayBox.AutoSize = true;
             displayBox.Text = Language["Animation"];
-            displayBox.Checked = Config["Animation"].Boolean;
             //
             //
             //
             linedodgeBox.Location = new Point(1050, 50);
             linedodgeBox.AutoSize = true;
             linedodgeBox.Text = Language["LineDodge"];
-            linedodgeBox.Checked = Config["LineDodge"].Boolean;
             ///
             //
             //
             onionskinBox.Location = new Point(1170, 50);
             onionskinBox.AutoSize = true;
             onionskinBox.Text = Language["OnionSkin"];
-            onionskinBox.Checked = Config["OnionSkin"].Boolean;
             //
             //
             //

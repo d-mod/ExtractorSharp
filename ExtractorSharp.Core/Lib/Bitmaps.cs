@@ -1,6 +1,7 @@
 ﻿using ExtractorSharp.Data;
 using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -12,7 +13,7 @@ namespace ExtractorSharp.Core.Lib {
         /// 图片扫描
         /// </summary>
         /// <param name="bmp"></param>
-        /// <returns></returns>
+        /// <returns>返回实际有色彩数据的最小矩形范围</returns>
         public static Rectangle Scan(this Bitmap bmp) {
             var up = bmp.Height;
             var down = 0;
@@ -32,7 +33,7 @@ namespace ExtractorSharp.Core.Lib {
                         }
                     }
             }
-            var width = Math.Abs(right - left + 1);
+            var width = Math.Abs(right - left + 1);//最小=1
             var height = Math.Abs(down - up + 1);
             return new Rectangle(left, up, width, height);
         }
@@ -47,33 +48,31 @@ namespace ExtractorSharp.Core.Lib {
         }
 
 
-
+        /// <summary>
+        /// 线性减淡
+        /// </summary>
+        /// <see cref="https://www.cnblogs.com/godzza/p/7428080.html"/>
+        /// <param name="bmp"></param>
+        /// <returns></returns>
         public static Bitmap LinearDodge(this Bitmap bmp) {
-            var data = bmp.ToArray();
+            var data = ToArray(bmp);
             for (var i = 0; i < data.Length; i += 4) {
-                var r = data[i];
-                var g = data[i + 1];
-                var b = data[i + 2];
-                var a = data[i + 3];
-                if (r + (g + b + a) / 2 < 0xff) {
-                    a = (byte)(a >> 6 & a << 3);
-                    g = (byte)(g << 1 & g >> 2);
-                    b = (byte)(b << 2 & b >> 3);
-                }
-                data[i] = r;
-                data[i + 1] = g;
-                data[i + 2] = b;
-                data[i + 3] = a;
+                var max = Math.Max(data[i], Math.Max(data[i + 1], data[i + 2]));
+                var sub = (byte)(0xff - max);
+                data[i + 3] = Math.Min(data[i + 3], max);
+                data[i + 2] += sub;
+                data[i + 1] += sub;
+                data[i + 0] += sub;
             }
             bmp = FromArray(data, bmp.Size);
             return bmp;
         }
 
+
         public static Bitmap Star(this Bitmap bmp, decimal scale) {
             var size = bmp.Size.Star(scale);
             var image = new Bitmap(size.Width, size.Height);
             using (var g = Graphics.FromImage(image)) {
-                g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
                 g.DrawImage(bmp, new Rectangle(Point.Empty, size));
             }
             return image;

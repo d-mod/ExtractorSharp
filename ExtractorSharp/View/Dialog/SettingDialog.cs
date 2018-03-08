@@ -20,8 +20,8 @@ namespace ExtractorSharp.View.Dialog {
             Dictionary = new Dictionary<TreeNode, AbstractSettingPane>();
             InitializeComponent();
             this.tree.AfterSelect += SelectNode;
-            yesButton.Click += Save;
-            applyButton.Click += (o, e) => Config.Save();
+            yesButton.Click += Yes;
+            applyButton.Click += Apply;
             resetButton.Click += Reset;
             cancelButton.Click += Cancel;
             AddConfig(typeof(GerneralPane));
@@ -101,9 +101,13 @@ namespace ExtractorSharp.View.Dialog {
             DialogResult = DialogResult.Cancel;
         }
 
-        private void Save(object sender,EventArgs e) {
+        private void Apply(object sender,EventArgs e) {
             Save();
             Config.Save();
+        }
+
+        private void Yes(object sender,EventArgs e) {
+            Apply(sender, e);
             DialogResult = DialogResult.OK;
         }
 

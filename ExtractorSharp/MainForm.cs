@@ -68,6 +68,16 @@ namespace ExtractorSharp {
             AddShow();
             AddBrush();
             AddPaint();
+            AddConfig();
+        }
+
+        private void AddConfig() {
+            linedodgeBox.Checked = Config["LineDodge"].Boolean;
+            realPositionBox.Checked = Config["RealPosition"].Boolean;
+            pixelateBox.Checked = Config["Pixelate"].Boolean;
+            scaleBox.Value = Config["CanvasScale"].Integer;
+            onionskinBox.Checked = Config["OnionSkin"].Boolean;
+            displayBox.Checked = Config["Animation"].Boolean;
         }
 
         private void AddBrush() {
@@ -239,9 +249,9 @@ namespace ExtractorSharp {
 
             newImageItem.Click += (o, e) => Viewer.Show("newImage", Connector.SelectedFile);
             realPositionBox.CheckedChanged += RealPosition;
+            displayBox.CheckedChanged += Display;
             newImgItem.Click += ShowNewImgDialog;
             hideImgItem.Click += HideImg;
-            displayBox.Click += Display;
             convertItem.Click += ShowConvert;
             DragEnter += DragEnterInput;
             DragDrop += DragDropInput;
@@ -276,7 +286,7 @@ namespace ExtractorSharp {
             adjustPositionItem.Click += AdjustPosition;
             repairFileItem.Click += (o, e) => Connector.Do("repairFile", Connector.CheckedFiles);
             Drawer.BrushChanged += (o, e) => box.Cursor = e.Brush.Cursor;
-            onionskinBox.Click += Onionskin;
+            onionskinBox.CheckedChanged += Onionskin;
             previewItem.CheckedChanged += PreviewChanged;
             trackBar.ValueChanged += TabLayer;
             Drawer.ColorChanged += ColorChanged;

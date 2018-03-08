@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -17,13 +18,17 @@ namespace ExtractorSharp.Json {
         }
 
         public LSObject Get(string url) {
-            var request = WebRequest.Create(url);
-            request.Method = "GET";
-            request.Timeout = 10000;
-            using (var response = request.GetResponse())
-            using (var stream = response.GetResponseStream()) {
-                var obj = Read(stream);
-                return obj;
+            try {
+                var request = WebRequest.Create(url);
+                request.Method = "GET";
+                request.Timeout = 5000;
+                using (var response = request.GetResponse())
+                using (var stream = response.GetResponseStream()) {
+                    var obj = Read(stream);
+                    return obj;
+                }
+            } catch (Exception) {
+                return null;
             }
         }
 
