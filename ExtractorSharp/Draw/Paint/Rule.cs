@@ -42,7 +42,6 @@ namespace ExtractorSharp.Draw.Paint {
             var x = rp.X - rule_radius;
             var y = rp.Y - rule_radius;
             g.DrawEllipse(Pens.WhiteSmoke, x, y, rule_radius * 2, rule_radius * 2);
-
         }
     }
 }

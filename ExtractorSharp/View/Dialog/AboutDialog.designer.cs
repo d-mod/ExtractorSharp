@@ -27,35 +27,26 @@ namespace ExtractorSharp.View{
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            nameLabel = new Label();
-            otherBox = new RichTextBox();
+            label = new Label();
             SuspendLayout();
             // 
             // nameLabel
             // 
-            nameLabel.AutoSize = true;
-            nameLabel.Location = new Point(90, 50);
-            nameLabel.Name = "nameLabel";
-            nameLabel.Size = new Size(185, 12);
-            nameLabel.TabIndex = 0;
-            nameLabel.Text = ProductName+" ver" + Program.Version;
+            label.AutoSize = true;
+            label.Location = new Point(105, 75);
+            label.Name = "nameLabel";
+            label.Size = new Size(185, 12);
+            label.TabIndex = 0;
+            label.Text = $"{ProductName} ver{Program.Version}\r\n\t  Copyright by Kritsu";
 
-
-            otherBox.Location = new Point(20, 250);
-            otherBox.Size = new Size(300,200);
-            otherBox.AutoSize = true;
-            otherBox.BackColor = BackColor;
-            otherBox.ForeColor = Color.Green;
-            otherBox.ReadOnly = true;
-            otherBox.BorderStyle = BorderStyle.None;
+            
             // 
             // AboutForm
             // 
             AutoScaleDimensions = new SizeF(6F, 12F);
             AutoScaleMode = AutoScaleMode.Font;
-            Size = new Size(400, 500);
-            Controls.Add(otherBox);
-            Controls.Add(nameLabel);
+            Size = new Size(400, 200);
+            Controls.Add(label);
             Name = "AboutForm";
             Text = Language["About"];
             ResumeLayout(false);
@@ -65,7 +56,6 @@ namespace ExtractorSharp.View{
 
         #endregion
 
-        private Label nameLabel;
-        private RichTextBox otherBox;
+        private Label label;
     }
 }

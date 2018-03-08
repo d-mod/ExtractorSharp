@@ -45,6 +45,8 @@ namespace ExtractorSharp {
         private IPaint Rule { set; get; }
 
         private IPaint Grid { set; get; }
+
+        private IPaint Border { set; get; }
         
         private int move_mode = -1;
 
@@ -89,12 +91,16 @@ namespace ExtractorSharp {
         private void AddPaint() {
             Rule = new Rule();
             Grid = new Grid();
+            Border = new Border();
             AddPaint(displayRuleItem, Rule);
             AddPaint(gridItem, Grid);
+            AddPaint(borderItem,Border);
         }
 
         private void AddPaint(ToolStripMenuItem item ,IPaint paint) {
             paint.Visible = item.Checked;
+            item.CheckOnClick = true;
+            item.Click += Flush;
             item.CheckedChanged += (o, e) => paint.Visible = item.Checked;
         }
         
@@ -249,7 +255,6 @@ namespace ExtractorSharp {
             sortItem.Click += Sort;
             classifyItem.CheckedChanged += Classify;
             displayRuleCrossHairItem.Click += Flush;
-            displayRuleItem.Click += Flush;
             adjustRuleItem.Click += AjustRule;
             openButton.Click += AddFile;
             pathBox.TextChanged += (o, e) => pathBox.SelectionStart = pathBox.Text.Length;//光标移到最后，以便显示名称
@@ -259,7 +264,6 @@ namespace ExtractorSharp {
             canvasImageItem.Click += CanvasImage;
             uncanvasImageItem.Click += UnCanvasImage;
             lockRuleItem.Click += LockRule;
-            gridItem.Click += Flush;
             linedodgeBox.CheckedChanged += Flush;
             mutipleLayerItem.CheckedChanged += Flush;
             replaceLayerItem.Click += ReplaceLayer;
@@ -1150,7 +1154,10 @@ namespace ExtractorSharp {
             } else {//多图层模式
                 Drawer.DrawLayer(g);
             }
-
+            if (Border.Visible) {
+                Border.Tag = CurrentLayer.Rectangle;
+                Border.Draw(g);
+            }
         }
 
 
@@ -1441,7 +1448,7 @@ namespace ExtractorSharp {
             public void AddFile(bool clear, params string[] args) {
                 if (clear) {
                     SavePath = string.Empty;
-                    IsSave = false;
+                    IsSave = true;
                 }
                 if (SavePath.Length == 0) {
                     SavePath = args.Find(item => item.ToLower().EndsWith(".npk")) ?? string.Empty;

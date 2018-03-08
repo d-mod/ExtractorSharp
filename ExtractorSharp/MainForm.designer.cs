@@ -107,6 +107,7 @@ namespace ExtractorSharp {
             previewItem = new ToolStripMenuItem();
 
             gridItem = new ToolStripMenuItem();
+            borderItem = new ToolStripMenuItem();
             
             aboutItem = new ToolStripMenuItem();
             sortItem = new ToolStripMenuItem();
@@ -392,6 +393,7 @@ namespace ExtractorSharp {
             viewMenu.Text = Language["View"];
             viewMenu.DropDownItems.Add(ruleItem);
             viewMenu.DropDownItems.Add(gridItem);
+            viewMenu.DropDownItems.Add(borderItem);
             viewMenu.DropDownItems.Add(previewItem);
             viewMenu.DropDownItems.Add(mutipleLayerItem);
 
@@ -421,9 +423,9 @@ namespace ExtractorSharp {
             previewItem.CheckOnClick = true;
             previewItem.Checked = Config["Preview"].Boolean;
             gridItem.Text = Language["Grid"];
-            gridItem.CheckOnClick = true;
             gridItem.Checked = Config["Grid"].Boolean;
-
+            borderItem.Text = Language["Border"];
+            borderItem.Checked = Config["Border"].Boolean;
 
 
             toolsMenu.Text = Language["Tools"];
@@ -660,6 +662,7 @@ namespace ExtractorSharp {
         private ToolStripMenuItem previewItem;      //贴图预览
 
         private ToolStripMenuItem gridItem;         //网格
+        private ToolStripMenuItem borderItem;       //边框
         private ToolStripMenuItem mutipleLayerItem; //多图层
 
         private ToolStripMenuItem toolsMenu;        //工具

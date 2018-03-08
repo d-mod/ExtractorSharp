@@ -150,6 +150,7 @@
     <Compile Include="Data\VersionInfo.cs" />
     <Compile Include="Draw\Brush\Eraser.cs" />
     <Compile Include="Draw\Brush\Straw.cs" />
+    <Compile Include="Draw\Paint\Border.cs" />
     <Compile Include="Draw\Paint\Grid.cs" />
     <Compile Include="Draw\Paint\Rule.cs" />
     <Compile Include="EventArguments\ColorEventArgs.cs" />

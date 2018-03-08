@@ -63,6 +63,11 @@ namespace ExtractorSharp {
             Dic.Add(name, dialog.GetType());
         }
 
+        public void Remove(string name) {
+            List.Remove(name);
+            Dic.Remove(name);
+        }
+
 
         /// <summary>
         /// 打开一个窗口
