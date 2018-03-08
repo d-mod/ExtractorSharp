@@ -56,7 +56,7 @@ namespace ExtractorSharp {
             splitFileItem = new ToolStripMenuItem();
             mixFileItem = new ToolStripMenuItem();
 
-            imageList = new ESListBox<ImageEntity>();
+            imageList = new ESListBox<Sprite>();
             imageListMenu = imageList.ContextMenuStrip;
 
             editImageItem = new ToolStripMenuItem();
@@ -626,7 +626,7 @@ namespace ExtractorSharp {
         #endregion
         
         private ESListBox<Album> albumList;
-        private ESListBox<ImageEntity> imageList;
+        private ESListBox<Sprite> imageList;
         private ESListBox<Layer> layerList;
 
         private MenuStrip mainMenu;

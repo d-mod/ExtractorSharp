@@ -27,10 +27,12 @@ namespace ExtractorSharp.View.Pane {
             dialog.Color = color;
             if (dialog.ShowDialog() == DialogResult.OK) {
                 color = dialog.Color;
-                foreach (ListViewItem item in items) {
-                    list.SetColor(item, color);
-                    Connector.Do("changeColor", Album, Album.TableIndex, item.Index, color);
+                var indexes = new int[items.Count];
+                for (var i=0;i<indexes.Length;i++) {
+                    list.SetColor(items[i], color);
+                    indexes[i] = items[i].Index;
                 }
+                Connector.Do("changeColor", Album, Album.TableIndex, indexes, color);
                 Album.Refresh();
                 Connector.CanvasFlush();
             }

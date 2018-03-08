@@ -80,7 +80,7 @@ namespace ExtractorSharp.View {
             dialog.Filter = "NPK文件,img文件 | *.NPK; *.img";
             dialog.Multiselect = true;
             if (dialog.ShowDialog() == DialogResult.OK) {
-                var array = NpkReader.Load(dialog.FileNames).ToArray();
+                var array = Npks.Load(dialog.FileNames).ToArray();
                 Connector.Do("addMerge", array);
             }
         }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ExtractorSharp.Command.DrawCommand {
     class PencilDraw : ICommand {
-        private ImageEntity Entity;
+        private Sprite Entity;
         private Point Location;
         private Color Color;
         private Bitmap Image;
@@ -23,7 +23,7 @@ namespace ExtractorSharp.Command.DrawCommand {
         public bool IsFlush => false;
 
         public void Do(params object[] args) {
-            Entity = args[0] as ImageEntity;
+            Entity = args[0] as Sprite;
             Location = (Point)args[1];
             Color = (Color)args[2];
             Image = Entity.Picture;

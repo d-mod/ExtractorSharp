@@ -5,7 +5,7 @@ using System.IO;
 
 namespace ExtractorSharp.Handle {
     class OggHandler : Handler {
-        byte[] Data;
+        byte[] Data = new byte[0];
         public OggHandler(Album Album) : base(Album) {}
 
         public override byte[] AdjustIndex() {
@@ -16,11 +16,11 @@ namespace ExtractorSharp.Handle {
             return new byte[0];
         }
 
-        public override Bitmap ConvertToBitmap(ImageEntity entity) {
+        public override Bitmap ConvertToBitmap(Sprite entity) {
             return null;
         }
 
-        public override byte[] ConvertToByte(ImageEntity entity) => new byte[0];
+        public override byte[] ConvertToByte(Sprite entity) => new byte[0];
 
         public override void CreateFromStream(Stream stream) {
             stream.Read((int)Album.Info_Length,out Data);

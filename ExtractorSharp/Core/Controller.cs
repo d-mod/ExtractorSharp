@@ -116,52 +116,6 @@ namespace ExtractorSharp.Core {
             undoStack = new Stack<ICommand>();
             redoStack = new Stack<ICommand>();
             Dic = new Dictionary<string, Type>();
-            Regisity("addImg", typeof(AddFile));
-            Regisity("deleteImg", typeof(DeleteFile));
-            Regisity("renameImg", typeof(RenameFile));
-            Regisity("replaceImg", typeof(ReplaceFile));
-            Regisity("newImg", typeof(NewFile));
-            Regisity("hideImg", typeof(HideFile));
-            Regisity("sortImg", typeof(SortFile));
-
-            Regisity("cutImg", typeof(CutFile));
-            Regisity("pasteImg", typeof(PasteFile));
-
-            Regisity("repairFile", typeof(RepairFile));
-            Regisity("splitFile", typeof(SplitFile));
-            Regisity("mixFile", typeof(MixFile));
-            Regisity("moveFile", typeof(MoveFile));
-
-            Regisity("newImage", typeof(NewImage));
-            Regisity("replaceImage", typeof(ReplaceImage));
-            Regisity("hideImage", typeof(HideImage));
-            Regisity("linkImage", typeof(LinkImage));
-            Regisity("deleteImage", typeof(DeleteImage));
-            Regisity("saveImage", typeof(SaveImage));
-            Regisity("changePosition", typeof(ChangePosition));
-            Regisity("changeSize", typeof(ChangeSize));
-
-            Regisity("cutImage", typeof(CutImage));
-            Regisity("pasteImage", typeof(PasteImage));
-            Regisity("pasteSingleImage", typeof(PasteSingleImage));
-            Regisity("moveImage", typeof(MoveImage));
-
-            Regisity("addMerge", typeof(AddMerge));
-            Regisity("removeMerge", typeof(RemoveMerge));
-            Regisity("clearMerge", typeof(ClearMerge));
-            Regisity("runMerge", typeof(RunMerge));
-            Regisity("moveMerge", typeof(MoveMerge));
-
-            Regisity("canvasImage", typeof(CanvasImage));
-            Regisity("uncanvasImage", typeof(UnCanvasImage));
-            Regisity("lineDodge", typeof(LineDodge));
-
-            Regisity("renameLayer", typeof(RenameLayer));
-
-            Regisity("changeColor", typeof(ChangeColor));
-            Regisity("pencil", typeof(PencilDraw));
-            Regisity("eraser", typeof(EraserDraw));
-            Regisity("moveTools", typeof(MoveToolsDraw));
         }
 
         /// <summary>
@@ -209,7 +163,7 @@ namespace ExtractorSharp.Core {
                     case IMutipleAciton mutipleAction:
                         mutipleAction.Action(als);
                         break;
-                    case SingleAction singleAction:
+                    case ISingleAction singleAction:
                         foreach (var al in als) {
                             var indexes = singleAction.Indices;
                             if (allImage) {

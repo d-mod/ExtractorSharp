@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using ExtractorSharp.EventArguments;
 using ExtractorSharp.Data;
 using ExtractorSharp.Core;
+using ExtractorSharp.Command;
 
 namespace ExtractorSharp.View.Pane {
     partial class ActionPage : TabPage {
@@ -22,7 +23,9 @@ namespace ExtractorSharp.View.Pane {
         }
 
         private void Delete() {
-            Controller.Delete(actionList.SelectItems);
+            var items = actionList.SelectItems;
+            var array = Array.ConvertAll(items, item => item.Action);
+            Controller.Delete(array);
         }
 
         private void Record(object sender, EventArgs e) {
@@ -47,12 +50,24 @@ namespace ExtractorSharp.View.Pane {
         public override void Refresh() {
             actionList.Items.Clear();
             foreach (var item in Controller.Macro) {
-                actionList.Items.Add(Language[item.Name]);
+                actionList.Items.Add(new ActionItem(item));
             }
             if (Controller.Index < actionList.Items.Count) {
                 actionList.SelectedIndex = Controller.Index;
             }
             base.Refresh();
+        }
+
+        private class ActionItem {
+            public IAction Action { get; }
+            private string Label;
+
+            public ActionItem(IAction action) {
+                Action = action;
+                Label = Language.Default[action.Name];
+            }
+
+            public override string ToString() => Label;
         }
 
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using ExtractorSharp.Data;
 
 namespace ExtractorSharp.Command.ImageCommand {
-    class MoveImage : SingleAction {
+    class MoveImage : ISingleAction {
 
         public int[] Indices { get; set; }
 
@@ -21,7 +21,7 @@ namespace ExtractorSharp.Command.ImageCommand {
 
         private Album Album;
 
-        private List<ImageEntity> List => Album.List;
+        private List<Sprite> List => Album.List;
 
         public void Do(params object[] args) {
             Album = args[0] as Album;
@@ -45,7 +45,7 @@ namespace ExtractorSharp.Command.ImageCommand {
         }
 
         public void Action(Album Album, int[] indexes) {
-            var list = new List<ImageEntity>();
+            var list = new List<Sprite>();
             for (var i = 0; i < indexes.Length; i++) {
                 if (indexes[i] < Album.List.Count) {
                     list.Add(Album[indexes[i]]);

@@ -37,32 +37,7 @@ namespace ExtractorSharp.Core.Lib {
             return list.ToArray();
         }
 
-        public static int LastIndexOf<T>(this T[] data, T[] pattern) {
-            var last = data.Length - 1;
-            for (var i = data.Length - 1; i > 0; i--) {
-                var j = i;
-                while ((Equals(data[j], pattern[j - i]))) {
-                    j++;
-                }
-                if (j - i == pattern.Length) {
-                    last = j;
-                    break;
-                }
-                i = j;
-            }
-            return last;
-        }
-        public static T[] Sub<T>(this T[] array, int start) {
-            var newArray = new T[array.Length-start];
-            Buffer.BlockCopy(array, start, newArray, 0, newArray.Length);
-            return newArray;
-        }
-
-        public static T[] Sub<T>(this T[] array, int start, int length) {
-            var newArray = new T[length];
-            Buffer.BlockCopy(array, start, newArray, 0, length);
-            return newArray;
-        }
+        
         
         /// <summary>
         /// 安全插入 当插入的位置不在于集合的区间时，改为添加

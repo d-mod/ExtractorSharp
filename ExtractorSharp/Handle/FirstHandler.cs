@@ -8,7 +8,7 @@ namespace ExtractorSharp.Handle {
     class FirstHandler :Handler{
         public FirstHandler(Album Album) : base(Album) { }
 
-        public override Bitmap ConvertToBitmap(ImageEntity entity) {
+        public override Bitmap ConvertToBitmap(Sprite entity) {
             var data = entity.Data;
             var type = entity.Type;
             var size = entity.Width * entity.Height * (type == ColorBits.ARGB_8888 ? 4 : 2);
@@ -25,23 +25,23 @@ namespace ExtractorSharp.Handle {
             return Bitmaps.FromArray(data, entity.Size);
         }
 
-        public override byte[] ConvertToByte(ImageEntity entity) {
+        public override byte[] ConvertToByte(Sprite entity) {
             using (var ms = new MemoryStream()) {
-                NpkReader.WriteImage(ms, entity);
+                Npks.WriteImage(ms, entity);
                 return ms.ToArray();
             }
         }
 
         public override void NewImage(int count, ColorBits type, int index) {
-            var array = new ImageEntity[count];
+            var array = new Sprite[count];
             if (count < 1)
                 return;
-            array[0] = new ImageEntity(Album);
+            array[0] = new Sprite(Album);
             array[0].Index = index;
             if (type != ColorBits.LINK)
                 array[0].Type = type;
             for (var i = 1; i < count; i++) {
-                array[i] = new ImageEntity(Album);
+                array[i] = new Sprite(Album);
                 array[i].Type = type;
                 if (type == ColorBits.LINK)
                     array[i].Target = array[0];
@@ -88,10 +88,10 @@ namespace ExtractorSharp.Handle {
         }
         
         public override void CreateFromStream(Stream stream) {
-            var dic = new Dictionary<ImageEntity, int>();
+            var dic = new Dictionary<Sprite, int>();
             long pos = stream.Position + Album.Info_Length;
             for (var i = 0; i < Album.Count; i++) {
-                var image = new ImageEntity(Album);
+                var image = new Sprite(Album);
                 image.Index = Album.List.Count;
                 image.Type = (ColorBits)stream.ReadInt();
                 Album.List.Add(image);

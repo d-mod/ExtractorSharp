@@ -41,8 +41,8 @@ namespace ExtractorSharp.Command.ImgCommand {
                 var data = al.Data;
                 var ms = new MemoryStream(data);
                 for (var i = 0; i < arr.Length; i++) {
-                    var name = prefix + NpkReader.CompleteCode(code + i) + suffix;
-                    arr[i] = NpkReader.ReadNPK(ms,al.Name)[0];
+                    var name = prefix + Npks.CompleteCode(code + i) + suffix;
+                    arr[i] = Npks.ReadNPK(ms,al.Name)[0];
                     arr[i].Path = al.Path.Replace(al.Name, name);
                     arr[i].Tables.Clear();
                     arr[i].Tables.Add(al.Tables[i]);

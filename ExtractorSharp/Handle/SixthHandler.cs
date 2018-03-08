@@ -8,7 +8,7 @@ using System.Linq;
 namespace ExtractorSharp.Handle {
     class SixthHandler :SecondHandler{
         public SixthHandler(Album Album) : base(Album) { }
-        public override Bitmap ConvertToBitmap(ImageEntity entity) {
+        public override Bitmap ConvertToBitmap(Sprite entity) {
             var data = entity.Data;
             var size = entity.Width * entity.Height;
             if (entity.Compress != Compress.ZLIB) {
@@ -29,7 +29,7 @@ namespace ExtractorSharp.Handle {
 
 
 
-        public override byte[] ConvertToByte(ImageEntity entity) {
+        public override byte[] ConvertToByte(Sprite entity) {
             if (entity.Compress == Compress.NONE)
                 return base.ConvertToByte(entity);
             var data = entity.Picture.ToArray();
@@ -51,18 +51,18 @@ namespace ExtractorSharp.Handle {
         }
 
         public override void NewImage(int count, ColorBits type, int index) {
-            var array = new ImageEntity[count];
+            var array = new Sprite[count];
             if (count < 1) {
                 return;
             }
-            array[0] = new ImageEntity(Album);
+            array[0] = new Sprite(Album);
             array[0].Index = index;
             array[0].Data = new byte[4];
             if (type != ColorBits.LINK) {
                 array[0].Type = type;
             }
             for (var i = 1; i < count; i++) {
-                array[i] = new ImageEntity(Album);
+                array[i] = new Sprite(Album);
                 array[i].Type = type;
                 if (type == ColorBits.LINK) {
                     array[i].Target = array[0];

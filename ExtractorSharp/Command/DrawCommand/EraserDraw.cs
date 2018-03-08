@@ -5,7 +5,7 @@ using System.Drawing.Drawing2D;
 
 namespace ExtractorSharp.Command.DrawCommand {
     class EraserDraw : ICommand {
-        private ImageEntity Entity;
+        private Sprite Entity;
 
         private Point Location;
 
@@ -24,7 +24,7 @@ namespace ExtractorSharp.Command.DrawCommand {
         public bool IsFlush => false;
 
         public void Do(params object[] args) {
-            Entity = args[0] as ImageEntity;
+            Entity = args[0] as Sprite;
             Location = (Point)args[1];
             Color = (Color)args[2];
             Radius = (int)args[3];

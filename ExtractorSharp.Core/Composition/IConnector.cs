@@ -29,13 +29,13 @@ namespace ExtractorSharp.Core {
 
         int[] CheckedImageIndices { get; }
 
-        ImageEntity[] CheckedImages { get; }
+        Sprite[] CheckedImages { get; }
 
-        ImageEntity[] ImageArray { get; }
+        Sprite[] ImageArray { get; }
 
         int ImageCount { get; }
 
-        ImageEntity SelectedImage { get; }
+        Sprite SelectedImage { get; }
 
         int SelectedImageIndex { get; set; }
 

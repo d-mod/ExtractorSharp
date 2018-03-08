@@ -6,7 +6,7 @@ namespace ExtractorSharp.Command.ImageCommand {
     /// 可撤销
     /// 可宏命令
     /// </summary>
-    class LinkImage : SingleAction {
+    class LinkImage : ISingleAction {
 
         public int[] Indices { set; get; }
 

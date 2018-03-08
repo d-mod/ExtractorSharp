@@ -66,7 +66,7 @@ namespace ExtractorSharp.Core.Lib {
 
         public static string ReadString(this Stream stream) => ReadString(stream, Encoding.Default);
 
-        public static void WriteString(this Stream stream, string str) => WriteString(stream, str, Encoding.Default);
+        public static void WriteString(this Stream stream, string str) => WriteString(stream, str, Encoding.Default,true);
 
         /// <summary>
         /// 读出一个字符串
@@ -76,21 +76,25 @@ namespace ExtractorSharp.Core.Lib {
         public static string ReadString(this Stream stream, Encoding encoding) {
             var ms = new MemoryStream();
             var j = 0;
-            while ((j = stream.ReadByte()) != 0 && stream.Position < stream.Length) {
+            while ((j = stream.ReadByte()) != 0 && j != -1) {
                 ms.WriteByte((byte)j);
             }
             ms.Close();
             return encoding.GetString(ms.ToArray());
         }
 
+        public static void WriteString(this Stream stream, string str,Encoding encoding) => WriteString(stream, str,encoding, true);
+
         /// <summary>
         /// 写入一个字符串
         /// </summary>
         /// <param name="stream"></param>
         /// <param name="str"></param>
-        public static void WriteString(this Stream stream, string str, Encoding encoding) {
+        public static void WriteString(this Stream stream, string str, Encoding encoding,bool split) {
             stream.Write(encoding.GetBytes(str));
-            stream.WriteByte(0);
+            if (split) {
+                stream.WriteByte(0);
+            }
         }
 
         public static byte[] ReadToEnd(this Stream stream) {

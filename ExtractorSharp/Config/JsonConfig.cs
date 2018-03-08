@@ -52,6 +52,8 @@ namespace ExtractorSharp.Config {
 
         public JsonConfig() {
             reader = new LSBuilder();
+            OriginalConfig = new Dictionary<string, ConfigValue>();
+            UserConfig = new Dictionary<string, ConfigValue>();
         }
 
 
@@ -60,7 +62,10 @@ namespace ExtractorSharp.Config {
             if (!Directory.Exists(ConfigDir)) {
                 Directory.CreateDirectory(ConfigDir);
             }
-            OriginalConfig = Read(obj);
+            var config = Read(obj);
+            foreach(var entry in config) {
+                OriginalConfig.Add(entry.Key,entry.Value);
+            }
             Reload();
         }
 

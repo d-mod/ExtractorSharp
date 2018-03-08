@@ -140,9 +140,9 @@ namespace ExtractorSharp.Core {
             e.Count = count;
             e.Album = Album;
             OnMergeStarted(e);//启动拼合事件
-            var entitys = new List<ImageEntity>();
+            var entitys = new List<Sprite>();
             for (var i = 0; i < count; i++) {
-                var entity = new ImageEntity(Album);
+                var entity = new Sprite(Album);
                 var width = 1;
                 var height = 1;
                 var max_width = 0;

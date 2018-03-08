@@ -23,7 +23,7 @@ namespace ExtractorSharp.Draw {
 
         public bool FullCanvas { set; get; }
         public string Name { get; set; }
-        public ImageEntity entity;
+        public Sprite entity;
         public Size Size { get => entity.Size; set { } }
         public Rectangle Rectangle => new Rectangle(Location, Size);
 
@@ -35,7 +35,7 @@ namespace ExtractorSharp.Draw {
         /// 替换图层
         /// </summary>
         /// <param name="entity"></param>
-        public void Replace(ImageEntity entity) {
+        public void Replace(Sprite entity) {
             Location = AbsoluteLocation.Add(entity.Location);
             this.entity = entity;
         }
@@ -62,7 +62,7 @@ namespace ExtractorSharp.Draw {
         public override string ToString() => Name;
         
 
-        public static Layer CreateFrom(ImageEntity image) {
+        public static Layer CreateFrom(Sprite image) {
             var layer = new Layer();
             layer.Name="新建图层" + image.Index;
             layer.entity = image;

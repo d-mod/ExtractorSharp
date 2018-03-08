@@ -8,7 +8,7 @@ namespace ExtractorSharp.Command.ImageCommand {
     /// 可撤销
     /// 可宏命令
     /// </summary>
-    class CanvasImage : SingleAction {
+    class CanvasImage : ISingleAction {
         private Album Album;
 
         private Size Size;
@@ -61,6 +61,6 @@ namespace ExtractorSharp.Command.ImageCommand {
 
         public bool IsChanged => true;
 
-        public string Name => "Canvas";
+        public string Name => "CanvasImage";
     }
 }

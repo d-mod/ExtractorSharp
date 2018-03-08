@@ -7,7 +7,7 @@ using System.Windows;
 namespace ExtractorSharp.Command.ImageCommand {
     public class PasteSingleImage : ICommand {
 
-        private ImageEntity Entity;
+        private Sprite Entity;
 
         private Bitmap Picture;
 
@@ -27,7 +27,7 @@ namespace ExtractorSharp.Command.ImageCommand {
 
 
         public void Do(params object[] args) {
-            Entity = args[0] as ImageEntity;
+            Entity = args[0] as Sprite;
             Location = (System.Drawing.Point)args[1];
             var clipboard = Clipboarder.Default;
             Bitmap image = null;

@@ -9,7 +9,7 @@ namespace ExtractorSharp.Command.ImageCommand {
     /// 不可撤销
     /// 可宏命令
     /// </summary>
-    class SaveImage : SingleAction {
+    class SaveImage : ISingleAction {
         public int[] Indices { set; get; }
         private Album Album;
         private string Path;

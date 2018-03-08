@@ -240,6 +240,7 @@
 	    "SelectPathIsInvalid": "所选目录无效，请重新选择",
 	    "SelectPathTips": "请选择路径",
 	    "FileIsInvalid": "文件无效!",
+		"FileNameCannotEmpty":"文件名不能为空!",
 	    "InputCannotEmpty": "输入不能为空!",
 	    "NotExistCommand": "不存在的命令",
 	    "ActionTips": "是否对所有贴图执行此处理？",

@@ -5,7 +5,7 @@ using System.Drawing;
 using System.IO;
 
 namespace ExtractorSharp.Command.ImageCommand {
-    class ReplaceImage : SingleAction {
+    class ReplaceImage : ISingleAction {
         
         public int[] Indices { set; get; }
 

@@ -35,13 +35,13 @@ namespace ExtractorSharp.Handle {
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public abstract Bitmap ConvertToBitmap(ImageEntity entity);
+        public abstract Bitmap ConvertToBitmap(Sprite entity);
         /// <summary>
         /// 将图片转换为字节集
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public abstract byte[] ConvertToByte(ImageEntity entity);
+        public abstract byte[] ConvertToByte(Sprite entity);
         /// <summary>
         /// 新建指定个数的贴图
         /// </summary>
@@ -62,7 +62,7 @@ namespace ExtractorSharp.Handle {
             } else {
                 var index_data = AdjustIndex();
                 var suffix_data = AdjustSuffix();
-                ms.WriteString(NpkReader.IMG_FLAG);
+                ms.WriteString(Npks.IMG_FLAG);
                 ms.WriteLong(Album.Info_Length);
                 ms.WriteInt((int)Album.Version);
                 ms.WriteInt(Album.Count);

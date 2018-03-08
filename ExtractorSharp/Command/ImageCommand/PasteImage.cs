@@ -29,11 +29,11 @@ namespace ExtractorSharp.Command.ImageCommand {
             Target = args[0] as Album;
             Index = (int)args[1];
             Clipboarder = Clipboarder.Default;
-            var array = new ImageEntity[0];
+            var array = new Sprite[0];
             if (Clipboarder != null) {
                 Indexes = Clipboarder.Indexes;
                 Source = Clipboarder.Album;
-                array = new ImageEntity[Indexes.Length];
+                array = new Sprite[Indexes.Length];
                 Source.Adjust();
                 for (var i = 0; i < array.Length; i++) {
                     array[i] = Source[Indexes[i]].Clone(Target);
@@ -49,7 +49,7 @@ namespace ExtractorSharp.Command.ImageCommand {
                 Source.Adjust();
             } else if (Clipboard.ContainsFileDropList()) {
                 var collection = Clipboard.GetFileDropList();
-                array = new ImageEntity[collection.Count];
+                array = new Sprite[collection.Count];
                 var builder = new LSBuilder();
                 for (var i = 0; i < collection.Count; i++) {
                     if (!File.Exists(collection[i])) {
@@ -59,7 +59,7 @@ namespace ExtractorSharp.Command.ImageCommand {
                     var json = collection[i].Replace(".png", ".json");
                     if (File.Exists(json)) {
                         var obj = builder.Read(json);
-                        array[i] = obj.GetValue(typeof(ImageEntity)) as ImageEntity;
+                        array[i] = obj.GetValue(typeof(Sprite)) as Sprite;
                         array[i].Parent = Target;
                         array[i].Picture = image;
                     }

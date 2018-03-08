@@ -11,7 +11,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ExtractorSharp</RootNamespace>
     <AssemblyName>ExtractorSharp</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
@@ -119,7 +119,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command\DrawCommand\MoveToolsDraw.cs" />
+    <Compile Include="Command\FileCommand\SaveFile.cs" />
     <Compile Include="Command\ImageCommand\PasteSingleImage.cs" />
+    <Compile Include="Command\ImageCommand\SaveGif.cs" />
     <Compile Include="Command\PaletteCommand\ChangeColor.cs" />
     <Compile Include="Command\DrawCommand\EraserDraw.cs" />
     <Compile Include="Command\FileCommand\MoveFile.cs" />
@@ -347,6 +349,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Kritsu.snk" />
     <None Include="README.md" />
     <None Include="Resources\chinese.json" />
@@ -432,13 +435,7 @@
     <None Include="Resources\ExtractorSharp.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bass.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="dictionary.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="FreeImage.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\aww.ico" />
@@ -482,7 +479,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Resources_4queues_1json__JSONSchema="http://json.schemastore.org/config" Resources_4alias_3weapon_1json__JSONSchema="http://json.schemastore.org/config" />
+      <UserProperties Resources_4queues_1json__JSONSchema="http://json.schemastore.org/config" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

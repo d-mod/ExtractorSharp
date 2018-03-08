@@ -5,11 +5,11 @@ namespace ExtractorSharp.Command.ImageCommand {
     /// <summary>
     /// 删除贴图
     /// </summary>
-    class DeleteImage : SingleAction {
+    class DeleteImage : ISingleAction {
 
         private Album Album;
 
-        private ImageEntity[] Array;
+        private Sprite[] Array;
 
         public int[] Indices { set; get; }
 
@@ -18,7 +18,7 @@ namespace ExtractorSharp.Command.ImageCommand {
         public void Do( params object[] args) {
             Album = args[0] as Album;
             Indices = args[1] as int[];
-            Array = new ImageEntity[Indices.Length];
+            Array = new Sprite[Indices.Length];
             for (var i = 0; i < Indices.Length; i++) {
                 if (Indices[i] > Album.List.Count - 1 || Indices[i] < 0) {
                     continue;
@@ -53,7 +53,7 @@ namespace ExtractorSharp.Command.ImageCommand {
         }
 
         public void Action(Album Album, int[] indexes) {
-            var array = new ImageEntity[indexes.Length];
+            var array = new Sprite[indexes.Length];
             for (int i = 0; i < array.Length; i++) {
                 if (indexes[i] < Album.List.Count && indexes[i] > -1) {
                     array[i] = Album.List[indexes[i]];

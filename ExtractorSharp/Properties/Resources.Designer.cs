@@ -127,15 +127,19 @@ namespace ExtractorSharp.Properties {
         ///
         ///	LayerMaximum: 20
         ///
-        ///	AvatarUrl:&quot;http://extractorsharp.kritsu.net/#/avatar&quot;,
         ///
-        ///	ResourceUrl: &quot;http://kritsu.net/avatar/image/&quot;,
-        ///
-        ///	ApiUrl: &quot;http://extractorsharp.kritsu.net/api/avatar&quot;,
         ///
         ///	UpdateUrl:&quot;http://extractorsharp.kritsu.net/api/program/update&quot;,
         ///	
-        ///	UpdateExeUrl:&quot;http://static [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///	UpdateExeUrl:&quot;http://static.kritsu.net/install.exe&quot;,
+        ///	
+        ///	DebugUrl:&quot;http://extractorsharp.kritsu.net/api/feedback/post&quot;
+        ///	
+        ///	UpdateExeName:&quot;install.exe&quot;,
+        ///	
+        ///	AutoUpdate: true
+        ///	
+        ///	MainColor :  [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Config {
             get {

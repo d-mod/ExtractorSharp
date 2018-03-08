@@ -10,7 +10,7 @@ namespace ExtractorSharp.Handle {
     /// Ver5处理器
     /// </summary>
     class FifthHandler : SecondHandler{
-        private readonly Dictionary<ImageEntity, DDS_Info> Map = new Dictionary<ImageEntity, DDS_Info>();
+        private readonly Dictionary<Sprite, DDS_Info> Map = new Dictionary<Sprite, DDS_Info>();
         private readonly List<DDS> List = new List<DDS>();
         public FifthHandler(Album Album) : base(Album) {}
 
@@ -118,7 +118,7 @@ namespace ExtractorSharp.Handle {
             return ms.ToArray();
         }
 
-        public override Bitmap ConvertToBitmap(ImageEntity entity) {
+        public override Bitmap ConvertToBitmap(Sprite entity) {
             if (entity.Type < ColorBits.LINK && entity.Length > 0) {
                 return base.ConvertToBitmap(entity);
             }
@@ -135,10 +135,10 @@ namespace ExtractorSharp.Handle {
 
         }
 
-        public override byte[] ConvertToByte(ImageEntity entity) {
+        public override byte[] ConvertToByte(Sprite entity) {
             if (entity.Compress == Compress.ZLIB && entity.Type < ColorBits.LINK) {
                 using (var ms = new MemoryStream()){
-                    NpkReader.WriteImage(ms, entity);
+                    Npks.WriteImage(ms, entity);
                     return ms.ToArray();
                 }
             }
@@ -170,10 +170,10 @@ namespace ExtractorSharp.Handle {
                 dds.Height = stream.ReadInt();
                 list.Add(dds);
             }
-            var dic = new Dictionary<ImageEntity, int>();
-            var ver2List = new List<ImageEntity>();
+            var dic = new Dictionary<Sprite, int>();
+            var ver2List = new List<Sprite>();
             for (var i = 0; i < Album.Count; i++) {
-                var entity = new ImageEntity(Album);
+                var entity = new Sprite(Album);
                 entity.Index = Album.List.Count;
                 entity.Type = (ColorBits)stream.ReadInt();
                 entity.Compress = (Compress)stream.ReadInt();

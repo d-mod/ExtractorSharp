@@ -232,7 +232,7 @@ namespace ExtractorSharp {
             searchBox.TextChanged += (o, e) => ListFlush();
 
             newImageItem.Click += (o, e) => Viewer.Show("newImage", Connector.SelectedFile);
-            realPositionBox.CheckedChanged += SelectImageChanged;
+            realPositionBox.CheckedChanged += RealPosition;
             newImgItem.Click += ShowNewImgDialog;
             hideImgItem.Click += HideImg;
             displayBox.Click += Display;
@@ -272,7 +272,7 @@ namespace ExtractorSharp {
             adjustPositionItem.Click += AdjustPosition;
             repairFileItem.Click += (o, e) => Connector.Do("repairFile", Connector.CheckedFiles);
             Drawer.BrushChanged += (o, e) => box.Cursor = e.Brush.Cursor;
-            onionskinBox.Click += Flush;
+            onionskinBox.Click += Onionskin;
             previewItem.CheckedChanged += PreviewChanged;
             trackBar.ValueChanged += TabLayer;
             Drawer.ColorChanged += ColorChanged;
@@ -295,6 +295,18 @@ namespace ExtractorSharp {
             selectAllLinkItem.Click += (o, e) => imageList.Filter(sprite => sprite.Type == ColorBits.LINK);
             selectThisLinkItm.Click += SelectThisLink;
             selectThisTargetItem.Click += SelectThisTarget;
+        }
+
+        private void RealPosition(object sender, EventArgs e) {
+            if (CurrentLayer.Location != null && Connector.SelectedImage != null) {
+                CurrentLayer.Location = realPositionBox.Checked ? Connector.SelectedImage.Location : Point.Empty;
+            }
+            this.Flush(sender, e);
+        }
+
+        private void Onionskin(object sender, EventArgs e) {
+            LastLayer.Visible = onionskinBox.Checked;
+            this.Flush(sender, e);
         }
 
         private void SelectThisLink(object sender, EventArgs e) {
@@ -436,7 +448,7 @@ namespace ExtractorSharp {
         }
 
         private void PreviewHover(object sender, ItemHoverEventArgs e) {
-            var entity = e.Item as ImageEntity;
+            var entity = e.Item as Sprite;
             if (previewItem.Checked && entity != null) {
                 previewPanel.BackgroundImage = entity.Picture;
                 previewPanel.Visible = true;
@@ -583,7 +595,7 @@ namespace ExtractorSharp {
         /// <summary>
         /// 移动贴图序列
         /// </summary>
-        private void MoveImageIndex(object sender, ItemDragEventArgs<ImageEntity> e) {
+        private void MoveImageIndex(object sender, ItemDragEventArgs<Sprite> e) {
             var al = Connector.SelectedFile;
             if (al != null && e.Index > -1 && Connector.ImageCount> 0) {
                 Connector.Do("moveImage", al, e.Index, e.Target);
@@ -646,8 +658,19 @@ namespace ExtractorSharp {
         }
 
         private void SelectImageChanged(object sender, EventArgs e) {
+            var lastPoint = Point.Empty;
+            var curPoint = Point.Empty;
+            if (LastLayer != null) {
+                lastPoint = LastLayer.Location;
+            }
+            if (CurrentLayer != null) {
+                curPoint = CurrentLayer.Location;
+            }
             LastLayer = CurrentLayer;//图层更新
+            LastLayer.Location = lastPoint;
+            LastLayer.Visible = onionskinBox.Checked;
             CurrentLayer = new Canvas();
+            CurrentLayer.Location = curPoint;
             if (realPositionBox.Checked && Connector.SelectedImage!= null) {
                 var entity = Connector.SelectedImage;
                 CurrentLayer.Location = entity.Location;
@@ -682,7 +705,7 @@ namespace ExtractorSharp {
             items.CopyTo(itemArray, 0);
             albumList.Items.Clear();
             var condition = searchBox.Text.Trim().Split(" ");
-            var array = NpkReader.Find(Connector.List, condition);
+            var array = Npks.Find(Connector.List, condition);
             if (classifyItem.Checked) {
                 var path = "";
                 foreach (var al in array) {
@@ -719,7 +742,7 @@ namespace ExtractorSharp {
             dialog.Multiselect = true;
             dialog.Filter = "img,npk文件|*.img;*.npk";
             if (dialog.ShowDialog() == DialogResult.OK) {
-                var array = NpkReader.Load(dialog.FileNames).ToArray();
+                var array = Npks.Load(dialog.FileNames).ToArray();
                 Connector.Do("addMerge", array);
             }
         }
@@ -882,7 +905,7 @@ namespace ExtractorSharp {
                     dialog.FilterIndex = 3;
                 }
                 if (dialog.ShowDialog() == DialogResult.OK) {
-                    var list = NpkReader.Load(dialog.FileName);
+                    var list = Npks.Load(dialog.FileName);
                     if (list.Count > 0) {
                         Connector.Do("replaceImg", item, list[0]);
                     }
@@ -908,9 +931,7 @@ namespace ExtractorSharp {
             } else if (array.Length > 1) {
                 var dialog = new FolderBrowserDialog();
                 if (dialog.ShowDialog() == DialogResult.OK) {
-                    foreach(var img in array) {
-                        img.Save($"{dialog.SelectedPath}/{img.Name}");
-                    }
+                    Connector.Do("saveImg", array, dialog.SelectedPath);
                 }
             }
         }
@@ -996,7 +1017,7 @@ namespace ExtractorSharp {
             var al = albumList.SelectedItem;            //记录当前所选img
             var index = imageList.SelectedIndex;        //记录当前选择贴图
             var items = imageList.CheckedItems;
-            var itemArray = new ImageEntity[items.Count];
+            var itemArray = new Sprite[items.Count];
             items.CopyTo(itemArray, 0);
             if (al != null && al.Version == Img_Version.OGG) { //判断是否为ogg音频
                 player.Play(al);
@@ -1072,9 +1093,7 @@ namespace ExtractorSharp {
         private void OutputDirectory(object sender, EventArgs e) {
             var dialog = new FolderBrowserDialog();
             if (dialog.ShowDialog() == DialogResult.OK) {
-                foreach (var img in Connector.List) {
-                    img.Save($"{dialog.SelectedPath}/{img.Name}");
-                }
+                Connector.Do("saveImg", Connector.FileArray, dialog.SelectedPath);
             }
         }
 
@@ -1099,25 +1118,6 @@ namespace ExtractorSharp {
             g.InterpolationMode = pixelateBox.Checked ? InterpolationMode.NearestNeighbor : InterpolationMode.High;
             var entity = Connector.SelectedImage;//获得当前选择的贴图
             var pos = CurrentLayer.Location;
-            if (!mutipleLayerItem.Checked && entity?.Picture != null) {
-                if (entity.Type == ColorBits.LINK && entity.Target != null) {
-                    entity = entity.Target;
-                }
-                var pictrue = entity.Picture;
-                var size = entity.Size.Star(ImageScale);
-                if (linedodgeBox.Checked) {
-                    pictrue = pictrue.LinearDodge();
-                }
-                if (onionskinBox.Checked) {
-                    LastLayer?.Draw(g);
-                }
-                CurrentLayer.Tag = entity;
-                CurrentLayer.Size = size;//校正当前图层的宽高
-                CurrentLayer.Image = pictrue;//校正贴图
-                CurrentLayer.Draw(g);//绘制贴图
-            } else {//多图层模式
-                Drawer.DrawLayer(g);
-            }
 
             if (Rule.Visible) {//显示标尺        
                 Rule.Tag = CurrentLayer.Location.Minus(Rule.Location);
@@ -1130,6 +1130,27 @@ namespace ExtractorSharp {
                 Grid.Size = box.Size;
                 Grid.Draw(g);
             }
+
+            if (!mutipleLayerItem.Checked && entity?.Picture != null) {
+                if (entity.Type == ColorBits.LINK && entity.Target != null) {
+                    entity = entity.Target;
+                }
+                var pictrue = entity.Picture;
+                var size = entity.Size.Star(ImageScale);
+                if (linedodgeBox.Checked) {
+                    pictrue = pictrue.LinearDodge();
+                }
+                if (LastLayer.Visible) {
+                    LastLayer?.Draw(g);
+                }
+                CurrentLayer.Tag = entity;
+                CurrentLayer.Size = size;//校正当前图层的宽高
+                CurrentLayer.Image = pictrue;//校正贴图
+                CurrentLayer.Draw(g);//绘制贴图
+            } else {//多图层模式
+                Drawer.DrawLayer(g);
+            }
+
         }
 
 
@@ -1151,8 +1172,13 @@ namespace ExtractorSharp {
                     return 1;
                 }
             }
-            if (entity != null && CurrentLayer.Contains(p)) {
-                return 0;
+            if (entity != null) {
+                if (CurrentLayer.Contains(p)) {
+                    return 0;
+                }
+                if (LastLayer.Visible && LastLayer.Contains(p)) {
+                    return -2;
+                }
             }
             return -1;
         }
@@ -1200,14 +1226,16 @@ namespace ExtractorSharp {
         /// <param name="e"></param>
 
         private void OnMouseMove(object sender, MouseEventArgs e) {
-            if (e.Button== MouseButtons.Left&&move_mode > -1) {
+            if (e.Button == MouseButtons.Left && move_mode != -1) {
                 var newPoint = e.Location;
-                if (!Rule.Locked&&Drawer.IsSelect("MoveTool")) {
+                if (!Rule.Locked && Drawer.IsSelect("MoveTool")) {
                     Rule.Location = Rule.Location.Add(newPoint.Minus(Drawer.CusorLocation));
                 }
                 if (move_mode == 0) {
                     Drawer.Brush.Draw(CurrentLayer, newPoint, ImageScale);
-                }else if(move_mode>1){
+                } else if (move_mode == -2) {
+                    Drawer.Brush.Draw(LastLayer, newPoint, ImageScale);
+                } else if (move_mode > 1) {
                     Drawer.Brush.Draw(Drawer.LayerList[move_mode - 2], newPoint, ImageScale);
                 }
                 Drawer.CusorLocation = e.Location;
@@ -1264,7 +1292,7 @@ namespace ExtractorSharp {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void SaveGif(object sender, EventArgs e) {
-            var array = Connector.CheckedImages;
+            var array = Connector.CheckedImageIndices;
             if (array.Length < 1) {
                 return;
             }
@@ -1273,8 +1301,7 @@ namespace ExtractorSharp {
             dialog.Filter = "gif动态图片|*.gif";
             dialog.FileName = name;
             if (dialog.ShowDialog() == DialogResult.OK) {
-                FreeImage.WriteGif(dialog.FileName, array);
-                Messager.ShowOperate("SaveGif");
+                Connector.Do("saveGif", Connector.SelectedFile, array, dialog.FileName);
             }
         }
 
@@ -1351,11 +1378,11 @@ namespace ExtractorSharp {
                 get => MainForm.pathBox.Text;
             }
 
-            public ImageEntity[] ImageArray => MainForm.imageList.AllItems;
+            public Sprite[] ImageArray => MainForm.imageList.AllItems;
 
-            public ImageEntity SelectedImage => MainForm.imageList.SelectedItem;
+            public Sprite SelectedImage => MainForm.imageList.SelectedItem;
 
-            public ImageEntity[] CheckedImages => MainForm.imageList.SelectItems;
+            public Sprite[] CheckedImages => MainForm.imageList.SelectItems;
 
             public int[] CheckedImageIndices => MainForm.imageList.SelectIndexes;
 
@@ -1414,12 +1441,13 @@ namespace ExtractorSharp {
             public void AddFile(bool clear, params string[] args) {
                 if (clear) {
                     SavePath = string.Empty;
+                    IsSave = false;
                 }
                 if (SavePath.Length == 0) {
                     SavePath = args.Find(item => item.ToLower().EndsWith(".npk")) ?? string.Empty;
                 }
                 if (args.Length > 0) {
-                    MainForm.Controller.Do("addImg", NpkReader.Load(args).ToArray(), clear);
+                    MainForm.Controller.Do("addImg", Npks.Load(args).ToArray(), clear);
                 }
             }
 
@@ -1452,7 +1480,7 @@ namespace ExtractorSharp {
             }
 
             public void Save(string file) {
-                NpkReader.Save(file, List);
+                Npks.Save(file, List);
                 IsSave = true;
                 Messager.ShowOperate("SaveFile");
             }

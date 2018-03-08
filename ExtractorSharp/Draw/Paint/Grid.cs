@@ -25,6 +25,7 @@ namespace ExtractorSharp.Draw.Paint {
 
         public void Draw(Graphics g) {
             var gap = (int)Tag;
+            gap = Math.Max(1, gap);
             for (var i = 0; i < Size.Width || i < Size.Height; i += gap) {
                 if (i < Size.Width) {
                     g.DrawLine(Pens.White, new Point(i, 0), new Point(i, Size.Height));

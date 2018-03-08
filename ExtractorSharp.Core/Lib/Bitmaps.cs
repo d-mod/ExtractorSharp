@@ -126,7 +126,7 @@ namespace ExtractorSharp.Core.Lib {
                 temp.CopyTo(data, i);
             }
             ms.Close();
-            return Bitmaps.FromArray(data, size);
+            return FromArray(data, size);
         }
     }
 }

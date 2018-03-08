@@ -24,7 +24,7 @@ namespace ExtractorSharp.Data {
         /// <summary>
         /// 贴图列表
         /// </summary>
-        public List<ImageEntity> List { get; } = new List<ImageEntity>();
+        public List<Sprite> List { get; } = new List<Sprite>();
         /// <summary>
         /// 索引信息长度
         /// </summary>
@@ -98,7 +98,7 @@ namespace ExtractorSharp.Data {
         
         public override string ToString() => Name;
 
-        public ImageEntity this[int index] {
+        public Sprite this[int index] {
             get => List[index];
             set {
                 if (index < List.Count) {
@@ -220,14 +220,14 @@ namespace ExtractorSharp.Data {
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public Bitmap ConvertToBitmap(ImageEntity entity)=>Handler.ConvertToBitmap(entity);
+        public Bitmap ConvertToBitmap(Sprite entity)=>Handler.ConvertToBitmap(entity);
 
         /// <summary>
         /// 转储为字节数组
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public byte[] ConvertToByte(ImageEntity entity) => Handler.ConvertToByte(entity);
+        public byte[] ConvertToByte(Sprite entity) => Handler.ConvertToByte(entity);
         
         /// <summary>
         /// 新建贴图
@@ -250,6 +250,6 @@ namespace ExtractorSharp.Data {
             AdjustIndex();
         }
 
-        public IEnumerator<ImageEntity> GetEnumerator() => List.GetEnumerator();
+        public IEnumerator<Sprite> GetEnumerator() => List.GetEnumerator();
     }
 }

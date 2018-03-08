@@ -3,11 +3,11 @@ using ExtractorSharp.Data;
 using System.Drawing;
 
 namespace ExtractorSharp.Command.ImageCommand {
-    class LineDodge : SingleAction {
+    class LineDodge : ISingleAction {
 
         private Bitmap[] Image;
 
-        private ImageEntity[] Array;
+        private Sprite[] Array;
 
         public string Name => "LineDodge";
 
@@ -28,7 +28,7 @@ namespace ExtractorSharp.Command.ImageCommand {
         }
 
         public void Do(params object[] args) {
-            Array = args as ImageEntity[];
+            Array = args as Sprite[];
             Image = new Bitmap[Array.Length];
             for (var i = 0; i < Array.Length; i++) {
                 Image[i] = Array[i].Picture;

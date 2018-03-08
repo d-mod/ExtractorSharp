@@ -89,7 +89,7 @@ namespace ExtractorSharp.Core {
             LayerList.AddRange(array);
         }
 
-        public void AddLayer(params ImageEntity[] array) {
+        public void AddLayer(params Sprite[] array) {
             var list = new List<Layer>();
             foreach (var entity in array) {
                 list.Add(Layer.CreateFrom(entity));
@@ -97,7 +97,7 @@ namespace ExtractorSharp.Core {
             AddLayer(list.ToArray());
         }
 
-        public void ReplaceLayer(params ImageEntity[] array) {
+        public void ReplaceLayer(params Sprite[] array) {
             foreach (var layer in LayerList) {
                 for (int j = 0; j < array.Length; j++) {
                     if (layer.Index == array[j].Index) {

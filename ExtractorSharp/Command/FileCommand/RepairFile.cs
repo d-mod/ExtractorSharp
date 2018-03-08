@@ -25,7 +25,7 @@ namespace ExtractorSharp.Command.ImgCommand {
             Array = args as Album[];
             Counts = new int[Array.Length];
             var i = 0;
-            NpkReader.Compare(Program.Config["GamePath"].Value, (a1,a2) => {
+            Npks.Compare(Program.Config["GamePath"].Value, (a1,a2) => {
                 Counts[i] = a1.List.Count - a2.List.Count;
                 if (Counts[i] > 0) {
                     var source = a1.List.GetRange(a2.List.Count, Counts[i]);//获得源文件比当前文件多的贴图集合
@@ -42,7 +42,7 @@ namespace ExtractorSharp.Command.ImgCommand {
 
 
         public void Action(params Album[] array) {
-            NpkReader.Compare(Program.Config["GamePath"].Value,(a1, a2) => {
+            Npks.Compare(Program.Config["GamePath"].Value,(a1, a2) => {
                 var count = a1.List.Count - a2.List.Count;
                 if (count > 0) {
                     a2.List.AddRange(a1.List.GetRange(a2.List.Count, count));

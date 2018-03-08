@@ -23,11 +23,7 @@
 
 	LayerMaximum: 20
 
-	AvatarUrl:"http://extractorsharp.kritsu.net/#/avatar",
 
-	ResourceUrl: "http://kritsu.net/avatar/image/",
-
-	ApiUrl: "http://extractorsharp.kritsu.net/api/avatar",
 
 	UpdateUrl:"http://extractorsharp.kritsu.net/api/program/update",
 	

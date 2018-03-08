@@ -19,7 +19,7 @@ namespace ExtractorSharp.Command {
     /// <summary>
     /// 单IMG操作
     /// </summary>
-    public interface SingleAction : IAction {
+    public interface ISingleAction : IAction {
         int[] Indices { get; set; }
         void  Action(Album Album, int[] indexes);
     }

@@ -2,7 +2,7 @@
 using System.Drawing;
 
 namespace ExtractorSharp.Command.ImageCommand {
-    class ChangePosition : SingleAction {
+    class ChangePosition : ISingleAction {
         public int[] Indices { set; get; }
 
         private Album Album;

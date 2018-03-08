@@ -10,7 +10,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 namespace ExtractorSharp.Core.Lib {
-    public static class NpkReader {
+    public static class Npks {
         public const string NPK_FlAG = "NeoplePack_Bill";
         public const string IMG_FLAG = "Neople Img File";
         public const string IMAGE_FLAG = "Neople Image File";
@@ -77,7 +77,7 @@ namespace ExtractorSharp.Core.Lib {
         /// <param name="stream"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static Bitmap ReadImage(Stream stream, ImageEntity entity) {
+        public static Bitmap ReadImage(Stream stream, Sprite entity) {
             var data = new byte[entity.Width * entity.Height * 4];
             for (var i = 0; i < data.Length; i += 4) {
                 var bits = entity.Type;
@@ -91,7 +91,7 @@ namespace ExtractorSharp.Core.Lib {
         }
 
 
-        public static void WriteImage(Stream stream, ImageEntity entity) {
+        public static void WriteImage(Stream stream, Sprite entity) {
             var bits = entity.Type;
             if (entity.Type > ColorBits.ARGB_8888) {//不支持dds的写入
                 return;
@@ -166,7 +166,7 @@ namespace ExtractorSharp.Core.Lib {
                 List.Add(album);
             } else if (file.EndsWith(".spk")) {
                 stream.Seek(0, SeekOrigin.Begin);
-                var data = SpkReader.Decompress(stream);
+                var data = Spks.Decompress(stream);
                 using (var ms = new MemoryStream(data)) {
                     return ReadNPK(ms, file.RemoveSuffix(".spk"));
                 }

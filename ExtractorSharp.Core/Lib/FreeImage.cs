@@ -3,6 +3,7 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Windows.Media.Imaging;
 
 namespace ExtractorSharp.Core.Lib {
     /// <summary>
@@ -126,7 +127,8 @@ namespace ExtractorSharp.Core.Lib {
         private static extern bool Save(int fif, IntPtr dib, string filename, int flag);
 
         [DllImport("FreeImage.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "_FreeImage_ConvertTo8Bits@4")]
-        private static extern bool ConvertTo8Bits(IntPtr dib);
+        private static extern bool ConvertTo8Bits(IntPtr dib);
+
 
         [DllImport("FreeImage.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "_FreeImage_ConvertTo24Bits@4")]
         private static extern bool ConvertTo24Bits(IntPtr dib);
@@ -135,7 +137,8 @@ namespace ExtractorSharp.Core.Lib {
         private static extern bool ConvertToGreyscale(IntPtr dib);
 
         [DllImport("FreeImage.dll",CallingConvention =CallingConvention.StdCall,EntryPoint = "_FreeImage_ColorQuantize@8")]
-        private static extern void ColorQuantize(IntPtr dib, int quantize);
+        private static extern void ColorQuantize(IntPtr dib, int quantize);
+
 
         public static Bitmap Load(byte[] data, Size size) {
             var memory = OpenMemory(data, data.Length);
@@ -152,8 +155,7 @@ namespace ExtractorSharp.Core.Lib {
 
         public static Bitmap[] ReadGif(string path) {
             var fs = new FileStream(path, FileMode.Open);
-            var data = new byte[fs.Length];
-            fs.Read(data);
+            var data=fs.ReadToEnd();
             fs.Close();
             var memory = OpenMemory(data, data.Length);
             var format = GetFormat(memory, 0);
@@ -171,43 +173,33 @@ namespace ExtractorSharp.Core.Lib {
                 Marshal.Copy(bits, data, 0, data.Length);
                 UnlockPage(handle, page, 1);
                 array[i] = Bitmaps.FromArray(data, new Size(width, height));
+                array[i].RotateFlip(RotateFlipType.Rotate180FlipX);
+            }
+            return array;
+        }
+
+        public static Bitmap[] ReadGif2(string path) {
+            var decoder = AnimatedGif.AnimatedGif.Load(path);
+            var array = new Bitmap[decoder.Frames.Count];
+            for (var i = 0; i < decoder.Frames.Count; i++) {
+                var frame = decoder.Frames[i];
+                BitmapEncoder encoder = new BmpBitmapEncoder();
+                encoder.Frames.Add(frame);
+                using (var os = new MemoryStream()) {
+                    encoder.Save(os);
+                    array[i] = new Bitmap(os);
+                }
             }
             return array;
         }
 
 
-        public static void WriteGif(string path, ImageEntity[] array) {
-            var gif = OpenMultiBitmap(25, path, true, false, true, 0);
-            var w = 1;
-            var h = 1;
-            var x = 800;
-            var y = 600;
-            foreach (var entity in array) {
-                if (entity.Width + entity.X > w) {
-                    w = entity.Width + entity.X;
-                }
-                if (entity.Height + entity.Y > h) {
-                    h = entity.Height + entity.Y;
-                }
-                if (entity.X < x) {
-                    x = entity.X;
-                }
-                if (entity.Y < y) {
-                    y = entity.Y;
-                }
-            }
-            w -= x;
-            h -= y;
+        public static void WriteGif(string path, Image[] array) {
+            var gif = AnimatedGif.AnimatedGif.Create(path, 100);
             for (var i = 0; i < array.Length; i++) {
-                var bmp = new Bitmap(w, h);
-                using (var g = Graphics.FromImage(bmp)) {
-                    g.DrawImage(array[i].Picture, array[i].X - x, array[i].Y - y);
-                }
-                var data = bmp.ToArray();
-                var dib = FromArray(data, w, h, 4 * w, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 1);
-                AppendPage(gif, dib);
+                gif.AddFrame(array[i],AnimatedGif.GifQuality.Bit8);
             }
-            CloseMultiBitmap(gif, 0);
+            gif.Dispose();
         }
 
     

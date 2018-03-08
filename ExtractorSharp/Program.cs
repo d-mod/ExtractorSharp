@@ -1,4 +1,12 @@
-﻿using ExtractorSharp.Component;
+﻿using ExtractorSharp.Command;
+using ExtractorSharp.Command.DrawCommand;
+using ExtractorSharp.Command.FileCommand;
+using ExtractorSharp.Command.ImageCommand;
+using ExtractorSharp.Command.ImgCommand;
+using ExtractorSharp.Command.LayerCommand;
+using ExtractorSharp.Command.MergeCommand;
+using ExtractorSharp.Command.PaletteCommand;
+using ExtractorSharp.Component;
 using ExtractorSharp.Config;
 using ExtractorSharp.Core;
 using ExtractorSharp.Core.Lib;
@@ -62,6 +70,7 @@ namespace ExtractorSharp {
             Application.EnableVisualStyles();
             LoadRegistry();
             Controller = new Controller();
+            RegistyCommand();
             Viewer = new Viewer();
             Drawer = new Drawer();
             Drawer.Select(Config["Brush"].Value);
@@ -75,6 +84,57 @@ namespace ExtractorSharp {
             Merger = new Merger();
             Hoster = new Hoster();
             Application.Run(Form);
+        }
+
+        private static void RegistyCommand() {
+            Controller.Regisity("addImg", typeof(AddFile));
+            Controller.Regisity("deleteImg", typeof(DeleteFile));
+            Controller.Regisity("renameImg", typeof(RenameFile));
+            Controller.Regisity("replaceImg", typeof(ReplaceFile));
+            Controller.Regisity("newImg", typeof(NewFile));
+            Controller.Regisity("hideImg", typeof(HideFile));
+            Controller.Regisity("sortImg", typeof(SortFile));
+            Controller.Regisity("saveImg", typeof(SaveFile));
+
+            Controller.Regisity("cutImg", typeof(CutFile));
+            Controller.Regisity("pasteImg", typeof(PasteFile));
+
+            Controller.Regisity("repairFile", typeof(RepairFile));
+            Controller.Regisity("splitFile", typeof(SplitFile));
+            Controller.Regisity("mixFile", typeof(MixFile));
+            Controller.Regisity("moveFile", typeof(MoveFile));
+
+            Controller.Regisity("newImage", typeof(NewImage));
+            Controller.Regisity("replaceImage", typeof(ReplaceImage));
+            Controller.Regisity("hideImage", typeof(HideImage));
+            Controller.Regisity("linkImage", typeof(LinkImage));
+            Controller.Regisity("deleteImage", typeof(DeleteImage));
+            Controller.Regisity("saveImage", typeof(SaveImage));
+            Controller.Regisity("saveGif", typeof(SaveGif));
+            Controller.Regisity("changePosition", typeof(ChangePosition));
+            Controller.Regisity("changeSize", typeof(ChangeSize));
+
+            Controller.Regisity("cutImage", typeof(CutImage));
+            Controller.Regisity("pasteImage", typeof(PasteImage));
+            Controller.Regisity("pasteSingleImage", typeof(PasteSingleImage));
+            Controller.Regisity("moveImage", typeof(MoveImage));
+
+            Controller.Regisity("addMerge", typeof(AddMerge));
+            Controller.Regisity("removeMerge", typeof(RemoveMerge));
+            Controller.Regisity("clearMerge", typeof(ClearMerge));
+            Controller.Regisity("runMerge", typeof(RunMerge));
+            Controller.Regisity("moveMerge", typeof(MoveMerge));
+
+            Controller.Regisity("canvasImage", typeof(CanvasImage));
+            Controller.Regisity("uncanvasImage", typeof(UnCanvasImage));
+            Controller.Regisity("lineDodge", typeof(LineDodge));
+
+            Controller.Regisity("renameLayer", typeof(RenameLayer));
+
+            Controller.Regisity("changeColor", typeof(ChangeColor));
+            Controller.Regisity("pencil", typeof(PencilDraw));
+            Controller.Regisity("eraser", typeof(EraserDraw));
+            Controller.Regisity("moveTools", typeof(MoveToolsDraw));
         }
 
         private static void ShowDebug(object sender, ThreadExceptionEventArgs e) {

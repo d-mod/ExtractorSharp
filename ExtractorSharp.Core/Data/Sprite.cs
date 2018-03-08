@@ -6,7 +6,7 @@ using ExtractorSharp.Json.Attr;
 
 namespace ExtractorSharp.Data {
 
-    public class ImageEntity {
+    public class Sprite {
         /// <summary>
         /// 色位
         /// </summary>
@@ -105,7 +105,7 @@ namespace ExtractorSharp.Data {
         /// 当贴图为链接贴图时所指向的贴图
         /// </summary>
         [LSIgnore]
-        public ImageEntity Target;
+        public Sprite Target;
 
         /// <summary>
         /// 贴图在V2,V4时的数据
@@ -124,9 +124,9 @@ namespace ExtractorSharp.Data {
         [LSIgnore]
         public Album Parent;
 
-        public ImageEntity() { }
+        public Sprite() { }
 
-        public ImageEntity(Album Parent) => this.Parent = Parent;
+        public Sprite(Album Parent) => this.Parent = Parent;
 
         /// <summary>
         /// 文件版本
@@ -220,7 +220,7 @@ namespace ExtractorSharp.Data {
         }
 
 
-        public bool Equals(ImageEntity entity) => entity != null && Parent.Equals(entity.Parent) && Index == entity.Index;
+        public bool Equals(Sprite entity) => entity != null && Parent.Equals(entity.Parent) && Index == entity.Index;
 
         public override string ToString() {
             if (Type == ColorBits.LINK && Target != null)
@@ -228,8 +228,8 @@ namespace ExtractorSharp.Data {
             return Index + "," + Type + "," + Language.Default["Position"] + "(" + Location.GetString() + ")," + Language.Default["Size"] + "(" + Size.GetString() + ")," + Language.Default["CanvasSize"] + "(" + Canvas_Size.GetString() + ")";
         }
 
-        public ImageEntity Clone(Album album) {
-            return new ImageEntity(album) {
+        public Sprite Clone(Album album) {
+            return new Sprite(album) {
                 Picture = Picture,
                 Compress = Compress,
                 Type = Type,
