@@ -7,6 +7,7 @@ namespace ExtractorSharp.Composition {
     public interface ISpriteConverter {
         string Name { get; }
         bool Enable { set; get; }
+        int Index { set; get; }
         void Convert(Sprite sprite, ref Bitmap bmp);
     }
 }

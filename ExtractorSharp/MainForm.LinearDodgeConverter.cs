@@ -22,6 +22,7 @@ namespace ExtractorSharp {
 
             public bool Enable { set; get; }
 
+            public int Index { set; get; }
 
             public void Convert(Sprite sprite, ref Bitmap bmp) {
                 if (Config["LinearDodge"].Boolean) {

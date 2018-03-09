@@ -196,10 +196,10 @@ namespace ExtractorSharp {
             Viewer.Regisity("about", typeof(AboutDialog));
             Viewer.Regisity("debug", typeof(BugDialog));
             Viewer.Regisity("newImage", typeof(NewImageDialog));
-            Viewer.Regisity("canvas", typeof(CanvasDialog));
             Viewer.Regisity("setting", typeof(SettingDialog));
             Viewer.Regisity("saveImage", typeof(SaveImageDialog));
             Viewer.Regisity("version", typeof(VersionDialog));
+            Viewer.Regisity("changeSize", typeof(ChangeSizeDialog));
          }
 
 

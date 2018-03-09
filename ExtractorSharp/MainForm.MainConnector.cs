@@ -81,7 +81,9 @@ namespace ExtractorSharp {
             public SpriteConverter SpirteConverter {
                 get {
                     SpriteConverter result = null;
-                    foreach (var converter in SpriteConverters) {
+                    var arr = SpriteConverters.ToList();
+                    arr.Sort((a, b) => a.Index - b.Index);
+                    foreach (var converter in arr) {
                         if (converter.Enable) {
                             result += converter.Convert;
                         }

@@ -180,10 +180,6 @@
     <Compile Include="MainForm.RealPosition.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\Dialog\CanvasDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="View\Dialog\CanvasDialog.designer.cs" />
     <Compile Include="Command\ImageCommand\CanvasImage.cs" />
     <Compile Include="Command\ImageCommand\SaveImage.cs" />
     <Compile Include="Command\FileCommand\SortFile.cs" />
@@ -212,6 +208,12 @@
     </Compile>
     <Compile Include="View\Dialog\BugDialog.Designer.cs">
       <DependentUpon>BugDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialog\ChangeSizeDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\Dialog\ChangeSizeDialog.Designer.cs">
+      <DependentUpon>ChangeSizeDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="View\Dialog\ConvertDialog.cs">
       <SubType>Form</SubType>
@@ -369,9 +371,6 @@
     <None Include="Resources\view.json" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="View\Dialog\CanvasDialog.resx">
-      <DependentUpon>CanvasDialog.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="View\Dialog\AboutDialog.resx">
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -380,6 +379,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\Dialog\ChangePositionDialog.resx">
       <DependentUpon>ChangePositionDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Dialog\ChangeSizeDialog.resx">
+      <DependentUpon>ChangeSizeDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\Dialog\ConvertDialog.resx">
       <DependentUpon>ConvertDialog.cs</DependentUpon>

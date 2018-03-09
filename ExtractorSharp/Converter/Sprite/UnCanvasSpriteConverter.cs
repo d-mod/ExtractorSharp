@@ -13,6 +13,7 @@ namespace ExtractorSharp.Converter.Sprite {
         public string Name => "UnCanvasImage";
 
         public bool Enable { set; get; }
+        public int Index { set; get; } = -1;
 
         public void Convert(Data.Sprite sprite, ref Bitmap bmp) {
             var rct = bmp.Scan();

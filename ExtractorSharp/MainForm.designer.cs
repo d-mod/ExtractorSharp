@@ -87,9 +87,7 @@ namespace ExtractorSharp {
             openDirItem = new ToolStripMenuItem();
             saveAsFileItem = new ToolStripMenuItem();
             saveDirItem = new ToolStripMenuItem();
-            
-            canvasImageItem = new ToolStripMenuItem();
-            uncanvasImageItem = new ToolStripMenuItem();
+
             lineDodgeItem = new ToolStripMenuItem();
 
             editMenu = new ToolStripMenuItem();
@@ -276,9 +274,6 @@ namespace ExtractorSharp {
             editImageItem.DropDownItems.Add(copyImageItem);
             editImageItem.DropDownItems.Add(pasteImageItem);
             editImageItem.DropDownItems.AddSeparator();
-            editImageItem.DropDownItems.Add(canvasImageItem);
-            editImageItem.DropDownItems.Add(uncanvasImageItem);
-            editImageItem.DropDownItems.AddSeparator();
             editImageItem.DropDownItems.Add(lineDodgeItem);
 
             cutImageItem.Text = Language["Cut"];
@@ -309,9 +304,6 @@ namespace ExtractorSharp {
             selectItem.DropDownItems.Add(selectAllLinkItem);
             selectItem.DropDownItems.Add(selectThisLinkItm);
             selectItem.DropDownItems.Add(selectThisTargetItem);
-        
-            canvasImageItem.Text = Language["CanvasImage"];
-            uncanvasImageItem.Text = Language["UnCanvasImage"];
             lineDodgeItem.Text = Language["LinearDodge"];
 
             // 
@@ -704,8 +696,6 @@ namespace ExtractorSharp {
 
         private ToolStripMenuItem adjustPositionItem;//校正坐标
         private ToolStripMenuItem addLayerItem; //加入图层
-        private ToolStripMenuItem canvasImageItem;//画布化贴图
-        private ToolStripMenuItem uncanvasImageItem;//去画布化贴图
         private ToolStripMenuItem lineDodgeItem;
 
         private ColorDialog colorDialog;

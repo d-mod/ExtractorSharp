@@ -20,18 +20,6 @@ namespace ExtractorSharp.View.SettingPane {
             savePathBox.Click += Browse;
             browseButton.Click += Browse;
             emptyButton.Click += (o, e) => savePathBox.Clear();
-            converterList = new List<CheckBox>();
-            var i = 0;
-            foreach (var converter in Connector.SpriteConverters) {
-                var checkbox = new CheckBox();
-                checkbox.Text = Language[converter.Name];
-                checkbox.Tag = converter;
-                checkbox.Checked = Config[$"{converter.Name}SpriteConverter"].Boolean;
-                checkbox.Location = new Point(100 * (i / 4) + 10, i * 30 + 15);
-                converterList.Add(checkbox);
-                i++;
-            }
-            converterGroup.Controls.AddRange(converterList.ToArray());
         }
 
         private void Browse(object sender, EventArgs e) {
@@ -45,6 +33,19 @@ namespace ExtractorSharp.View.SettingPane {
             promptCheck.Checked = Config["SaveImageTip"].Boolean;
             fullPathCheck.Checked = Config["SaveImageAllPath"].Boolean;
             savePathBox.Text = Config["SaveImagePath"].Value;
+            var i = 0;
+            converterList = new List<CheckBox>();
+            converterGroup.Controls.Clear();
+            foreach (var converter in Connector.SpriteConverters) {
+                var checkbox = new CheckBox();
+                checkbox.Text = Language[converter.Name];
+                checkbox.Tag = converter;
+                checkbox.Checked = Config[$"{converter.Name}SpriteConverter"].Boolean;
+                checkbox.Location = new Point(100 * (i / 4) + 10, i * 30 + 15);
+                converterList.Add(checkbox);
+                i++;
+            }
+            converterGroup.Controls.AddRange(converterList.ToArray());
         }
 
         public override void Save() {

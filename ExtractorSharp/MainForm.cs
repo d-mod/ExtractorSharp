@@ -41,7 +41,7 @@ namespace ExtractorSharp {
         /// <summary>
         /// 上一图层
         /// </summary>
-        private IPaint LastLayer { set; get; }
+        private IPaint LastLayer { set; get; } = new Canvas();
 
         private IPaint Rule { set; get; }
 
@@ -74,14 +74,15 @@ namespace ExtractorSharp {
         }
 
         private void AddSpriteConverter() {
+            AddSpriteConverter(new UnCanvasSpriteConverter());
             AddSpriteConverter(new LinearDodgeSpriteConverter(Config));
             AddSpriteConverter(new RealPositionSpriteConverter(Config));
-            AddSpriteConverter(new UnCanvasSpriteConverter());
         }
 
         private void AddSpriteConverter(ISpriteConverter converter) {
             Connector.SpriteConverters.Add(converter);
             converter.Enable = Config[$"{converter.Name}SpriteConverter"].Boolean;
+            converter.Index = Config[$"{converter.Name}SpriteConverterIndex"].Integer;
         }
 
         private void AddConfig() {
@@ -258,7 +259,7 @@ namespace ExtractorSharp {
             imageList.SelectedIndexChanged += SelectImageChanged;
             imageList.ItemHoverChanged += PreviewHover;
             changePositionItem.Click += (o, e) => Viewer.Show("changePosition", Connector.CheckedImages);
-            changeSizeItem.Click += (o, e) => Connector.Do("changeSize", Connector.SelectedFile, imageList.SelectIndexes, ImageScale);
+            changeSizeItem.Click += (o, e) => Viewer.Show("changeSize", Connector.SelectedFile, imageList.SelectIndexes, ImageScale);
             searchBox.TextChanged += (o, e) => ListFlush();
 
             newImageItem.Click += (o, e) => Viewer.Show("newImage", Connector.SelectedFile);
@@ -273,7 +274,7 @@ namespace ExtractorSharp {
             redoItem.Click += (o, e) => Controller.Move(1);
             closeButton.Click += CloseFile;
             historyButton.Click += ShowHistory;
-            scaleBox.ValueChanged += Flush;
+            scaleBox.ValueChanged += ScaleChange;
             scaleBox.Increment = 30;
             pixelateBox.CheckedChanged += Flush;
             sortItem.Click += Sort;
@@ -285,8 +286,6 @@ namespace ExtractorSharp {
             pathBox.Click += SelectSavePath;
             openFileItem.Click += AddFile;
             saveFileItem.Click += (o, e) => Connector.Save();
-            canvasImageItem.Click += CanvasImage;
-            uncanvasImageItem.Click += UnCanvasImage;
             lockRuleItem.Click += LockRule;
             mutipleLayerItem.CheckedChanged += Flush;
             replaceLayerItem.Click += ReplaceLayer;
@@ -325,11 +324,16 @@ namespace ExtractorSharp {
             selectThisTargetItem.Click += SelectThisTarget;
         }
 
+        private void ScaleChange(object sender, EventArgs e) {
+            Config["CanvasScale"] = new ConfigValue(scaleBox.Value);
+            Flush(sender, e);
+        }
+
         private void RealPosition(object sender, EventArgs e) {
             if (CurrentLayer.Location != null && Connector.SelectedImage != null) {
                 CurrentLayer.Location = realPositionBox.Checked ? Connector.SelectedImage.Location : Point.Empty;
             }
-            this.Flush(sender, e);
+            Flush(sender, e);
         }
 
         private void Onionskin(object sender, EventArgs e) {
@@ -654,7 +658,7 @@ namespace ExtractorSharp {
             Config["Brush"] = new ConfigValue(Drawer.Brush.Name);
             Config["BrushColor"] = new ConfigValue(Drawer.Color);
 
-            Config["LineDodge"] = new ConfigValue(linearDodge.Checked);
+            Config["LinearDodge"] = new ConfigValue(linearDodge.Checked);
             Config["OnionSkin"] = new ConfigValue(onionskinBox.Checked);
             Config["RealPosition"] = new ConfigValue(realPositionBox.Checked);
             Config["Animation"] = new ConfigValue(displayBox.Checked);
@@ -711,15 +715,7 @@ namespace ExtractorSharp {
         private void Classify(object sender, EventArgs e) {
             ListFlush();
         }
-
-
-        private void CanvasImage(object sender, EventArgs e) {
-            Viewer.Show("canvas", Connector.SelectedFile, Connector.CheckedImageIndices);
-        }
-
-        private void UnCanvasImage(object sender, EventArgs e) {
-            Connector.Do("uncanvasImage", Connector.SelectedFile, Connector.CheckedImageIndices);
-        }
+       
 
         /// <summary>
         /// 列表刷新

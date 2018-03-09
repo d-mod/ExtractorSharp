@@ -17,6 +17,7 @@ namespace ExtractorSharp {
             public string Name => "RealPosition";
 
             public bool Enable { set; get; }
+            public int Index { set; get; }
 
             internal RealPositionSpriteConverter(IConfig Config) {
                 this.Config = Config;
