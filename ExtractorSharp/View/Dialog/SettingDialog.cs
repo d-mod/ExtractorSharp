@@ -39,7 +39,7 @@ namespace ExtractorSharp.View.Dialog {
         }
 
 
-        public void AddConfig(Type type) {
+        private void AddConfig(Type type) {
             if (!typeof(AbstractSettingPane).IsAssignableFrom(type)) {
                 return;
             }

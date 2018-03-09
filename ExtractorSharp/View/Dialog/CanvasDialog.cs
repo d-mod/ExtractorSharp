@@ -15,6 +15,9 @@ namespace ExtractorSharp.View {
         public CanvasDialog(IConnector Connector) : base(Connector) {
             InitializeComponent();
             CancelButton = cancelButton;
+            var size = Config["CanvasImageSize"].Size;
+            width_box.Value = size.Width;
+            height_box.Value = size.Height;
             yesButton.Click += Run;
         }
 
@@ -38,6 +41,7 @@ namespace ExtractorSharp.View {
             }
             width_box.Value = width;
             height_box.Value = height;
+            Config["CanvasImageSize"] = new ConfigValue(new Size(width, height));
             return ShowDialog();
         }
 

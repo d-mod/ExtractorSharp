@@ -120,7 +120,7 @@ namespace ExtractorSharp {
             saveGifItem = new ToolStripMenuItem();
             box = new PictureBox();
             mutipleLayerItem = new ToolStripMenuItem();
-            linedodgeBox = new CheckBox();
+            linearDodge = new CheckBox();
             realPositionBox = new CheckBox();
             onionskinBox = new CheckBox();
             displayBox = new CheckBox();
@@ -312,7 +312,7 @@ namespace ExtractorSharp {
         
             canvasImageItem.Text = Language["CanvasImage"];
             uncanvasImageItem.Text = Language["UnCanvasImage"];
-            lineDodgeItem.Text = Language["LineDodge"];
+            lineDodgeItem.Text = Language["LinearDodge"];
 
             // 
             // mainMenu
@@ -510,9 +510,9 @@ namespace ExtractorSharp {
             //
             //
             //
-            linedodgeBox.Location = new Point(1050, 50);
-            linedodgeBox.AutoSize = true;
-            linedodgeBox.Text = Language["LineDodge"];
+            linearDodge.Location = new Point(1050, 50);
+            linearDodge.AutoSize = true;
+            linearDodge.Text = Language["LinearDodge"];
             ///
             //
             //
@@ -589,7 +589,7 @@ namespace ExtractorSharp {
             Controls.Add(pathBox);
             Controls.Add(realPositionBox);
             Controls.Add(displayBox);
-            Controls.Add(linedodgeBox);
+            Controls.Add(linearDodge);
             Controls.Add(onionskinBox);
             Controls.Add(box);
             Controls.Add(historyButton);
@@ -713,7 +713,7 @@ namespace ExtractorSharp {
         
         private CheckBox realPositionBox;        //真实坐标
         private CheckBox displayBox;            //动画播放
-        private CheckBox linedodgeBox;          //线性减淡
+        private CheckBox linearDodge;          //线性减淡
         private CheckBox onionskinBox;             //模拟残影
 
         private Label scaleLabel;

@@ -1,4 +1,5 @@
-﻿using ExtractorSharp.Config;
+﻿using ExtractorSharp.Composition;
+using ExtractorSharp.Config;
 using ExtractorSharp.Data;
 using ExtractorSharp.Draw;
 using System;
@@ -107,5 +108,9 @@ namespace ExtractorSharp.Core {
         void OnSaveChanged();
 
         event EventHandler SaveChanged;
+
+        List<ISpriteConverter> SpriteConverters { get; }
+
+        SpriteConverter SpirteConverter { get; }
     }
 }

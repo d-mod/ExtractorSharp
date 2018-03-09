@@ -5,6 +5,9 @@ using ExtractorSharp.Config;
 using ExtractorSharp.Data;
 using ExtractorSharp.Core;
 using System.Text.RegularExpressions;
+using System.Drawing;
+using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Composition;
 
 namespace ExtractorSharp.View {
     public partial class SaveImageDialog : ESDialog {
@@ -32,17 +35,18 @@ namespace ExtractorSharp.View {
 
         private void Save() {
             var name = nameBox.Text;
-            var match = Regex.Match(name, @"\d+$",RegexOptions.Compiled);
+            var match = Regex.Match(name, @"\d+$", RegexOptions.Compiled);
             var value = match.Value;
             var incre = -1;
             var prefix = name;
-            var digit = 0;      
+            var digit = 0;
             if (match.Success) {
                 incre = int.Parse(value);
                 prefix = prefix.Remove(match.Index, match.Length);
                 digit = value.Length;
             }
-            Connector.Do("saveImage", Album, 1, Indexes, pathBox.Text, prefix, incre, digit);
+            prefix = (allPathCheck.Checked ? Album.Path : Album.Name) + "/" + prefix;
+            Connector.Do("saveImage", Album, 1, Indexes, pathBox.Text, prefix, incre, digit,Connector.SpirteConverter);
         }
 
         private void Replace(object sender, EventArgs e) {

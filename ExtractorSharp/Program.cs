@@ -237,6 +237,7 @@ namespace ExtractorSharp {
         private static void LoadConfig() {
             Config = new JsonConfig();
             Config.LoadConfig(Resources.Config);
+            Config.LoadConfig(Resources.View);
             Config["RootPath"] = new ConfigValue(Application.StartupPath);
             Config["ResourcePath"] = new ConfigValue($"{Config["GamePath"]}/ImagePacks2");
         }

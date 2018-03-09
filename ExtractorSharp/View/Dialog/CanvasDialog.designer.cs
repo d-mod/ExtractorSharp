@@ -32,13 +32,12 @@ namespace ExtractorSharp.View{
             this.SuspendLayout();
             // 
             // numericUpDown1
-            // 
+            //        
             this.width_box.Location = new System.Drawing.Point(90, 17);
             this.width_box.Size = new System.Drawing.Size(88, 21);
             this.width_box.TabIndex = 0;
             this.width_box.Maximum = 9999;
             this.width_box.Minimum = 1;
-            this.width_box.Value = 800;
             // 
             // numericUpDown2
             // 
@@ -47,7 +46,6 @@ namespace ExtractorSharp.View{
             this.height_box.TabIndex = 1;
             this.height_box.Maximum = 9999;
             this.height_box.Minimum = 1;
-            this.height_box.Value = 600;
             // 
             // label1
             // 

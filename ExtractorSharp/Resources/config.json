@@ -1,88 +1,66 @@
 {
-	UserConfig:"conf.json"
+  "UserConfig": "conf.json",
 
-	FlashSpeed:20
+  "FlashSpeed": 20,
 
-	GamePath:""
+  "GamePath": "",
 
-	SaveImagePath:""
+  "SaveImagePath": "",
 
-	SaveImageTip:true
+  "SaveImageTip": true,
 
-	Version:"1.6.0.1"
+  "Version": "1.6.0.1",
 
-	GridGap:100
+  "GridGap": 100,
 
-	AutoSave:false
+  "AutoSave": false,
 
-	LineLevel:0.5
+  "LineLevel": 0.5,
 
-	LCID:2052
+  "LCID": 2052,
 
-	SaveImageAllPath:false
+  "SaveImageAllPath": false,
 
-	LayerMaximum: 20
+  "LayerMaximum": 20,
 
 
 
-	UpdateUrl:"http://extractorsharp.kritsu.net/api/program/update",
-	
-	UpdateExeUrl:"http://static.kritsu.net/install.exe",
-	
-	DebugUrl:"http://extractorsharp.kritsu.net/api/feedback/post"
-	
-	UpdateExeName:"install.exe",
-	
-	AutoUpdate: true
-	
-	MainColor : '180,214,221'
-	
-	MainImage : ''		
+  "UpdateUrl": "http://extractorsharp.kritsu.net/api/program/update",
 
-	MainSize : '1368,768'		
+  "UpdateExeUrl": "http://static.kritsu.net/install.exe",
 
-	MainImageLayout : ''		
+  "DebugUrl": "http://extractorsharp.kritsu.net/api/feedback/post",
 
-	MainIcon : ''		
+  "UpdateExeName": "install.exe",
 
-	FormImage : ''		
+  "AutoUpdate": true,
 
-	FormColor : ''	
 
-	FormImageLayout : ''		
+  "Preview": false,
 
-	FormIcon : 'aww.ico'		
+  "CanvasScale": 100,
 
-	CanvasColor : ''		
+  "CanvasImageSize": "800,600",
 
-	CanvasImage : ''		
+  "Pixelate": true,
 
-	CanvasSize : '800,600'		
+  "LinearDodge": false,
 
-	StartPosition : 'center'		
+  "OnionSkin": false,
 
-	Preview : false		
+  "RealPosition": false,
 
-	Title : ''		
+  "Animation": false,
 
-	CanvasScale:100
+  "Ruler": false,
 
-	Pixelate:true
+  "RuleCrosshair": false,
 
-	LineDodge:false
+  "RulerLocked": false,
 
-	OnionSkin:false
+  "Profile": "release",
 
-	RealPosition:false
+  "LinearDodgeSpriteConverter": true,
 
-	Animation:false
-
-	Ruler:false
-
-	RuleCrosshair:false
-
-	RulerLocked:false
-
-	Profile:'release'
-
+  "RealPositionSpriteConverter": false
 }

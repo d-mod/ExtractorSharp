@@ -1,6 +1,7 @@
 ﻿using ExtractorSharp.Component;
 using ExtractorSharp.Composition;
 using ExtractorSharp.Config;
+using ExtractorSharp.Converter.Sprite;
 using ExtractorSharp.Core;
 using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Data;
@@ -21,7 +22,7 @@ using System.Windows.Forms;
 
 namespace ExtractorSharp {
     public partial class MainForm : ESForm {
-        
+
         private Viewer Viewer { get; }
         private Drawer Drawer { get; }
         private Controller Controller { get; }
@@ -41,17 +42,17 @@ namespace ExtractorSharp {
         /// 上一图层
         /// </summary>
         private IPaint LastLayer { set; get; }
-        
+
         private IPaint Rule { set; get; }
 
         private IPaint Grid { set; get; }
 
         private IPaint Border { set; get; }
-        
+
         private int move_mode = -1;
 
 
-        public MainForm():base(new MainConnector()) {
+        public MainForm() : base(new MainConnector()) {
             (this.Connector as MainConnector).MainForm = this;
             InitializeComponent();
             Controller = Program.Controller;
@@ -69,10 +70,22 @@ namespace ExtractorSharp {
             AddBrush();
             AddPaint();
             AddConfig();
+            AddSpriteConverter();
+        }
+
+        private void AddSpriteConverter() {
+            AddSpriteConverter(new LinearDodgeSpriteConverter(Config));
+            AddSpriteConverter(new RealPositionSpriteConverter(Config));
+            AddSpriteConverter(new UnCanvasSpriteConverter());
+        }
+
+        private void AddSpriteConverter(ISpriteConverter converter) {
+            Connector.SpriteConverters.Add(converter);
+            converter.Enable = Config[$"{converter.Name}SpriteConverter"].Boolean;
         }
 
         private void AddConfig() {
-            linedodgeBox.Checked = Config["LineDodge"].Boolean;
+            linearDodge.Checked = Config["LinearDodge"].Boolean;
             realPositionBox.Checked = Config["RealPosition"].Boolean;
             pixelateBox.Checked = Config["Pixelate"].Boolean;
             scaleBox.Value = Config["CanvasScale"].Integer;
@@ -86,7 +99,7 @@ namespace ExtractorSharp {
                 item.CheckOnClick = true;
                 if (Drawer.IsSelect(entry.Key)) {
                     item.Checked = true;
-                }            
+                }
                 item.Click += (o, e) => {
                     Drawer.Select(entry.Key);
                     foreach (ToolStripMenuItem i in toolsMenu.DropDownItems) {
@@ -104,16 +117,16 @@ namespace ExtractorSharp {
             Border = new Border();
             AddPaint(displayRuleItem, Rule);
             AddPaint(gridItem, Grid);
-            AddPaint(borderItem,Border);
+            AddPaint(borderItem, Border);
         }
 
-        private void AddPaint(ToolStripMenuItem item ,IPaint paint) {
+        private void AddPaint(ToolStripMenuItem item, IPaint paint) {
             paint.Visible = item.Checked;
             item.CheckOnClick = true;
             item.Click += Flush;
             item.CheckedChanged += (o, e) => paint.Visible = item.Checked;
         }
-        
+
 
         /// <summary>
         /// 给不需要动态参数的窗口-菜单添加监听
@@ -128,11 +141,11 @@ namespace ExtractorSharp {
         public void AddShow(ToolStripMenuItem item, string name, params object[] args) => item.Click += (o, e) => Viewer.Show(name, args);
 
 
-        public void AddCommand(Control control,string name) {
+        public void AddCommand(Control control, string name) {
             control.Click += (o, e) => Connector.Do(name, Connector);
         }
 
-        public void AddCommand(ToolStripItem control,string name) {
+        public void AddCommand(ToolStripItem control, string name) {
             control.Click += (o, e) => Connector.Do(name, Connector);
         }
 
@@ -208,6 +221,7 @@ namespace ExtractorSharp {
             }
         }
 
+
         /// <summary>
         /// 添加监听
         /// </summary>
@@ -274,7 +288,6 @@ namespace ExtractorSharp {
             canvasImageItem.Click += CanvasImage;
             uncanvasImageItem.Click += UnCanvasImage;
             lockRuleItem.Click += LockRule;
-            linedodgeBox.CheckedChanged += Flush;
             mutipleLayerItem.CheckedChanged += Flush;
             replaceLayerItem.Click += ReplaceLayer;
             layerList.ItemCheck += HideLayer;
@@ -286,12 +299,13 @@ namespace ExtractorSharp {
             adjustPositionItem.Click += AdjustPosition;
             repairFileItem.Click += (o, e) => Connector.Do("repairFile", Connector.CheckedFiles);
             Drawer.BrushChanged += (o, e) => box.Cursor = e.Brush.Cursor;
+            linearDodge.CheckedChanged += LinearDodge;
             onionskinBox.CheckedChanged += Onionskin;
             previewItem.CheckedChanged += PreviewChanged;
             trackBar.ValueChanged += TabLayer;
             Drawer.ColorChanged += ColorChanged;
             colorPanel.MouseClick += ColorChanged;
-            lineDodgeItem.Click += LineDodge;
+            lineDodgeItem.Click += LinearDodge;
             splitFileItem.Click += (o, e) => Connector.Do("splitFile", Connector.CheckedFiles);
             mixFileItem.Click += (o, e) => Connector.Do("mixFile", Connector.CheckedFiles);
             cutImageItem.Click += CutImage;
@@ -305,7 +319,7 @@ namespace ExtractorSharp {
             canvasCopyItem.Click += CopyImage;
             canvasPasteItem.Click += CanvasPasteImage;
 
-            selectAllHideItem.Click += (o, e) => imageList.Filter(sprite => sprite.Hidden);    
+            selectAllHideItem.Click += (o, e) => imageList.Filter(sprite => sprite.Hidden);
             selectAllLinkItem.Click += (o, e) => imageList.Filter(sprite => sprite.Type == ColorBits.LINK);
             selectThisLinkItm.Click += SelectThisLink;
             selectThisTargetItem.Click += SelectThisTarget;
@@ -333,7 +347,7 @@ namespace ExtractorSharp {
         private void SelectThisTarget(object sender, EventArgs e) {
             var cur = imageList.SelectedItem;
             if (cur != null && cur.Type == ColorBits.LINK) {
-                for(var i = 0; i < imageList.Items.Count; i++) {
+                for (var i = 0; i < imageList.Items.Count; i++) {
                     if (imageList.Items[i].Equals(cur.Target)) {
                         imageList.SelectedIndex = i;
                     }
@@ -365,7 +379,7 @@ namespace ExtractorSharp {
             Connector.Do("cutImg", Connector.CheckedFiles, mode);
         }
 
-        private void CopyImage(object sender,EventArgs e) {
+        private void CopyImage(object sender, EventArgs e) {
             CutImage(ClipMode.Copy);
         }
 
@@ -417,11 +431,9 @@ namespace ExtractorSharp {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void LineDodge(object sender, EventArgs e) {
-            var arr = Connector.CheckedImages;
-            if (arr.Length > 0) {
-                Connector.Do("lineDodge", arr);
-            }
+        private void LinearDodge(object sender, EventArgs e) {
+            Config["LinearDodge"] = new ConfigValue(linearDodge.Checked);
+            Flush(sender, e);
         }
 
         /// <summary>
@@ -611,7 +623,7 @@ namespace ExtractorSharp {
         /// </summary>
         private void MoveImageIndex(object sender, ItemDragEventArgs<Sprite> e) {
             var al = Connector.SelectedFile;
-            if (al != null && e.Index > -1 && Connector.ImageCount> 0) {
+            if (al != null && e.Index > -1 && Connector.ImageCount > 0) {
                 Connector.Do("moveImage", al, e.Index, e.Target);
                 Connector.SelectedImageIndex = e.Target;
             }
@@ -639,10 +651,10 @@ namespace ExtractorSharp {
         private void SaveConfig() {
             Config["CanvasScale"] = new ConfigValue(scaleBox.Value);
             Config["Pixelate"] = new ConfigValue(pixelateBox.Checked);
-            Config["Brush"]=new ConfigValue(Drawer.Brush.Name);
+            Config["Brush"] = new ConfigValue(Drawer.Brush.Name);
             Config["BrushColor"] = new ConfigValue(Drawer.Color);
 
-            Config["LineDodge"] = new ConfigValue(linedodgeBox.Checked);
+            Config["LineDodge"] = new ConfigValue(linearDodge.Checked);
             Config["OnionSkin"] = new ConfigValue(onionskinBox.Checked);
             Config["RealPosition"] = new ConfigValue(realPositionBox.Checked);
             Config["Animation"] = new ConfigValue(displayBox.Checked);
@@ -663,7 +675,7 @@ namespace ExtractorSharp {
             con.SelectSavePath();
             pathBox.Text = con.SavePath;
         }
-        
+
 
 
         private void AjustRule(object sender, EventArgs e) {
@@ -685,7 +697,7 @@ namespace ExtractorSharp {
             LastLayer.Visible = onionskinBox.Checked;
             CurrentLayer = new Canvas();
             CurrentLayer.Location = curPoint;
-            if (realPositionBox.Checked && Connector.SelectedImage!= null) {
+            if (realPositionBox.Checked && Connector.SelectedImage != null) {
                 var entity = Connector.SelectedImage;
                 CurrentLayer.Location = entity.Location;
             }
@@ -854,7 +866,7 @@ namespace ExtractorSharp {
                 Thread.Sleep(1000 / Config["FlashSpeed"].Integer);
             }
         }
-        
+
 
         private void DisplayNext() {
             if (mutipleLayerItem.Checked) {
@@ -1048,7 +1060,7 @@ namespace ExtractorSharp {
                     }
                 }
                 //添加贴图
-                index = (index > -1 && index < imageList.Items.Count) ? index : 0;      
+                index = (index > -1 && index < imageList.Items.Count) ? index : 0;
                 if (imageList.Items.Count > 0) {
                     imageList.SelectedIndex = index;
                 } else if (imageList.Items.Count == 0) {
@@ -1151,7 +1163,7 @@ namespace ExtractorSharp {
                 }
                 var pictrue = entity.Picture;
                 var size = entity.Size.Star(ImageScale);
-                if (linedodgeBox.Checked) {
+                if (linearDodge.Checked) {
                     pictrue = pictrue.LinearDodge();
                 }
                 if (LastLayer.Visible) {
@@ -1373,169 +1385,6 @@ namespace ExtractorSharp {
                 Connector.Do("deleteImage", album, indexes);
             }
         }
-
-
-
-        internal class MainConnector : IConnector {
-
-            internal MainForm MainForm { get; set; }
-
-            internal MainConnector() {
-                SaveChanged += (o, e) => OnSaveChanged();
-            }
-
-            public Language Language => Language.Default;
-
-            public IConfig Config => Program.Config;
-
-            public List<Language> LanguageList => Language.List;
-
-            public string SavePath {
-                set => MainForm.pathBox.Text = value;
-                get => MainForm.pathBox.Text;
-            }
-
-            public Sprite[] ImageArray => MainForm.imageList.AllItems;
-
-            public Sprite SelectedImage => MainForm.imageList.SelectedItem;
-
-            public Sprite[] CheckedImages => MainForm.imageList.SelectItems;
-
-            public int[] CheckedImageIndices => MainForm.imageList.SelectIndexes;
-
-            public int ImageCount => MainForm.imageList.Items.Count;
-
-            public int SelectedImageIndex {
-                set {
-                    MainForm.imageList.SelectedIndex = value;
-                }
-                get {
-                    return MainForm.imageList.SelectedIndex;
-                }
-            }
-
-            public Album[] FileArray => MainForm.albumList.AllItems;
-
-            public Album[] CheckedFiles => MainForm.albumList.SelectItems;
-
-            public Album SelectedFile => MainForm.albumList.SelectedItem;
-
-            public int[] CheckedFileIndices => MainForm.albumList.SelectIndexes;
-
-            public int FileCount => MainForm.albumList.Items.Count;
-
-            public int SelectedFileIndex {
-                set {
-                    MainForm.albumList.SelectedIndex = value;
-                }
-                get {
-                    return MainForm.albumList.SelectedIndex;
-                }
-            }
-
-            public List<Album> List => _list;
-
-            public bool IsSave { set; get; } = true;
-
-            private readonly List<Album> _list = new List<Album>();
-
-            public event EventHandler SaveChanged;
-
-            public void OnSaveChanged() {
-                ImageListFlush();
-                IsSave = false;
-                if (Config["AutoSave"].Boolean) {
-                    Save();
-                }
-            }
-
-            public void CanvasFlush() => MainForm.CanvasFlush();
-
-            public void ImageListFlush() => MainForm.ImageFlush();
-
-            public void FileListFlush() => MainForm.ListFlush();
-
-            public void AddFile(bool clear, params string[] args) {
-                if (clear) {
-                    SavePath = string.Empty;
-                    IsSave = true;
-                }
-                if (SavePath.Length == 0) {
-                    SavePath = args.Find(item => item.ToLower().EndsWith(".npk")) ?? string.Empty;
-                }
-                if (args.Length > 0) {
-                    MainForm.Controller.Do("addImg", Npks.Load(args).ToArray(), clear);
-                }
-            }
-
-            public void AddFile(bool clear, params Album[] array) {
-                if (clear) {
-                    List.Clear();
-                }
-                if (array.Length > 0) {
-                    if (FileCount > 0) {
-                        SelectedFileIndex = FileCount - 1;
-                    }
-                    List.AddRange(array);
-                }
-            }
-
-
-            public void RemoveFile(params Album[] array) {
-                foreach (var album in array) {
-                    List.Remove(album);
-                }
-            }
-            public void Save() {
-                if (SavePath.Trim().Length == 0) {
-                    SelectSavePath();
-                }
-                if (SavePath.Trim().Length == 0) {
-                    return;
-                }
-                Save(SavePath);
-            }
-
-            public void Save(string file) {
-                Npks.Save(file, List);
-                IsSave = true;
-                Messager.ShowOperate("SaveFile");
-            }
-
-            public void SelectSavePath() {
-                var dir = SavePath;
-                var path = SavePath.GetSuffix();
-                if (path != string.Empty) {
-                    dir = dir.Replace(path, "");
-                }
-                var dialog = new SaveFileDialog();
-                dialog.InitialDirectory = dir;
-                dialog.FileName = path;
-                dialog.Filter = "npk文件|*.npk";
-                if (dialog.ShowDialog() == DialogResult.OK) {
-                    SavePath = dialog.FileName;
-                    OnSaveChanged();
-                }
-            }
-
-            public void SelectPath() {
-                var dialog = new FolderBrowserDialog();
-                dialog.SelectedPath = Config["GamePath"].Value;
-                if (dialog.ShowDialog() == DialogResult.OK) {
-                    Config["GamePath"] = new ConfigValue(dialog.SelectedPath);
-                    Config.Save();
-                }
-            }
-
-            public void Do(string name,params object[] args) {
-                MainForm.Controller.Do(name, args);
-            }
-
-            public void Draw(IPaint paint, Point location, decimal scale) {
-                MainForm.Drawer.Brush.Draw(paint, location, scale);
-            }
-        }
-
-
     }
+
 }

@@ -30,18 +30,19 @@
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.promptCheck = new System.Windows.Forms.CheckBox();
             this.fullPathCheck = new System.Windows.Forms.CheckBox();
+            this.converterGroup = new System.Windows.Forms.GroupBox();
             this.savePathGroup.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBox1
             // 
             this.savePathBox.Location = new System.Drawing.Point(15, 37);
-            this.savePathBox.Size = new System.Drawing.Size(158, 21);
+            this.savePathBox.Size = new System.Drawing.Size(275, 21);
             this.savePathBox.TabIndex = 0;
             // 
             // easeButton1
             // 
-            this.browseButton.Location = new System.Drawing.Point(171, 35);
+            this.browseButton.Location = new System.Drawing.Point(15, 60);
             this.browseButton.Size = new System.Drawing.Size(75, 24);
             this.browseButton.TabIndex = 1;
             this.browseButton.Text = Language["Browse"];
@@ -49,7 +50,7 @@
             //
             //
             //
-            this.emptyButton.Location = new System.Drawing.Point(245, 35);
+            this.emptyButton.Location = new System.Drawing.Point(100, 60);
             this.emptyButton.Size = new System.Drawing.Size(75, 24);
             this.emptyButton.TabIndex = 1;
             this.emptyButton.Text = Language["Empty"];
@@ -65,6 +66,7 @@
             this.savePathGroup.TabIndex = 2;
             this.savePathGroup.TabStop = false;
             this.savePathGroup.Text = Language["SaveImagePath"];
+
             // 
             // checkBox1
             // 
@@ -82,15 +84,21 @@
             this.fullPathCheck.Size = new System.Drawing.Size(78, 16);
             this.fullPathCheck.Text = Language["SavePathTips"];
             this.fullPathCheck.UseVisualStyleBackColor = true;
+
+            converterGroup.Location = new System.Drawing.Point(13, 220);
+            converterGroup.Size = new System.Drawing.Size(350, 200);
+            converterGroup.Text = Language["Effect"];
+            
             // 
             // FilePane
             // 
             this.Controls.Add(this.fullPathCheck);
             this.Controls.Add(this.promptCheck);
             this.Controls.Add(this.savePathGroup);
+            this.Controls.Add(this.converterGroup);
             this.Parent = "File";
             this.Name = "SaveImage";
-            this.Size = new System.Drawing.Size(329, 244);
+            this.Size = new System.Drawing.Size(329, 300);
             this.savePathGroup.ResumeLayout(false);
             this.savePathGroup.PerformLayout();
             this.ResumeLayout(false);
@@ -107,5 +115,8 @@
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.CheckBox promptCheck;
         private System.Windows.Forms.CheckBox fullPathCheck;
+
+        private System.Windows.Forms.GroupBox converterGroup;
+        
     }
 }

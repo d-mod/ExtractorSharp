@@ -72,28 +72,26 @@ namespace ExtractorSharp.Properties {
         
         /// <summary>
         ///   查找类似 {
-        ///  &quot;Name&quot; : &quot;中文(简体)&quot;,
+        ///  &quot;Name&quot;: &quot;中文(简体)&quot;,
         ///  &quot;LCID&quot;: 2052,
-        ///  &quot;Group&quot;:{
-        ///  	&quot;Dictionary&quot;: {
-        ///		&quot;Apply&quot;:&quot;应用&quot;,
-        ///	    &quot;OK&quot;: &quot;确定&quot;,
-        ///	    &quot;Cancel&quot;: &quot;取消&quot;,
-        ///	    &quot;GamePath&quot;: &quot;游戏路径&quot;,
-        ///	    &quot;Browse&quot;: &quot;浏览&quot;,
-        ///	    &quot;HandleObject&quot;: &quot;处理对象&quot;,
-        ///	    &quot;HandleContent&quot;: &quot;处理内容&quot;,
-        ///	    &quot;HandleImg&quot;: &quot;Img处理&quot;,
-        ///	    &quot;HandleImage&quot;: &quot;贴图处理&quot;,
-        ///	    &quot;CheckImg&quot;: &quot;当前所选Img&quot;,
-        ///	    &quot;AllImg&quot;: &quot;所有Img&quot;,
-        ///	    &quot;CheckImage&quot;: &quot;当前所选贴图&quot;,
-        ///	    &quot;AllImage&quot;: &quot;所有贴图&quot;,
-        ///		&quot;ImageResources&quot;:&quot;图片资源&quot;,
-        ///		&quot;SoundResources&quot;:&quot;音效资源&quot;,
-        ///	    &quot;Width&quot;: &quot;宽&quot;,
-        ///	    &quot;Height&quot;: &quot;高&quot;,
-        ///	    &quot;S [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///  &quot;Group&quot;: {
+        ///    &quot;Dictionary&quot;: {
+        ///      &quot;Apply&quot;: &quot;应用&quot;,
+        ///      &quot;OK&quot;: &quot;确定&quot;,
+        ///      &quot;Cancel&quot;: &quot;取消&quot;,
+        ///      &quot;GamePath&quot;: &quot;游戏路径&quot;,
+        ///      &quot;Browse&quot;: &quot;浏览&quot;,
+        ///      &quot;HandleObject&quot;: &quot;处理对象&quot;,
+        ///      &quot;HandleContent&quot;: &quot;处理内容&quot;,
+        ///      &quot;HandleImg&quot;: &quot;Img处理&quot;,
+        ///      &quot;HandleImage&quot;: &quot;贴图处理&quot;,
+        ///      &quot;CheckImg&quot;: &quot;当前所选Img&quot;,
+        ///      &quot;AllImg&quot;: &quot;所有Img&quot;,
+        ///      &quot;CheckImage&quot;: &quot;当前所选贴图&quot;,
+        ///      &quot;AllImage&quot;: &quot;所有贴图&quot;,
+        ///      &quot;ImageResources&quot;: &quot;图片资源&quot;,
+        ///      &quot;SoundResources&quot;: &quot;音效资源&quot;,
+        ///      &quot;Width&quot;: &quot;宽&quot;,        /// [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Chinese {
             get {
@@ -103,43 +101,37 @@ namespace ExtractorSharp.Properties {
         
         /// <summary>
         ///   查找类似 {
-        ///	UserConfig:&quot;conf.json&quot;
+        ///  &quot;UserConfig&quot;: &quot;conf.json&quot;,
         ///
-        ///	FlashSpeed:20
+        ///  &quot;FlashSpeed:20&quot;: null,
         ///
-        ///	GamePath:&quot;&quot;
+        ///  &quot;GamePath&quot;: &quot;&quot;,
         ///
-        ///	SaveImagePath:&quot;&quot;
+        ///  &quot;SaveImagePath&quot;: &quot;&quot;,
         ///
-        ///	SaveImageTip:true
+        ///  &quot;SaveImageTip&quot;: true,
         ///
-        ///	Version:&quot;1.6.0.1&quot;
+        ///  &quot;Version&quot;: &quot;1.6.0.1&quot;,
         ///
-        ///	GridGap:100
+        ///  &quot;GridGap&quot;: 100,
         ///
-        ///	AutoSave:false
+        ///  &quot;AutoSave&quot;: false,
         ///
-        ///	LineLevel:0.5
+        ///  &quot;LineLevel&quot;: 0.5,
         ///
-        ///	LCID:2052
+        ///  &quot;LCID&quot;: 2052,
         ///
-        ///	SaveImageAllPath:false
+        ///  &quot;SaveImageAllPath&quot;: false,
         ///
-        ///	LayerMaximum: 20
+        ///  &quot;LayerMaximum&quot;: 20,
         ///
         ///
         ///
-        ///	UpdateUrl:&quot;http://extractorsharp.kritsu.net/api/program/update&quot;,
-        ///	
-        ///	UpdateExeUrl:&quot;http://static.kritsu.net/install.exe&quot;,
-        ///	
-        ///	DebugUrl:&quot;http://extractorsharp.kritsu.net/api/feedback/post&quot;
-        ///	
-        ///	UpdateExeName:&quot;install.exe&quot;,
-        ///	
-        ///	AutoUpdate: true
-        ///	
-        ///	MainColor :  [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///  &quot;UpdateUrl&quot;: &quot;http://extractorsharp.kritsu.net/api/program/update&quot;,
+        ///
+        ///  &quot;UpdateExeUrl&quot;: &quot;http://static.kritsu.net/install.exe&quot;,
+        ///
+        ///  &quot;DebugUrl&quot;: &quot;http://extractorsharp.kritsu.net/api/feedback/post&quot; [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Config {
             get {
@@ -269,6 +261,44 @@ namespace ExtractorSharp.Properties {
         internal static string Version {
             get {
                 return ResourceManager.GetString("Version", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 {
+        ///
+        ///  &quot;MainColor&quot;: &quot;180,214,221&quot;,
+        ///
+        ///  &quot;MainImage&quot;: &quot;&quot;,
+        ///
+        ///  &quot;MainSize&quot;: &quot;1368,768&quot;,
+        ///
+        ///  &quot;MainImageLayout&quot;: &quot;&quot;,
+        ///
+        ///  &quot;MainIcon&quot;: &quot;&quot;,
+        ///
+        ///  &quot;FormImage&quot;: &quot;&quot;,
+        ///
+        ///  &quot;FormColor&quot;: &quot;&quot;,
+        ///
+        ///  &quot;FormImageLayout&quot;: &quot;&quot;,
+        ///
+        ///  &quot;FormIcon&quot;: &quot;aww.ico&quot;,
+        ///
+        ///  &quot;CanvasColor&quot;: &quot;&quot;,
+        ///
+        ///  &quot;CanvasImage&quot;: &quot;&quot;,
+        ///
+        ///  &quot;CanvasSize&quot;: &quot;800,600&quot;,
+        ///
+        ///  &quot;StartPosition&quot;: &quot;center&quot;,
+        ///
+        ///  &quot;Title&quot;: &quot;&quot;
+        ///} 的本地化字符串。
+        /// </summary>
+        internal static string View {
+            get {
+                return ResourceManager.GetString("View", resourceCulture);
             }
         }
     }

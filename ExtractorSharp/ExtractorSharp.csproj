@@ -144,6 +144,7 @@
     <Compile Include="Composition\Metadata.cs" />
     <Compile Include="Composition\Plugin.cs" />
     <Compile Include="Config\JsonConfig.cs" />
+    <Compile Include="Converter\Sprite\UnCanvasSpriteConverter.cs" />
     <Compile Include="Core\Clipboarder.cs" />
     <Compile Include="Core\Sorter\DefaultSorter.cs" />
     <Compile Include="Core\Sorter\ISorter.cs" />
@@ -169,6 +170,16 @@
     <Compile Include="Command\ImageCommand\ChangePosition.cs" />
     <Compile Include="Command\ImageCommand\UnCanvasImage.cs" />
     <Compile Include="EventArguments\MergeEventArg.cs" />
+    <Compile Include="EventArguments\SavingEventArgs.cs" />
+    <Compile Include="MainForm.LinearDodgeConverter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.MainConnector.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.RealPosition.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="View\Dialog\CanvasDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -355,6 +366,7 @@
     <None Include="README.md" />
     <None Include="Resources\chinese.json" />
     <None Include="Resources\queues.json" />
+    <None Include="Resources\view.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="View\Dialog\CanvasDialog.resx">
@@ -477,6 +489,7 @@
       <Name>ExtractorSharp.Json</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>

@@ -101,7 +101,8 @@
       "Null": "无",
       "History": "历史操作",
       "RealPosition": "真实坐标",
-      "LineDodge": "线性减淡",
+      "LinearDodge": "线性减淡",
+      "Effect": "效果",
       "Animation": "动画播放",
 
       "AddFile": "添加文件",
@@ -147,7 +148,7 @@
       "MoveImage": "移动贴图",
       "Tools": "工具",
       "CanvasImage": "画布化",
-      "UnCanvasImage": "去画布化",
+      "UnCanvasImage": "画布裁剪",
       "NewLayer": "新建图层",
       "ChangeLayerPosition": "修改图层坐标",
       "LoadModel": "载入模板",
