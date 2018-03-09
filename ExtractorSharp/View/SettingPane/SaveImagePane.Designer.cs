@@ -71,7 +71,7 @@
             // checkBox1
             // 
             this.promptCheck.AutoSize = true;
-            this.promptCheck.Location = new System.Drawing.Point(13, 139);
+            this.promptCheck.Location = new System.Drawing.Point(13, 300);
             this.promptCheck.Size = new System.Drawing.Size(78, 16);
             this.promptCheck.TabIndex = 3;
             this.promptCheck.Text = Language["SaveImageTips"];
@@ -80,13 +80,13 @@
             // checkBox2
             // 
             this.fullPathCheck.AutoSize = true;
-            this.fullPathCheck.Location = new System.Drawing.Point(13, 186);
+            this.fullPathCheck.Location = new System.Drawing.Point(220, 300);
             this.fullPathCheck.Size = new System.Drawing.Size(78, 16);
             this.fullPathCheck.Text = Language["SavePathTips"];
             this.fullPathCheck.UseVisualStyleBackColor = true;
 
-            converterGroup.Location = new System.Drawing.Point(13, 220);
-            converterGroup.Size = new System.Drawing.Size(350, 200);
+            converterGroup.Location = new System.Drawing.Point(13, 130);
+            converterGroup.Size = new System.Drawing.Size(350, 150);
             converterGroup.Text = Language["Effect"];
             
             // 

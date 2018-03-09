@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace ExtractorSharp.Core.Lib {
     /// <summary>
@@ -97,14 +98,21 @@ namespace ExtractorSharp.Core.Lib {
         /// 初始化
         /// </summary>
         /// <returns></returns>
-        public static bool Init() => Init(-1, 44100, 0, 0, 0);
+        private static bool Init() => Init(-1, 44100, 0, 0, 0);
 
         /// <summary>
         /// 创建句柄
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public static int CreateFromMemory(byte[] data) =>CreateFromMemory(true, data, 0, data.Length, 0);
+        private static int CreateFromMemory(byte[] data) =>CreateFromMemory(true, data, 0, data.Length, 0);
 
+
+        public static int Play(byte[] data) {
+            Init();
+            int handle = CreateFromMemory(data);
+            Play(handle, false);
+            return handle;
+        }
     }
 }

@@ -86,16 +86,26 @@
     <Compile Include="Lib\Streams.cs" />
     <Compile Include="Lib\Strings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Tools.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Component\Messager.resx">
       <DependentUpon>Messager.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="README.md" />
+    <None Include="Resources\end.ogg" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ExtractorSharp.Json\ExtractorSharp.Json.csproj">
@@ -110,6 +120,9 @@
     <Content Include="FreeImage.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\errorIcon.png" />
+    <None Include="Resources\warnningIcon.png" />
+    <None Include="Resources\successIcon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

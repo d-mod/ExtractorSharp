@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using ExtractorSharp.Command;
 using ExtractorSharp.Command.ImageCommand;
@@ -19,14 +20,14 @@ namespace ExtractorSharp.Core {
     /// </summary>
     public class Controller : IDisposable {
         
-        private IConnector Data => Program.Connector;
+        private IConnector Connector => Program.Connector;
 
         private readonly Stack<ICommand> undoStack;
         private readonly Stack<ICommand> redoStack;
 
         private readonly Dictionary<string, Type> Dic;
 
-        private readonly CommandEventArgs cmdArgs;
+        private readonly Dictionary<Type, string> ReserveDic;
 
         public delegate void CommandHandler(object sender, CommandEventArgs e);
 
@@ -110,12 +111,12 @@ namespace ExtractorSharp.Core {
    
 
         public Controller() {
-            cmdArgs = new CommandEventArgs();
             actArgs = new ActionEventArgs();
             actArgs.Queues = new List<IAction>();
             undoStack = new Stack<ICommand>();
             redoStack = new Stack<ICommand>();
             Dic = new Dictionary<string, Type>();
+            ReserveDic = new Dictionary<Type, string>();
         }
 
         /// <summary>
@@ -128,6 +129,7 @@ namespace ExtractorSharp.Core {
                 Dic.Remove(cmd);
             }
             Dic.Add(cmd, type);
+            ReserveDic.Add(type, cmd);
         }
 
 
@@ -177,8 +179,8 @@ namespace ExtractorSharp.Core {
                 }
                 OnActionDid(actArgs);//触发动作执行事件
             }
-            Data.FileListFlush();
-            Data.ImageListFlush();//刷新画布
+            Connector.FileListFlush();
+            Connector.ImageListFlush();//刷新画布
             Messager.ShowMessage(Msg_Type.Operate, Language.Default["ActionRun"]);
         }
 
@@ -215,7 +217,7 @@ namespace ExtractorSharp.Core {
                     Undo();
                 }
             }
-            Data.ImageListFlush();
+            Connector.ImageListFlush();
         }
 
         /// <summary>
@@ -239,13 +241,17 @@ namespace ExtractorSharp.Core {
                         OnActionChanged(actArgs);
                     }
                     if (cmd.IsFlush) {
-                        Data.FileListFlush();
+                        Connector.FileListFlush();
                     }
                     if (cmd.IsChanged) {//发生更改
-                        Data.OnSaveChanged();
+                        Connector.OnSaveChanged();
                     }
                     redoStack.Clear();
-                    OnComandDid(cmdArgs);
+                    OnComandDid(new CommandEventArgs() {
+                        Name = key,
+                        Command = cmd,
+                        Type = CommandEventType.Do
+                    });
                     Current = cmd;
                 }
             } else {
@@ -261,12 +267,16 @@ namespace ExtractorSharp.Core {
                 var cmd = undoStack.Pop();
                 cmd.Undo();
                 redoStack.Push(cmd);
-                OnComandUndid(cmdArgs);
+                OnComandUndid(new CommandEventArgs() {
+                    Name = ReserveDic[cmd.GetType()],
+                    Command = cmd,
+                    Type=CommandEventType.Undo
+                });
                 if (cmd.IsFlush) {
-                    Data.FileListFlush();
+                    Connector.FileListFlush();
                 }
                 if (cmd.IsChanged) {
-                    Data.OnSaveChanged();
+                    Connector.OnSaveChanged();
                 }
             }
         }
@@ -279,12 +289,16 @@ namespace ExtractorSharp.Core {
                 var cmd = redoStack.Pop();
                 cmd.Redo();
                 undoStack.Push(cmd);
-                OnCommandRedid(cmdArgs);
+                OnCommandRedid(new CommandEventArgs() {
+                    Name = ReserveDic[cmd.GetType()],
+                    Command = cmd,
+                    Type = CommandEventType.Redo
+                });
                 if (cmd.IsFlush) {
-                    Data.FileListFlush();
+                    Connector.FileListFlush();
                 }
                 if (cmd.IsChanged) {
-                    Data.OnSaveChanged();
+                    Connector.OnSaveChanged();
                 }
             }
         }
@@ -300,7 +314,8 @@ namespace ExtractorSharp.Core {
         public void Dispose() {
             undoStack.Clear();
             redoStack.Clear();
-            OnCommandClear(cmdArgs);
+            OnCommandClear(new CommandEventArgs() {
+            });
         }
 
 

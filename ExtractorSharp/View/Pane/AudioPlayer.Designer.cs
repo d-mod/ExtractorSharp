@@ -1,5 +1,5 @@
 ﻿namespace ExtractorSharp.View {
-    partial class OggPlayer {
+    partial class AudioPlayer {
         /// <summary> 
         /// 必需的设计器变量。
         /// </summary>

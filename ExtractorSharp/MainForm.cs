@@ -60,11 +60,12 @@ namespace ExtractorSharp {
             Drawer = Program.Drawer;
             box.Cursor = Drawer.Brush.Cursor;
             dropPanel = new DropPanel();
-            player = new OggPlayer();
+            player = new AudioPlayer();
             Controls.Add(dropPanel);
             Controls.Add(player);
             player.BringToFront();
             previewPanel.BringToFront();
+            Messager.Default.BringToFront();
             AddListenter();
             AddShow();
             AddBrush();
@@ -134,8 +135,8 @@ namespace ExtractorSharp {
         /// </summary>
         private void AddShow() {
             AddShow(aboutItem, "about");
-            AddShow(debugItem, "debug", "feedback");
-            AddShow(propertyItem, "setting");
+            AddShow(feedbackItem, "debug", "feedback");
+            AddShow(settingItem, "setting");
             AddShow(versionItem, "version");
         }
 
@@ -231,6 +232,7 @@ namespace ExtractorSharp {
             openDirItem.Click += InputDirectory;
             saveAsFileItem.Click += OutputFile;
             saveDirItem.Click += OutputDirectory;
+            exitItem.Click += (o, e) => Application.Exit();
             replaceItem.Click += ReplaceImg;
             saveAsItem.Click += SaveAsImg;
             renameItem.Click += RenameImg;
@@ -465,7 +467,7 @@ namespace ExtractorSharp {
         }
 
         private void ImageChanged(object sender, EventArgs e) {
-            Drawer.OnImageChanged(new ImageEntityEventArgs {
+            Drawer.OnImageChanged(new SpriteEventArgs {
                 Entity = Connector.SelectedImage,
                 Album = Connector.SelectedFile
             });
@@ -965,7 +967,7 @@ namespace ExtractorSharp {
         /// <param name="e"></param>
         private void DeleteImg() {
             var indices = Connector.CheckedFileIndices;
-            if (indices.Length > 0 && MessageBox.Show(Language["DeleteTips"], "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) {
+            if (indices.Length > 0 && MessageBox.Show(Language["DeleteTips"],Language["Tips"], MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) {
                 Connector.Do("deleteImg", indices);
             }
         }
@@ -1377,7 +1379,7 @@ namespace ExtractorSharp {
         private void DeleteImage() {
             var indexes = Connector.CheckedImageIndices;
             var album = Connector.SelectedFile;
-            if (album != null && indexes.Length > 0 && MessageBox.Show(Language["DeleteTips"], "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) {
+            if (album != null && indexes.Length > 0 && MessageBox.Show(Language["DeleteTips"], Language["Tips"], MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) {
                 Connector.Do("deleteImage", album, indexes);
             }
         }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExtractorSharp.EventArguments {
-    class SavingEventArgs :EventArgs{
+namespace ExtractorSharp.Command.PaletteCommand {
+    class DeleteColor {
     }
 }

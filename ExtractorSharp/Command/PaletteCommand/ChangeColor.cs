@@ -30,8 +30,9 @@ namespace ExtractorSharp.Command.PaletteCommand {
             OldColor = new Color[Indexes.Length];
             for (var i =0;i<Indexes.Length;i++) {
                 var index = Indexes[i];
-                OldColor[i] = Album.Tables[TableIndex][index];
-                Album.Tables[TableIndex][index] = NewColor;
+                var table = Album.Tables[TableIndex];
+                OldColor[i] = table[index];
+                table[i] = NewColor;
             }
             Album.Refresh();
         }
@@ -45,8 +46,6 @@ namespace ExtractorSharp.Command.PaletteCommand {
                 Album.Tables[TableIndex][Indexes[i]] = OldColor[i];
             }
             Album.Refresh();
-        }
-
-        public override string ToString() => Language.Default["ChangeColor"];
+        }      
     }
 }

@@ -1,4 +1,6 @@
-﻿using ExtractorSharp.Data;
+﻿using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Core.Properties;
+using ExtractorSharp.Data;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -26,53 +28,67 @@ namespace ExtractorSharp.Core{
     /// 提示窗口
     /// </summary>
     public partial class Messager : Panel {
-        private static Language Language => Language.Default;
         public static Messager Default { get; } = new Messager();
-        private Timer timer = new Timer();
+
+        private Timer timer;
+
+        public IConnector Connector { set; get; }
+        public Language Language { set; get; } = Language.Default;
+
 
         private Messager() {
             InitializeComponent();
+            timer = new Timer();
             timer.Tick += Exit;
-            button.Click += Exit;
+            button.Click += Exit;        
         }
 
-        /// <summary>
-        /// 发送消息
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="msg"></param>
-        public static void ShowMessage(Msg_Type type, string msg) => Default?.Show(type, msg);
+        protected override void OnVisibleChanged(EventArgs e) {
 
-        public static void ShowError(string msg) => ShowMessage(Msg_Type.Error, Language[msg]);
+        }
+
+
+        public static void ShowOperate(string msg) => Default?._ShowOperate(msg);
+
+        public static void ShowWarnning(string msg) => Default?._ShowWarnning(msg);
+
+        public static void ShowError(string msg) => Default?._ShowError(msg); 
+
+        public static void ShowMessage(Msg_Type type, string msg) => Default?._ShowMessage(type, msg);
+
+
+        private void _ShowError(string msg) => _ShowMessage(Msg_Type.Error, Language[msg]);
 
         /// <summary>
         /// 警告消息
         /// </summary>
         /// <param name="msg"></param>
-        public static void ShowWarnning(string msg) => ShowMessage(Msg_Type.Warning, Language[msg]);
+        private void _ShowWarnning(string msg) => _ShowMessage(Msg_Type.Warning, Language[msg]);
 
         /// <summary>
         /// 操作成功时触发的消息
         /// </summary>
         /// <param name="msg"></param>
-        public static void ShowOperate(string msg) => ShowMessage(Msg_Type.Operate, $"{Language[msg]}  {Language["Success"]}");
-
+        private void _ShowOperate(string msg) {
+            _ShowMessage(Msg_Type.Operate, $"{Language[msg]}  {Language["Success"]}");
+            Bass.Play(Resources.end);
+        }
         /// <summary>
         /// 提示
         /// </summary>
         /// <param name="type">提示类型</param>
         /// <param name="msg">提示信息</param>
         /// <param name="code">提示码</param>
-        public void Show(Msg_Type type,string msg) {
+        public void _ShowMessage(Msg_Type type,string msg) {
             switch (type) {
                 case Msg_Type.Error:
-                    BackColor = Color.Red;
+                    iconLabel.Image = Resources.errorIcon;
                     break;
                 case Msg_Type.Operate:
-                    BackColor = Color.LightGreen;
+                    iconLabel.Image = Resources.successIcon;
                     break;
                 case Msg_Type.Warning:
-                    BackColor = Color.Yellow;
+                    iconLabel.Image = Resources.warnningIcon;
                     break;
                 default:
                     return;
@@ -89,7 +105,7 @@ namespace ExtractorSharp.Core{
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void Exit(object sender, EventArgs e) => Hide();
+        private void Exit(object sender, EventArgs e) => Hide();
         
     }
 }

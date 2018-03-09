@@ -60,9 +60,9 @@ namespace ExtractorSharp.Core {
 
 
 #region event
-        public delegate void ImageHandler(object sender, ImageEntityEventArgs e);
+        public delegate void ImageHandler(object sender, SpriteEventArgs e);
         public event ImageHandler ImageChanged;
-        public void OnImageChanged(ImageEntityEventArgs e) => ImageChanged(this, e);
+        public void OnImageChanged(SpriteEventArgs e) => ImageChanged(this, e);
 
         public delegate void DrawHandler(object sender, DrawEventArgs e);
 

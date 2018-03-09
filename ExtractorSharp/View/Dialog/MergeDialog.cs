@@ -5,6 +5,7 @@ using ExtractorSharp.Component;
 using ExtractorSharp.Core;
 using ExtractorSharp.Data;
 using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Properties;
 
 namespace ExtractorSharp.View {
     partial class MergeDialog : ESDialog {
@@ -30,10 +31,11 @@ namespace ExtractorSharp.View {
         }
 
         private void MergeCompleted(object sender, MergeEventArgs e) {
-            Program.Controller.Do("replaceImg", Album, e.Album);
+            Connector.Do("replaceImg", Album, e.Album);
             MergeButton.Enabled = true;
             sortButton.Enabled = true;
             prograss.Visible = false;
+            Bass.Play(Resources.success);
             DialogResult = DialogResult.OK;
         }
 

@@ -8,6 +8,7 @@ using System.Linq;
 namespace ExtractorSharp.Handle {
     class SixthHandler :SecondHandler{
         public SixthHandler(Album Album) : base(Album) { }
+
         public override Bitmap ConvertToBitmap(Sprite entity) {
             var data = entity.Data;
             var size = entity.Width * entity.Height;

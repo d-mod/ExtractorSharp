@@ -139,6 +139,7 @@
     <Compile Include="Command\LayerCommand\RenameLayer.cs" />
     <Compile Include="Command\MergeCommand\MoveMerge.cs" />
     <Compile Include="Command\MergeCommand\RunMerge.cs" />
+    <Compile Include="Command\PaletteCommand\DeleteColor.cs" />
     <Compile Include="Composition\IGuid.cs" />
     <Compile Include="Composition\IMetadata.cs" />
     <Compile Include="Composition\Metadata.cs" />
@@ -161,7 +162,7 @@
     <Compile Include="EventArguments\CommandEventArgs.cs" />
     <Compile Include="Core\Controller.cs" />
     <Compile Include="Core\Drawer.cs" />
-    <Compile Include="EventArguments\ImageEntityEventArgs.cs" />
+    <Compile Include="EventArguments\SpriteEventArgs.cs" />
     <Compile Include="EventArguments\MergeQueueEventArgs.cs" />
     <Compile Include="Core\Merger.cs" />
     <Compile Include="Core\Viewer.cs" />
@@ -170,7 +171,6 @@
     <Compile Include="Command\ImageCommand\ChangePosition.cs" />
     <Compile Include="Command\ImageCommand\UnCanvasImage.cs" />
     <Compile Include="EventArguments\MergeEventArg.cs" />
-    <Compile Include="EventArguments\SavingEventArgs.cs" />
     <Compile Include="MainForm.LinearDodgeConverter.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -197,6 +197,11 @@
     <Compile Include="Command\FileCommand\ReplaceFile.cs" />
     <Compile Include="Command\MergeCommand\ClearMerge.cs" />
     <Compile Include="Command\MergeCommand\RemoveMerge.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="View\Dialog\AboutDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -344,11 +349,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="View\Dialog\MergeDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -367,7 +367,10 @@
     <None Include="Kritsu.snk" />
     <None Include="README.md" />
     <None Include="Resources\chinese.json" />
+    <None Include="Resources\end.ogg" />
+    <None Include="Resources\error.ogg" />
     <None Include="Resources\queues.json" />
+    <None Include="Resources\success.ogg" />
     <None Include="Resources\view.json" />
   </ItemGroup>
   <ItemGroup>
@@ -415,8 +418,8 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="View\Dialog\MergeDialog.resx">
       <DependentUpon>MergeDialog.cs</DependentUpon>
@@ -447,21 +450,45 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\ExtractorSharp.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="dictionary.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\grid.png" />
+    <None Include="Resources\ruler.png" />
+    <None Include="Resources\gif.png" />
+    <None Include="Resources\position.png" />
+    <None Include="Resources\edit.png" />
+    <None Include="Resources\修改信息.png" />
+    <None Include="Resources\link.png" />
+    <None Include="Resources\paste.png" />
+    <None Include="Resources\copy.png" />
+    <None Include="Resources\cut.png" />
+    <None Include="Resources\rename.png" />
+    <None Include="Resources\repair.png" />
+    <None Include="Resources\newFile.png" />
+    <None Include="Resources\replace.png" />
+    <None Include="Resources\about.png" />
+    <None Include="Resources\feedback.png" />
+    <None Include="Resources\setting.png" />
+    <None Include="Resources\sort.png" />
+    <None Include="Resources\classify.png" />
+    <None Include="Resources\play.png" />
+    <None Include="Resources\record.png" />
+    <None Include="Resources\delete.png" />
+    <None Include="Resources\pause.png" />
+    <None Include="Resources\exit.png" />
+    <None Include="Resources\addFile.png" />
+    <None Include="Resources\open.png" />
+    <None Include="Resources\saveAs.png" />
+    <None Include="Resources\save.png" />
+    <None Include="Resources\undo.png" />
+    <None Include="Resources\redo.png" />
     <None Include="Resources\aww.ico" />
     <Content Include="aww.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\pencil.png" />
-    <None Include="Resources\pause.png" />
     <None Include="Resources\run.png" />
-    <None Include="Resources\record.png" />
-    <None Include="Resources\delete.png" />
     <None Include="Resources\config.json" />
     <None Include="Resources\version.json" />
     <None Include="Resources\button.png" />

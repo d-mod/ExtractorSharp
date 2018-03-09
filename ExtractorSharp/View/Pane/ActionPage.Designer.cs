@@ -51,7 +51,7 @@ namespace ExtractorSharp.View.Pane {
 
             runButton.Location = new System.Drawing.Point(72, 240);
             runButton.UseVisualStyleBackColor = true;
-            runButton.Image = Properties.Resources.run;
+            runButton.Image = Properties.Resources.play;
             runButton.Size = new System.Drawing.Size(24, 24);
 
             deleteButton.Location = new System.Drawing.Point(108, 240);

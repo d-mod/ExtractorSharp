@@ -26,13 +26,13 @@ namespace ExtractorSharp.View {
             int mode = 0;
             if (array.Length == 1) {
                 var dialog = new OpenFileDialog();
-                dialog.Filter = "图片|*.jpg;*.png;*.bmp";
+                dialog.Filter = $"{Language["ImageResource"]}|*.jpg;*.png;*.bmp";
                 if (dialog.ShowDialog() == DialogResult.OK) {
                     path = dialog.FileName;
                 }
             } else if (fromGifBox.Checked) {
                 var dialog = new OpenFileDialog();
-                dialog.Filter = "gif动态图片|*.gif";
+                dialog.Filter = "GIF|*.gif";
                 if (dialog.ShowDialog() == DialogResult.OK) {
                     path = dialog.FileName;
                 }

@@ -26,7 +26,7 @@ namespace ExtractorSharp.Draw.Brush {
         public void Draw(IPaint paint, Point point, decimal scale) {
             point = point.Minus(paint.Location).Divide(scale);
             if (paint.Tag != null) {
-                Program.Controller.Do("eraser", paint.Tag, point, Program.Drawer.Color, Radius);
+                Program.Connector.Do("eraser", paint.Tag, point, Program.Drawer.Color, Radius);
             }
         }
     }

@@ -5,13 +5,12 @@ using System;
 using System.Windows.Forms;
 
 namespace ExtractorSharp.View {
-    partial class OggPlayer : UserControl {
+    partial class AudioPlayer : UserControl {
         private int handle;
         private bool isRun;
         private Language Language = Language.Default;
-        public OggPlayer() {
+        public AudioPlayer() {
             InitializeComponent();
-            Bass.Init();
             playButton.Click += Play;
             pauseButton.Click += Pause;
         }
@@ -28,7 +27,7 @@ namespace ExtractorSharp.View {
             if (ogg != null && ogg.Version == Img_Version.OGG) {
                 ogg.Adjust();
                 groupBox1.Text = ogg.Name;
-                handle = Bass.CreateFromMemory(ogg.Data);
+                handle = Bass.Play(ogg.Data);
                 isRun = true;
                 Play(null, null);
             }

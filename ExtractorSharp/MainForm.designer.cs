@@ -7,6 +7,7 @@ using ExtractorSharp.Draw;
 using ExtractorSharp.Core;
 using System.IO;
 using ExtractorSharp.Data;
+using ExtractorSharp.Properties;
 
 namespace ExtractorSharp {
     partial class MainForm {
@@ -78,6 +79,7 @@ namespace ExtractorSharp {
             saveAllImageItem = new ToolStripMenuItem();
             openFileItem = new ToolStripMenuItem();
             saveFileItem = new ToolStripMenuItem();
+            exitItem = new ToolStripMenuItem();
 
             convertItem = new ToolStripMenuItem();
 
@@ -113,8 +115,7 @@ namespace ExtractorSharp {
             toolsMenu = new ToolStripMenuItem();
 
             modelMenu = new ToolStripMenuItem();
-
-            Messager Messager = Messager.Default;
+            
             saveGifItem = new ToolStripMenuItem();
             box = new PictureBox();
             mutipleLayerItem = new ToolStripMenuItem();
@@ -135,10 +136,9 @@ namespace ExtractorSharp {
 
 
             aboutMenu = new ToolStripMenuItem();
-            debugItem = new ToolStripMenuItem();
+            feedbackItem = new ToolStripMenuItem();
             versionItem = new ToolStripMenuItem();
-            pluginItem = new ToolStripMenuItem();
-            propertyItem = new ToolStripMenuItem();
+            settingItem = new ToolStripMenuItem();
 
             trackBar = new TrackBar();
 
@@ -210,29 +210,49 @@ namespace ExtractorSharp {
 
             replaceItem.Text = Language["ReplaceFile"];
             replaceItem.ShortcutKeys = Keys.Control | Keys.Q;
+            replaceItem.Image = Resources.replace;
 
             cutImgItem.Text = Language["Cut"];
             cutImgItem.ShortcutKeys = Keys.Control | Keys.X;
+            cutImgItem.Image = Resources.cut;
+
             copyImgItem.Text = Language["Copy"];
             copyImgItem.ShortcutKeys = Keys.Control | Keys.C;
+            copyImgItem.Image = Resources.copy;
+
             pasteImgItem.Text = Language["Paste"];
             pasteImgItem.ShortcutKeys = Keys.Control | Keys.V;
+            pasteImgItem.Image = Resources.paste;
 
             saveAsItem.Text = Language["SaveAs"];
             saveAsItem.ShortcutKeys = Keys.Control | Keys.E;
+            saveAsItem.Image = Resources.saveAs;
+
             newImgItem.Text = Language["NewFile"];
             newImgItem.ShortcutKeys = Keys.Control | Keys.N;
+            newImgItem.Image = Resources.newFile;
+
             hideImgItem.Text = Language["HideFile"];
             hideImgItem.ShortcutKeys = Keys.Control | Keys.H;
             convertItem.Text = Language["ConvertVersion"];
+
             addMergeItem.Text = Language["AddMerge"];
             addMergeItem.ShortcutKeys = Keys.Control | Keys.M;
+            addMergeItem.Image = Resources.addFile;
+
             addOutsideMergeItem.Text = Language["AddOutsideMerge"];
             addOutsideMergeItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.M;
+
             runMergeItem.Text = Language["RunMerge"];
+            runMergeItem.Image = Resources.play;
+
             renameItem.Text = Language["Rename"];
             renameItem.ShortcutKeys = Keys.Control | Keys.R;
+            renameItem.Image = Resources.rename;
+
             repairFileItem.Text = Language["RepairFile"];
+            repairFileItem.Image = Resources.repair;
+
             splitFileItem.Text = Language["SplitFile"];
             mixFileItem.Text = Language["MixFile"];
             // 
@@ -277,20 +297,43 @@ namespace ExtractorSharp {
             editImageItem.DropDownItems.Add(lineDodgeItem);
 
             cutImageItem.Text = Language["Cut"];
+            cutImageItem.Image = Resources.cut;
+
             copyImageItem.Text = Language["Copy"];
+            copyImageItem.Image = Resources.copy;
+
             pasteImageItem.Text = Language["Paste"];
+            pasteImageItem.Image = Resources.paste;
 
 
             saveImageItem.Text = Language["SaveImage"];
+            saveImageItem.Image = Resources.save;
+
             saveSingleImageItem.Text = Language["SaveAs"];
+            saveSingleImageItem.Image = Resources.saveAs;
+
             saveAllImageItem.Text = Language["SaveAllImage"];
+
             saveGifItem.Text = Language["SaveGif"];
+
+            saveGifItem.Image = Resources.gif;
+
             changePositionItem.Text = Language["ChangeImagePosition"];
+            changePositionItem.Image = Resources.position;
+
             changeSizeItem.Text = Language["ChangeImageSize"];
+            changeSizeItem.Image = Resources.edit;
+
             replaceImageItem.Text = Language["ReplaceImage"];
+            replaceImageItem.Image = Resources.replace;
+
             hideCheckImageItem.Text = Language["HideImage"];
             linkImageItem.Text = Language["LinkImage"];
+            linkImageItem.Image = Resources.link;
+
             newImageItem.Text = Language["NewImage"];
+            newImageItem.Image = Resources.newFile;
+
             addLayerItem.Text = Language["AddLayer"];
 
 
@@ -322,13 +365,18 @@ namespace ExtractorSharp {
             aboutMenu.Text = Language["About"];
             aboutMenu.DropDownItems.Add(aboutItem);
             aboutMenu.DropDownItems.Add(versionItem);
-            aboutMenu.DropDownItems.Add(debugItem);
-            aboutMenu.DropDownItems.Add(propertyItem);
+            aboutMenu.DropDownItems.Add(feedbackItem);
+            aboutMenu.DropDownItems.Add(settingItem);
             aboutItem.Text = Language["About"];
+            aboutItem.Image = Resources.about;
+
             versionItem.Text = Language["Features"];
-            debugItem.Text = Language["FeedBack"];
-            pluginItem.Text = Language["Plugin"];
-            propertyItem.Text = Language["Setting"];
+
+            feedbackItem.Text = Language["FeedBack"];
+            feedbackItem.Image = Resources.feedback;
+            
+            settingItem.Text = Language["Setting"];
+            settingItem.Image = Resources.setting;
 
             // 
             // fileMenu
@@ -341,27 +389,36 @@ namespace ExtractorSharp {
             fileMenu.DropDownItems.AddSeparator();
             fileMenu.DropDownItems.Add(openDirItem);
             fileMenu.DropDownItems.Add(saveDirItem);
+            fileMenu.DropDownItems.AddSeparator();
+            fileMenu.DropDownItems.Add(exitItem);
             fileMenu.Text = Language["File"];
             openFileItem.Text = Language["Open"];
             openFileItem.ShowShortcutKeys = false;
             openFileItem.ShortcutKeys = Keys.Control | Keys.O;
+            openFileItem.Image = Resources.open;
             saveFileItem.Text = Language["Save"];
             saveFileItem.ShowShortcutKeys = false;
             saveFileItem.ShortcutKeys = Keys.Control | Keys.S;
+            saveFileItem.Image = Resources.save;
 
             addFileItem.Text = Language["Add"];
             addFileItem.ShowShortcutKeys = false;
+            addFileItem.Image = Resources.addFile;
             addFileItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.O;
 
             saveAsFileItem.Text = Language["SaveAs"];
             saveAsFileItem.ShowShortcutKeys = false;
             saveAsFileItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.S;
+            saveAsFileItem.Image = Resources.saveAs;
 
             openDirItem.Text = Language["OpenDir"];
-            openDirItem.ToolTipText = "从文件夹打开多个img/npk文件";
 
             saveDirItem.Text = Language["SaveDir"];
-            saveDirItem.ToolTipText = "将文件分割为多个img保存至文件夹";
+
+            exitItem.Text = Language["Exit"];
+            exitItem.ShortcutKeys = Keys.Alt | Keys.F4;
+            exitItem.ShowShortcutKeys = false;
+            exitItem.Image = Resources.exit;
 
             editMenu.Text = Language["Edit"];
             editMenu.DropDownItems.Add(undoItem);
@@ -373,11 +430,19 @@ namespace ExtractorSharp {
             editMenu.DropDownItems.Add(sortItem);
             undoItem.Text = Language["Undo"];
             undoItem.ShortcutKeys = Keys.Control | Keys.Z;
+            undoItem.Image = Resources.undo;
+
             redoItem.Text = Language["Redo"];
             redoItem.ShortcutKeys = Keys.Control | Keys.Y;
+            redoItem.Image = Resources.redo;
+
             classifyItem.Text = Language["Classify"];
             classifyItem.CheckOnClick = true;
+            classifyItem.Image = Resources.classify;
+
             sortItem.Text = Language["Sort"];
+            sortItem.Image = Resources.sort;
+
             adjustPositionItem.Text = Language["AdjustPosition"];
             adjustPositionItem.ShortcutKeys = Keys.Control | Keys.B;
 
@@ -390,6 +455,7 @@ namespace ExtractorSharp {
             viewMenu.DropDownItems.Add(mutipleLayerItem);
 
             ruleItem.Text = Language["Ruler"];
+            ruleItem.Image = Resources.ruler;
             ruleItem.DropDownItems.Add(displayRuleItem);
             ruleItem.DropDownItems.Add(displayRuleCrossHairItem);
             ruleItem.DropDownItems.Add(lockRuleItem);
@@ -416,6 +482,7 @@ namespace ExtractorSharp {
             previewItem.Checked = Config["Preview"].Boolean;
             gridItem.Text = Language["Grid"];
             gridItem.Checked = Config["Grid"].Boolean;
+            gridItem.Image = Resources.grid;
             borderItem.Text = Language["Border"];
             borderItem.Checked = Config["Border"].Boolean;
 
@@ -428,12 +495,8 @@ namespace ExtractorSharp {
             // 
             // Message
             // 
-            Messager.Location = new Point(1100, 30);
-            Messager.Name = "Message";
-            Messager.Size = new Size(250, 50);
-            Messager.TabIndex = 9;
-            Messager.Text = Language["Tips"];
-            Messager.Visible = false;
+            var messager = Messager.Default;
+            messager.Location = new Point(1050, 25);
 
             openButton.Location = new Point(20, 63);
             openButton.Text = Language["Open"];
@@ -561,10 +624,15 @@ namespace ExtractorSharp {
 
             canvasCutItem.Text = Language["Cut"];
             canvasCutItem.ShortcutKeys = Keys.Control | Keys.X;
+            canvasCutItem.Image = Resources.cut;
+
             canvasCopyItem.Text = Language["Copy"];
             canvasCopyItem.ShortcutKeys = Keys.Control | Keys.C;
+            canvasCopyItem.Image = Resources.copy;
+
             canvasPasteItem.Text = Language["Paste"];
             canvasPasteItem.ShortcutKeys = Keys.Control | Keys.V;
+            canvasPasteItem.Image = Resources.paste;
 
 
             AutoScaleDimensions = new SizeF(6F, 12F);
@@ -575,7 +643,7 @@ namespace ExtractorSharp {
             Controls.Add(albumList);
             Controls.Add(layerList);
             Controls.Add(trackBar);
-            Controls.Add(Messager);
+            Controls.Add(messager);
             Controls.Add(openButton);
             Controls.Add(closeButton);
             Controls.Add(pathBox);
@@ -625,6 +693,7 @@ namespace ExtractorSharp {
         private ToolStripMenuItem saveDirItem;
         private ToolStripMenuItem openDirItem;
         private ToolStripMenuItem openFileItem;
+        private ToolStripMenuItem exitItem;
 
         private ToolStripMenuItem editMenu;
         private ToolStripMenuItem undoItem;
@@ -634,10 +703,9 @@ namespace ExtractorSharp {
 
         private ToolStripMenuItem aboutMenu;        //关于
         private ToolStripMenuItem aboutItem;        //关于
-        private ToolStripMenuItem debugItem;        //问题反馈
+        private ToolStripMenuItem feedbackItem;        //问题反馈
         private ToolStripMenuItem versionItem;      //版本特性
-        private ToolStripMenuItem pluginItem;       //插件拓展
-        private ToolStripMenuItem propertyItem;     //设置
+        private ToolStripMenuItem settingItem;     //设置
 
         private ToolStripMenuItem viewMenu;         //视图
         private ToolStripMenuItem ruleItem;         //标尺
@@ -740,7 +808,7 @@ namespace ExtractorSharp {
         private ToolStripMenuItem selectAllHideItem;
 
         private DropPanel dropPanel;
-        private OggPlayer player;
+        private AudioPlayer player;
         private Panel previewPanel;
         private Panel colorPanel;
     }

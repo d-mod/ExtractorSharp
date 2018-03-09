@@ -120,6 +120,7 @@
   <ItemGroup>
     <None Include="README.md" />
     <None Include="Resources\aww.ico" />
+    <None Include="Resources\end.ogg" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ExtractorSharp.Core\ExtractorSharp.Core.csproj">

@@ -13,7 +13,7 @@ namespace ExtractorSharp.Draw.Brush {
             point = point.Minus(paint.Location).Divide(scale);
             var image = paint.Image;
             if (paint.Tag != null) {
-                Program.Controller.Do("pencil", paint.Tag, point, Program.Drawer.Color);
+                Program.Connector.Do("pencil", paint.Tag, point, Program.Drawer.Color);
             }
         }
 

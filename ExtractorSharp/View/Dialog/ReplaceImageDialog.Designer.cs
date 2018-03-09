@@ -43,7 +43,7 @@ namespace ExtractorSharp.View {
             // 
             // button1
             // 
-            this.yesButton.Location = new System.Drawing.Point(42, 276);
+            this.yesButton.Location = new System.Drawing.Point(247, 275);
             this.yesButton.Name = "button1";
             this.yesButton.Size = new System.Drawing.Size(75, 23);
             this.yesButton.TabIndex = 2;
@@ -52,7 +52,7 @@ namespace ExtractorSharp.View {
             // 
             // button2
             // 
-            this.cancelButton.Location = new System.Drawing.Point(148, 276);
+            this.cancelButton.Location = new System.Drawing.Point(362, 275);
             this.cancelButton.Name = "button2";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 3;
@@ -64,9 +64,9 @@ namespace ExtractorSharp.View {
             this.channelGroup.Controls.Add(this._8888_Radio);
             this.channelGroup.Controls.Add(this._4444_Radio);
             this.channelGroup.Controls.Add(this._1555_Radio);
-            this.channelGroup.Location = new System.Drawing.Point(42, 124);
+            this.channelGroup.Location = new System.Drawing.Point(297, 32);
             this.channelGroup.Name = "channelBox";
-            this.channelGroup.Size = new System.Drawing.Size(184, 97);
+            this.channelGroup.Size = new System.Drawing.Size(184, 120);
             this.channelGroup.TabIndex = 4;
             this.channelGroup.TabStop = false;
             this.channelGroup.Text = Language["ColorBits"];
@@ -74,7 +74,7 @@ namespace ExtractorSharp.View {
             // _8888_Radio
             // 
             this._8888_Radio.AutoSize = true;
-            this._8888_Radio.Location = new System.Drawing.Point(6, 66);
+            this._8888_Radio.Location = new System.Drawing.Point(40, 88);
             this._8888_Radio.Name = "_8888_Radio";
             this._8888_Radio.Size = new System.Drawing.Size(125, 16);
             this._8888_Radio.TabIndex = 2;
@@ -84,7 +84,7 @@ namespace ExtractorSharp.View {
             // _4444_Radio
             // 
             this._4444_Radio.AutoSize = true;
-            this._4444_Radio.Location = new System.Drawing.Point(7, 44);
+            this._4444_Radio.Location = new System.Drawing.Point(40, 55);
             this._4444_Radio.Name = "_4444_Radio";
             this._4444_Radio.Size = new System.Drawing.Size(125, 16);
             this._4444_Radio.TabIndex = 1;
@@ -95,7 +95,7 @@ namespace ExtractorSharp.View {
             // 
             this._1555_Radio.AutoSize = true;
             this._1555_Radio.Checked = true;
-            this._1555_Radio.Location = new System.Drawing.Point(7, 21);
+            this._1555_Radio.Location = new System.Drawing.Point(40,22);
             this._1555_Radio.Name = "_1555_Radio";
             this._1555_Radio.Size = new System.Drawing.Size(125, 16);
             this._1555_Radio.TabIndex = 0;
@@ -107,9 +107,9 @@ namespace ExtractorSharp.View {
             // 
             this.group.Controls.Add(this.allImageRadio);
             this.group.Controls.Add(this.seletImageRadio);
-            this.group.Location = new System.Drawing.Point(42, 32);
+            this.group.Location = new System.Drawing.Point(57, 32);
             this.group.Name = "groupBox1";
-            this.group.Size = new System.Drawing.Size(184, 72);
+            this.group.Size = new System.Drawing.Size(184, 120);
             this.group.TabIndex = 5;
             this.group.TabStop = false;
             this.group.Text = Language["HandleObject"];
@@ -117,7 +117,7 @@ namespace ExtractorSharp.View {
             // allImageRadio
             // 
             this.allImageRadio.AutoSize = true;
-            this.allImageRadio.Location = new System.Drawing.Point(23, 43);
+            this.allImageRadio.Location = new System.Drawing.Point(40, 77);
             this.allImageRadio.Name = "allImageRadio";
             this.allImageRadio.Size = new System.Drawing.Size(119, 16);
             this.allImageRadio.TabIndex = 1;
@@ -129,7 +129,7 @@ namespace ExtractorSharp.View {
             // 
             this.seletImageRadio.AutoSize = true;
             this.seletImageRadio.Checked = true;
-            this.seletImageRadio.Location = new System.Drawing.Point(23, 20);
+            this.seletImageRadio.Location = new System.Drawing.Point(40, 33);
             this.seletImageRadio.Name = "seletImageRadio";
             this.seletImageRadio.Size = new System.Drawing.Size(107, 16);
             this.seletImageRadio.TabIndex = 0;
@@ -140,7 +140,7 @@ namespace ExtractorSharp.View {
             // fromGifBox
             // 
             this.fromGifBox.AutoSize = true;
-            this.fromGifBox.Location = new System.Drawing.Point(42, 244);
+            this.fromGifBox.Location = new System.Drawing.Point(79, 174);
             this.fromGifBox.Name = "fromGifBox";
             this.fromGifBox.Size = new System.Drawing.Size(78, 16);
             this.fromGifBox.TabIndex = 6;
@@ -150,8 +150,7 @@ namespace ExtractorSharp.View {
             // adjustPositionBox
             // 
             this.adjustPositionBox.AutoSize = true;
-            this.adjustPositionBox.Checked = true;
-            this.adjustPositionBox.Location = new System.Drawing.Point(151, 244);
+            this.adjustPositionBox.Location = new System.Drawing.Point(79, 224);
             this.adjustPositionBox.Name = "adjustPositionBox";
             this.adjustPositionBox.Size = new System.Drawing.Size(72, 16);
             this.adjustPositionBox.TabIndex = 7;
@@ -162,7 +161,7 @@ namespace ExtractorSharp.View {
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(266, 330);
+            this.ClientSize = new System.Drawing.Size(550, 330);
             this.Controls.Add(this.adjustPositionBox);
             this.Controls.Add(this.fromGifBox);
             this.Controls.Add(this.group);

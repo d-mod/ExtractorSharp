@@ -53,7 +53,7 @@ namespace ExtractorSharp.Core.Lib {
         /// </summary>
         /// <see cref="https://www.cnblogs.com/godzza/p/7428080.html"/>
         /// <param name="bmp"></param>
-        /// <returns></returns>
+        /// <returns></returns>LinearBrun
         public static Bitmap LinearDodge(this Bitmap bmp) {
             var data = ToArray(bmp);
             for (var i = 0; i < data.Length; i += 4) {
@@ -63,6 +63,26 @@ namespace ExtractorSharp.Core.Lib {
                 data[i + 2] += sub;
                 data[i + 1] += sub;
                 data[i + 0] += sub;
+            }
+            bmp = FromArray(data, bmp.Size);
+            return bmp;
+        }
+
+        /// <summary>
+        /// 线性减淡
+        /// </summary>
+        /// <see cref="https://www.cnblogs.com/godzza/p/7428080.html"/>
+        /// <param name="bmp"></param>
+        /// <returns></returns>LinearDodge
+        public static Bitmap LinearBrun(this Bitmap bmp) {
+            var data = ToArray(bmp);
+            for (var i = 0; i < data.Length; i += 4) {
+                var min = Math.Min(data[i], Math.Max(data[i + 1], data[i + 2]));
+                var sub = min;
+                data[i + 3] = Math.Max(data[i + 3], min);
+                data[i + 2] = Math.Max((byte)0, (byte)(data[i + 2] - min));
+                data[i + 1] =Math.Max((byte)0, (byte)(data[i + 1] - min));
+                data[i + 0] =Math.Max((byte)0, (byte)(data[i + 2] - min));
             }
             bmp = FromArray(data, bmp.Size);
             return bmp;

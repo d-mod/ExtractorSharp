@@ -16,6 +16,16 @@ namespace ExtractorSharp.View.Pane {
             combo.SelectedIndexChanged += ColorChanged;
             changeColorItem.Click += ChangeColor;
             changeToCurrentItem.Click += ChangeToCurrentColor;
+            Program.Controller.CommandUndid+= UndoFresh;
+            Program.Controller.CommandRedid += UndoFresh;
+        }
+
+        private void UndoFresh(object sender,CommandEventArgs e) {
+            if (e.Name.Equals("changeColor")) {
+                SelectImageChanged(sender, new SpriteEventArgs() {
+                    Album = this.Album
+                });
+            }
         }
 
         private void ChangeColor(object sender, EventArgs e) {
@@ -38,7 +48,7 @@ namespace ExtractorSharp.View.Pane {
             }
         }
 
-        private void SelectImageChanged(object sender, ImageEntityEventArgs e) {
+        private void SelectImageChanged(object sender, SpriteEventArgs e) {
             Album = e.Album;
             if (Album != null) {
                 combo.Items.Clear();

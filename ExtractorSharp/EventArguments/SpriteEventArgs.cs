@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ExtractorSharp.EventArguments {
-    class ImageEntityEventArgs :EventArgs{
+    class SpriteEventArgs :EventArgs{
         public Sprite Entity { set; get; }
         public Album Album { set; get; }
     }
