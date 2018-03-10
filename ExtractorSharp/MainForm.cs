@@ -638,7 +638,7 @@ namespace ExtractorSharp {
 
         protected override void OnFormClosing(FormClosingEventArgs e) {
             if (!Connector.IsSave) {
-                var rs = MessageBox.Show(Language["SaveTips"], "", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                var rs = MessageBox.Show(Language["SaveTips"],Language["Tips"], MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                 if (rs == DialogResult.Cancel) {
                     e.Cancel = true;
                     return;
