@@ -47,8 +47,7 @@ namespace ExtractorSharp {
             }
             var count = (int)countBox.Value;
             var index = (int)indexBox.Value;
-            var album = new Album();
-            Connector.Do("newImg",album, path, count, index);
+            Connector.Do("newImg",null, path, count, index);
             pathBox.Text = pathBox.Text.Replace(path.GetSuffix(), "");
             DialogResult = DialogResult.OK;
         }

@@ -7,6 +7,7 @@ using ExtractorSharp.Properties;
 using ExtractorSharp.Data;
 using ExtractorSharp.Core.Sorter;
 using ExtractorSharp.Json;
+using ExtractorSharp.Core.Lib;
 
 namespace ExtractorSharp.Core {
     /// <summary>
@@ -23,10 +24,6 @@ namespace ExtractorSharp.Core {
         /// 拼合队列事件
         /// </summary>
         public event MergeQueueHandler MergeQueueChanged;
-        /// <summary>
-        /// 拼合队列事件参数
-        /// </summary>
-        public MergeQueueEventArgs Arguments { get; }
 
         /// <summary>
         /// 启动拼合
@@ -43,7 +40,7 @@ namespace ExtractorSharp.Core {
         /// </summary>
         public event MergeHandler MergeCompleted;
 
-        public void OnMergeQueueChanged() => MergeQueueChanged?.Invoke(this,null);
+        public void OnMergeQueueChanged(MergeQueueEventArgs e) => MergeQueueChanged?.Invoke(this,e);
 
         private void OnMergeStarted(MergeEventArgs e) => MergeStarted?.Invoke(this, e);
 
@@ -101,7 +98,10 @@ namespace ExtractorSharp.Core {
                 array[i] = array[i].Clone();
             }
             Queues.AddRange(array);
-            OnMergeQueueChanged();
+            OnMergeQueueChanged(new MergeQueueEventArgs() {
+                Mode = QueueChangeMode.Add,
+                Tag=array
+            });
         }
 
         /// <summary>
@@ -113,7 +113,27 @@ namespace ExtractorSharp.Core {
                 Queues.Remove(al);
             }
             var args = new MergeQueueEventArgs();
-            OnMergeQueueChanged();
+            OnMergeQueueChanged(new MergeQueueEventArgs() {
+                Mode = QueueChangeMode.Remove,
+                Tag = array
+            });
+        }
+
+
+        /// <summary>
+        /// 互换位置
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="target"></param>
+        public void Move(int index, int target) {
+            if (index > -1 && index != target) {
+                var item = Queues[index];
+                Queues.RemoveAt(index);
+                Queues.InsertAt(target, new Album[] { item });//插入到指定位置
+                OnMergeQueueChanged(new MergeQueueEventArgs() {
+                    Mode = QueueChangeMode.Move
+                });//触发序列更改事件
+            }
         }
 
         /// <summary>
@@ -204,15 +224,57 @@ namespace ExtractorSharp.Core {
             OnMergeCompleted(e);//拼合完成
         }
 
+        public void Priview(int index, Graphics g) {
+            var width = 1;
+            var height = 1;
+            var max_width = 0;
+            var max_height = 0;
+            var x = 800;
+            var y = 600;
+            foreach (var al in Queues) {
+                if (index < al.List.Count) {
+                    var source = al.List[index];
+                    if (source.Type == ColorBits.LINK)//如果为链接贴图。则引用指向贴图的属性
+                        source = source.Target;
+                    if (source.Compress == Compress.NONE && source.Width * source.Height == 1)//将透明图层过滤
+                        continue;
+                    if (source.Width + source.X > width)//获得最右点坐标
+                        width = source.Width + source.X;
+                    if (source.Height + source.Y > height)//获得最下点坐标
+                        height = source.Height + source.Y;
+                    if (source.X < x)//获得最左点坐标
+                        x = source.X;
+                    if (source.Y < y)//获得最上点坐标
+                        y = source.Y;
+                }
+            }
+            for (var i = Queues.Count - 1; i > 0; i--) {
+                var entity = Queues[i][index];
+                g.DrawImage(entity.Picture, entity.X - x, entity.Y - y);
+            }
+        }
+
+
+        public int GetFrameCount() {
+            var count = 0;
+            foreach (var al in Queues) {
+                if (al.List.Count > count) {//获得最大帧数
+                    count = al.List.Count;
+                }
+            }
+            return count;
+        }
         
 
         /// <summary>
         /// 排序
         /// </summary>
         /// <param name="useOther"></param>
-        public void Sort(bool useOther) {
+        public void Sort() {
             Queues.Sort(Sorters[0].Comparer);
-            OnMergeQueueChanged();
+            OnMergeQueueChanged(new MergeQueueEventArgs() {
+                Mode = QueueChangeMode.Sort
+            });
         }
 
        
@@ -220,7 +282,9 @@ namespace ExtractorSharp.Core {
 
         public void Clear() {
             Queues.Clear();
-            OnMergeQueueChanged();
+            OnMergeQueueChanged(new MergeQueueEventArgs() {
+                Mode = QueueChangeMode.Clear,
+            });
         }
 
         public List<Album> Queues { set; get; }

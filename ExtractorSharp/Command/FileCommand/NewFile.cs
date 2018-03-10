@@ -15,7 +15,7 @@ namespace ExtractorSharp.Command.ImgCommand {
         private IConnector Connector => Program.Connector;
 
         public void Do(params object[] args) {
-            Album = args[0] as Album;
+            Album = (args[0] as Album) ?? new Album();
             Path = args[1] as string;
             Index = Album.List.Count;
             if (args.Length > 2) {

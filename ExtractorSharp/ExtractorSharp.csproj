@@ -453,6 +453,13 @@
     <Content Include="dictionary.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\last.png" />
+    <None Include="Resources\next.png" />
+    <None Include="Resources\add.png" />
+    <None Include="Resources\minus.png" />
+    <None Include="Resources\change.png" />
+    <None Include="Resources\switch.png" />
+    <None Include="Resources\search.png" />
     <None Include="Resources\grid.png" />
     <None Include="Resources\ruler.png" />
     <None Include="Resources\gif.png" />

@@ -127,6 +127,7 @@ namespace ExtractorSharp {
             openButton = new ESButton();
             closeButton = new ESButton();
             historyButton = new ESButton();
+            searchIcon = new Label();
             searchBox = new TextBox();
             pathBox = new TextBox();
 
@@ -235,6 +236,7 @@ namespace ExtractorSharp {
             hideImgItem.Text = Language["HideFile"];
             hideImgItem.ShortcutKeys = Keys.Control | Keys.H;
             convertItem.Text = Language["ConvertVersion"];
+            convertItem.Image = Resources.change;
 
             addMergeItem.Text = Language["AddMerge"];
             addMergeItem.ShortcutKeys = Keys.Control | Keys.M;
@@ -468,13 +470,12 @@ namespace ExtractorSharp {
             displayRuleItem.CheckOnClick = true;
             displayRuleCrossHairItem.Text = Language["DisplayRulerCrosshair"];
             displayRuleCrossHairItem.Checked = Config["RulerCrosshair"].Boolean;
-            displayRuleCrossHairItem.ToolTipText = "显示准心可以让标尺移动";
+
             displayRuleCrossHairItem.CheckOnClick = true;
             displayRuleCrossHairItem.Checked = true;
             adjustRuleItem.Text = Language["ResetRuler"];
-            adjustRuleItem.ToolTipText = "还原标尺位置";
+
             lockRuleItem.Text = Language["LockRuler"];
-            lockRuleItem.ToolTipText = "固定标尺，禁止移动";
             lockRuleItem.CheckOnClick = true;
             lockRuleItem.Checked = Config["RulerLocked"].Boolean;
             previewItem.Text = Language["Preview"];
@@ -582,13 +583,16 @@ namespace ExtractorSharp {
             historyButton.Size = new Size(85, 25);
             historyButton.Text = Language["Other"];
             historyButton.UseVisualStyleBackColor = true;
-            
+
+            searchIcon.Location = new Point(204, 672);
+            searchIcon.Size = new Size(16, 16);
+            searchIcon.Image = Resources.search;
             // 
             // searchBox
             // 
             searchBox.Location = new Point(20, 670);
             searchBox.Name = "searchBox";
-            searchBox.Size = new Size(200, 20);
+            searchBox.Size = new Size(180, 20);
             searchBox.TabIndex = 6;
             // 
             // MainForm
@@ -639,6 +643,7 @@ namespace ExtractorSharp {
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(imageList);
             Controls.Add(mainMenu);
+            Controls.Add(searchIcon);
             Controls.Add(searchBox);
             Controls.Add(albumList);
             Controls.Add(layerList);
@@ -783,6 +788,7 @@ namespace ExtractorSharp {
         private Button closeButton;             //关闭文件
         private PictureBox box;
         private TextBox searchBox;
+        private Label searchIcon;
         private TextBox pathBox;
         private Button historyButton;           //历史操作
         private TrackBar trackBar;

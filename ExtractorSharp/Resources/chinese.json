@@ -126,6 +126,10 @@
       "AddMerge": "加入拼合",
       "AddOutsideMerge": "加入外部文件到拼合",
       "RunMerge": "执行拼合",
+      "AutoSort": "自动排序",
+      "CompletedHide": "完成后关闭窗口",
+      "FrameCount": "帧数",
+      "TargetFile": "目标文件",
       "Encrypt": "密码保护",
       "DeletePassword": "删除密码",
 

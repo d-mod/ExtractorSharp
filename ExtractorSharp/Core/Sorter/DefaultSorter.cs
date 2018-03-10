@@ -5,8 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace ExtractorSharp.Core.Sorter {
     class DefaultSorter : ISorter {
-        public string Name { get => "default"; set => _name = value; }
-        private string _name;
+        public string Name { set; get; } = "DefaultSorter";
 
         public int Comparer(Album a1, Album a2) {
             var index1 = IndexOf(a1.Name);
