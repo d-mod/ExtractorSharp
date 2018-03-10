@@ -166,6 +166,7 @@ namespace ExtractorSharp {
 
             previewPanel = new Panel();
             colorPanel = new Panel();
+            messager = new ESMessager(Connector);
             albumListMenu.SuspendLayout();
             imageListMenu.SuspendLayout();
             mainMenu.SuspendLayout();
@@ -496,7 +497,6 @@ namespace ExtractorSharp {
             // 
             // Message
             // 
-            var messager = Messager.Default;
             messager.Location = new Point(1050, 25);
 
             openButton.Location = new Point(20, 63);
@@ -817,6 +817,7 @@ namespace ExtractorSharp {
         private AudioPlayer player;
         private Panel previewPanel;
         private Panel colorPanel;
+        private ESMessager messager;
     }
 }
 

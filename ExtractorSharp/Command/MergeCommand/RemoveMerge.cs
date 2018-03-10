@@ -2,14 +2,13 @@
 using ExtractorSharp.Data;
 
 namespace ExtractorSharp.Command.MergeCommand {
-    class RemoveMerge:ICommand{
+    class RemoveMerge:ICommand,ICommandMessage{
         private Merger Merger;
         private Album[] Array;
         public void Do(params object[] args) {
             Array = args as Album[];
             Merger = Program.Merger;
             Merger.Remove(Array);
-            Messager.ShowOperate("RemoveMerge");
         }
         
         public void Undo() => Merger.Add(Array);

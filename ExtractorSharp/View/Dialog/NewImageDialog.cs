@@ -20,8 +20,9 @@ namespace ExtractorSharp.View {
                 index_box.Maximum = album.List.Count;
                 index_box.Value = album.List.Count;
                 return ShowDialog();
-            } else
-                Messager.ShowMessage(Msg_Type.Warning, Language["NotSelectImgTips"]);
+            } else {
+                Connector.SendWarning("NotSelectImgTips");
+            }
             return DialogResult.None;
         }
 

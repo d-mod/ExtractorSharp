@@ -96,6 +96,13 @@ namespace ExtractorSharp.Core {
 
         void Do(string name, params object[] args);
 
+        void SendMessage(MessageType type, string msg);
+
+        void SendSuccess(string name);
+
+        void SendError(string name);
+
+        void SendWarning(string name);
 
         #endregion
 

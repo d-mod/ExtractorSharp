@@ -8,7 +8,7 @@ namespace ExtractorSharp.Command.ImageCommand {
     /// <summary>
     /// 去画布化
     /// </summary>
-    class UnCanvasImage : ISingleAction {
+    class UnCanvasImage : ISingleAction,ICommandMessage{
         public int[] Indices { set; get; }
 
         public string Name => "UnCanvas";
@@ -33,7 +33,6 @@ namespace ExtractorSharp.Command.ImageCommand {
                 Locations[i] = entity.Location;
                 entity.UnCanvasImage();
             }
-            Messager.ShowOperate("UnCanvasImage");
         }
 
         public void Redo() => Do(Album, Indices);

@@ -3,7 +3,7 @@ using ExtractorSharp.Data;
 using ExtractorSharp.Handle;
 
 namespace ExtractorSharp.Command.ImgCommand {
-    class NewFile : IMutipleAciton {
+    class NewFile : IMutipleAciton,ICommandMessage{
         private Album Album;
 
         private string Path;
@@ -31,7 +31,6 @@ namespace ExtractorSharp.Command.ImgCommand {
             Album.NewImage(Count, ColorBits.LINK, -1);
             Index = Connector.List.Count;
             Connector.List.Insert(Index, Album);
-            Messager.ShowOperate("NewFile");
         }
 
         public void Undo() {

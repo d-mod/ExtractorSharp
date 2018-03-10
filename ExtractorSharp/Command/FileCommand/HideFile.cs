@@ -3,15 +3,15 @@ using ExtractorSharp.Data;
 using System.Collections.Generic;
 
 namespace ExtractorSharp.Command.ImgCommand {
-    class HideFile : IMutipleAciton {
+    class HideFile : IMutipleAciton,ICommandMessage{
         /// <summary>
         /// 原文件对象
         /// </summary>
-        Album[] Array;
+        private Album[] Array;
         /// <summary>
         /// 存储原文件对象和临时对象的集合
         /// </summary>
-        Dictionary<Album, Album> Dic;
+        private Dictionary<Album, Album> Dic;
         public void Do(params object[] args) {
             Array = args as Album[];
             Dic = new Dictionary<Album, Album>();
@@ -21,7 +21,6 @@ namespace ExtractorSharp.Command.ImgCommand {
                 Dic.Add(album, temp);
                 album.Hide();//隐藏文件
             }
-            Messager.ShowOperate("HideFile");
         }
 
         public void Undo() {

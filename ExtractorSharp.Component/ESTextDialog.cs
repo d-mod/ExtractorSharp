@@ -53,7 +53,7 @@ namespace ExtractorSharp.Component {
             var i = textBox.Text.LastIndexOf("/") + 1;
             var text = textBox.Text.Substring(i);
             if (!CanEmpty && text.Trim().Equals(string.Empty)) {
-                Messager.ShowWarnning("InputCannotEmpty");
+                Connector.SendWarning("InputCannotEmpty");
                 DialogResult = DialogResult.Retry;
                 return;
             }

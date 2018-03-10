@@ -12,7 +12,7 @@ namespace ExtractorSharp.Command.ImageCommand {
     /// 不可撤销
     /// 可宏命令
     /// </summary>
-    class SaveImage : ISingleAction {
+    class SaveImage : ISingleAction,ICommandMessage{
         public int[] Indices { set; get; }
         private Album Album;
         private string Path;
@@ -40,7 +40,6 @@ namespace ExtractorSharp.Command.ImageCommand {
                 OnSaving = args[7] as SpriteConverter;
             }
             Action(Album, Indices);
-            Messager.ShowOperate("SaveImage");
         }
 
         public void Redo() {

@@ -7,7 +7,7 @@ namespace ExtractorSharp.Command.ImageCommand {
     /// 可撤销
     /// 可宏命令
     /// </summary>
-    class NewImage : IMutipleAciton {
+    class NewImage : IMutipleAciton,ICommandMessage{
 
         private Album Album;
 
@@ -25,7 +25,6 @@ namespace ExtractorSharp.Command.ImageCommand {
             Type = (ColorBits)args[2];
             Index = (int)args[3];
             Album.NewImage(Count, Type, Index);
-            Messager.ShowOperate("NewImage");
         }
 
         public void Action(params Album[] array) {

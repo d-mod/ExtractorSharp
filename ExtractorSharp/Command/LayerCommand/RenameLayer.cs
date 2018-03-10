@@ -2,7 +2,7 @@
 using ExtractorSharp.Draw;
 
 namespace ExtractorSharp.Command.LayerCommand {
-    class RenameLayer : ICommand {
+    class RenameLayer : ICommand,ICommandMessage{
 
         private Layer Layer;
 
@@ -14,7 +14,6 @@ namespace ExtractorSharp.Command.LayerCommand {
             Layer = args[0] as Layer;
             oldName = Layer.Name;
             Layer.Name = newName = args[1] as string;           
-            Messager.ShowMessage(Msg_Type.Operate, Layer + "重命名成功");
         }
 
         public void Undo() {

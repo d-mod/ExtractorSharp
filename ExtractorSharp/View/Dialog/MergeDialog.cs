@@ -50,6 +50,12 @@ namespace ExtractorSharp.View {
             }
         }
 
+        protected override void OnVisibleChanged(EventArgs e) {
+            base.OnVisibleChanged(e);
+            Config["AutoSort"] = new Config.ConfigValue(autoSortCheck.Checked);
+            Config["MergeCompletedHide"] = new Config.ConfigValue(completedHideCheck.Checked);
+            Config.Save();
+        }
         private void nextFrame(object sender, EventArgs e) {
             var i = frameBox.SelectedIndex + 1;
             if (i < frameBox.Items.Count) {
@@ -192,13 +198,13 @@ namespace ExtractorSharp.View {
 
         public void MergeImg(object sender, EventArgs e) {
             if (list.Items.Count < 1) {//当拼合队列为空时
-                Messager.ShowWarnning("EmptyMergeTips");
+                Connector.SendWarning("EmptyMergeTips");
                 return;
             }
             if (albumList.SelectedItem == null) {//没有选择Img时
                 var name = albumList.Text;
                 if (name == string.Empty) {
-                    Messager.ShowWarnning("NotSelectImgTips");
+                    Connector.SendWarning("NotSelectImgTips");
                     return;
                 } else {
                     var rs=Connector.FileArray.Find(al => al.Name.Equals(name));

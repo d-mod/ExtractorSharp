@@ -4,15 +4,18 @@ using ExtractorSharp.EventArguments;
 using ExtractorSharp.Data;
 using ExtractorSharp.Core;
 using ExtractorSharp.Command;
+using ExtractorSharp.Composition;
 
 namespace ExtractorSharp.View.Pane {
     partial class ActionPage : TabPage {
         private Controller Controller;
         private Language Language;
+        private IConnector Connector;
         public ActionPage() {
             Language = Language.Default;
             InitializeComponent();
             Controller = Program.Controller;
+            Connector=Program.Connector;
             Controller.ActionChanged += Refresh;
             recordButton.Click += Record;
             pauseButton.Click += Pause;
@@ -29,12 +32,12 @@ namespace ExtractorSharp.View.Pane {
         }
 
         private void Record(object sender, EventArgs e) {
-            Messager.ShowMessage(Msg_Type.Operate, Language["ActionRecord"]);
+            Connector.SendMessage(MessageType.Success, Language["ActionRecord"]);
             Controller.Record();
         }
 
         private void Pause(object sender, EventArgs e) {
-            Messager.ShowMessage(Msg_Type.Operate, Language["ActionPause"]);
+            Connector.SendMessage(MessageType.Success, Language["ActionPause"]);
             Controller.Pause();          
         }
 

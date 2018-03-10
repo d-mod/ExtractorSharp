@@ -9,7 +9,7 @@ using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Data;
 
 namespace ExtractorSharp.Command.ImageCommand {
-    class SaveGif : ISingleAction {
+    class SaveGif : ISingleAction,ICommandMessage{
         public int[] Indices { set; get; }
 
         public string Name => "SaveGif";
@@ -61,7 +61,6 @@ namespace ExtractorSharp.Command.ImageCommand {
             Indices = args[1] as int[];
             Path = args[2] as string;
             Action(Album, Indices);
-            Messager.ShowOperate("SaveGif");
         }
 
         public void Redo() {

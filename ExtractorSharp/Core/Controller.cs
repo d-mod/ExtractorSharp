@@ -12,6 +12,8 @@ using ExtractorSharp.Command.PaletteCommand;
 using ExtractorSharp.Command.DrawCommand;
 using ExtractorSharp.Data;
 using ExtractorSharp.Command.FileCommand;
+using ExtractorSharp.Exceptions;
+using ExtractorSharp.Composition;
 
 namespace ExtractorSharp.Core {
     /// <summary>
@@ -181,7 +183,7 @@ namespace ExtractorSharp.Core {
             }
             Connector.FileListFlush();
             Connector.ImageListFlush();//刷新画布
-            Messager.ShowMessage(Msg_Type.Operate, Language.Default["ActionRun"]);
+            Connector.SendMessage(MessageType.Success, Language.Default["ActionRun"]);
         }
 
         /// <summary>
@@ -246,6 +248,9 @@ namespace ExtractorSharp.Core {
                     if (cmd.IsChanged) {//发生更改
                         Connector.OnSaveChanged();
                     }
+                    if(cmd is ICommandMessage) {
+                        Connector.SendSuccess(cmd.Name);
+                    }
                     redoStack.Clear();
                     OnComandDid(new CommandEventArgs() {
                         Name = key,
@@ -255,7 +260,7 @@ namespace ExtractorSharp.Core {
                     Current = cmd;
                 }
             } else {
-                Messager.ShowMessage(Msg_Type.Error, $"不存在的命令[{key}]");
+                throw new CommandException("NotExistCommand");
             }
         }
 

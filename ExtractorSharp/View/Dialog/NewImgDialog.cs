@@ -42,7 +42,7 @@ namespace ExtractorSharp {
         public void NewImg(object sender, EventArgs e) {
             var path = pathBox.Text.Trim();
             if (path.GetSuffix().Equals(string.Empty)) {
-                Messager.ShowError("FileNameCannotEmpty");
+                Connector.SendError("FileNameCannotEmpty");
                 return;
             }
             var count = (int)countBox.Value;

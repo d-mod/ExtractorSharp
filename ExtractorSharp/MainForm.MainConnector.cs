@@ -156,7 +156,7 @@ namespace ExtractorSharp {
             public void Save(string file) {
                 Npks.Save(file, List);
                 IsSave = true;
-                Messager.ShowOperate("SaveFile");
+                SendSuccess("SaveFile");
             }
 
             public void SelectSavePath() {
@@ -191,6 +191,15 @@ namespace ExtractorSharp {
             public void Draw(IPaint paint, Point location, decimal scale) {
                 MainForm.Drawer.Brush.Draw(paint, location, scale);
             }
+
+            public void SendMessage(MessageType type, string msg) =>
+                MainForm.messager.ShowMessage(type, msg);
+            public void SendSuccess(string name) =>
+                MainForm.messager.ShowOperate(name);
+            public void SendError(string name) =>
+                MainForm.messager.ShowError(name);
+            public void SendWarning(string name) =>
+                MainForm.messager.ShowWarnning(name);
         }
     }
 }

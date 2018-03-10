@@ -154,11 +154,13 @@ namespace ExtractorSharp.View{
             this.completedHideCheck.Location = new Point(150, 338);
             this.completedHideCheck.Text = Language["CompletedHide"];
             this.completedHideCheck.AutoSize = true;
+            this.completedHideCheck.Checked = Config["MergeCompletedHide"].Boolean;
 
 
             this.autoSortCheck.Location = new Point(32, 338);
             this.autoSortCheck.Text = Language["AutoSort"];
             this.autoSortCheck.AutoSize = true;
+            this.autoSortCheck.Checked = Config["AutoSort"].Boolean;
 
             // 
             // MergeDialog

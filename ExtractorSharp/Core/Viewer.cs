@@ -5,6 +5,7 @@ using ExtractorSharp.Component;
 using ExtractorSharp.View;
 using System.Reflection;
 using ExtractorSharp.Core;
+using ExtractorSharp.Exceptions;
 
 namespace ExtractorSharp {
     /// <summary>
@@ -87,7 +88,7 @@ namespace ExtractorSharp {
                     List.Add(dialogName, e.Dialog);
                 }
             } else {
-                Messager.ShowError("NotExistCommand");
+                throw new CommandException("NotExistCommand"); 
             }
         }
 

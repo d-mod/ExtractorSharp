@@ -65,7 +65,7 @@ namespace ExtractorSharp {
             Controls.Add(player);
             player.BringToFront();
             previewPanel.BringToFront();
-            Messager.Default.BringToFront();
+            messager.BringToFront();
             AddListenter();
             AddShow();
             AddBrush();
@@ -543,7 +543,7 @@ namespace ExtractorSharp {
                 } else {
                     CanvasFlush();
                 }
-                Messager.ShowOperate("AddLayer");
+                Connector.SendSuccess("AddLayer");
             }
         }
 
@@ -559,7 +559,7 @@ namespace ExtractorSharp {
                 foreach (var item in array) {
                     item.Adjust();
                 }
-                Messager.ShowOperate("AdjustPosition");
+                Connector.SendSuccess("AdjustPosition");
             }
 
         }
@@ -602,7 +602,7 @@ namespace ExtractorSharp {
         private void ReplaceLayer(object sender, EventArgs e) {
             var array = Connector.ImageArray;
             Drawer.ReplaceLayer(array);
-            Messager.ShowOperate("ReplaceImage");
+            Connector.SendSuccess("ReplaceImage");
             CanvasFlush();
         }
 
@@ -835,7 +835,7 @@ namespace ExtractorSharp {
         private bool CheckOgg(params Album[] args) {
             foreach (var al in args) {
                 if (al.Version == Img_Version.OGG) {
-                    Messager.ShowError("NotHandleFile");
+                    Connector.SendWarning("NotHandleFile");
                     return false;
                 }
             }

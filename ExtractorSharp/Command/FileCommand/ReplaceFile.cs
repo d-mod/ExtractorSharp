@@ -6,7 +6,7 @@ namespace ExtractorSharp.Command.ImgCommand {
     /// <summary>
     /// 替换IMG文件
     /// </summary>
-    class ReplaceFile : IMutipleAciton {
+    class ReplaceFile : IMutipleAciton,ICommandMessage{
         private Album OldSource,Source,Target;
         public void Do(params object[] args) {
             Target=args[0] as Album;
@@ -17,7 +17,6 @@ namespace ExtractorSharp.Command.ImgCommand {
             OldSource = new Album();
             OldSource.Replace(Target);
             Target.Replace(Source);
-            Messager.ShowOperate("ReplaceFile");
         }
 
         public void Undo() => Target.Replace(OldSource);

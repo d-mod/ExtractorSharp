@@ -5,7 +5,7 @@ namespace ExtractorSharp.Command.ImageCommand {
     /// <summary>
     /// 删除贴图
     /// </summary>
-    class DeleteImage : ISingleAction {
+    class DeleteImage : ISingleAction,ICommandMessage{
 
         private Album Album;
 
@@ -31,7 +31,6 @@ namespace ExtractorSharp.Command.ImageCommand {
                 }
             }
             Album.AdjustIndex();
-            Messager.ShowOperate("DeleteFile");
         }
 
         public void Redo() => Do( Album, Indices);
@@ -71,7 +70,5 @@ namespace ExtractorSharp.Command.ImageCommand {
         public bool IsChanged => true;
 
         public bool IsFlush => false;
-
-        public override string ToString() => Language.Default["DeleteImage"];
     }
 }

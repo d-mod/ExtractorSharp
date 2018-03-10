@@ -33,10 +33,10 @@ namespace ExtractorSharp.View.SettingPane {
             if (dialog.ShowDialog() == DialogResult.OK) {
                 var dir=dialog.SelectedPath;
                 if (Hoster.Install(dir)) {
-                    Messager.ShowMessage(Msg_Type.Operate, "插件安装完成!");
+                    Connector.SendSuccess("PluginInstalled");
                     Flush();
                 } else {
-                    Messager.ShowMessage(Msg_Type.Warning, "插件安装失败!");
+                    Connector.SendError("PluginInstallError");
                 }
             }
         }

@@ -11,6 +11,7 @@ using ExtractorSharp.Data;
 using ExtractorSharp.Json;
 using System.Diagnostics;
 using System.Net;
+using ExtractorSharp.Exceptions;
 
 namespace ExtractorSharp.Core {
     /// <summary>
@@ -101,7 +102,7 @@ namespace ExtractorSharp.Core {
                     NetList = obj["tag"].GetValue(typeof(List<Metadata>)) as List<Metadata>;
                 }
             } catch (Exception e) {
-
+                throw new PluginExecption("PluginListDownloadError");
             }
         }
     }

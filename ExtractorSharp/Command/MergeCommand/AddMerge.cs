@@ -6,14 +6,13 @@ namespace ExtractorSharp.Command {
     /// <summary>
     /// 加入拼合
     /// </summary>
-    class AddMerge : IMutipleAciton {
+    class AddMerge : IMutipleAciton,ICommandMessage{
         
 
         Album[] Array;
         public void Do(params object[] args) {
             Array = args as Album[];
             Program.Merger.Add(Array);
-            Messager.ShowOperate("AddMerge");
         }
 
         public void Undo() => Program.Merger.Remove(Array);

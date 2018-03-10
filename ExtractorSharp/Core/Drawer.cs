@@ -145,9 +145,9 @@ namespace ExtractorSharp.Core {
             this["Pencil"] = new Pencil();
             Brush = this["MoveTool"];
 
-            FlashList = new List<List<Layer>>();
-            LayerList = new List<Layer>();
-            FlashList.Add(LayerList);
+            FlashList = new List<List<Layer>>(){
+                { LayerList = new List<Layer>() }
+            };
         }
     }
 }

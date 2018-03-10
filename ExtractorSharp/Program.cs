@@ -11,6 +11,7 @@ using ExtractorSharp.Config;
 using ExtractorSharp.Core;
 using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Data;
+using ExtractorSharp.Exceptions;
 using ExtractorSharp.Handle;
 using ExtractorSharp.Json;
 using ExtractorSharp.Properties;
@@ -51,7 +52,7 @@ namespace ExtractorSharp {
 
         private static string[] Arguments;
 
-       /// <summary>
+        /// <summary>
         /// 应用程序的主入口点。
         /// </summary>
         [STAThread]
@@ -63,10 +64,10 @@ namespace ExtractorSharp {
             if (Config["AutoUpdate"].Boolean) {
                 CheckUpdate(false);
             }
-            if (Config["Profile"].Value.Equals("release")) {
-                Application.ThreadException += ShowDebug; 
-            }
-            Application.SetCompatibleTextRenderingDefault(true);           
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+            Application.ThreadException += ShowDebug;
+            AppDomain.CurrentDomain.UnhandledException += CatchException;
+            Application.SetCompatibleTextRenderingDefault(true);
             Application.EnableVisualStyles();
             LoadRegistry();
             Controller = new Controller();
@@ -84,6 +85,10 @@ namespace ExtractorSharp {
             Merger = new Merger();
             Hoster = new Hoster();
             Application.Run(Form);
+        }
+
+        private static void CatchException(object sender, UnhandledExceptionEventArgs e) {
+            ShowDebug(sender, new ThreadExceptionEventArgs(e.ExceptionObject as Exception));
         }
 
         private static void RegistyCommand() {
@@ -138,18 +143,26 @@ namespace ExtractorSharp {
         }
 
         private static void ShowDebug(object sender, ThreadExceptionEventArgs e) {
-            var log = $"{e.Exception.Message};\r\n{e.Exception.StackTrace}";
-            var data = Encoding.Default.GetBytes(log);
-            log = Convert.ToBase64String(data);
-            var dir = $"{Config["RootPath"]}/log";
-            if (!Directory.Exists(dir)) {
-                Directory.CreateDirectory(dir);
-            }      
-            var current = $"{dir}/{DateTime.Now.ToString("yyyyMMddHHmmss")}.log";
-            using (var fs = new FileStream(current, FileMode.Create)) {
-                fs.Write(data);
+            try {
+                var log = $"{e.Exception.Message};\r\n{e.Exception.StackTrace}";
+                var data = Encoding.Default.GetBytes(log);
+                log = Convert.ToBase64String(data);
+                var dir = $"{Config["RootPath"]}/log";
+                if (!Directory.Exists(dir)) {
+                    Directory.CreateDirectory(dir);
+                }
+                var current = $"{dir}/{DateTime.Now.ToString("yyyyMMddHHmmss")}.log";
+                using (var fs = new FileStream(current, FileMode.Create)) {
+                    fs.Write(data);
+                }
+                if ((e.Exception is ProgramException && Connector != null)) {
+                    Connector.SendError(e.Exception.Message);
+                } else if (Config["Profile"].Value.Equals("release")) {
+                    Viewer.Show("debug", "debug", log);
+                }
+            } catch (Exception ex) {
+
             }
-            Viewer.Show("debug", "debug", log);
         }
 
 
@@ -257,9 +270,9 @@ namespace ExtractorSharp {
             }
         }
 
-       
 
-   
+
+
 
 
         /// <summary>
@@ -267,19 +280,19 @@ namespace ExtractorSharp {
         /// </summary>
         /// <returns></returns>
         public static void CheckUpdate(bool Tips) {
-            try {
-                var builder = new LSBuilder();
-                var obj = builder.Get(Config["UpdateUrl"].Value).GetValue(typeof(VersionInfo)) as VersionInfo;
-                if (!obj.Name.Equals(Version)) {//若当前版本低于最新版本时，触发更新
-                    if (MessageBox.Show(Language.Default["NeedUpdateTips"], "", MessageBoxButtons.OKCancel) != DialogResult.OK) {
-                        return;                 //提示更新
-                    }
-                    StartUpdate();//启动更新
-                } else if (Tips) {
-                    MessageBox.Show(Language.Default["NeedNotUpdateTips"]);//提示不需要更新
+            var builder = new LSBuilder();
+            var obj = builder.Get(Config["UpdateUrl"].Value);
+            if (obj == null) {
+                return;
+            }
+            var info = obj.GetValue(typeof(VersionInfo)) as VersionInfo;
+            if (info != null && !info.Name.Equals(Version)) {//若当前版本低于最新版本时，触发更新
+                if (MessageBox.Show(Language.Default["NeedUpdateTips"], Language.Default["Tips"], MessageBoxButtons.OKCancel) != DialogResult.OK) {
+                    return;                 //提示更新
                 }
-            } catch (Exception e) {
-                Console.Write(e.StackTrace);
+                StartUpdate();//启动更新
+            } else if (Tips) {
+                MessageBox.Show(Language.Default["NeedNotUpdateTips"]);//提示不需要更新
             }
             Config.Save();
         }
@@ -317,7 +330,7 @@ namespace ExtractorSharp {
                     Config.Save();
                     return true;
                 } else {
-                    Messager.ShowWarnning("SelectPathIsInvalid");
+                    Connector.SendError("SelectPathIsInvalid");
                 }
             }
             return false;

@@ -3,9 +3,6 @@ using ExtractorSharp.EventArguments;
 using System.Windows.Forms;
 
 namespace ExtractorSharp.Component {
-    /// <summary>
-    /// Ease框架的窗口
-    /// </summary>
     public partial class ESDialog:ESForm{
         /// <summary>
         /// 向视图层传递数据的事件

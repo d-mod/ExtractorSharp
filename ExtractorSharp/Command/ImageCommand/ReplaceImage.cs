@@ -5,7 +5,7 @@ using System.Drawing;
 using System.IO;
 
 namespace ExtractorSharp.Command.ImageCommand {
-    class ReplaceImage : ISingleAction {
+    class ReplaceImage : ISingleAction,ICommandMessage{
         
         public int[] Indices { set; get; }
 
@@ -71,7 +71,6 @@ namespace ExtractorSharp.Command.ImageCommand {
             }
             Album.Adjust();
             Album.Refresh();
-            Messager.ShowOperate(Language.Default[Name]);
         }
 
         public Bitmap[] GetImages(Album Album,int count) {

@@ -53,17 +53,13 @@
   <ItemGroup>
     <Compile Include="Command\IAciton.cs" />
     <Compile Include="Command\ICommand.cs" />
-    <Compile Include="Component\Messager.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Component\Messager.designer.cs">
-      <DependentUpon>Messager.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Command\ICommandMessage.cs" />
     <Compile Include="Composition\ClickType.cs" />
     <Compile Include="Composition\IConnector.cs" />
     <Compile Include="Composition\IConverter.cs" />
     <Compile Include="Composition\IMenuItem.cs" />
     <Compile Include="Composition\MenuItemType.cs" />
+    <Compile Include="Composition\MessageType.cs" />
     <Compile Include="Config\ConfigValue.cs" />
     <Compile Include="Config\IConfig.cs" />
     <Compile Include="Data\Album.cs" />
@@ -71,7 +67,7 @@
     <Compile Include="Data\Language.cs" />
     <Compile Include="Draw\IBrush.cs" />
     <Compile Include="Draw\IPaint.cs" />
-    <Compile Include="Draw\Paint\Cavas.cs" />
+    <Compile Include="Draw\Paint\Canvas.cs" />
     <Compile Include="Handle\Handler.cs" />
     <Compile Include="Handle\Img_Version.cs" />
     <Compile Include="Composition\IPlugin.cs" />
@@ -94,9 +90,6 @@
     <Compile Include="Tools.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Component\Messager.resx">
-      <DependentUpon>Messager.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -123,6 +116,9 @@
     <None Include="Resources\errorIcon.png" />
     <None Include="Resources\warnningIcon.png" />
     <None Include="Resources\successIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Component\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

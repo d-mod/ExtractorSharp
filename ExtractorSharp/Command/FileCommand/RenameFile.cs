@@ -2,7 +2,7 @@
 using ExtractorSharp.Data;
 
 namespace ExtractorSharp.Command.ImgCommand {
-    class RenameFile : ICommand {
+    class RenameFile : ICommand,ICommandMessage{
         Album Album;
         /// <summary>
         /// 原文件名
@@ -17,7 +17,6 @@ namespace ExtractorSharp.Command.ImgCommand {
             Album = args[0] as Album;
             oldPath = Album.Path;
             Album.Path = newPath = args[1] as string;//修改文件名
-            Messager.ShowOperate("Rename");
         }
 
         public void Undo() => Album.Path = oldPath;//还原文件名

@@ -8,7 +8,7 @@ namespace ExtractorSharp.Command.ImageCommand {
     /// 可撤销
     /// 可宏命令
     /// </summary>
-    class CanvasImage : ISingleAction {
+    class CanvasImage : ISingleAction,ICommandMessage{
         private Album Album;
 
         private Size Size;
@@ -35,7 +35,6 @@ namespace ExtractorSharp.Command.ImageCommand {
                 Locations[i] = entity.Location;
                 entity.CanvasImage(Size);
             }
-            Messager.ShowOperate("CanvasImage");
         }
 
         public void Redo() => Do(Album, Size, Indices);

@@ -24,6 +24,19 @@ namespace ExtractorSharp.View.Dialog {
             applyButton.Click += Apply;
             resetButton.Click += Reset;
             cancelButton.Click += Cancel;
+            try {
+                AddConfig();
+            } catch (Exception e) {
+
+            }
+        }
+
+
+        protected override void OnEscape() {
+            Cancel(null, null);
+        }
+
+        private void AddConfig() {
             AddConfig(typeof(GerneralPane));
             AddConfig(typeof(SaveImagePane));
             AddConfig(typeof(GridPane));
@@ -32,12 +45,6 @@ namespace ExtractorSharp.View.Dialog {
             AddConfig(typeof(PluginListPane));
             AddConfig(typeof(MarketplacePane));
         }
-
-
-        protected override void OnEscape() {
-            Cancel(null, null);
-        }
-
 
         private void AddConfig(Type type) {
             if (!typeof(AbstractSettingPane).IsAssignableFrom(type)) {
