@@ -37,7 +37,7 @@ ExtractorSharp
 ---
    + Windows 7,8,10
    + .NET Framework 4.5 以上
-**在Windows7环境中,你自行需要安装.NET Framework 4.5**
+**在Windows7环境中,你需要自行安装.NET Framework 4.5**
    
 国际化支持(Language)
 ---
