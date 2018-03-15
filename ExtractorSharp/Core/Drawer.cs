@@ -6,6 +6,7 @@ using System;
 using System.Drawing;
 using ExtractorSharp.Config;
 using ExtractorSharp.Data;
+using ExtractorSharp.Draw.Paint;
 
 namespace ExtractorSharp.Core {
     /// <summary>
@@ -17,15 +18,61 @@ namespace ExtractorSharp.Core {
         /// 画笔集
         /// </summary>
         public Dictionary<string, IBrush> Brushes { get; }
-        public List<List<Layer>> FlashList { get; }
-        public List<Layer> LayerList { get; private set; }
+        public List<List<IPaint>> FlashList { get; }
+        public List<IPaint> LayerList { get; private set; }
         public int Count => FlashList.Count;
 
-        public Layer CurrentLayer;
+        public IPaint CurrentLayer {
+            set {
+                var lastPoint = LayerList[0].Location;
+                var curPoint = LayerList[1].Location;
+                LayerList[0] = LayerList[1];//图层更新
+                LayerList[0].Location = lastPoint;
+                LayerList[0].Name = "LastLayer";
+                LayerList[0].Visible = false;
+                LayerList[1] = value;
+                LayerList[1].Location = curPoint;
+                LayerList[1].Name = "CurrentLayer";
+                LayerList[1].Visible = true;
+                OnLayerChanged(new LayerEventArgs() {
+                    Last = LayerList[0],
+                    Current = LayerList[1],
+                    ChangedIndex = 1
+                });
+            }
+            get {
+                return LayerList[1];
+            }
+        }
 
-        public Layer LastLayer;
+        public IPaint LastLayer {
+            set {
+                LayerList[0] = value;
+            }
+            get {
+                return LayerList[0];
+            }
+        }
 
-        public Dictionary<string,ConfigValue> Properties { get; }
+        private bool _lastLayerVisible;
+
+        public bool LastLayerVisible {
+            set {
+                if (LayerList[0].Visible != value) {
+                    LayerList[0].Visible = value;
+                    _lastLayerVisible = value;
+                    OnLayerVisibleChanged(new LayerEventArgs() {
+                        ChangedIndex = 0
+                    });
+                }
+            }
+            get {
+                return LayerList[0].Visible;
+            }
+        }
+
+
+        public Dictionary<string, ConfigValue> Properties { get; }
 
         /// <summary>
         /// 当前选择的画笔<see cref="IBrush"/>
@@ -34,13 +81,13 @@ namespace ExtractorSharp.Core {
 
         public Point CusorLocation { set => Brush.Location = value; get => Brush.Location; }
 
-        private Color _color=Color.White;
+        private Color _color = Color.White;
         public Color Color {
             set {
-                var args = new ColorEventArgs();
-                args.OldColor = this.Color;
-                args.NewColor = value;
-                ColorChanged?.Invoke(this, args);
+                ColorChanged?.Invoke(this, new ColorEventArgs() {
+                    OldColor = this.Color,
+                    NewColor = value
+                });
                 this._color = value;
             }
             get => _color;
@@ -58,19 +105,27 @@ namespace ExtractorSharp.Core {
             }
         }
 
+        
 
-#region event
-        public delegate void ImageHandler(object sender, SpriteEventArgs e);
-        public event ImageHandler ImageChanged;
-        public void OnImageChanged(SpriteEventArgs e) => ImageChanged(this, e);
+
+        #region event
+        public delegate void FileHandler(object sender, FileEventArgs e);
+        public event FileHandler ImageChanged;
+        public void OnImageChanged(FileEventArgs e) => ImageChanged(this, e);
 
         public delegate void DrawHandler(object sender, DrawEventArgs e);
 
         public event DrawHandler BrushChanged;
         private void OnBrushChanged(DrawEventArgs e) => BrushChanged?.Invoke(this, e);
 
-        public delegate void ColorChangeHandler(object sender, ColorEventArgs e);
-        public event ColorChangeHandler ColorChanged;
+        public delegate void ColorHandler(object sender, ColorEventArgs e);
+        public event ColorHandler ColorChanged;
+
+        public delegate void LayerHandler(object sender,LayerEventArgs e);
+        public event LayerHandler LayerChanged;
+        public event LayerHandler LayerVisibleChanged;
+        public void OnLayerChanged(LayerEventArgs e) => LayerChanged?.Invoke(this, e);
+        public void OnLayerVisibleChanged(LayerEventArgs e) => LayerVisibleChanged?.Invoke(this, e);
 
         #endregion
 
@@ -98,19 +153,13 @@ namespace ExtractorSharp.Core {
         }
 
         public void ReplaceLayer(params Sprite[] array) {
-            foreach (var layer in LayerList) {
-                for (int j = 0; j < array.Length; j++) {
-                    if (layer.Index == array[j].Index) {
-                        layer.Replace(array[j]);
-                    }
-                }
-            }
+
         }
 
         public int IndexOfLayer(Point point) {
             for (var i = LayerList.Count - 1; i > -1; i--) {
                 if (LayerList[i].Contains(point)) {
-                    return i + 2;
+                    return i;
                 }
             }
             return -1;
@@ -122,7 +171,7 @@ namespace ExtractorSharp.Core {
 
         public void TabLayer(int index) {
             while (index >= Count) {
-                FlashList.Add(new List<Layer>());
+                FlashList.Add(new List<IPaint>());
             }
             LayerList = FlashList[index];
         }
@@ -131,9 +180,10 @@ namespace ExtractorSharp.Core {
             if (Brushes.ContainsKey(name)) {
                 return Brushes[name] == Brush;
             }
-            return false; 
+            return false;
         }
         
+
 
 
         public Drawer() {
@@ -144,10 +194,11 @@ namespace ExtractorSharp.Core {
             this["Eraser"] = new Eraser();
             this["Pencil"] = new Pencil();
             Brush = this["MoveTool"];
-
-            FlashList = new List<List<Layer>>(){
-                { LayerList = new List<Layer>() }
+            LayerList = new List<IPaint>() {
+                { new Canvas() { Name="LastLayer"} },
+                { new Canvas() { Name="CurrentLayer"} }
             };
+            FlashList = new List<List<IPaint>>() { { LayerList } };
         }
     }
 }

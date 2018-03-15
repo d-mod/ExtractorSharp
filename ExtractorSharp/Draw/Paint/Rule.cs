@@ -9,6 +9,7 @@ using ExtractorSharp.Data;
 
 namespace ExtractorSharp.Draw.Paint {
     class Rule : IPaint {
+        public string Name { set; get; } = "Rule";
         public Bitmap Image { set; get; }
         public Size Size { set; get; }
         public Point Location { set; get; }

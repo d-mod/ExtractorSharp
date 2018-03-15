@@ -5,6 +5,8 @@ namespace ExtractorSharp.Draw {
     /// 可绘制的物体
     /// </summary>
     public interface IPaint {
+
+        string Name { set; get; }
         /// <summary>
         /// 是否全屏
         /// </summary>

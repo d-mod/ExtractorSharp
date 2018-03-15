@@ -162,7 +162,7 @@
     <Compile Include="EventArguments\CommandEventArgs.cs" />
     <Compile Include="Core\Controller.cs" />
     <Compile Include="Core\Drawer.cs" />
-    <Compile Include="EventArguments\SpriteEventArgs.cs" />
+    <Compile Include="EventArguments\FileEventArgs.cs" />
     <Compile Include="EventArguments\MergeQueueEventArgs.cs" />
     <Compile Include="Core\Merger.cs" />
     <Compile Include="Core\Viewer.cs" />
@@ -171,6 +171,7 @@
     <Compile Include="Command\ImageCommand\ChangePosition.cs" />
     <Compile Include="Command\ImageCommand\UnCanvasImage.cs" />
     <Compile Include="EventArguments\MergeEventArg.cs" />
+    <Compile Include="EventArguments\LayerEventArgs.cs" />
     <Compile Include="Exceptions\ApplicationException.cs" />
     <Compile Include="Exceptions\CommandException.cs" />
     <Compile Include="Exceptions\ConfigException.cs" />

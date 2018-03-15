@@ -1,8 +1,10 @@
 ﻿using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Data;
 using System.Drawing;
 
 namespace ExtractorSharp.Draw.Paint {
     public class Canvas : IPaint {
+        public string Name { set; get; }
         public Bitmap Image { set; get; }
         public Rectangle Rectangle => new Rectangle(Location, Size);
         public bool Contains(Point point) => Rectangle.Contains(point);
@@ -20,5 +22,7 @@ namespace ExtractorSharp.Draw.Paint {
         public bool FullCanvas { set; get; }
         public bool Visible { set; get; }
         public bool Locked { set; get; }
+
+        public override string ToString() => Language.Default[Name];
     }
 }

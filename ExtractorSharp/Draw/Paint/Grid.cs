@@ -8,6 +8,7 @@ using ExtractorSharp.Draw;
 
 namespace ExtractorSharp.Draw.Paint {
     class Grid : IPaint {
+        public string Name { set; get; } = "Grid";
         public Bitmap Image { set; get; }
         public Size Size { set; get; }
         public Point Location { set; get; }

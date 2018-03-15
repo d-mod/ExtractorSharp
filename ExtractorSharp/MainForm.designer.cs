@@ -143,7 +143,7 @@ namespace ExtractorSharp {
 
             trackBar = new TrackBar();
 
-            layerList = new ESListBox<Layer>();
+            layerList = new ESListBox<IPaint>();
             layerMenu = layerList.ContextMenuStrip;
             renameLayerItem = new ToolStripMenuItem();
             changeLayerPositionItem = new ToolStripMenuItem();
@@ -688,7 +688,7 @@ namespace ExtractorSharp {
         
         private ESListBox<Album> albumList;
         private ESListBox<Sprite> imageList;
-        private ESListBox<Layer> layerList;
+        private ESListBox<IPaint> layerList;
 
         private MenuStrip mainMenu;
         private ToolStripMenuItem fileMenu; 

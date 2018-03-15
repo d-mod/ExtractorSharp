@@ -22,7 +22,7 @@ namespace ExtractorSharp.View.Pane {
 
         private void UndoFresh(object sender,CommandEventArgs e) {
             if (e.Name.Equals("changeColor")) {
-                SelectImageChanged(sender, new SpriteEventArgs() {
+                SelectImageChanged(sender, new FileEventArgs() {
                     Album = this.Album
                 });
             }
@@ -48,7 +48,7 @@ namespace ExtractorSharp.View.Pane {
             }
         }
 
-        private void SelectImageChanged(object sender, SpriteEventArgs e) {
+        private void SelectImageChanged(object sender, FileEventArgs e) {
             Album = e.Album;
             if (Album != null) {
                 combo.Items.Clear();
