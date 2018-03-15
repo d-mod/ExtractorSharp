@@ -173,32 +173,42 @@ namespace ExtractorSharp.Core {
                 foreach (var al in Array) {
                     if (i < al.List.Count) {
                         var source = al.List[i];
-                        if (source.Type == ColorBits.LINK)//如果为链接贴图。则引用指向贴图的属性
+                        if (source.Type == ColorBits.LINK) {//如果为链接贴图。则引用指向贴图的属性
                             source = source.Target;
-                        if (source.Canvas_Width > max_width)//最大画布
+                        }
+                        if (source.Canvas_Width > max_width) {//最大画布
                             max_width = source.Canvas_Height;
-                        if (source.Canvas_Height > max_height)
+                        }
+                        if (source.Canvas_Height > max_height) {
                             max_height = source.Canvas_Height;
-                        if (source.Compress == Compress.NONE && source.Width * source.Height == 1)//将透明图层过滤
+                        }
+                        if (source.Compress == Compress.NONE && source.Width * source.Height == 1) {//将透明图层过滤
                             continue;
-                        if (source.Width + source.X > width)//获得最右点坐标
+                        }
+                        if (source.Width + source.X > width) {//获得最右点坐标
                             width = source.Width + source.X;
-                        if (source.Height + source.Y > height)//获得最下点坐标
+                        }
+                        if (source.Height + source.Y > height) {//获得最下点坐标
                             height = source.Height + source.Y;
-                        if (source.X < x)//获得最左点坐标
+                        }
+                        if (source.X < x) {//获得最左点坐标
                             x = source.X;
-                        if (source.Y < y)//获得最上点坐标
+                        }
+                        if (source.Y < y) {//获得最上点坐标
                             y = source.Y;
-                        if (source.Type > type && source.Type < ColorBits.LINK)
+                        }
+                        if (source.Type > type && source.Type < ColorBits.LINK) {
                             type = source.Type;
+                        }
                     }
                 }
                 width -= x;//获得上下左右两端的差,即宽高
                 height -= y;
                 width = width > 1 ? width : 1;//防止宽高小于1
                 height = height > 1 ? height : 1;
-                if (width * height > 1)//当贴图面积大于1时,使用zlib压缩
+                if (width * height > 1) {//当贴图面积大于1时,使用zlib压缩
                     entity.Compress = Compress.ZLIB;
+                }
                 entity.Type = type;
                 entity.Index = entitys.Count;
                 entity.Location = new Point(x, y);
@@ -225,32 +235,34 @@ namespace ExtractorSharp.Core {
         }
 
         public void Priview(int index, Graphics g) {
-            var width = 1;
-            var height = 1;
-            var max_width = 0;
-            var max_height = 0;
             var x = 800;
             var y = 600;
             foreach (var al in Queues) {
                 if (index < al.List.Count) {
                     var source = al.List[index];
-                    if (source.Type == ColorBits.LINK)//如果为链接贴图。则引用指向贴图的属性
+                    if (source.Type == ColorBits.LINK) {//如果为链接贴图。则引用指向贴图的属性
                         source = source.Target;
-                    if (source.Compress == Compress.NONE && source.Width * source.Height == 1)//将透明图层过滤
+                    }
+                    if (source.Compress == Compress.NONE && source.Width * source.Height == 1) {//将透明图层过滤
                         continue;
-                    if (source.Width + source.X > width)//获得最右点坐标
-                        width = source.Width + source.X;
-                    if (source.Height + source.Y > height)//获得最下点坐标
-                        height = source.Height + source.Y;
-                    if (source.X < x)//获得最左点坐标
+                    }
+                    if (source.X < x) {//获得最左点坐标
                         x = source.X;
-                    if (source.Y < y)//获得最上点坐标
+                    }
+                    if (source.Y < y) {//获得最上点坐标
                         y = source.Y;
+                    }
                 }
             }
             for (var i = Queues.Count - 1; i > 0; i--) {
-                var entity = Queues[i][index];
-                g.DrawImage(entity.Picture, entity.X - x, entity.Y - y);
+                var source = Queues[i][index];
+                if (source.Type == ColorBits.LINK) {//如果为链接贴图。则引用指向贴图的属性
+                    source = source.Target;
+                }
+                if (source.Compress == Compress.NONE && source.Width * source.Height == 1) {//将透明图层过滤
+                    continue;
+                }
+                g.DrawImage(source.Picture, source.X - x, source.Y - y);
             }
         }
 

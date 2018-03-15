@@ -12,7 +12,7 @@ namespace ExtractorSharp.Handle {
         public override Bitmap ConvertToBitmap(Sprite entity) {
             var data = entity.Data;
             var size = entity.Width * entity.Height;
-            if (entity.Compress != Compress.ZLIB) {
+            if (entity.Compress != Compress.ZLIB || entity.Type > ColorBits.ARGB_1555) {
                 return base.ConvertToBitmap(entity);
             }
             data = FreeImage.Decompress(data, size);
@@ -20,7 +20,7 @@ namespace ExtractorSharp.Handle {
             if (table.Count > 0) {
                 using (var os = new MemoryStream()) {
                     foreach (var i in data) {
-                        Colors.WriteColor(os,table[i % table.Count],ColorBits.ARGB_8888);
+                        Colors.WriteColor(os, table[i % table.Count], ColorBits.ARGB_8888);
                     }
                     data = os.ToArray();
                 }

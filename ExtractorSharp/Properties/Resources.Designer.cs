@@ -131,7 +131,8 @@ namespace ExtractorSharp.Properties {
         ///      &quot;AllImage&quot;: &quot;所有贴图&quot;,
         ///      &quot;ImageResources&quot;: &quot;图片资源&quot;,
         ///      &quot;SoundResources&quot;: &quot;音效资源&quot;,
-        ///      &quot;Width&quot;: &quot;宽&quot;,        /// [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///      &quot;Width&quot;: &quot;宽&quot;,
+        /// [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Chinese {
             get {

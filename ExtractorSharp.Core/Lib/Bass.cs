@@ -109,7 +109,6 @@ namespace ExtractorSharp.Core.Lib {
 
 
         public static int Play(byte[] data) {
-            Init();
             int handle = CreateFromMemory(data);
             Play(handle, false);
             return handle;
