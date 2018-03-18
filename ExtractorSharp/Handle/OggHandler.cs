@@ -4,7 +4,7 @@ using System.Drawing;
 using System.IO;
 
 namespace ExtractorSharp.Handle {
-    class OggHandler : Handler {
+    public class OggHandler : Handler {
         byte[] Data = new byte[0];
         public OggHandler(Album Album) : base(Album) {}
 

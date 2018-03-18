@@ -8,7 +8,7 @@ namespace ExtractorSharp.Handle {
     /// <summary>
     /// Ver4处理器
     /// </summary>
-    class FourthHandler : SecondHandler {
+    public class FourthHandler : SecondHandler {
 
         public FourthHandler(Album Album) : base(Album) {}
 

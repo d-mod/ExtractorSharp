@@ -9,7 +9,7 @@ namespace ExtractorSharp.Handle {
     /// <summary>
     /// Ver5处理器
     /// </summary>
-    class FifthHandler : SecondHandler{
+    public class FifthHandler : SecondHandler{
         private readonly Dictionary<Sprite, DDS_Info> Map = new Dictionary<Sprite, DDS_Info>();
         private readonly List<DDS> List = new List<DDS>();
         public FifthHandler(Album Album) : base(Album) {}
@@ -155,7 +155,7 @@ namespace ExtractorSharp.Handle {
             int index_count = stream.ReadInt();
             Album.Length = stream.ReadInt();
             int count = stream.ReadInt();
-            var table = new List<Color>(Colors.ReadPalette(stream,count));
+            var table = new List<Color>(Colors.ReadPalette(stream, count));
             Album.Tables = new List<List<Color>>();
             Album.Tables.Add(table);
             var list = new List<DDS>();
@@ -176,12 +176,12 @@ namespace ExtractorSharp.Handle {
                 var entity = new Sprite(Album);
                 entity.Index = Album.List.Count;
                 entity.Type = (ColorBits)stream.ReadInt();
-                entity.Compress = (Compress)stream.ReadInt();
                 Album.List.Add(entity);
                 if (entity.Type == ColorBits.LINK) {
                     dic.Add(entity, stream.ReadInt());
                     continue;
                 }
+                entity.Compress = (Compress)stream.ReadInt();
                 entity.Width = stream.ReadInt();
                 entity.Height = stream.ReadInt();
                 entity.Length = stream.ReadInt();                    //保留，固定为0
@@ -189,11 +189,11 @@ namespace ExtractorSharp.Handle {
                 entity.Y = stream.ReadInt();
                 entity.Canvas_Width = stream.ReadInt();
                 entity.Canvas_Height = stream.ReadInt();
-                if (entity.Type < ColorBits.LINK && entity.Length > 0) {
+                if (entity.Type < ColorBits.LINK && entity.Length != 0) {
                     ver2List.Add(entity);
                     continue;
                 }
-                stream.Seek(4);
+                int j = stream.ReadInt();
                 var dds = list[stream.ReadInt()];
                 var leftup = new Point(stream.ReadInt(), stream.ReadInt());
                 var rightdown = new Point(stream.ReadInt(), stream.ReadInt());

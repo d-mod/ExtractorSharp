@@ -5,7 +5,7 @@ using System.Drawing;
 using System.IO;
 
 namespace ExtractorSharp.Handle {
-    class FirstHandler :Handler{
+    public class FirstHandler :Handler{
         public FirstHandler(Album Album) : base(Album) { }
 
         public override Bitmap ConvertToBitmap(Sprite entity) {

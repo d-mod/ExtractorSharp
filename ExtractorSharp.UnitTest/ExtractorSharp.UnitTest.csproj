@@ -55,6 +55,7 @@
     <Compile Include="Pictrue.cs" />
     <Compile Include="Profession.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestHandler.cs" />
     <Compile Include="UnitTest3.cs" />
   </ItemGroup>
   <ItemGroup>
