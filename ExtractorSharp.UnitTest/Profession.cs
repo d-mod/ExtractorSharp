@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 namespace ExtractorSharp.UnitTest {
     class Profession {
         public string Name;
-        public string Text;
+        public string Label;
     }
 }

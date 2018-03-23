@@ -51,7 +51,7 @@ namespace ExtractorSharp {
             Viewer = Program.Viewer;
             Drawer = Program.Drawer;
             box.Cursor = Drawer.Brush.Cursor;
-            dropPanel = new DropPanel();
+            dropPanel = new DropPanel(Connector);
             player = new AudioPlayer();
             Controls.Add(dropPanel);
             Controls.Add(player);

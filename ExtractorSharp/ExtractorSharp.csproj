@@ -149,6 +149,7 @@
     <Compile Include="Core\Clipboarder.cs" />
     <Compile Include="Core\Sorter\DefaultSorter.cs" />
     <Compile Include="Core\Sorter\ISorter.cs" />
+    <Compile Include="Data\Result.cs" />
     <Compile Include="Data\VersionInfo.cs" />
     <Compile Include="Draw\Brush\Eraser.cs" />
     <Compile Include="Draw\Brush\Straw.cs" />

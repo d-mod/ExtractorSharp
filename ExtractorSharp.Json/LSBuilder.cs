@@ -68,6 +68,28 @@ namespace ExtractorSharp.Json {
             }
         }
 
+        public LSObject Post(string url,LSObject obj) {
+            var data = Encoding.GetBytes(obj.ToString());
+            var request = WebRequest.Create(url) as HttpWebRequest;
+            request.Method = "POST";
+            request.ContentType = "application/json";
+            request.ContentLength = data.Length;
+            using (var stream = request.GetRequestStream()) {
+                stream.Write(data, 0, data.Length);
+            }
+            using (var response = request.GetResponse() as HttpWebResponse)
+            using (var stream = response.GetResponseStream()) {
+                var rs = Read(stream);
+                return rs;
+            }
+        }
+
+        public LSObject Post(string url, object obj) {
+            return Post(url, new LSObject {
+                Value = obj
+            });
+        }
+
         public LSObject Read(string file) {
             using (var fs = new FileStream(file, FileMode.Open)) {
                 return Read(fs);

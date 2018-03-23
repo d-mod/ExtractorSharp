@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using ExtractorSharp.Component;
 using ExtractorSharp.Config;
 using ExtractorSharp.Core;
+using ExtractorSharp.Data;
 using ExtractorSharp.Json;
 
 namespace ExtractorSharp.View {
@@ -25,6 +26,7 @@ namespace ExtractorSharp.View {
                 submitCheck.Checked = true;
                 submitCheck.Visible = true;
             } else {
+                Error = null;
                 label1.Text = Language["SubmitFeedback"];
                 submitCheck.Checked = false;
                 submitCheck.Visible = false;
@@ -33,27 +35,30 @@ namespace ExtractorSharp.View {
         }
 
         private void Submit(object sender, EventArgs e) {
-            UploadBug(box.Text, textBox2.Text, Error, Mode);
+            UploadBug(box.Text, Error);
             DialogResult = DialogResult.OK;
         }
 
-        private bool UploadBug(string remark, string contact, string log, string type) {
+        private Result UploadBug(string message, string log) {
+            var result = new Result() {
+                Status = "error",
+                Message = "提交失败!"
+            };
             try {
                 var data = new Dictionary<string, object>() {
-                    { "remark",remark },
-                    { "contact",contact},
+                    { "projectId" , Config["ProgramId"].Integer },
+                    { "message",message },
                     { "log", log },
-                    { "type",type},
-                    { "version",Config["Version"]}
+                    { "version", Config["Version"].Value}
                 };
                 var builder = new LSBuilder();
-                var resultObj = builder.Post(Config["DebugUrl"].Value, data);
-                var result = (bool)resultObj.GetValue(typeof(bool));
-                return result;
+                var path = $"{Config["ApiHost"].Value}/{Config["FeedbackUrl"].Value}";
+                var resultObj = builder.Post(path, data);
+                resultObj.GetValue(ref result);
             } catch (Exception e) {
                 Console.Write(e.StackTrace);
             }
-            return false;
+            return result;
         }
 
     }

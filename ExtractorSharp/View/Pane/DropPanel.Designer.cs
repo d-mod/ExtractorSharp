@@ -31,7 +31,7 @@ namespace ExtractorSharp.View {
             // HistoryPanel
             //
             historyPanel = new HistoryPage();
-            actionPanel = new ActionPage();
+            actionPanel = new ActionPage(Connector);
             
             this.Name = "DropPanel";
             this.Size = new System.Drawing.Size(200, 300);

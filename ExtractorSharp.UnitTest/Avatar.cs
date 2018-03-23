@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ExtractorSharp.UnitTest {
     class Avatar {
-       public string Name;
-       public string File;
+        public string Code;
+        public string Name;
     }
 }

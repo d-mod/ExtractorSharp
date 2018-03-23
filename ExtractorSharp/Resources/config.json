@@ -23,13 +23,14 @@
 
   "LayerMaximum": 20,
 
+  "ApiHost": "http://localhost",
 
 
   "UpdateUrl": "http://extractorsharp.kritsu.net/api/program/update",
 
   "UpdateExeUrl": "http://static.kritsu.net/install.exe",
 
-  "DebugUrl": "http://extractorsharp.kritsu.net/api/feedback/post",
+  "FeedbackUrl": "http://extractorsharp.kritsu.net/api/feedback/post",
 
   "UpdateExeName": "install.exe",
 
@@ -66,5 +67,7 @@
 
   "AutoSort": true,
 
-  "MergeCompletedHide":true
+  "MergeCompletedHide": true,
+
+  "ProgramId": 1
 }

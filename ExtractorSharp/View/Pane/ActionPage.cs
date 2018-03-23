@@ -11,11 +11,11 @@ namespace ExtractorSharp.View.Pane {
         private Controller Controller;
         private Language Language;
         private IConnector Connector;
-        public ActionPage() {
-            Language = Language.Default;
+        public ActionPage(IConnector Connector) {
+            this.Connector = Connector;
+            this.Language = Connector.Language;
             InitializeComponent();
             Controller = Program.Controller;
-            Connector=Program.Connector;
             Controller.ActionChanged += Refresh;
             recordButton.Click += Record;
             pauseButton.Click += Pause;

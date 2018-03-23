@@ -31,7 +31,7 @@ namespace ExtractorSharp.Command.ImageCommand {
             Mode = (int)args[1];
             Indices = args[2] as int[];
             Path = args[3] as string;
-            if (args.Length > 3) {
+            if (args.Length > 4) {
                 Prefix = (args[4] as string).Replace("\\", "/");
                 Increment = (int)args[5];
                 Digit = (int)args[6];
