@@ -15,7 +15,7 @@ namespace ExtractorSharp.Command.ImageCommand {
 
         public string Name => "DeleteImage";
 
-        public void Do( params object[] args) {
+        public void Do(params object[] args) {
             Album = args[0] as Album;
             Indices = args[1] as int[];
             Array = new Sprite[Indices.Length];
@@ -27,7 +27,12 @@ namespace ExtractorSharp.Command.ImageCommand {
             }
             foreach (var entity in Array) {
                 if (entity != null) {
-                    Album.List.Remove(entity);
+                    var linkes = Album.List.FindAll(item => item.Target == entity);
+                    if (linkes.Count > 0) {
+                        var frist = linkes[0];
+                        Album.List[frist.Index] = entity;
+                    }
+                    Album.List.RemoveAt(entity.Index);
                 }
             }
             Album.AdjustIndex();
