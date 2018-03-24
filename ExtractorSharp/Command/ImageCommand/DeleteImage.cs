@@ -27,9 +27,8 @@ namespace ExtractorSharp.Command.ImageCommand {
             }
             foreach (var entity in Array) {
                 if (entity != null) {
-                    var linkes = Album.List.FindAll(item => item.Target == entity);
-                    if (linkes.Count > 0) {
-                        var frist = linkes[0];
+                    var frist = Album.List.Find(item => item.Target == entity);
+                    if (frist != null) {
                         Album.List[frist.Index] = entity;
                     }
                     Album.List.RemoveAt(entity.Index);
