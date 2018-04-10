@@ -65,6 +65,7 @@
     <Compile Include="Data\Album.cs" />
     <Compile Include="Data\Sprite.cs" />
     <Compile Include="Data\Language.cs" />
+    <Compile Include="Data\Texture.cs" />
     <Compile Include="Draw\IBrush.cs" />
     <Compile Include="Draw\IPaint.cs" />
     <Compile Include="Draw\Paint\Canvas.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Lib\Bitmaps.cs" />
     <Compile Include="Lib\Colors.cs" />
     <Compile Include="Lib\Drawings.cs" />
+    <Compile Include="Lib\Reader\Ddss.cs" />
     <Compile Include="Lib\Reader\Npks.cs" />
     <Compile Include="Lib\Reader\Spks.cs" />
     <Compile Include="Lib\Bass.cs" />

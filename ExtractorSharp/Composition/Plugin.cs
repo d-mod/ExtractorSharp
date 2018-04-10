@@ -71,7 +71,7 @@ namespace ExtractorSharp.Composition {
                 if (Guid.TryParse(lazy.Metadata.Guid, out Guid guid)) {
                     if (guid == this.Guid) {
                         var cmd = lazy.Value;
-                        Controller.Regisity(cmd.Name,cmd.GetType());
+                        Controller.Registry(cmd.Name,cmd.GetType());
                     }
                 }
             }

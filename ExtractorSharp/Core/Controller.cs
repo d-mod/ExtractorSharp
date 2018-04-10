@@ -126,7 +126,7 @@ namespace ExtractorSharp.Core {
         /// </summary>
         /// <param name="cmd"></param>
         /// <param name="type"></param>
-        public void Regisity(string cmd, Type type) {
+        public void Registry(string cmd, Type type) {
             if (Dic.ContainsKey(cmd)) {
                 Dic.Remove(cmd);
             }

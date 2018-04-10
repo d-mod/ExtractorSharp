@@ -15,18 +15,17 @@ namespace ExtractorSharp.Handle {
         public override Bitmap ConvertToBitmap(Sprite entity) {
             var data = entity.Data;
             var size = entity.Width * entity.Height;
-            if (entity.Compress != Compress.ZLIB) {
-                return base.ConvertToBitmap(entity);
-            }
-            data = FreeImage.Decompress(data, size);
-            var table = Album.CurrentTable;
-            if (table.Count > 0) {
-                using (var os = new MemoryStream()) {
-                    for (var i = 0; i < data.Length; i++) {
-                        var j = data[i] % table.Count;
-                        Colors.WriteColor(os,table[j], ColorBits.ARGB_8888);
+            if (entity.Compress == Compress.ZLIB) {
+                data = FreeImage.Decompress(data, size);
+                var table = Album.CurrentTable;
+                if (table.Count > 0) {
+                    using (var os = new MemoryStream()) {
+                        for (var i = 0; i < data.Length; i++) {
+                            var j = data[i] % table.Count;
+                            Colors.WriteColor(os, table[j], ColorBits.ARGB_8888);
+                        }
+                        data = os.ToArray();
                     }
-                    data = os.ToArray();
                 }
             }
             return Bitmaps.FromArray(data, entity.Size);

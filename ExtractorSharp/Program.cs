@@ -92,54 +92,54 @@ namespace ExtractorSharp {
         }
 
         private static void RegistyCommand() {
-            Controller.Regisity("addImg", typeof(AddFile));
-            Controller.Regisity("deleteImg", typeof(DeleteFile));
-            Controller.Regisity("renameImg", typeof(RenameFile));
-            Controller.Regisity("replaceImg", typeof(ReplaceFile));
-            Controller.Regisity("newImg", typeof(NewFile));
-            Controller.Regisity("hideImg", typeof(HideFile));
-            Controller.Regisity("sortImg", typeof(SortFile));
-            Controller.Regisity("saveImg", typeof(SaveFile));
+            Controller.Registry("addImg", typeof(AddFile));
+            Controller.Registry("deleteImg", typeof(DeleteFile));
+            Controller.Registry("renameImg", typeof(RenameFile));
+            Controller.Registry("replaceImg", typeof(ReplaceFile));
+            Controller.Registry("newImg", typeof(NewFile));
+            Controller.Registry("hideImg", typeof(HideFile));
+            Controller.Registry("sortImg", typeof(SortFile));
+            Controller.Registry("saveImg", typeof(SaveFile));
 
-            Controller.Regisity("cutImg", typeof(CutFile));
-            Controller.Regisity("pasteImg", typeof(PasteFile));
+            Controller.Registry("cutImg", typeof(CutFile));
+            Controller.Registry("pasteImg", typeof(PasteFile));
 
-            Controller.Regisity("repairFile", typeof(RepairFile));
-            Controller.Regisity("splitFile", typeof(SplitFile));
-            Controller.Regisity("mixFile", typeof(MixFile));
-            Controller.Regisity("moveFile", typeof(MoveFile));
+            Controller.Registry("repairFile", typeof(RepairFile));
+            Controller.Registry("splitFile", typeof(SplitFile));
+            Controller.Registry("mixFile", typeof(MixFile));
+            Controller.Registry("moveFile", typeof(MoveFile));
 
-            Controller.Regisity("newImage", typeof(NewImage));
-            Controller.Regisity("replaceImage", typeof(ReplaceImage));
-            Controller.Regisity("hideImage", typeof(HideImage));
-            Controller.Regisity("linkImage", typeof(LinkImage));
-            Controller.Regisity("deleteImage", typeof(DeleteImage));
-            Controller.Regisity("saveImage", typeof(SaveImage));
-            Controller.Regisity("saveGif", typeof(SaveGif));
-            Controller.Regisity("changePosition", typeof(ChangePosition));
-            Controller.Regisity("changeSize", typeof(ChangeSize));
+            Controller.Registry("newImage", typeof(NewImage));
+            Controller.Registry("replaceImage", typeof(ReplaceImage));
+            Controller.Registry("hideImage", typeof(HideImage));
+            Controller.Registry("linkImage", typeof(LinkImage));
+            Controller.Registry("deleteImage", typeof(DeleteImage));
+            Controller.Registry("saveImage", typeof(SaveImage));
+            Controller.Registry("saveGif", typeof(SaveGif));
+            Controller.Registry("changePosition", typeof(ChangePosition));
+            Controller.Registry("changeSize", typeof(ChangeSize));
 
-            Controller.Regisity("cutImage", typeof(CutImage));
-            Controller.Regisity("pasteImage", typeof(PasteImage));
-            Controller.Regisity("pasteSingleImage", typeof(PasteSingleImage));
-            Controller.Regisity("moveImage", typeof(MoveImage));
+            Controller.Registry("cutImage", typeof(CutImage));
+            Controller.Registry("pasteImage", typeof(PasteImage));
+            Controller.Registry("pasteSingleImage", typeof(PasteSingleImage));
+            Controller.Registry("moveImage", typeof(MoveImage));
 
-            Controller.Regisity("addMerge", typeof(AddMerge));
-            Controller.Regisity("removeMerge", typeof(RemoveMerge));
-            Controller.Regisity("clearMerge", typeof(ClearMerge));
-            Controller.Regisity("runMerge", typeof(RunMerge));
-            Controller.Regisity("moveMerge", typeof(MoveMerge));
+            Controller.Registry("addMerge", typeof(AddMerge));
+            Controller.Registry("removeMerge", typeof(RemoveMerge));
+            Controller.Registry("clearMerge", typeof(ClearMerge));
+            Controller.Registry("runMerge", typeof(RunMerge));
+            Controller.Registry("moveMerge", typeof(MoveMerge));
 
-            Controller.Regisity("canvasImage", typeof(CanvasImage));
-            Controller.Regisity("uncanvasImage", typeof(UnCanvasImage));
-            Controller.Regisity("lineDodge", typeof(LineDodge));
+            Controller.Registry("canvasImage", typeof(CanvasImage));
+            Controller.Registry("uncanvasImage", typeof(UnCanvasImage));
+            Controller.Registry("lineDodge", typeof(LineDodge));
 
-            Controller.Regisity("renameLayer", typeof(RenameLayer));
+            Controller.Registry("renameLayer", typeof(RenameLayer));
 
-            Controller.Regisity("changeColor", typeof(ChangeColor));
-            Controller.Regisity("pencil", typeof(PencilDraw));
-            Controller.Regisity("eraser", typeof(EraserDraw));
-            Controller.Regisity("moveTools", typeof(MoveToolsDraw));
+            Controller.Registry("changeColor", typeof(ChangeColor));
+            Controller.Registry("pencil", typeof(PencilDraw));
+            Controller.Registry("eraser", typeof(EraserDraw));
+            Controller.Registry("moveTools", typeof(MoveToolsDraw));
         }
 
         private static void ShowDebug(object sender, ThreadExceptionEventArgs e) {

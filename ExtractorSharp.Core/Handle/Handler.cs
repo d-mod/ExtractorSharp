@@ -62,6 +62,7 @@ namespace ExtractorSharp.Handle {
             } else {
                 var index_data = AdjustIndex();
                 var suffix_data = AdjustSuffix();
+                var flag = Album.Version == Img_Version.Ver1 ? Npks.IMAGE_FLAG : Npks.IMG_FLAG;
                 ms.WriteString(Npks.IMG_FLAG);
                 ms.WriteLong(Album.Info_Length);
                 ms.WriteInt((int)Album.Version);

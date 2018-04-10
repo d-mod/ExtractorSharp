@@ -244,8 +244,9 @@ namespace ExtractorSharp.Data {
         /// 校正贴图
         /// </summary>
         public void Adjust() {
-            if (Version == Img_Version.Ver1 || Version == Img_Version.Ver5)
+            if (Version == Img_Version.Ver5) {
                 ConvertTo(Img_Version.Ver2);
+            }
             Handler.Adjust();
             AdjustIndex();
         }

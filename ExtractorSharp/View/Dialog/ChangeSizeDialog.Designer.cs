@@ -134,6 +134,8 @@
             this.scaleBox.Name = "numericUpDown3";
             this.scaleBox.Size = new System.Drawing.Size(120, 21);
             this.scaleBox.TabIndex = 10;
+            this.scaleBox.Minimum = 20;
+            this.scaleBox.Maximum = 10000;
             // 
             // checkBox1
             // 

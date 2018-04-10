@@ -34,12 +34,14 @@ namespace ExtractorSharp.Handle {
 
         public override void NewImage(int count, ColorBits type, int index) {
             var array = new Sprite[count];
-            if (count < 1)
+            if (count < 1) {
                 return;
+            }
             array[0] = new Sprite(Album);
             array[0].Index = index;
-            if (type != ColorBits.LINK)
+            if (type != ColorBits.LINK) {
                 array[0].Type = type;
+            }
             for (var i = 1; i < count; i++) {
                 array[i] = new Sprite(Album);
                 array[i].Type = type;
@@ -47,10 +49,11 @@ namespace ExtractorSharp.Handle {
                     array[i].Target = array[0];
                 array[i].Index = index + i;
             }
-            if (index < Album.List.Count && index > 0)
+            if (index < Album.List.Count && index > 0) {
                 Album.List.InsertRange(index, array);
-            else
+            } else {
                 Album.List.AddRange(array);
+            }
         }
 
         public override byte[] AdjustIndex() {
@@ -69,6 +72,7 @@ namespace ExtractorSharp.Handle {
                 ms.WriteInt(entity.Location.Y);
                 ms.WriteInt(entity.Canvas_Size.Width);
                 ms.WriteInt(entity.Canvas_Size.Height);
+                ms.Write(entity.Data);
             }
             ms.Close();
             var data = ms.ToArray();
@@ -77,14 +81,7 @@ namespace ExtractorSharp.Handle {
         }
 
         public override byte[] AdjustSuffix() {
-            var ms = new MemoryStream();
-            foreach (var entity in Album.List) {
-                if (entity.Type == ColorBits.LINK)
-                    continue;
-                ms.Write(entity.Data);
-            }
-            ms.Close();
-            return ms.ToArray();
+            return new byte[0];
         }
         
         public override void CreateFromStream(Stream stream) {
@@ -107,19 +104,23 @@ namespace ExtractorSharp.Handle {
                 image.Y = stream.ReadInt();
                 image.Canvas_Width = stream.ReadInt();
                 image.Canvas_Height = stream.ReadInt();
-                if (image.Compress == Compress.NONE)
+                if (image.Compress == Compress.NONE) {
                     image.Length = image.Size.Width * image.Size.Height * (image.Type == ColorBits.ARGB_8888 ? 4 : 2);
+                }
                 var data = new byte[image.Length];
                 stream.Read(data);
                 image.Data = data;
             }
             foreach (var image in Album.List) {
                 if (image.Type == ColorBits.LINK) {
-                    if (dic.ContainsKey(image) && dic[image] < Album.List.Count) {
+                    if (dic.ContainsKey(image) && dic[image] > -1 && dic[image] < Album.List.Count && dic[image] != image.Index) {
                         image.Target = Album.List[dic[image]];
                         image.Size = image.Target.Size;
                         image.Canvas_Size = image.Target.Canvas_Size;
                         image.Location = image.Target.Location;
+                    } else {
+                        Album.List.Clear();
+                        return;
                     }
                 }
             }
