@@ -10,11 +10,6 @@ namespace ExtractorSharp.Core.Lib {
     /// FreeImage图片处理库封装
     /// </summary>
     public static class FreeImage {
-
-        static FreeImage() {
-            Init(0);
-        }
-
         /// <summary>
         /// zlib压缩
         /// </summary>
@@ -23,7 +18,7 @@ namespace ExtractorSharp.Core.Lib {
         public static byte[] Compress(byte[] data) {
             var size = (int)(data.LongLength * 1.001 + 12);//缓冲长度 
             var target = new byte[size];
-            size = Compress(target, ref size, data, data.Length);
+            Compress(target, ref size, data, data.Length);
             var temp = new byte[size];
             Array.Copy(target, temp, size);
             return temp;
@@ -37,13 +32,9 @@ namespace ExtractorSharp.Core.Lib {
         /// <returns></returns>
         public static byte[] Decompress(byte[] data, int size) {
             var target = new byte[size];
-            Uncompress(target, ref size, data, data.Length);
+            Decompress(target, ref size, data, data.Length);
             return target;
         }
-
-
-        [DllImport("FreeImage.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "_FreeImage_Initialise@4")]
-        private static extern void Init(int id);
 
         [DllImport("FreeImage.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "_FreeImage_DeInitialise@0")]
         private static extern void Close();
@@ -84,11 +75,11 @@ namespace ExtractorSharp.Core.Lib {
         [DllImport("FreeImage.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "_FreeImage_GetHeight@4")]
         private static extern int GetHeight(IntPtr handle);
 
-        [DllImport("FreeImage.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "_FreeImage_ZLibCompress@16")]
+        [DllImport("zlib1.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "compress")]
         private static extern int Compress([In, Out]byte[] dest, ref int destLen, byte[] source, int sourceLen);
 
-        [DllImport("FreeImage.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "_FreeImage_ZLibUncompress@16")]
-        private static extern int Uncompress([In, Out]byte[] dest, ref int destLen, byte[] source, int sourceLen);
+        [DllImport("zlib1.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "uncompress")]
+        private static extern int Decompress([In, Out]byte[] dest, ref int destLen, byte[] source, int sourceLen);
 
         [DllImport("FreeImage.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "_FreeImage_GetFileTypeFromMemory@8")]
         private static extern int GetFormat(IntPtr memory, int dib);
@@ -120,36 +111,6 @@ namespace ExtractorSharp.Core.Lib {
         [DllImport("FreeImage.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "_FreeImage_UnlockPage@12")]
         private static extern void UnlockPage(IntPtr handle, IntPtr page, int able);
 
-        [DllImport("FreeImage.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "_FreeImage_AppendPage@8")]
-        private static extern bool AppendPage(IntPtr bitmap, IntPtr page);
-
-        [DllImport("FreeImage.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "_FreeImage_Save@16")]
-        private static extern bool Save(int fif, IntPtr dib, string filename, int flag);
-
-        [DllImport("FreeImage.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "_FreeImage_ConvertTo8Bits@4")]
-        private static extern bool ConvertTo8Bits(IntPtr dib);
-
-
-        [DllImport("FreeImage.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "_FreeImage_ConvertTo24Bits@4")]
-        private static extern bool ConvertTo24Bits(IntPtr dib);
-
-        [DllImport("FreeImage.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "_FreeImage_ConvertToGreyscale@4")]
-        private static extern bool ConvertToGreyscale(IntPtr dib);
-
-        [DllImport("FreeImage.dll",CallingConvention =CallingConvention.StdCall,EntryPoint = "_FreeImage_ColorQuantize@8")]
-        private static extern void ColorQuantize(IntPtr dib, int quantize);
-
-
-        public static Bitmap Load(byte[] data, Size size) {
-            var memory = OpenMemory(data, data.Length);
-            var format = GetFormat(memory, 0);
-            var handle = LoadFromMemory(format, memory, 0);
-            var bits = GetBits(handle);
-            var length = size.Width * size.Height * 4;
-            data = new byte[length];
-            Marshal.Copy(bits, data, 0, data.Length);
-            return Bitmaps.FromArray(data, size);
-        }
 
 
 
@@ -177,22 +138,6 @@ namespace ExtractorSharp.Core.Lib {
             }
             return array;
         }
-
-        public static Bitmap[] ReadGif2(string path) {
-            var decoder = AnimatedGif.AnimatedGif.Load(path);
-            var array = new Bitmap[decoder.Frames.Count];
-            for (var i = 0; i < decoder.Frames.Count; i++) {
-                var frame = decoder.Frames[i];
-                BitmapEncoder encoder = new BmpBitmapEncoder();
-                encoder.Frames.Add(frame);
-                using (var os = new MemoryStream()) {
-                    encoder.Save(os);
-                    array[i] = new Bitmap(os);
-                }
-            }
-            return array;
-        }
-
 
         public static void WriteGif(string path, Image[] array) {
             var gif = AnimatedGif.AnimatedGif.Create(path, 100);

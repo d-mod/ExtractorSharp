@@ -14,6 +14,12 @@ namespace ExtractorSharp.Core.Lib {
 
         public static void Write(this Stream stream, byte[] buf) => stream.Write(buf, 0, buf.Length);
 
+        public static byte[] Read(this Stream stream, int length) {
+            var buf = new byte[length];
+            stream.Read(buf, 0, length);
+            return buf;
+        }
+
         public static void Seek(this Stream stream, long offset) => stream.Seek(offset, SeekOrigin.Current);
 
         #endregion
@@ -29,6 +35,11 @@ namespace ExtractorSharp.Core.Lib {
             return BitConverter.ToInt32(buf, 0);
         }
 
+        public static uint ReadUInt(this Stream stream) {
+            stream.Read(4, out byte[] buf);
+            return BitConverter.ToUInt32(buf, 0);
+        }
+
         /// <summary>
         /// 写入一个int
         /// </summary>
@@ -36,11 +47,18 @@ namespace ExtractorSharp.Core.Lib {
         /// <param name="data"></param>
         public static void WriteInt(this Stream stream, int data) => stream.Write(BitConverter.GetBytes(data));
 
+        public static void WriteUInt(this Stream stream, uint data) => stream.Write(BitConverter.GetBytes(data));
 
         public static short ReadShort(this Stream stream) {
             stream.Read(2,out byte[] buf);
             return BitConverter.ToInt16(buf, 0);
         }
+
+        public static ushort ReadUShort(this Stream stream) {
+            stream.Read(2, out byte[] buf);
+            return BitConverter.ToUInt16(buf, 0);
+        }
+
 
         public static void WriteShort(this Stream stream, short s) => stream.Write(BitConverter.GetBytes(s));
 

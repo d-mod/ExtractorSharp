@@ -21,6 +21,10 @@ namespace ExtractorSharp.Data {
         public TextureFormat Format { set; get; }
         public bool IsCubemap { get; internal set; }
         public Mipmap[] Mipmaps { get; internal set; }
+        public int Pitch { get; internal set; }
+        public int Depth { get; internal set; }
+        public byte[] Reverse { set; get; } = new byte[11];
+        public int PixelFormatSize { get; internal set; }
     }
 
     public class Mipmap {

@@ -18,10 +18,12 @@ namespace ExtractorSharp.Data {
         [LSIgnore]
         public Bitmap Picture {
             get {
-                if (Type == ColorBits.LINK)
+                if (Type == ColorBits.LINK) {
                     return Target.Picture;
-                if (IsOpen)//如果已打开,直接返回image
+                }
+                if (IsOpen) {//如果已打开,直接返回image
                     return _image;
+                }
                 return _image = Parent.ConvertToBitmap(this);//使用父容器解析
             }
             set {

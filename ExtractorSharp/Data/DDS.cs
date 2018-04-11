@@ -18,14 +18,19 @@ namespace ExtractorSharp.Data {
         public ColorBits Type = ColorBits.DXT_1;
         public Bitmap Pictrue {
             get {
-                if (image != null)
+                if (image != null) {
                     return image;
+                }
                 var data = FreeImage.Decompress(Data, DDS_Size);
                 if (Type < ColorBits.DXT_1) {
                     return Bitmaps.FromArray(data, new Size(Width, Height), Type);
                 }
-                var bmp = FreeImage.Load(data, new Size(Width, Height));
-                bmp.RotateFlip(RotateFlipType.Rotate180FlipX);
+                var fs = new FileStream("d:/test.dds", FileMode.Create);
+                fs.Write(data);
+                fs.Close();
+                var dds = Ddss.Parse(data);
+                data = dds.Mipmaps[0].Data;
+                var bmp = Bitmaps.FromArray(data, new Size(Width, Height));
                 return bmp;
             }
             set => image = value;
