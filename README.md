@@ -14,17 +14,13 @@ ExtractorSharp
         
 依赖
 ---
-   + 图形处理
-       + FreeImage
    + 音频处理
        + Bass
-   + Bzip2压缩
+   + 压缩
+       + Zlib
        + ICSharpCode.SharpZipLib
-   + Json
-       + ExtractorSharp.Json
    + 控件
        + WinForm
-       + ExtractorSharp.Component
    + 插件支持
        + MEF
        
@@ -36,8 +32,8 @@ ExtractorSharp
 运行环境
 ---
    + Windows 7,8,10
-   + .NET Framework 4.5 以上
-**在Windows7环境中,你需要自行安装.NET Framework 4.5**
+   + .NET Framework 4.6 以上
+**在Windows7环境中,你需要自行安装.NET Framework 4.6**
    
 国际化支持(Language)
 ---
