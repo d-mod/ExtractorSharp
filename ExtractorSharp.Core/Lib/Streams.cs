@@ -50,12 +50,14 @@ namespace ExtractorSharp.Core.Lib {
         public static void WriteUInt(this Stream stream, uint data) => stream.Write(BitConverter.GetBytes(data));
 
         public static short ReadShort(this Stream stream) {
-            stream.Read(2,out byte[] buf);
+            var buf = new byte[2];
+            stream.Read(buf, 0, buf.Length);
             return BitConverter.ToInt16(buf, 0);
         }
 
         public static ushort ReadUShort(this Stream stream) {
-            stream.Read(2, out byte[] buf);
+            var buf = new byte[2];
+            stream.Read(buf, 0, buf.Length);
             return BitConverter.ToUInt16(buf, 0);
         }
 
@@ -69,7 +71,8 @@ namespace ExtractorSharp.Core.Lib {
         /// <param name="stream"></param>
         /// <returns></returns>
         public static long ReadLong(this Stream stream) {
-            stream.Read(8,out byte[] buf);
+            var buf = new byte[8];
+            stream.Read(buf, 0, buf.Length);
             return BitConverter.ToInt64(buf, 0);
         }
 

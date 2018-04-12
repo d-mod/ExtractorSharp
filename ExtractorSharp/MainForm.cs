@@ -1299,10 +1299,10 @@ namespace ExtractorSharp {
             }
             var dialog = new SaveFileDialog();
             var name = Connector.SelectedFile.Name.RemoveSuffix(".");
-            dialog.Filter = "gif动态图片|*.gif";
+            dialog.Filter = $"GIF|*.gif";
             dialog.FileName = name;
             if (dialog.ShowDialog() == DialogResult.OK) {
-                Connector.Do("saveGif", Connector.SelectedFile, array, dialog.FileName);
+                Connector.Do("saveGif", Connector.SelectedFile, array, dialog.FileName, Config["GifTransparent"].Color, Config["GifDelay"].Integer);
             }
         }
 

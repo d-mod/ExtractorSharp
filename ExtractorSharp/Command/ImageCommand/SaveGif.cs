@@ -9,7 +9,7 @@ using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Data;
 
 namespace ExtractorSharp.Command.ImageCommand {
-    class SaveGif : ISingleAction,ICommandMessage{
+    class SaveGif : ISingleAction, ICommandMessage {
         public int[] Indices { set; get; }
 
         public string Name => "SaveGif";
@@ -22,6 +22,8 @@ namespace ExtractorSharp.Command.ImageCommand {
 
         private Album Album;
         private string Path;
+        private Color Transparent = Color.Transparent;
+        private int Delay = 75;
 
         public void Action(Album Album, int[] indexes) {
             var w = 1;
@@ -53,13 +55,17 @@ namespace ExtractorSharp.Command.ImageCommand {
                     g.DrawImage(sprite.Picture, sprite.X - x, sprite.Y - y);
                 }
             }
-            FreeImage.WriteGif(Path, array);
+            Bitmaps.WriteGif(Path, array, Transparent, Delay);
         }
 
         public void Do(params object[] args) {
             Album = args[0] as Album;
             Indices = args[1] as int[];
             Path = args[2] as string;
+            if (args.Length > 4) {
+                Transparent = (Color)args[3];
+                Delay = (int)args[4];
+            }
             Action(Album, Indices);
         }
 

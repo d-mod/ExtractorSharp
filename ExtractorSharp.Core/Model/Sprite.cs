@@ -216,7 +216,7 @@ namespace ExtractorSharp.Data {
                 return;
             Data = Parent.ConvertToByte(this);
             if (Compress == Compress.ZLIB) { 
-                Data = FreeImage.Compress(Data);
+                Data = Zlib.Compress(Data);
                 }
             Length = Data.Length;            //不压缩时，按原长度保存
         }
@@ -244,7 +244,7 @@ namespace ExtractorSharp.Data {
         public void Save(Stream stream) {
             var data = Picture.ToArray();
             if (Compress != Compress.NONE) {
-                data = FreeImage.Compress(data);
+                data = Zlib.Compress(data);
             }
             stream.WriteString("");
             stream.WriteInt((int)Type);

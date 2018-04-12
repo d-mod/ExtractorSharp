@@ -15,7 +15,7 @@ namespace ExtractorSharp.Handle {
             if (entity.Compress != Compress.ZLIB || entity.Type > ColorBits.ARGB_1555) {
                 return base.ConvertToBitmap(entity);
             }
-            data = FreeImage.Decompress(data, size);
+            data = Zlib.Decompress(data, size);
             var table = Album.CurrentTable;
             if (table.Count > 0) {
                 using (var os = new MemoryStream()) {

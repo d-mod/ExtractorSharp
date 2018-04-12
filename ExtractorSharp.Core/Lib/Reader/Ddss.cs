@@ -100,34 +100,38 @@ namespace ExtractorSharp.Core.Lib {
                 for (var y = 0; y < height; y += 4) {
                     var co0 = ms.ReadUShort();
                     var co1 = ms.ReadUShort();
-                    var color0 = DecodeRGB565(co0);
-                    var color1 = DecodeRGB565(co1);
-                    var color2 = new byte[4];
-                    var color3 = new byte[4];
-                    if (co0 > co1 ) {
-                        color2[0] = (byte)((color0[0] * 2 + color1[0]) / 3);
-                        color2[1] = (byte)((color0[1] * 2 + color1[1]) / 3);
-                        color2[2] = (byte)((color0[2] * 2 + color1[2]) / 3);
-                        color2[3] = 0xff;
-                        color3[0] = (byte)((color0[0] + color1[0] * 2) / 3);
-                        color3[1] = (byte)((color0[1] + color1[1] * 2) / 3);
-                        color3[2] = (byte)((color0[2] + color1[2] * 2) / 3);
-                        color3[3] = 0xff;
+                    var colors = new byte[4][];
+                    colors[0] = DecodeRGB565(co0);
+                    colors[1] = DecodeRGB565(co1);
+                    colors[2] = new byte[4];
+                    colors[3] = new byte[4];
+                    if (co0 > co1) {
+                        colors[2][0] = (byte)((colors[0][0] * 2 + colors[1][0]) / 3);
+                        colors[2][1] = (byte)((colors[0][1] * 2 + colors[1][1]) / 3);
+                        colors[2][2] = (byte)((colors[0][2] * 2 + colors[1][2]) / 3);
+                        colors[2][3] = 0xff;
+                        colors[3][0] = (byte)((colors[0][0] + colors[1][0] * 2) / 3);
+                        colors[3][1] = (byte)((colors[0][1] + colors[1][1] * 2) / 3);
+                        colors[3][2] = (byte)((colors[0][2] + colors[1][2] * 2) / 3);
+                        colors[3][3] = 0xff;
                     } else {
-                        color2[0] = (byte)((color0[0] + color1[0]) / 2);
-                        color2[1] = (byte)((color0[1] + color1[1]) / 2);
-                        color2[2] = (byte)((color0[2] + color1[2]) / 2);
-                        color2[3] = (byte)((color0[3] + color1[3]) / 2);
+                        colors[2][0] = (byte)((colors[0][0] + colors[1][0]) / 2);
+                        colors[2][1] = (byte)((colors[0][1] + colors[1][1]) / 2);
+                        colors[2][2] = (byte)((colors[0][2] + colors[1][2]) / 2);
+                        colors[2][3] = (byte)((colors[0][3] + colors[1][3]) / 2);
                     }
-                    var colors = new byte[][] { color0, color1, color2, color3 };
                     var index = ms.ReadInt();
-                    for (int i = 0; i < 16; i++) {
-                        var code = ((index >> (i * 2)) & 0x3);
+                    for (int i = 0; i < 16; i++, index >>= 2) {
+                        var j = index & 0x3;
                         var pos = 4 * (height * (x + i / 4) + y + i % 4);
-                        Array.Copy(colors[code], 0, buf, pos, 4);
+                        buf[pos + 0] = colors[j][0];
+                        buf[pos + 1] = colors[j][1];
+                        buf[pos + 2] = colors[j][2];
+                        buf[pos + 3] = colors[j][3];
                     }
                 }
             }
+            ms.Close();
             return buf;
         }
 
@@ -163,20 +167,18 @@ namespace ExtractorSharp.Core.Lib {
                     color3[2] = (byte)((color0[2] + color1[2] * 2) / 3);
 
                     var colors = new byte[][] { color0, color1, color2, color3 };
-
-                    for (var i = 0; i < 16; i++) {
-                        var select = (index >> (i * 2)) & 0x3;
+                    for (var i = 0; i < 16; i++, index >>= 2) {
+                        var j = index & 0x3;
                         var pos = 4 * (height * (x + i / 4) + y + i % 4);
                         var a = (byte)(alphas[i / 4] & 0xf);
-                        a |= (byte)(a << 4);
-                        var col = colors[select];
-                        buf[pos + 0] = col[0];
-                        buf[pos + 1] = col[1];
-                        buf[pos + 2] = col[2];
-                        buf[pos + 3] = a;
+                        buf[pos + 0] = colors[j][0];
+                        buf[pos + 1] = colors[j][1];
+                        buf[pos + 2] = colors[j][2];
+                        buf[pos + 3] = (byte)(a | a << 4);
                     }
                 }
             }
+            ms.Close();
             return buf;
         }
 
@@ -212,53 +214,41 @@ namespace ExtractorSharp.Core.Lib {
                     var c1 = ms.ReadUShort();
                     //rgb索引
                     var index = ms.ReadInt();
+                    var colors = new byte[4][];
 
-                    var color0 = DecodeRGB565(c0);
-                    var color1 = DecodeRGB565(c1);
-
-                    var color2 = new byte[4];
-
-                    var color3 = new byte[4];
-                    if (c0 > c1) {
-                        color2[0] = (byte)((color0[0] * 2 + color1[0]) / 3);
-                        color2[1] = (byte)((color0[1] * 2 + color1[1]) / 3);
-                        color2[2] = (byte)((color0[2] * 2 + color1[2]) / 3);
-                        color3[0] = (byte)((color0[0] + color1[0] * 2) / 3);
-                        color3[1] = (byte)((color0[1] + color1[1] * 2) / 3);
-                        color3[2] = (byte)((color0[2] + color1[2] * 2) / 3);
-                    } else {
-                        color2[0] = (byte)((color0[0] + color1[0]) / 2);
-                        color2[1] = (byte)((color0[1] + color1[1]) / 2);
-                        color2[2] = (byte)((color0[2] + color1[2]) / 2);
+                    colors[0] = DecodeRGB565(c0);
+                    colors[1] = DecodeRGB565(c1);
+                    colors[2] = new byte[4];
+                    colors[3] = new byte[4];
+                    for (var i = 0; i < 3; i++) {
+                        colors[2][i] = (byte)((colors[0][i] * 2 + colors[1][i]) / 3);
+                        colors[3][i] = (byte)((colors[0][i] + colors[1][i] * 2) / 3);
                     }
-                    var colors = new byte[][] { color0, color1, color2, color3 };
 
-                    for (var i = 0; i < 16; i++) {
-                        var select = (index >> (i * 2)) & 0x3;
-                        var pos = 4 * (height * (x + i / 4) + y + i % 4);
-                        var ai = (bit >> (i * 3)) & 0x7;
-                        var col = colors[select];
-                        buf[pos + 0] = col[0];
-                        buf[pos + 1] = col[1];
-                        buf[pos + 2] = col[2];
-                        buf[pos + 3] = alphas[ai];
+                    for (var i = 0; i < 16; i++, index >>= 2, bit >>= 3) {
+                        var j = index & 0x3;
+                        var pos = (height * (x + i / 4) + y + i % 4) * 4;
+                        buf[pos + 0] = colors[j][0];
+                        buf[pos + 1] = colors[j][1];
+                        buf[pos + 2] = colors[j][2];
+                        buf[pos + 3] = alphas[bit & 0x7];
                     }
                 }
             }
+            ms.Close();
             return buf;
         }
 
         public static byte[] DecodeRGB565(ushort color) {
-            byte[] rgb = new byte[4];
-            rgb[0] = (byte)((color) & 0x1f);
-            rgb[1] = (byte)((color >> 5) & 0x3f);
-            rgb[2] = (byte)((color >> 11) & 0x1f);
+            var r = (byte)((color) & 0x1f);
+            var g = (byte)((color >> 5) & 0x3f);
+            var b = (byte)((color >> 11) & 0x1f);
+            var a = (byte)0xff;
 
-            rgb[0] = (byte)((rgb[0] << 3) | (rgb[0] >> 2));
-            rgb[1] = (byte)((rgb[1] << 2) | (rgb[1] >> 4));
-            rgb[2] = (byte)((rgb[2] << 3) | (rgb[2] >> 2));
-            rgb[3] = 0xff;
-            return rgb;
+            r = (byte)((r << 3) | (r >> 2));
+            g = (byte)((g << 2) | (g >> 4));
+            b = (byte)((b << 3) | (b >> 2));
+            return new byte[] { r, g, b, a };
         }
 
 

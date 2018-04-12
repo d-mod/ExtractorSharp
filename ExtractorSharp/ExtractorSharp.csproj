@@ -327,9 +327,6 @@
     <Compile Include="View\Dialog\VersionDialog.Designer.cs">
       <DependentUpon>VersionDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Handle\FirstHandler.cs" />
-    <Compile Include="Handle\OggHandler.cs" />
-    <Compile Include="Handle\SixthHandler.cs" />
     <Compile Include="Draw\Paint\Layer.cs" />
     <Compile Include="Core\Hoster.cs" />
     <Compile Include="View\Dialog\ChangePositionDialog.cs">
@@ -338,10 +335,6 @@
     <Compile Include="View\Dialog\ChangePositionDialog.designer.cs">
       <DependentUpon>ChangePositionDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Data\DDS.cs" />
-    <Compile Include="Handle\FifthHandler.cs" />
-    <Compile Include="Handle\FourthHandler.cs" />
-    <Compile Include="Handle\SecondHandler.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

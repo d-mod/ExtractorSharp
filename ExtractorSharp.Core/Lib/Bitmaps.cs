@@ -1,13 +1,15 @@
 ﻿using ExtractorSharp.Data;
+using Gif.Components;
 using System;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 
 namespace ExtractorSharp.Core.Lib {
     public static class Bitmaps {
+
+
 
         /// <summary>
         /// 图片扫描
@@ -146,6 +148,29 @@ namespace ExtractorSharp.Core.Lib {
             }
             ms.Close();
             return FromArray(data, size);
+        }
+
+        public static Bitmap[] ReadGif(string path) {
+            GifDecoder decoder = new GifDecoder();
+            decoder.Read(path);
+            var count = decoder.GetFrameCount();
+            var array = new Bitmap[count];
+            for (var i = 0; i < count; i++) {
+                array[i] = decoder.GetFrame(i) as Bitmap;
+            }
+            return array;
+        }
+
+        public static void WriteGif(string path, Image[] array, Color transparent, int delay = 75) {
+            var encoder = new AnimatedGifEncoder();
+            encoder.Start();
+            encoder.SetDelay(75);
+            encoder.SetTransparent(transparent);
+            for (var i = 0; i < array.Length; i++) {
+                encoder.AddFrame(array[i]);
+            }
+            encoder.Finish();
+            encoder.Output(path);
         }
     }
 }

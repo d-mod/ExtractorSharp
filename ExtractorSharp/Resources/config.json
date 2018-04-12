@@ -23,6 +23,10 @@
 
   "LayerMaximum": 20,
 
+  "GifTransparent": "0,0,0,0",
+
+  "GifDelay": 75,
+
   "ApiHost": "http://localhost",
 
 

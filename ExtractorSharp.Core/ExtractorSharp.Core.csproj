@@ -31,9 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AnimatedGif, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AnimatedGif.1.0.1\lib\AnimatedGif.dll</HintPath>
-    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
@@ -62,25 +59,37 @@
     <Compile Include="Composition\MessageType.cs" />
     <Compile Include="Config\ConfigValue.cs" />
     <Compile Include="Config\IConfig.cs" />
-    <Compile Include="Data\Album.cs" />
-    <Compile Include="Data\Sprite.cs" />
-    <Compile Include="Data\Language.cs" />
-    <Compile Include="Data\Texture.cs" />
+    <Compile Include="Model\Album.cs" />
+    <Compile Include="Model\DDS.cs" />
+    <Compile Include="Model\Sprite.cs" />
+    <Compile Include="Model\Language.cs" />
+    <Compile Include="Model\Texture.cs" />
     <Compile Include="Draw\IBrush.cs" />
     <Compile Include="Draw\IPaint.cs" />
     <Compile Include="Draw\Paint\Canvas.cs" />
+    <Compile Include="Handle\FifthHandler.cs" />
+    <Compile Include="Handle\FirstHandler.cs" />
+    <Compile Include="Handle\FourthHandler.cs" />
     <Compile Include="Handle\Handler.cs" />
     <Compile Include="Handle\Img_Version.cs" />
     <Compile Include="Composition\IPlugin.cs" />
+    <Compile Include="Handle\OggHandler.cs" />
+    <Compile Include="Handle\SecondHandler.cs" />
+    <Compile Include="Handle\SixthHandler.cs" />
     <Compile Include="Lib\Arrays.cs" />
     <Compile Include="Lib\Bitmaps.cs" />
     <Compile Include="Lib\Colors.cs" />
     <Compile Include="Lib\Drawings.cs" />
     <Compile Include="Lib\Reader\Ddss.cs" />
+    <Compile Include="Lib\Reader\Gifs.cs" />
+    <Compile Include="Lib\Reader\Gif\AnimatedGifEncoder.cs" />
+    <Compile Include="Lib\Reader\Gif\GifDecoder.cs" />
+    <Compile Include="Lib\Reader\Gif\LZWEncoder.cs" />
+    <Compile Include="Lib\Reader\Gif\NeuQuant.cs" />
     <Compile Include="Lib\Reader\Npks.cs" />
     <Compile Include="Lib\Reader\Spks.cs" />
     <Compile Include="Lib\Bass.cs" />
-    <Compile Include="Lib\FreeImage.cs" />
+    <Compile Include="Lib\Zlib.cs" />
     <Compile Include="Lib\Streams.cs" />
     <Compile Include="Lib\Strings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

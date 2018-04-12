@@ -21,13 +21,10 @@ namespace ExtractorSharp.Data {
                 if (image != null) {
                     return image;
                 }
-                var data = FreeImage.Decompress(Data, DDS_Size);
+                var data = Zlib.Decompress(Data, DDS_Size);
                 if (Type < ColorBits.DXT_1) {
                     return Bitmaps.FromArray(data, new Size(Width, Height), Type);
                 }
-                var fs = new FileStream("d:/test.dds", FileMode.Create);
-                fs.Write(data);
-                fs.Close();
                 var dds = Ddss.Parse(data);
                 data = dds.Mipmaps[0].Data;
                 var bmp = Bitmaps.FromArray(data, new Size(Width, Height));

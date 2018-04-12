@@ -16,7 +16,7 @@ namespace ExtractorSharp.Handle {
             var data = entity.Data;
             var size = entity.Width * entity.Height;
             if (entity.Compress == Compress.ZLIB) {
-                data = FreeImage.Decompress(data, size);
+                data = Zlib.Decompress(data, size);
                 var table = Album.CurrentTable;
                 if (table.Count > 0) {
                     using (var os = new MemoryStream()) {
