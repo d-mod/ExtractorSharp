@@ -774,7 +774,7 @@ namespace ExtractorSharp {
         private void AddOutMerge(object sender, EventArgs e) {
             var dialog = new OpenFileDialog();
             dialog.Multiselect = true;
-            dialog.Filter = "img,npk文件|*.img;*.npk";
+            dialog.Filter = $"${Language["ImageSources"]}|*.img;*.gif;*.npk";
             if (dialog.ShowDialog() == DialogResult.OK) {
                 var array = Npks.Load(dialog.FileNames).ToArray();
                 Connector.Do("addMerge", array);
@@ -1092,7 +1092,7 @@ namespace ExtractorSharp {
         /// <param name="e"></param>
         private void AddFile(object sender, EventArgs e) {
             var dialog = new OpenFileDialog();
-            dialog.Filter = "图片资源|*.npk;*.spk;*.img;|音效资源|*.mp3;*.wav;*.ogg";
+            dialog.Filter = $"{Language["ImageSources"]}|*.npk;*.spk;*.img;*.gif;|{Language["SoundResources"]}|*.mp3;*.wav;*.ogg";
             dialog.Multiselect = true;
             if (dialog.ShowDialog() == DialogResult.OK) {
                 Connector.AddFile(!sender.Equals(addFileItem), dialog.FileNames);

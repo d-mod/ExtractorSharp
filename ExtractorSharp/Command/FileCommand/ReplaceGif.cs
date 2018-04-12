@@ -31,15 +31,7 @@ namespace ExtractorSharp.Command.FileCommand {
         public void Do(params object[] args) {
             Target = args[0] as Album;
             Path = args[1] as string;
-            Source = new Album();
-            var array = Bitmaps.ReadGif(Path);
-            List = new Sprite[array.Length];
-            for (var i = 0; i < array.Length; i++) {
-                List[i]= new Sprite(Source);
-                List[i].Picture = array[i];
-                List[i].UnCanvasImage();
-            }
-            Source.List.AddRange(List);
+            Source = Npks.CreateFromGif(Path);
             Redo();
         }
 

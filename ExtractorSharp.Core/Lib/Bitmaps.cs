@@ -151,12 +151,18 @@ namespace ExtractorSharp.Core.Lib {
         }
 
         public static Bitmap[] ReadGif(string path) {
-            GifDecoder decoder = new GifDecoder();
-            decoder.Read(path);
+            using (var fs = File.Open(path, FileMode.Open)) {
+                return ReadGif(fs);
+            }
+        }
+
+        public static Bitmap[] ReadGif(Stream stream) {
+            var decoder = new GifDecoder();
+            decoder.Read(stream);
             var count = decoder.GetFrameCount();
             var array = new Bitmap[count];
             for (var i = 0; i < count; i++) {
-                array[i] = decoder.GetFrame(i) as Bitmap;
+                array[i] = new Bitmap(decoder.GetFrame(i));
             }
             return array;
         }

@@ -144,6 +144,9 @@ namespace ExtractorSharp {
         }
 
         private static void ShowDebug(object sender, ThreadExceptionEventArgs e) {
+            if (Config["Profile"].Value.Equals("debug")) {
+                return;
+            }
             try {
                 var log = $"{e.Exception.Message};\r\n{e.Exception.StackTrace}";
                 var data = Encoding.Default.GetBytes(log);
