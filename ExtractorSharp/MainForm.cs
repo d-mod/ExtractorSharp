@@ -1,4 +1,5 @@
-﻿using ExtractorSharp.Component;
+﻿using ExtractorSharp.Command;
+using ExtractorSharp.Component;
 using ExtractorSharp.Composition;
 using ExtractorSharp.Config;
 using ExtractorSharp.Converter.Sprite;
@@ -226,7 +227,7 @@ namespace ExtractorSharp {
             saveAsFileItem.Click += OutputFile;
             saveDirItem.Click += OutputDirectory;
             exitItem.Click += (o, e) => Application.Exit();
-            replaceItem.Click += ReplaceImg;
+            replaceItem.Click += ReplaceFile;
             saveAsItem.Click += SaveAsImg;
             renameItem.Click += RenameImg;
             addMergeItem.Click += AddMerge;
@@ -321,6 +322,7 @@ namespace ExtractorSharp {
             selectAllLinkItem.Click += (o, e) => imageList.Filter(sprite => sprite.Type == ColorBits.LINK);
             selectThisLinkItm.Click += SelectThisLink;
             selectThisTargetItem.Click += SelectThisTarget;
+            Controller.CommandDid += CommandDid;
         }
 
         private void LayerVisibleChanged(object sender, LayerEventArgs e) {
@@ -337,6 +339,18 @@ namespace ExtractorSharp {
             layerList.Items.Clear();
             for(var i = 0; i < arr.Length; i++) {
                 layerList.Items.Add(arr[i], arr[i].Visible);
+            }
+        }
+
+        private void CommandDid(object sender,CommandEventArgs e) {
+            if (e.Command.IsFlush) {
+                Connector.FileListFlush();
+            }
+            if (e.Command.IsChanged) {//发生更改
+                Connector.OnSaveChanged();
+            }
+            if (e.Command is ICommandMessage) {
+                Connector.SendSuccess(e.Command.Name);
             }
         }
 
@@ -912,11 +926,11 @@ namespace ExtractorSharp {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ReplaceImg(object sender, EventArgs e) {
+        private void ReplaceFile(object sender, EventArgs e) {
             var item = Connector.SelectedFile;
             if (item != null) {
                 var dialog = new OpenFileDialog();
-                dialog.Filter = $"{Language["ImageResources"]}|*.img|{Language["SoundResources"]}|*.ogg;*.wav;*.mp3|{Language["AllFormat"]}|*.*";
+                dialog.Filter = $"{Language["ImageResources"]}|*.img;*.gif|{Language["SoundResources"]}|*.ogg;*.wav;*.mp3|{Language["AllFormat"]}|*.*";
                 if (item.Version == Img_Version.OGG) {
                     dialog.FilterIndex = 2;
                 } else if (item.Name.EndsWith(".img")) {
@@ -925,9 +939,14 @@ namespace ExtractorSharp {
                     dialog.FilterIndex = 3;
                 }
                 if (dialog.ShowDialog() == DialogResult.OK) {
-                    var list = Npks.Load(dialog.FileName);
-                    if (list.Count > 0) {
-                        Connector.Do("replaceImg", item, list[0]);
+                    var filename = dialog.FileName;
+                    if (filename.EndsWith(".gif")) {
+                        Connector.Do("replaceGif", item, filename);
+                    } else {
+                        var list = Npks.Load(dialog.FileName);
+                        if (list.Count > 0) {
+                            Connector.Do("replaceImg", item, list[0]);
+                        }
                     }
                 }
             }

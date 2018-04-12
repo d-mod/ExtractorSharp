@@ -96,6 +96,7 @@ namespace ExtractorSharp {
             Controller.Registry("deleteImg", typeof(DeleteFile));
             Controller.Registry("renameImg", typeof(RenameFile));
             Controller.Registry("replaceImg", typeof(ReplaceFile));
+            Controller.Registry("replaceGif", typeof(ReplaceGif));
             Controller.Registry("newImg", typeof(NewFile));
             Controller.Registry("hideImg", typeof(HideFile));
             Controller.Registry("sortImg", typeof(SortFile));

@@ -242,15 +242,6 @@ namespace ExtractorSharp.Core {
                         actArgs.Action = action;
                         OnActionChanged(actArgs);
                     }
-                    if (cmd.IsFlush) {
-                        Connector.FileListFlush();
-                    }
-                    if (cmd.IsChanged) {//发生更改
-                        Connector.OnSaveChanged();
-                    }
-                    if(cmd is ICommandMessage) {
-                        Connector.SendSuccess(cmd.Name);
-                    }
                     redoStack.Clear();
                     OnComandDid(new CommandEventArgs() {
                         Name = key,

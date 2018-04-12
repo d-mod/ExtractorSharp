@@ -12,13 +12,15 @@ namespace ExtractorSharp.Core.Lib {
             return stream.Read(buf, 0, length);
         }
 
-        public static void Write(this Stream stream, byte[] buf) => stream.Write(buf, 0, buf.Length);
 
         public static byte[] Read(this Stream stream, int length) {
             var buf = new byte[length];
             stream.Read(buf, 0, length);
             return buf;
         }
+
+        public static void Write(this Stream stream, byte[] buf) => stream.Write(buf, 0, buf.Length);
+
 
         public static void Seek(this Stream stream, long offset) => stream.Seek(offset, SeekOrigin.Current);
 
