@@ -17,12 +17,12 @@ namespace ExtractorSharp.Core.Lib {
 
         public static Texture Parse(byte[] data) {
             using (var ms = new MemoryStream(data)) {
-                return Parse(ms);
+                return Decode(ms);
             }
         }
 
 
-        public static Texture Parse(Stream stream) {
+        public static Texture Decode(Stream stream) {
             Texture texture = new Texture();
             var magic = stream.ReadInt();
             if (magic != DDS_MAGIC) {
@@ -57,13 +57,10 @@ namespace ExtractorSharp.Core.Lib {
                     texture.Format = TextureFormat.RGBA_S3TC_DXT5_Format;
                     break;
             }
-            stream.Seek(8);
             var offset = texture.Length + 4;
             stream.Seek(offset, SeekOrigin.Begin);
             var width = texture.Width;
             var height = texture.Height;
-            width = width / 4 * 4;
-            height = height / 4 * 4;
             var len = width * height / 16 * blockBytes;
             texture.Mipmaps = new Mipmap[texture.Count];
             for (var i = 0; i < texture.Count; i++) {
@@ -212,8 +209,7 @@ namespace ExtractorSharp.Core.Lib {
                     //rgb数据 rgb565 
                     var c0 = ms.ReadUShort();
                     var c1 = ms.ReadUShort();
-                    //rgb索引
-                    var index = ms.ReadInt();
+
                     var colors = new byte[4][];
 
                     colors[0] = DecodeRGB565(c0);
@@ -225,13 +221,16 @@ namespace ExtractorSharp.Core.Lib {
                         colors[3][i] = (byte)((colors[0][i] + colors[1][i] * 2) / 3);
                     }
 
+                    //rgb索引
+                    var index = ms.ReadInt();
                     for (var i = 0; i < 16; i++, index >>= 2, bit >>= 3) {
                         var j = index & 0x3;
                         var pos = (height * (x + i / 4) + y + i % 4) * 4;
+                        var a = alphas[bit & 0x7];
                         buf[pos + 0] = colors[j][0];
                         buf[pos + 1] = colors[j][1];
                         buf[pos + 2] = colors[j][2];
-                        buf[pos + 3] = alphas[bit & 0x7];
+                        buf[pos + 3] = a;
                     }
                 }
             }

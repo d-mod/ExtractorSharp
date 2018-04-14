@@ -4,17 +4,17 @@ using System.Drawing;
 using System.IO;
 
 namespace ExtractorSharp.Handle {
-    public class OggHandler : Handler {
+    /// <summary>
+    /// 其他类型文件的处理
+    /// </summary>
+    public class OtherHandler : Handler {
         byte[] Data = new byte[0];
-        public OggHandler(Album Album) : base(Album) {}
+        public OtherHandler(Album Album) : base(Album) {}
 
-        public override byte[] AdjustIndex() {
+        public override byte[] AdjustData() {
             return Data;
         }
-
-        public override byte[] AdjustSuffix() {
-            return new byte[0];
-        }
+        
 
         public override Bitmap ConvertToBitmap(Sprite entity) {
             return null;

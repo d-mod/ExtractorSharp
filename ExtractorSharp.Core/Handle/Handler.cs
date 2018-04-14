@@ -56,21 +56,16 @@ namespace ExtractorSharp.Handle {
             }
             Album.Count = Album.List.Count;
             var ms = new MemoryStream();
-            if (Album.Version == Img_Version.OGG) {
-                ms.Write(AdjustIndex());
-                ms.Close();
-            } else {
-                var index_data = AdjustIndex();
-                var suffix_data = AdjustSuffix();
+            var data = AdjustData();
+            if (Album.Version > Img_Version.OGG) {
                 var flag = Album.Version == Img_Version.Ver1 ? Npks.IMAGE_FLAG : Npks.IMG_FLAG;
-                ms.WriteString(Npks.IMG_FLAG);
+                ms.WriteString(flag);
                 ms.WriteLong(Album.Info_Length);
                 ms.WriteInt((int)Album.Version);
                 ms.WriteInt(Album.Count);
-                ms.Write(index_data);
-                ms.Write(suffix_data);
-                ms.Close();
             }
+            ms.Write(data);
+            ms.Close();
             Album.Data = ms.ToArray();
             Album.Length = Album.Data.Length;
         }
@@ -86,13 +81,13 @@ namespace ExtractorSharp.Handle {
             }
             Dic.Add(Version, type);
         }
-
-
-        public abstract byte[] AdjustIndex();
-
-        public abstract byte[] AdjustSuffix();
+     
 
         public virtual void ConvertToVersion(Img_Version Version) { }
+
+        public virtual byte[] AdjustData() {
+            return new byte[0];
+        }
 
         public Handler() {
 

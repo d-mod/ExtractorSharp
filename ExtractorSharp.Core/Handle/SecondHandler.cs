@@ -45,7 +45,7 @@ namespace ExtractorSharp.Handle {
             Album.List.InsertAt(index, array);
         }
 
-        public override byte[] AdjustIndex() {
+        public override byte[] AdjustData() {
             using (var ms = new MemoryStream()) {
                 foreach (var entity in Album.List) {
                     ms.WriteInt((int)entity.Type);
@@ -62,15 +62,7 @@ namespace ExtractorSharp.Handle {
                     ms.WriteInt(entity.Canvas_Width);
                     ms.WriteInt(entity.Canvas_Height);
                 }
-                ms.Close();
-                var data = ms.ToArray();
-                Album.Info_Length = data.Length;
-                return data;
-            }
-        }
-
-        public override byte[] AdjustSuffix() {
-            using (var ms = new MemoryStream()) {
+                Album.Info_Length = ms.Length;
                 foreach (var entity in Album.List) {
                     if (entity.Type == ColorBits.LINK) {
                         continue;

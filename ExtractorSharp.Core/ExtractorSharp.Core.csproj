@@ -73,7 +73,7 @@
     <Compile Include="Handle\Handler.cs" />
     <Compile Include="Handle\Img_Version.cs" />
     <Compile Include="Composition\IPlugin.cs" />
-    <Compile Include="Handle\OggHandler.cs" />
+    <Compile Include="Handle\OtherHandler.cs" />
     <Compile Include="Handle\SecondHandler.cs" />
     <Compile Include="Handle\SixthHandler.cs" />
     <Compile Include="Lib\Arrays.cs" />

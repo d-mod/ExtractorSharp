@@ -56,32 +56,27 @@ namespace ExtractorSharp.Handle {
             }
         }
 
-        public override byte[] AdjustIndex() {
-            var ms = new MemoryStream();
-            foreach (var entity in Album.List) {
-                ms.WriteInt((int)entity.Type);
-                if (entity.Type == ColorBits.LINK) {
-                    ms.WriteInt(entity.Target.Index);
-                    continue;
+        public override byte[] AdjustData() {
+            using (var ms = new MemoryStream()) {
+                foreach (var entity in Album.List) {
+                    ms.WriteInt((int)entity.Type);
+                    if (entity.Type == ColorBits.LINK) {
+                        ms.WriteInt(entity.Target.Index);
+                        continue;
+                    }
+                    ms.WriteInt((int)entity.Compress);
+                    ms.WriteInt(entity.Size.Width);
+                    ms.WriteInt(entity.Size.Height);
+                    ms.WriteInt(entity.Length);
+                    ms.WriteInt(entity.Location.X);
+                    ms.WriteInt(entity.Location.Y);
+                    ms.WriteInt(entity.Canvas_Size.Width);
+                    ms.WriteInt(entity.Canvas_Size.Height);
+                    ms.Write(entity.Data);
                 }
-                ms.WriteInt((int)entity.Compress);
-                ms.WriteInt(entity.Size.Width);
-                ms.WriteInt(entity.Size.Height);
-                ms.WriteInt(entity.Length);
-                ms.WriteInt(entity.Location.X);
-                ms.WriteInt(entity.Location.Y);
-                ms.WriteInt(entity.Canvas_Size.Width);
-                ms.WriteInt(entity.Canvas_Size.Height);
-                ms.Write(entity.Data);
+                Album.Info_Length = ms.Length;
+                return ms.ToArray();
             }
-            ms.Close();
-            var data = ms.ToArray();
-            Album.Info_Length = data.Length;
-            return data;
-        }
-
-        public override byte[] AdjustSuffix() {
-            return new byte[0];
         }
         
         public override void CreateFromStream(Stream stream) {

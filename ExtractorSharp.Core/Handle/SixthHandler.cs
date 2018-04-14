@@ -51,57 +51,16 @@ namespace ExtractorSharp.Handle {
             return data;
         }
 
-        public override void NewImage(int count, ColorBits type, int index) {
-            var array = new Sprite[count];
-            if (count < 1) {
-                return;
-            }
-            array[0] = new Sprite(Album);
-            array[0].Index = index;
-            array[0].Data = new byte[4];
-            if (type != ColorBits.LINK) {
-                array[0].Type = type;
-            }
-            for (var i = 1; i < count; i++) {
-                array[i] = new Sprite(Album);
-                array[i].Type = type;
-                if (type == ColorBits.LINK) {
-                    array[i].Target = array[0];
+        public override byte[] AdjustData() {
+            using (var ms = new MemoryStream()) {
+                ms.WriteInt(Album.Tables.Count);
+                foreach (var table in Album.Tables) {
+                    ms.WriteInt(table.Count);
+                    Colors.WritePalette(ms, table);
                 }
-                array[i].Index = array[0].Index + i;
+                ms.Write(base.AdjustData());
+                return ms.ToArray();
             }
-            Album.List.InsertAt(index, array);
-        }
-
-        public override byte[] AdjustIndex() {
-            var ms = new MemoryStream();
-            foreach (var entity in Album.List) {
-                ms.WriteInt((int)entity.Type);
-                if (entity.Type == ColorBits.LINK) {
-                    ms.WriteInt(entity.Target.Index);
-                    continue;
-                }
-                ms.WriteInt((int)entity.Compress);
-                ms.WriteInt(entity.Size.Width);
-                ms.WriteInt(entity.Size.Height);
-                ms.WriteInt(entity.Length);
-                ms.WriteInt(entity.Location.X);
-                ms.WriteInt(entity.Location.Y);
-                ms.WriteInt(entity.Canvas_Size.Width);
-                ms.WriteInt(entity.Canvas_Size.Height);
-            }
-            ms.Close();
-            var data = ms.ToArray();
-            Album.Info_Length = data.Length;
-            ms = new MemoryStream();
-            ms.WriteInt(Album.Tables.Count);
-            foreach(var table in Album.Tables) {
-                ms.WriteInt(table.Count);
-                Colors.WritePalette(ms,table.ToArray());
-            }
-            ms.Write(data);
-            ms.Close();
-            return ms.ToArray();
         }
 
         public override void ConvertToVersion(Img_Version Version) {

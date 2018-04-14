@@ -13,7 +13,7 @@ namespace ExtractorSharp.UnitTest {
     public class TestHandler {
 
         static TestHandler() {
-            Handler.Regisity(Img_Version.OGG, typeof(OggHandler));
+            Handler.Regisity(Img_Version.OGG, typeof(OtherHandler));
             Handler.Regisity(Img_Version.Ver1, typeof(FirstHandler));
             Handler.Regisity(Img_Version.Ver2, typeof(SecondHandler));
             Handler.Regisity(Img_Version.Ver4, typeof(FourthHandler));

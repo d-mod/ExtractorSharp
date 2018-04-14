@@ -93,13 +93,7 @@ namespace ExtractorSharp.Core.Lib {
 
         public static void WriteImage(Stream stream, Sprite entity) {
             var bits = entity.Type;
-            if (entity.Type > ColorBits.ARGB_8888) {//不支持dds的写入
-                return;
-            }
             var data = entity.Picture.ToArray();
-            if (entity.Version == Img_Version.Ver4 && entity.Compress == Compress.ZLIB && bits == ColorBits.ARGB_1555) {
-                bits = ColorBits.ARGB_8888;
-            }
             for (var i = 0; i < data.Length; i += 4) {
                 var temp = new byte[4];
                 Array.Copy(data, i, temp, 0, 4);

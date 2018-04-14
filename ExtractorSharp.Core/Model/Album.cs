@@ -247,8 +247,8 @@ namespace ExtractorSharp.Data {
             if (Version == Img_Version.Ver5) {
                 ConvertTo(Img_Version.Ver2);
             }
-            Handler.Adjust();
             AdjustIndex();
+            Handler.Adjust();
         }
 
         public IEnumerator<Sprite> GetEnumerator() => List.GetEnumerator();

@@ -18,7 +18,7 @@ namespace ExtractorSharp.Handle {
         /// 校正下标
         /// </summary>
         /// <returns></returns>
-        public override byte[] AdjustIndex() {
+        public override byte[] AdjustData() {
             var ms = new MemoryStream();
             foreach (var entity in Album.List) {
                 ms.WriteInt((int)entity.Type);
@@ -94,28 +94,6 @@ namespace ExtractorSharp.Handle {
             ms.Close();
             Index_Data = ms.ToArray();
             return Index_Data;
-        }
-
-        public override byte[] AdjustSuffix() {
-            if (!Equals(Album.Handler))
-                return Album.Handler.AdjustSuffix();
-            var ms = new MemoryStream();
-            var list = new List<DDS>();
-            foreach (var index in Map.Values) {
-                var dds = index.DDS;
-                if (list.Contains(dds)) {
-                    continue;
-                }
-                ms.Write(dds.Data);
-                list.Add(dds);
-            }
-            foreach (var entity in Album.List) {
-                if (entity.Compress == Compress.ZLIB && entity.Type < ColorBits.LINK) {
-                    ms.Write(entity.Data);
-                }
-            }
-            ms.Close();
-            return ms.ToArray();
         }
 
         public override Bitmap ConvertToBitmap(Sprite entity) {
