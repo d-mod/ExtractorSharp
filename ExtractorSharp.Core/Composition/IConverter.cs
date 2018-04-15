@@ -1,13 +1,18 @@
 ﻿using ExtractorSharp.Data;
-using System.Drawing;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace ExtractorSharp.Composition {
-    public delegate void SpriteConverter(Sprite sprite,ref Bitmap bmp);
+   /// <summary>
+   /// 文件转换器
+   /// 将其他格式的文件转为IMG格式
+   /// </summary>
+    public interface IFileConverter{
 
-    public interface ISpriteConverter {
-        string Name { get; }
-        bool Enable { set; get; }
-        int Index { set; get; }
-        void Convert(Sprite sprite, ref Bitmap bmp);
+        List<Album> Load(string filename);
     }
 }

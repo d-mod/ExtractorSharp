@@ -36,6 +36,7 @@
  *
  */
 #endregion
+using ExtractorSharp.Core.Lib;
 using System;
 using System.Collections;
 using System.Drawing;
@@ -171,42 +172,34 @@ namespace Gif.Components
 			return loopCount;
 		}
 
-		/**
+        /**
 		 * Creates new frame image from current data (and previous
 		 * frames as specified by their disposition codes).
 		 */
-		int [] GetPixels( Bitmap bitmap )
-		{
-			int [] pixels = new int [ 3 * image.Width * image.Height ];
-			int count = 0;
-			for (int th = 0; th < image.Height; th++)
-			{
-				for (int tw = 0; tw < image.Width; tw++)
-				{
-					Color color = bitmap.GetPixel(tw, th);
-					pixels[count] = color.R;
-					count++;
-					pixels[count] = color.G;
-					count++;
-					pixels[count] = color.B;
-					count++;
-				}
-			}
-			return pixels;
-		}
+        int[] GetPixels(Bitmap bitmap) {
+            int[] pixels = new int[4 * image.Width * image.Height];
+            var data = bitmap.ToArray();
+            var len = image.Width * image.Height;
+            for (var i = 0; i < len; i++) {
+                pixels[i * 3 + 0] = data[i * 4 + 0];
+                pixels[i * 3 + 1] = data[i * 4 + 1];
+                pixels[i * 3 + 2] = data[i * 4 + 2];
+            }
+            return pixels;
+        }
 
-		void SetPixels( int [] pixels )
-		{
-			int count = 0;
-			for (int th = 0; th < image.Height; th++)
-			{
-				for (int tw = 0; tw < image.Width; tw++)
-				{
-					Color color = Color.FromArgb( pixels[count++] );
-					bitmap.SetPixel( tw, th, color );
-				}
-			}
-		}
+        void SetPixels(int[] pixels) {
+            var len = image.Width * image.Height;
+            var data = new byte[len * 4];
+            for (var i = 0; i < len; i++) {
+                var pixel = pixels[i];
+                data[i * 4 + 0] = (byte)(pixel & 0xff);
+                data[i * 4 + 1] = (byte)((pixel >> 8) & 0xff);
+                data[i * 4 + 2] = (byte)((pixel >> 16) & 0xff);
+                data[i * 4 + 3] = (byte)(pixel >> 24);
+            }
+            bitmap = Bitmaps.FromArray(data, image.Size);
+        }
 
 		protected void SetPixels() 
 		{

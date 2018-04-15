@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace ExtractorSharp {
     partial class MainForm {
-        private class LinearDodgeSpriteConverter : ISpriteConverter {
+        private class LinearDodgeEffect : IEffect {
             private IConfig Config;
-            internal LinearDodgeSpriteConverter(IConfig Config) {
+            internal LinearDodgeEffect(IConfig Config) {
                 this.Config = Config;
                 Enable = Config["LinearDodgeSpriteConverter"].Boolean;
             }
@@ -24,7 +24,7 @@ namespace ExtractorSharp {
 
             public int Index { set; get; }
 
-            public void Convert(Sprite sprite, ref Bitmap bmp) {
+            public void Handle(Sprite sprite, ref Bitmap bmp) {
                 if (Config["LinearDodge"].Boolean) {
                     bmp = bmp.LinearDodge();
                 }

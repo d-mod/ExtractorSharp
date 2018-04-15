@@ -54,6 +54,7 @@
     <Compile Include="Composition\ClickType.cs" />
     <Compile Include="Composition\IConnector.cs" />
     <Compile Include="Composition\IConverter.cs" />
+    <Compile Include="Composition\IEffect.cs" />
     <Compile Include="Composition\IMenuItem.cs" />
     <Compile Include="Composition\MenuItemType.cs" />
     <Compile Include="Composition\MessageType.cs" />

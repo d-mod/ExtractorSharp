@@ -19,7 +19,7 @@ namespace ExtractorSharp.Command.ImageCommand {
         private int Increment = 0;
         private string Prefix = string.Empty;
         private int Digit = 0;
-        private SpriteConverter OnSaving;
+        private SpriteEffect OnSaving;
         /// <summary>
         /// 提取模式
         /// <para>0.单张贴图</para>
@@ -37,7 +37,7 @@ namespace ExtractorSharp.Command.ImageCommand {
                 Digit = (int)args[6];
             }
             if (args.Length > 7) {
-                OnSaving = args[7] as SpriteConverter;
+                OnSaving = args[7] as SpriteEffect;
             }
             Action(Album, Indices);
         }
@@ -78,7 +78,7 @@ namespace ExtractorSharp.Command.ImageCommand {
                     var path = $"{dir}/{prefix}{name}.png";//文件名格式:文件路径/贴图索引.png
 
                     Bitmap image = null;
-                    foreach (SpriteConverter action in OnSaving?.GetInvocationList()) {
+                    foreach (SpriteEffect action in OnSaving?.GetInvocationList()) {
                         if (image == null) {
                             image = entity.Picture;
                         }

@@ -4,9 +4,11 @@ using ExtractorSharp.Core;
 using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Data;
 using ExtractorSharp.Draw;
+using ExtractorSharp.Support;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,9 +18,12 @@ namespace ExtractorSharp {
     partial class MainForm {
         private class MainConnector : IConnector {
             internal MainForm MainForm { get; set; }
+            internal Dictionary<string, IFileConverter> FileConverters { get; } = new Dictionary<string, IFileConverter>();
 
             internal MainConnector() {
                 SaveChanged += (o, e) => OnSaveChanged();
+                FileConverters.Add("gif", new GifSupport());
+                FileConverters.Add("spk", new SpkSupport());
             }
 
             public Language Language => Language.Default;
@@ -74,18 +79,18 @@ namespace ExtractorSharp {
 
             public bool IsSave { set; get; } = true;
 
-            public SpriteConverter OnSpriteSaving { set; get; }
+            public SpriteEffect OnSpriteSaving { set; get; }
 
-            public List<ISpriteConverter> SpriteConverters { get; } = new List<ISpriteConverter>();
+            public List<IEffect> SpriteEffects { get; } = new List<IEffect>();
 
-            public SpriteConverter SpirteConverter {
+            public SpriteEffect SpirteConverter {
                 get {
-                    SpriteConverter result = null;
-                    var arr = SpriteConverters.ToList();
+                    SpriteEffect result = null;
+                    var arr = SpriteEffects.ToList();
                     arr.Sort((a, b) => a.Index - b.Index);
                     foreach (var converter in arr) {
                         if (converter.Enable) {
-                            result += converter.Convert;
+                            result += converter.Handle;
                         }
                     }
                     return result;
@@ -120,8 +125,23 @@ namespace ExtractorSharp {
                 if (SavePath.Length == 0) {
                     SavePath = args.Find(item => item.ToLower().EndsWith(".npk")) ?? string.Empty;
                 }
+                if (args.Length < 1) {
+                    return;
+                }
+                var list = new List<Album>();
+                for(var i = 0; i < args.Length; i++) {
+                    var index = args[i].LastIndexOf(".") + 1;
+                    var suffix = args[i].Substring(index);
+                    var arr = new List<Album>();
+                    if (FileConverters.ContainsKey(suffix)) {
+                        arr = FileConverters[suffix].Load(args[i]);
+                    } else {
+                        arr = Npks.Load(args[i]);
+                    }
+                    list.AddRange(arr);
+                }
                 if (args.Length > 0) {
-                    MainForm.Controller.Do("addImg", Npks.Load(args).ToArray(), clear);
+                    MainForm.Controller.Do("addImg", list.ToArray(), clear);
                 }
             }
 
@@ -168,7 +188,7 @@ namespace ExtractorSharp {
                 var dialog = new SaveFileDialog();
                 dialog.InitialDirectory = dir;
                 dialog.FileName = path;
-                dialog.Filter = "npk文件|*.npk";
+                dialog.Filter = "NPK|*.npk";
                 if (dialog.ShowDialog() == DialogResult.OK) {
                     SavePath = dialog.FileName;
                     OnSaveChanged();

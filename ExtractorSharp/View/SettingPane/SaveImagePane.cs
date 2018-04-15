@@ -36,7 +36,7 @@ namespace ExtractorSharp.View.SettingPane {
             var i = 0;
             converterList = new List<CheckBox>();
             converterGroup.Controls.Clear();
-            foreach (var converter in Connector.SpriteConverters) {
+            foreach (var converter in Connector.SpriteEffects) {
                 var checkbox = new CheckBox();
                 checkbox.Text = Language[converter.Name];
                 checkbox.Tag = converter;
@@ -53,7 +53,7 @@ namespace ExtractorSharp.View.SettingPane {
             Config["SaveImageAllPath"] = new ConfigValue(fullPathCheck.Checked);
             Config["SaveImagePath"] = new ConfigValue(savePathBox.Text);
             foreach(var box in converterList) {
-                var converter = box.Tag as ISpriteConverter;
+                var converter = box.Tag as IEffect;
                 Config[$"{converter.Name}SpriteConverter"] = new ConfigValue(box.Checked);
                 converter.Enable = box.Checked;
             }

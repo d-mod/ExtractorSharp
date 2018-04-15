@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ExtractorSharp {
     partial class MainForm {
-        private class RealPositionSpriteConverter : ISpriteConverter {
+        private class RealPositionEffect : IEffect {
             private IConfig Config;
 
             public string Name => "RealPosition";
@@ -19,12 +19,12 @@ namespace ExtractorSharp {
             public bool Enable { set; get; }
             public int Index { set; get; }
 
-            internal RealPositionSpriteConverter(IConfig Config) {
+            internal RealPositionEffect(IConfig Config) {
                 this.Config = Config;
                 Enable = Config["LinearDodgeSpriteConverter"].Boolean;
             }
 
-            public void Convert(Sprite sprite, ref Bitmap bmp) {
+            public void Handle(Sprite sprite, ref Bitmap bmp) {
                 if (Config["RealPosition"].Boolean) {
                     bmp = bmp.Canvas(new Rectangle(sprite.Location, Config["CanvasImageSize"].Size));
                 }

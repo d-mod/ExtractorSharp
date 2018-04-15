@@ -116,8 +116,8 @@ namespace ExtractorSharp.Core {
 
         event EventHandler SaveChanged;
 
-        List<ISpriteConverter> SpriteConverters { get; }
+        List<IEffect> SpriteEffects { get; }
 
-        SpriteConverter SpirteConverter { get; }
+        SpriteEffect SpirteConverter { get; }
     }
 }

@@ -2,12 +2,12 @@
 using ExtractorSharp.Component;
 using ExtractorSharp.Composition;
 using ExtractorSharp.Config;
-using ExtractorSharp.Converter.Sprite;
 using ExtractorSharp.Core;
 using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Data;
 using ExtractorSharp.Draw;
 using ExtractorSharp.Draw.Paint;
+using ExtractorSharp.Effect.Sprite;
 using ExtractorSharp.EventArguments;
 using ExtractorSharp.Handle;
 using ExtractorSharp.View;
@@ -69,15 +69,15 @@ namespace ExtractorSharp {
         
 
         private void AddSpriteConverter() {
-            AddSpriteConverter(new UnCanvasSpriteConverter());
-            AddSpriteConverter(new LinearDodgeSpriteConverter(Config));
-            AddSpriteConverter(new RealPositionSpriteConverter(Config));
+            AddSpriteConverter(new UnCanvasEffect());
+            AddSpriteConverter(new LinearDodgeEffect(Config));
+            AddSpriteConverter(new RealPositionEffect(Config));
         }
 
-        private void AddSpriteConverter(ISpriteConverter converter) {
-            Connector.SpriteConverters.Add(converter);
-            converter.Enable = Config[$"{converter.Name}SpriteConverter"].Boolean;
-            converter.Index = Config[$"{converter.Name}SpriteConverterIndex"].Integer;
+        private void AddSpriteConverter(IEffect converter) {
+            Connector.SpriteEffects.Add(converter);
+            converter.Enable = Config[$"{converter.Name}SpriteEffect"].Boolean;
+            converter.Index = Config[$"{converter.Name}SpriteEffectIndex"].Integer;
         }
 
         private void AddConfig() {

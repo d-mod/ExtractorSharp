@@ -158,19 +158,6 @@ namespace ExtractorSharp.Core.Lib {
                 var album = new Album();
                 album.Path = file.GetSuffix();
                 List.Add(album);
-            } else if (file.EndsWith(".gif")) {
-                stream.Seek(0, SeekOrigin.Begin);
-                var album = new Album();
-                album.Path = file.GetSuffix();
-                CreateFromGif(album, stream);
-                List.Add(album);
-                return List;
-            } else if (file.EndsWith(".spk")) {
-                stream.Seek(0, SeekOrigin.Begin);
-                var data = Spks.Decompress(stream);
-                using (var ms = new MemoryStream(data)) {
-                    return ReadNPK(ms, file.RemoveSuffix(".spk"));
-                }
             }
             for (var i = 0; i < List.Count; i++) {
                 var album = List[i];
@@ -266,28 +253,7 @@ namespace ExtractorSharp.Core.Lib {
         public static List<Album> Load(params string[] files) => Load(false, files);
 
 
-        public static Album CreateFromGif(string path) {
-            var album = new Album();
-            CreateFromGif(album, path);
-            return album;
-        }
 
-        public static void CreateFromGif(Album album,string path) {
-            using (var fs = File.Open(path, FileMode.Open)) {
-                CreateFromGif(album, fs);
-            }
-        }
-
-        public static void CreateFromGif(Album album, Stream stream) {
-            var array = Bitmaps.ReadGif(stream);
-            var sprites = new Sprite[array.Length];
-            for (var i = 0; i < array.Length; i++) {
-                sprites[i] = new Sprite(album);
-                sprites[i].Picture = array[i];
-                sprites[i].UnCanvasImage();
-            }
-            album.List.AddRange(sprites);
-        }
 
 
         public static Album LoadWithName(string file, string name) {

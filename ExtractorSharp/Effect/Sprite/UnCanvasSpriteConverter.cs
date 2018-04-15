@@ -8,14 +8,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExtractorSharp.Converter.Sprite {
-    class UnCanvasSpriteConverter : ISpriteConverter {
+namespace ExtractorSharp.Effect.Sprite {
+    class UnCanvasEffect : IEffect {
         public string Name => "UnCanvasImage";
 
         public bool Enable { set; get; }
         public int Index { set; get; } = -1;
 
-        public void Convert(Data.Sprite sprite, ref Bitmap bmp) {
+        public void Handle(Data.Sprite sprite, ref Bitmap bmp) {
             var rct = bmp.Scan();
             var image = new Bitmap(rct.Width, rct.Height);
             using (var g = Graphics.FromImage(image)) {

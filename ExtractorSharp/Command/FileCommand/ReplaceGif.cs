@@ -31,7 +31,7 @@ namespace ExtractorSharp.Command.FileCommand {
         public void Do(params object[] args) {
             Target = args[0] as Album;
             Path = args[1] as string;
-            Source = Npks.CreateFromGif(Path);
+            Source = null;
             Redo();
         }
 
