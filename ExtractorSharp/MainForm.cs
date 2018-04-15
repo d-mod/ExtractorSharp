@@ -940,13 +940,19 @@ namespace ExtractorSharp {
                 }
                 if (dialog.ShowDialog() == DialogResult.OK) {
                     var filename = dialog.FileName;
+                    Album file = null;
                     if (filename.EndsWith(".gif")) {
-                        Connector.Do("replaceGif", item, filename);
+                        var fs = File.Open(filename, FileMode.Open);
+                        var array = Bitmaps.ReadGif(fs);
+                        fs.Close();
+                        file = new Album(array);
+                        file.Path = filename.GetSuffix();
                     } else {
                         var list = Npks.Load(dialog.FileName);
-                        if (list.Count > 0) {
-                            Connector.Do("replaceImg", item, list[0]);
-                        }
+                        file = list.Count > 0 ? list[0] : null;
+                    }
+                    if (file != null) {
+                        Connector.Do("replaceImg", item, file);
                     }
                 }
             }

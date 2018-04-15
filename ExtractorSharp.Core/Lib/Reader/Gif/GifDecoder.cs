@@ -177,9 +177,9 @@ namespace Gif.Components
 		 * frames as specified by their disposition codes).
 		 */
         int[] GetPixels(Bitmap bitmap) {
-            int[] pixels = new int[4 * image.Width * image.Height];
             var data = bitmap.ToArray();
             var len = image.Width * image.Height;
+            int[] pixels = new int[4 * len];
             for (var i = 0; i < len; i++) {
                 pixels[i * 3 + 0] = data[i * 4 + 0];
                 pixels[i * 3 + 1] = data[i * 4 + 1];

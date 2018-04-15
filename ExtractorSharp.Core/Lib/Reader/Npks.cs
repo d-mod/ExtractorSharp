@@ -253,9 +253,6 @@ namespace ExtractorSharp.Core.Lib {
         public static List<Album> Load(params string[] files) => Load(false, files);
 
 
-
-
-
         public static Album LoadWithName(string file, string name) {
             var list = Load(file);
             Album al = null;

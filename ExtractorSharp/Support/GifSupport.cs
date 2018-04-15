@@ -11,14 +11,8 @@ namespace ExtractorSharp.Support {
             var fs = File.Open(filename, FileMode.Open);
             var array = Bitmaps.ReadGif(fs);
             fs.Close();
-            var album = new Album();
+            var album = new Album(array);
             album.Path = filename.GetSuffix();
-            var sprites = new Sprite[array.Length];
-            for (var i = 0; i < array.Length; i++) {
-                sprites[i] = new Sprite(album);
-                sprites[i].Picture = array[i];
-            }
-            album.List.AddRange(sprites);
             return new List<Album>() { album};
         }
         

@@ -114,7 +114,17 @@ namespace ExtractorSharp.Data {
             Tables = new List<List<Color>>();
             Handler = Handler.CreateHandler(Version,this);
         }
-        
+
+        public Album(Bitmap[] array) : this() {
+            var sprites = new Sprite[array.Length];
+            for (var i = 0; i < array.Length; i++) {
+                sprites[i] = new Sprite(this);
+                sprites[i].Picture = array[i];
+            }
+            List.AddRange(sprites);
+        }
+
+
         /// <summary>
         /// 重置图片
         /// </summary>
@@ -252,5 +262,8 @@ namespace ExtractorSharp.Data {
         }
 
         public IEnumerator<Sprite> GetEnumerator() => List.GetEnumerator();
+
+
+
     }
 }

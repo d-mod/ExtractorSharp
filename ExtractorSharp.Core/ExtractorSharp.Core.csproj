@@ -82,7 +82,6 @@
     <Compile Include="Lib\Colors.cs" />
     <Compile Include="Lib\Drawings.cs" />
     <Compile Include="Lib\Reader\Ddss.cs" />
-    <Compile Include="Lib\Reader\Gifs.cs" />
     <Compile Include="Lib\Reader\Gif\AnimatedGifEncoder.cs" />
     <Compile Include="Lib\Reader\Gif\GifDecoder.cs" />
     <Compile Include="Lib\Reader\Gif\LZWEncoder.cs" />
