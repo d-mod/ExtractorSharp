@@ -12,7 +12,7 @@ namespace ExtractorSharp.UnitTest {
     public class UnitTest3 {
 
         static UnitTest3() {
-            Handler.Regisity(Img_Version.OGG, typeof(OtherHandler));
+            Handler.Regisity(Img_Version.Other, typeof(OtherHandler));
             Handler.Regisity(Img_Version.Ver1, typeof(FirstHandler));
             Handler.Regisity(Img_Version.Ver2, typeof(SecondHandler));
             Handler.Regisity(Img_Version.Ver4, typeof(FourthHandler));
@@ -22,7 +22,7 @@ namespace ExtractorSharp.UnitTest {
         }
 
         public string[] part_array = {"cap","coat","belt","neck","hair","face","skin","pants","shoes" };
-        public const string API_HOST = "http://193.112.3.202";
+        public const string API_HOST = "http://193.112.3.202:8080/";
         public const string GAME_DIR = "D:/地下城与勇士";
         public const string SAVE_DIR = "D:/avatar_ex";
 

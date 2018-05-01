@@ -24,7 +24,7 @@ namespace ExtractorSharp.View {
                 Bass.Stop(handle);
                 Bass.Close(handle);
             }
-            if (ogg != null && ogg.Version == Img_Version.OGG) {
+            if (ogg != null && ogg.Version == Img_Version.Other) {
                 ogg.Adjust();
                 groupBox1.Text = ogg.Name;
                 handle = Bass.Play(ogg.Data);

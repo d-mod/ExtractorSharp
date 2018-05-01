@@ -55,11 +55,22 @@
     <Compile Include="Pictrue.cs" />
     <Compile Include="Profession.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DressImage.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="TestHandler.cs" />
+    <Compile Include="UnitTest1.cs" />
+    <Compile Include="UnitTest2.cs" />
     <Compile Include="UnitTest3.cs" />
+    <Compile Include="WeaponInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Resources\queues.json" />
+    <None Include="Resources\weapon.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ExtractorSharp.Core\ExtractorSharp.Core.csproj">
@@ -75,6 +86,12 @@
       <Name>ExtractorSharp</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -85,4 +102,9 @@
     <Error Condition="!Exists('..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.targets'))" />
   </Target>
   <Import Project="..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.targets" Condition="Exists('..\packages\MSTest.TestAdapter.1.2.0\build\net45\MSTest.TestAdapter.targets')" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties Resources_4queues_1json__JSONSchema="http://json.schemastore.org/babelrc" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

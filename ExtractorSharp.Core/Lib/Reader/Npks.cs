@@ -177,7 +177,7 @@ namespace ExtractorSharp.Core.Lib {
                     stream.Seek(album.Offset, SeekOrigin.Begin);
                     var name = album.Name.ToLower();
                     if (name.EndsWith(".ogg")) {
-                        album.Version = Img_Version.OGG;
+                        album.Version = Img_Version.Other;
                         if (i < List.Count - 1) {
                             album.Info_Length = List[i + 1].Offset - stream.Position;
                         } else {

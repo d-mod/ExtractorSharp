@@ -9,6 +9,7 @@ namespace ExtractorSharp.Draw.Paint {
         public Rectangle Rectangle => new Rectangle(Location, Size);
         public bool Contains(Point point) => Rectangle.Contains(point);
         public void Move(Point point) => Location = Location.Add(point);
+        public Point Offset { set; get; } = Point.Empty;
         public Size CanvasSize { set; get; }
         public void Draw(Graphics g) {
             if (Image != null) {

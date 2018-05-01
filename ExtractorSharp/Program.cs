@@ -220,7 +220,7 @@ namespace ExtractorSharp {
 
 
         public static void RegistyHandler() {
-            Handler.Regisity(Img_Version.OGG, typeof(OtherHandler));
+            Handler.Regisity(Img_Version.Other, typeof(OtherHandler));
             Handler.Regisity(Img_Version.Ver1, typeof(FirstHandler));
             Handler.Regisity(Img_Version.Ver2, typeof(SecondHandler));
             Handler.Regisity(Img_Version.Ver4, typeof(FourthHandler));

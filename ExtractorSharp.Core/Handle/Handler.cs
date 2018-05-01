@@ -57,7 +57,7 @@ namespace ExtractorSharp.Handle {
             Album.Count = Album.List.Count;
             var ms = new MemoryStream();
             var data = AdjustData();
-            if (Album.Version > Img_Version.OGG) {
+            if (Album.Version > Img_Version.Other) {
                 var flag = Album.Version == Img_Version.Ver1 ? Npks.IMAGE_FLAG : Npks.IMG_FLAG;
                 ms.WriteString(flag);
                 ms.WriteLong(Album.Info_Length);

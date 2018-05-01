@@ -360,9 +360,13 @@ namespace ExtractorSharp {
         }
 
         private void RealPosition(object sender, EventArgs e) {
-            if (Connector.SelectedImage != null) {
-                Drawer.CurrentLayer.Location = realPositionBox.Checked ? Connector.SelectedImage.Location : Point.Empty;
-
+            var currentTag = Drawer.CurrentLayer.Tag as Sprite;
+            if (currentTag != null) {
+                var lastTag = Drawer.LastLayer.Tag as Sprite;
+                var isRelative = realPositionBox.Checked;
+                if (isRelative) {
+                    Drawer.CurrentLayer.Location = currentTag.Location;
+                }
             }
             Flush(sender, e);
         }
@@ -711,11 +715,13 @@ namespace ExtractorSharp {
         }
 
         private void SelectImageChanged(object sender, EventArgs e) {
+            var lastSprite = Drawer.CurrentLayer.Tag as Sprite;
+            var lastSpritePosition = lastSprite != null ? lastSprite.Location : Point.Empty;
+            var lastPosition = Drawer.CurrentLayer.Location.Minus(lastSpritePosition);
             Drawer.CurrentLayer = new Canvas();
             Drawer.LastLayerVisible = onionskinBox.Checked;
-            if (realPositionBox.Checked && Connector.SelectedImage != null) {
-                var entity = Connector.SelectedImage;
-                Drawer.CurrentLayer.Location = entity.Location;
+            if (realPositionBox.Checked) {
+                Drawer.CurrentLayer.Location = Connector.SelectedImage.Location.Add(lastPosition);
             }
             Flush(sender, e);
         }
@@ -844,7 +850,7 @@ namespace ExtractorSharp {
 
         private bool CheckOgg(params Album[] args) {
             foreach (var al in args) {
-                if (al.Version == Img_Version.OGG) {
+                if (al.Version == Img_Version.Other) {
                     Connector.SendWarning("NotHandleFile");
                     return false;
                 }
@@ -931,7 +937,7 @@ namespace ExtractorSharp {
             if (item != null) {
                 var dialog = new OpenFileDialog();
                 dialog.Filter = $"{Language["ImageResources"]}|*.img;*.gif|{Language["SoundResources"]}|*.ogg;*.wav;*.mp3|{Language["AllFormat"]}|*.*";
-                if (item.Version == Img_Version.OGG) {
+                if (item.Version == Img_Version.Other) {
                     dialog.FilterIndex = 2;
                 } else if (item.Name.EndsWith(".img")) {
                     dialog.FilterIndex = 1;
@@ -969,7 +975,7 @@ namespace ExtractorSharp {
                 var dialog = new SaveFileDialog();
                 dialog.FileName = array[0].Name;
                 dialog.Filter = "img|*.img|ogg|*.ogg|mp3|*.mp3|wav|*.wav";
-                dialog.FilterIndex = array[0].Version != Img_Version.OGG ? 1 : 2;
+                dialog.FilterIndex = array[0].Version != Img_Version.Other ? 1 : 2;
                 if (dialog.ShowDialog() == DialogResult.OK) {
                     array[0].Save(dialog.FileName);
                 }
@@ -1064,7 +1070,7 @@ namespace ExtractorSharp {
             var items = imageList.CheckedItems;
             var itemArray = new Sprite[items.Count];
             items.CopyTo(itemArray, 0);
-            if (al != null && al.Version == Img_Version.OGG) { //判断是否为ogg音频
+            if (al != null && al.Version == Img_Version.Other) { //判断是否为ogg音频
                 player.Play(al);
             } else {
                 player.Visible = false;
@@ -1162,7 +1168,6 @@ namespace ExtractorSharp {
             var g = e.Graphics;
             g.InterpolationMode = pixelateBox.Checked ? InterpolationMode.NearestNeighbor : InterpolationMode.High;
             var entity = Connector.SelectedImage;//获得当前选择的贴图
-            var pos = Drawer.CurrentLayer.Location;
 
             if (Rule.Visible) {//显示标尺        
                 Rule.Tag = Drawer.CurrentLayer.Location.Minus(Rule.Location);

@@ -6,6 +6,11 @@ namespace ExtractorSharp.Core.Lib {
     /// bass音效处理库封装
     /// </summary>
     public static class Bass {
+
+        static Bass() {
+            Init();
+        }
+
         /// <summary>
         /// 初始化
         /// </summary>

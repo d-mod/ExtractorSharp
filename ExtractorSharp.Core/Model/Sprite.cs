@@ -136,6 +136,7 @@ namespace ExtractorSharp.Data {
         [LSIgnore]
         public Img_Version Version => Parent.Version;
 
+        [LSIgnore]
         public bool Hidden => Width * Height == 1 && Compress == Compress.NONE;
 
 

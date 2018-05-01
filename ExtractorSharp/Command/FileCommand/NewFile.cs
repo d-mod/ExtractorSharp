@@ -25,7 +25,7 @@ namespace ExtractorSharp.Command.ImgCommand {
                 Index = (int)args[3];
             }
             if (Path.EndsWith(".ogg")) {
-                Album.Version = Img_Version.OGG;
+                Album.Version = Img_Version.Other;
             }
             Album.Path = Path;
             Album.NewImage(Count, ColorBits.LINK, -1);
@@ -46,7 +46,7 @@ namespace ExtractorSharp.Command.ImgCommand {
         public void Action(params Album[] array) {
             foreach(Album al in array) {
                 if (Path.EndsWith(".ogg")) {
-                    Album.Version = Img_Version.OGG;
+                    Album.Version = Img_Version.Other;
                 }
                 Album.Path = Path;
                 Album.NewImage(Count, ColorBits.LINK, -1);
