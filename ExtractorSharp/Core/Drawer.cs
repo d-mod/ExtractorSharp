@@ -21,9 +21,13 @@ namespace ExtractorSharp.Core {
         public List<List<IPaint>> FlashList { get; }
         public List<IPaint> LayerList { get; private set; }
         public int Count => FlashList.Count;
-
+        public int CustomLayerCount { set; get; }
+        public decimal ImageScale { set; get; }
+        
         public IPaint CurrentLayer {
             set {
+
+
                 var lastPoint = LayerList[0].Location;
                 var curPoint = LayerList[1].Location;
                 LayerList[0] = LayerList[1];//图层更新
@@ -140,17 +144,22 @@ namespace ExtractorSharp.Core {
             return Brush;
         }
 
-        public void AddLayer(params Layer[] array) {
+        public void AddLayer(params IPaint[] array) {
             LayerList.AddRange(array);
         }
 
         public void AddLayer(params Sprite[] array) {
-            var list = new List<Layer>();
-            foreach (var entity in array) {
-                list.Add(Layer.CreateFrom(entity));
+            var layers = new Layer[array.Length];
+            for (var i = 0; i < layers.Length; i++) {
+                layers[i] = new Layer();
+                layers[i].Name = $"{Language.Default["NewLayer"]}{CustomLayerCount++}";
+                layers[i].Sprite = array[i];
+                layers[i].ImageScale = ImageScale;
+                layers[i].Visible = false;
             }
-            AddLayer(list.ToArray());
+            this.AddLayer(layers);
         }
+
 
         public void ReplaceLayer(params Sprite[] array) {
 
@@ -158,6 +167,10 @@ namespace ExtractorSharp.Core {
 
         public int IndexOfLayer(Point point) {
             for (var i = LayerList.Count - 1; i > -1; i--) {
+                var layer = LayerList[i];
+                if (!layer.Visible || layer.Locked) {
+                    continue;
+                }
                 if (LayerList[i].Contains(point)) {
                     return i;
                 }
@@ -166,7 +179,11 @@ namespace ExtractorSharp.Core {
         }
 
         public void DrawLayer(Graphics g) {
-            LayerList.ForEach(l => l.Draw(g));
+            LayerList.ForEach(l => {
+                if (l.Visible) {
+                    l.Draw(g);
+                }
+            });
         }
 
         public void TabLayer(int index) {

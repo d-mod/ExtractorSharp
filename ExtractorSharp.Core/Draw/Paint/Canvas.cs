@@ -8,7 +8,6 @@ namespace ExtractorSharp.Draw.Paint {
         public Bitmap Image { set; get; }
         public Rectangle Rectangle => new Rectangle(Location, Size);
         public bool Contains(Point point) => Rectangle.Contains(point);
-        public void Move(Point point) => Location = Location.Add(point);
         public Point Offset { set; get; } = Point.Empty;
         public Size CanvasSize { set; get; }
         public void Draw(Graphics g) {
@@ -24,6 +23,8 @@ namespace ExtractorSharp.Draw.Paint {
         public bool Visible { set; get; }
         public bool Locked { set; get; }
 
-        public override string ToString() => Language.Default[Name];
+        public override string ToString() {
+            return $"{Language.Default[Name]},{Language.Default["Position"]}({Location.X},{Location.Y}),{Language.Default["Size"]}({Size.Width},{Size.Height})";
+        }
     }
 }

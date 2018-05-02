@@ -16,7 +16,7 @@ namespace ExtractorSharp.View.Dialog {
     public partial class SettingDialog : ESDialog {
         private Dictionary<TreeNode, AbstractSettingPane> Dictionary;
         private AbstractSettingPane SelectPane { set; get; }
-        public SettingDialog(IConnector Data) : base(Data) {
+        public SettingDialog(IConnector Connector) : base(Connector) {
             Dictionary = new Dictionary<TreeNode, AbstractSettingPane>();
             InitializeComponent();
             this.tree.AfterSelect += SelectNode;

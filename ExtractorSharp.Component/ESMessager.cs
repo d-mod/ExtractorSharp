@@ -43,7 +43,6 @@ namespace ExtractorSharp.Core {
         /// <param name="msg"></param>
         public void ShowOperate(string msg) {
             ShowMessage(MessageType.Success, $"{Language[msg]}  {Language["Success"]}");    
-            Bass.Play(Resources.end);
         }
         /// <summary>
         /// 提示

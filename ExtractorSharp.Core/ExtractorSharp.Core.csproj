@@ -128,8 +128,6 @@
     <None Include="Resources\warnningIcon.png" />
     <None Include="Resources\successIcon.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Component\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

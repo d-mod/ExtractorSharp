@@ -176,15 +176,16 @@ namespace ExtractorSharp.Properties {
         ///
         ///  &quot;LayerMaximum&quot;: 20,
         ///
+        ///  &quot;GifTransparent&quot;: &quot;0,0,0,0&quot;,
+        ///
+        ///  &quot;GifDelay&quot;: 75,
+        ///
+        ///  &quot;ApiHost&quot;: &quot;http://localhost&quot;,
         ///
         ///
         ///  &quot;UpdateUrl&quot;: &quot;http://extractorsharp.kritsu.net/api/program/update&quot;,
         ///
-        ///  &quot;UpdateExeUrl&quot;: &quot;http://static.kritsu.net/install.exe&quot;,
-        ///
-        ///  &quot;DebugUrl&quot;: &quot;http://extractorsharp.kritsu.net/api/feedback/post&quot;,
-        ///
-        /// [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///  &quot;UpdateExeUrl&quot;: &quot;http://static.kritsu.net [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Config {
             get {
@@ -229,16 +230,6 @@ namespace ExtractorSharp.Properties {
             get {
                 object obj = ResourceManager.GetObject("edit", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
-        /// </summary>
-        internal static byte[] error {
-            get {
-                object obj = ResourceManager.GetObject("error", resourceCulture);
-                return ((byte[])(obj));
             }
         }
         
@@ -536,16 +527,6 @@ namespace ExtractorSharp.Properties {
             get {
                 object obj = ResourceManager.GetObject("sort", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
-        /// </summary>
-        internal static byte[] success {
-            get {
-                object obj = ResourceManager.GetObject("success", resourceCulture);
-                return ((byte[])(obj));
             }
         }
         

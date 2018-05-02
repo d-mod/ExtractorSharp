@@ -34,7 +34,11 @@ namespace ExtractorSharp.View.Pane {
             }
         }
 
-        public void Refresh(object sender, EventArgs e) => Refresh();
+        public void Refresh(object sender, CommandEventArgs e) {
+            if (e.Command.CanUndo) {
+                Refresh();
+            }
+        }
 
         public override void Refresh() {
             if (Parent.Visible) {

@@ -255,7 +255,11 @@ namespace ExtractorSharp.Core {
                 }
             }
             for (var i = Queues.Count - 1; i > 0; i--) {
-                var source = Queues[i][index];
+                var img = Queues[i];
+                if (index > img.List.Count - 1) {
+                    continue;
+                }
+                var source = img[index];
                 if (source.Type == ColorBits.LINK) {//如果为链接贴图。则引用指向贴图的属性
                     source = source.Target;
                 }

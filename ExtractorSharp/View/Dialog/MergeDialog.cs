@@ -78,7 +78,6 @@ namespace ExtractorSharp.View {
             mergerButton.Enabled = true;
             sortButton.Enabled = true;
             prograss.Visible = false;
-            Bass.Play(Resources.success);
             if (completedHideCheck.Checked) {
                 DialogResult = DialogResult.OK;
             }

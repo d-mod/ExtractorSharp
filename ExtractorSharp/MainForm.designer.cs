@@ -118,7 +118,6 @@ namespace ExtractorSharp {
             
             saveGifItem = new ToolStripMenuItem();
             box = new PictureBox();
-            mutipleLayerItem = new ToolStripMenuItem();
             linearDodge = new CheckBox();
             realPositionBox = new CheckBox();
             onionskinBox = new CheckBox();
@@ -141,16 +140,7 @@ namespace ExtractorSharp {
             versionItem = new ToolStripMenuItem();
             settingItem = new ToolStripMenuItem();
 
-            trackBar = new TrackBar();
-
             layerList = new ESListBox<IPaint>();
-            layerMenu = layerList.ContextMenuStrip;
-            renameLayerItem = new ToolStripMenuItem();
-            changeLayerPositionItem = new ToolStripMenuItem();
-            adjustEntityPositionItem = new ToolStripMenuItem();
-            loadModelItem = new ToolStripMenuItem();
-            saveAsLayerItem = new ToolStripMenuItem();
-            replaceLayerItem = new ToolStripMenuItem();
 
             canvasMenu = new ContextMenuStrip();
             canvasCutItem = new ToolStripMenuItem();
@@ -455,7 +445,6 @@ namespace ExtractorSharp {
             viewMenu.DropDownItems.Add(gridItem);
             viewMenu.DropDownItems.Add(borderItem);
             viewMenu.DropDownItems.Add(previewItem);
-            viewMenu.DropDownItems.Add(mutipleLayerItem);
 
             ruleItem.Text = Language["Ruler"];
             ruleItem.Image = Resources.ruler;
@@ -490,10 +479,7 @@ namespace ExtractorSharp {
 
 
             toolsMenu.Text = Language["Tools"];
-
-
-            mutipleLayerItem.Text = Language["MutipleLayer"];
-            mutipleLayerItem.CheckOnClick = true;
+            
             // 
             // Message
             // 
@@ -594,31 +580,16 @@ namespace ExtractorSharp {
             searchBox.Name = "searchBox";
             searchBox.Size = new Size(180, 20);
             searchBox.TabIndex = 6;
-            // 
-            // MainForm
-            // 
-            trackBar.Location = new Point(1050, 370);
-            trackBar.Size = new Size(240, 40);
-            trackBar.LargeChange = trackBar.SmallChange = 1;
+
 
             layerList.HorizontalScrollbar = true;
             layerList.Location = new Point(1050, 405);
             layerList.Name = "layerList";
             layerList.Size = new Size(240, 280);
             layerList.TabIndex = 4;
+            layerList.CanClear = false;
+            layerList.CanDelete = false;
 
-            layerMenu.Items.Add(renameLayerItem);
-            layerMenu.Items.Add(replaceLayerItem);
-            // layerMenu.Items.Add(changeLayerPositionItem);
-            layerMenu.Items.Add(adjustEntityPositionItem);
-            layerMenu.Items.Add(loadModelItem);
-            layerMenu.Items.Add(saveAsLayerItem);
-            renameLayerItem.Text = Language["Rename"];
-            changeLayerPositionItem.Text = Language["ChangeLayerPosition"];
-            adjustEntityPositionItem.Text = Language["AdjustPosition"];
-            loadModelItem.Text = Language["LoadModel"];
-            saveAsLayerItem.Text = Language["SaveAs"];
-            replaceLayerItem.Text = Language["ReplaceImage"];
 
             colorDialog = new ColorDialog();
 
@@ -647,7 +618,6 @@ namespace ExtractorSharp {
             Controls.Add(searchBox);
             Controls.Add(albumList);
             Controls.Add(layerList);
-            Controls.Add(trackBar);
             Controls.Add(messager);
             Controls.Add(openButton);
             Controls.Add(closeButton);
@@ -722,7 +692,6 @@ namespace ExtractorSharp {
 
         private ToolStripMenuItem gridItem;         //网格
         private ToolStripMenuItem borderItem;       //边框
-        private ToolStripMenuItem mutipleLayerItem; //多图层
 
         private ToolStripMenuItem toolsMenu;        //工具
 
@@ -791,15 +760,7 @@ namespace ExtractorSharp {
         private Label searchIcon;
         private TextBox pathBox;
         private Button historyButton;           //历史操作
-        private TrackBar trackBar;
 
-        private ContextMenuStrip layerMenu;
-        private ToolStripMenuItem renameLayerItem;//重命名
-        private ToolStripMenuItem changeLayerPositionItem;//修改图层坐标
-        private ToolStripMenuItem replaceLayerItem;//替换贴图
-        private ToolStripMenuItem adjustEntityPositionItem;//校正坐标
-        private ToolStripMenuItem loadModelItem;    //载入模板
-        private ToolStripMenuItem saveAsLayerItem;//另存为
 
 
         private ContextMenuStrip canvasMenu;

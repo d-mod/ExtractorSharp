@@ -40,9 +40,8 @@ namespace ExtractorSharp.Component {
             ContextMenuStrip.Items.Add(checkAllItem);
             ContextMenuStrip.Items.Add(reverseCheckItem);
             ContextMenuStrip.Items.Add(unCheckAllItem);
-            ContextMenuStrip.Items.Add(new ToolStripSeparator());
-            ContextMenuStrip.Items.Add(deleteItem);
             CanClear = true;
+            CanDelete = true;
             AllowDrop = true;
             ImeMode=ImeMode.Disable;
             ContextMenuStrip.Items.Add(new ToolStripSeparator());

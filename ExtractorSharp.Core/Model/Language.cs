@@ -45,6 +45,9 @@ namespace ExtractorSharp.Data {
 
         public string this[string group, string key] {
             get {
+                if (group == null || key == null) {
+                    return "";
+                }
                 if (Group.ContainsKey(group) && Group[group].ContainsKey(key)) {
                     return Group[group][key];
                 }

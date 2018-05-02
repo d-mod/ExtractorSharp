@@ -155,7 +155,7 @@
     <Compile Include="Draw\Brush\Straw.cs" />
     <Compile Include="Draw\Paint\Border.cs" />
     <Compile Include="Draw\Paint\Grid.cs" />
-    <Compile Include="Draw\Paint\Rule.cs" />
+    <Compile Include="Draw\Paint\Ruler.cs" />
     <Compile Include="EventArguments\ColorEventArgs.cs" />
     <Compile Include="EventArguments\DrawEventArgs.cs" />
     <Compile Include="Core\QueueChangeMode.cs" />

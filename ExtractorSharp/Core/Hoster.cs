@@ -30,9 +30,6 @@ namespace ExtractorSharp.Core {
         private const string MARKET_URL = "http://extractorsharp.kritsu.net/api/plugin/list";
 
 
-        private const string DOWNLOAD_URL = "http://extractorsharp.kritsu.net/api/plugin/download";
-
-
         public Hoster() {
             List = new Dictionary<Guid, Plugin>();
             Catalog = new AssemblyCatalog(Assembly.GetExecutingAssembly());
@@ -97,7 +94,7 @@ namespace ExtractorSharp.Core {
             NetList.Clear();
             try {
                 var builder = new LSBuilder();
-                var obj = builder.Get(MARKET_URL);
+                var obj = builder.Get(Config["MarketUrl"].Value);
                 if (obj["status"].Value.Equals("success")) {
                     NetList = obj["tag"].GetValue(typeof(List<Metadata>)) as List<Metadata>;
                 }

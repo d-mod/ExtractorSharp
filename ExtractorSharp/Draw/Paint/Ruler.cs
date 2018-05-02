@@ -8,8 +8,8 @@ using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Data;
 
 namespace ExtractorSharp.Draw.Paint {
-    class Rule : IPaint {
-        public string Name { set; get; } = "Rule";
+    class Ruler : IPaint {
+        public string Name { set; get; } = "Ruler";
         public Bitmap Image { set; get; }
         public Size Size { set; get; }
         public Point Location { set; get; }
@@ -32,6 +32,7 @@ namespace ExtractorSharp.Draw.Paint {
             }
             return false;
         }
+
         public void Draw(Graphics g) {
             var rp = Location;
             var rule_point = (Point)Tag;
@@ -43,6 +44,10 @@ namespace ExtractorSharp.Draw.Paint {
             var x = rp.X - rule_radius;
             var y = rp.Y - rule_radius;
             g.DrawEllipse(Pens.WhiteSmoke, x, y, rule_radius * 2, rule_radius * 2);
+        }
+
+        public override string ToString() {
+            return $"{Language.Default[Name]},{Language.Default["Position"]}({Location.X},{Location.Y})";
         }
     }
 }

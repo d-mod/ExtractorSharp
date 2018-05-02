@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ExtractorSharp.Data;
 using ExtractorSharp.Draw;
 
 namespace ExtractorSharp.Draw.Paint {
@@ -35,6 +36,9 @@ namespace ExtractorSharp.Draw.Paint {
                     g.DrawLine(Pens.White, new Point(0, i), new Point(Size.Width, i));
                 }
             }
+        }
+        public override string ToString() {
+            return $"{Language.Default[Name]}";
         }
     }
 }

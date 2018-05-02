@@ -33,7 +33,23 @@ namespace ExtractorSharp.Component {
             }
         }
 
+        public bool CanDelete {
+            set {
+                _canDelete = value;
+                if (_canDelete) {
+                    ContextMenuStrip.Items.Add(deleteItem);
+                } else {
+                    ContextMenuStrip.Items.Remove(deleteItem);
+                }
+            }
+            get {
+                return _canDelete;
+            }
+        }
+
         private bool _canClear = true;
+
+        private bool _canDelete = true;
 
         public delegate void ItemHoverHandler(object sender, ItemHoverEventArgs e);
 

@@ -36,6 +36,8 @@
 
   "FeedbackUrl": "http://extractorsharp.kritsu.net/api/feedback/post",
 
+  "MarketUrl": "http://extractorsharp.kritsu.net/api/plugin/list",
+
   "UpdateExeName": "install.exe",
 
   "AutoUpdate": true,

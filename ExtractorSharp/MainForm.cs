@@ -27,7 +27,6 @@ namespace ExtractorSharp {
         private Viewer Viewer { get; }
         private Drawer Drawer { get; }
         private Controller Controller { get; }
-        private decimal ImageScale => scaleBox.Value / 100;
         public string Path {
             set => pathBox.Text = value;
             get => pathBox.Text;
@@ -108,7 +107,7 @@ namespace ExtractorSharp {
         }
 
         private void AddPaint() {
-            Rule = new Rule();
+            Rule = new Ruler();
             Grid = new Grid();
             Border = new Border();
             AddPaint(displayRuleItem, Rule);
@@ -121,6 +120,7 @@ namespace ExtractorSharp {
             item.CheckOnClick = true;
             item.Click += Flush;
             item.CheckedChanged += (o, e) => paint.Visible = item.Checked;
+            Drawer.LayerList.Add(paint);
         }
 
 
@@ -255,7 +255,7 @@ namespace ExtractorSharp {
             imageList.SelectedIndexChanged += SelectImageChanged;
             imageList.ItemHoverChanged += PreviewHover;
             changePositionItem.Click += (o, e) => Viewer.Show("changePosition", Connector.CheckedImages);
-            changeSizeItem.Click += (o, e) => Viewer.Show("changeSize", Connector.SelectedFile, imageList.SelectIndexes, ImageScale);
+            changeSizeItem.Click += (o, e) => Viewer.Show("changeSize", Connector.SelectedFile, imageList.SelectIndexes, Drawer.ImageScale);
             searchBox.TextChanged += (o, e) => ListFlush();
 
             newImageItem.Click += (o, e) => Viewer.Show("newImage", Connector.SelectedFile);
@@ -283,14 +283,7 @@ namespace ExtractorSharp {
             openFileItem.Click += AddFile;
             saveFileItem.Click += (o, e) => Connector.Save();
             lockRuleItem.Click += LockRule;
-            mutipleLayerItem.CheckedChanged += Flush;
-            replaceLayerItem.Click += ReplaceLayer;
             layerList.ItemCheck += HideLayer;
-            layerList.Cleared += ClearLayer;
-            layerList.Deleted += DeleteLayer;
-            renameLayerItem.Click += RenameLayer;
-            addLayerItem.Click += AddLayer;
-            adjustEntityPositionItem.Click += AdjustLayer;
             adjustPositionItem.Click += AdjustPosition;
             repairFileItem.Click += (o, e) => Connector.Do("repairFile", Connector.CheckedFiles);
 
@@ -301,7 +294,6 @@ namespace ExtractorSharp {
             linearDodge.CheckedChanged += LinearDodge;
             onionskinBox.CheckedChanged += Onionskin;
             previewItem.CheckedChanged += PreviewChanged;
-            trackBar.ValueChanged += TabLayer;
             Drawer.ColorChanged += ColorChanged;
             colorPanel.MouseClick += ColorChanged;
             lineDodgeItem.Click += LinearDodge;
@@ -323,6 +315,13 @@ namespace ExtractorSharp {
             selectThisLinkItm.Click += SelectThisLink;
             selectThisTargetItem.Click += SelectThisTarget;
             Controller.CommandDid += CommandDid;
+            addLayerItem.Click += AddLayer;
+        }
+
+        private void AddLayer(object sender, EventArgs e) {
+            var image = Connector.SelectedImage;
+            Drawer.AddLayer(image);
+            LayerFlush();
         }
 
         private void LayerVisibleChanged(object sender, LayerEventArgs e) {
@@ -356,6 +355,7 @@ namespace ExtractorSharp {
 
         private void ScaleChange(object sender, EventArgs e) {
             Config["CanvasScale"] = new ConfigValue(scaleBox.Value);
+            Drawer.ImageScale = scaleBox.Value / 100;
             Flush(sender, e);
         }
 
@@ -520,19 +520,7 @@ namespace ExtractorSharp {
             }
         }
 
-
-        private void DeleteLayer() {
-            var array = layerList.SelectItems;
-            foreach (var item in array) {
-                Drawer.LayerList.Remove(item);
-                layerList.Items.Remove(item);
-            }
-        }
-
-        private void ClearLayer() {
-            layerList.Items.Clear();
-        }
-
+        
         private void AdjustPosition(object sender, EventArgs e) {
             var index = Connector.SelectedImageIndex;
             var item = Connector.SelectedFile;
@@ -541,53 +529,7 @@ namespace ExtractorSharp {
             }
         }
 
-        /// <summary>
-        /// 重命名
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void RenameLayer(object sender, EventArgs e) {
-            if (mutipleLayerItem.Checked) {
-                if (layerList.SelectedItem is Layer item) {
-                    var dialog = new ESTextDialog();
-                    dialog.InputText = item?.ToString();
-                    dialog.Text = Language["Rename"];
-                    if (dialog.Show() == DialogResult.OK) {
-                        Connector.Do("renameLayer", item, dialog.InputText);
-                    }
-                }
-            }
-        }
 
-        /// <summary>
-        /// 加入图层
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void AddLayer(object sender, EventArgs e) {
-            var array = Connector.CheckedImages;
-            if (array.Length > 0) {
-                Drawer.AddLayer(array);
-                layerList.Items.Clear();
-                layerList.Items.AddRange(Drawer.LayerList.ToArray());
-                if (!mutipleLayerItem.Checked) {
-                    mutipleLayerItem.Checked = true;
-                } else {
-                    CanvasFlush();
-                }
-                Connector.SendSuccess("AddLayer");
-            }
-        }
-
-
-        /// <summary>
-        /// 校正坐标
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void AdjustLayer(object sender, EventArgs e) {
-
-        }
 
         /// <summary>
         /// 隐藏图层
@@ -595,41 +537,16 @@ namespace ExtractorSharp {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void HideLayer(object sender, EventArgs e) {
-            if (mutipleLayerItem.Checked) {
-                if (layerList.SelectedItem is Layer item) {
-                    item.Visible = !item.Visible;
-                }
-                CanvasFlush();
+            var index = layerList.SelectedIndex;
+            var item = layerList.SelectedItem;
+            if (index < 0 || item == null) {
+                return;
             }
-        }
-
-        /// <summary>
-        /// 切换图层
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void TabLayer(object sender, EventArgs e) {
-            var value = trackBar.Value;
-            if (value == trackBar.Maximum && value < Config["LayerMaximum"].Integer - 1) {
-                trackBar.Maximum++;
-            }
-            Drawer.TabLayer(value);
-            layerList.Items.Clear();
-            layerList.Items.AddRange(Drawer.LayerList.ToArray());
+            item.Visible = !layerList.GetItemChecked(index);
             CanvasFlush();
         }
 
-        /// <summary>
-        /// 替换图层
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ReplaceLayer(object sender, EventArgs e) {
-            var array = Connector.ImageArray;
-            Drawer.ReplaceLayer(array);
-            Connector.SendSuccess("ReplaceImage");
-            CanvasFlush();
-        }
+
 
 
 
@@ -718,8 +635,9 @@ namespace ExtractorSharp {
             var lastSprite = Drawer.CurrentLayer.Tag as Sprite;
             var lastSpritePosition = lastSprite != null ? lastSprite.Location : Point.Empty;
             var lastPosition = Drawer.CurrentLayer.Location.Minus(lastSpritePosition);
+            var lastLayerVisible = Drawer.LastLayer.Visible;
             Drawer.CurrentLayer = new Canvas();
-            Drawer.LastLayerVisible = onionskinBox.Checked;
+            Drawer.LastLayerVisible = lastLayerVisible;
             if (realPositionBox.Checked) {
                 Drawer.CurrentLayer.Location = Connector.SelectedImage.Location.Add(lastPosition);
             }
@@ -883,23 +801,14 @@ namespace ExtractorSharp {
 
 
         private void DisplayNext() {
-            if (mutipleLayerItem.Checked) {
-                if (trackBar.InvokeRequired) {
-                    trackBar.Invoke(new MethodInvoker(DisplayNext));
-                    return;
-                }
-                var i = trackBar.Value + 1;
-                trackBar.Value = i < Drawer.Count ? i : 0;
-            } else {
-                if (imageList.InvokeRequired) {
-                    imageList.Invoke(new MethodInvoker(DisplayNext));
-                    return;
-                }
-                var i = Connector.SelectedImageIndex + 1;
-                i = i < Connector.ImageCount ? i : 0;
-                if (Connector.ImageCount > 0) {
-                    Connector.SelectedImageIndex = i;
-                }
+            if (imageList.InvokeRequired) {
+                imageList.Invoke(new MethodInvoker(DisplayNext));
+                return;
+            }
+            var i = Connector.SelectedImageIndex + 1;
+            i = i < Connector.ImageCount ? i : 0;
+            if (Connector.ImageCount > 0) {
+                Connector.SelectedImageIndex = i;
             }
         }
 
@@ -1180,23 +1089,23 @@ namespace ExtractorSharp {
                 Grid.Size = box.Size;
                 Grid.Draw(g);
             }
-
+            if (Drawer.LastLayer.Visible) {
+                Drawer.LastLayer?.Draw(g);
+            }
             if (entity?.Picture != null) {
                 if (entity.Type == ColorBits.LINK && entity.Target != null) {
                     entity = entity.Target;
                 }
                 var pictrue = entity.Picture;
-                var size = entity.Size.Star(ImageScale);
+                var size = entity.Size.Star(Drawer.ImageScale);
                 if (linearDodge.Checked) {
                     pictrue = pictrue.LinearDodge();
                 }
-                if (Drawer.LastLayer.Visible) {
-                    Drawer.LastLayer?.Draw(g);
-                }
+
                 Drawer.CurrentLayer.Tag = entity;
                 Drawer.CurrentLayer.Size = size;//校正当前图层的宽高
                 Drawer.CurrentLayer.Image = pictrue;//校正贴图
-                Drawer.CurrentLayer.Draw(g);//绘制贴图
+                Drawer.DrawLayer(g);
             } 
             if (Border.Visible) {
                 Border.Tag = Drawer.CurrentLayer.Rectangle;
@@ -1206,23 +1115,6 @@ namespace ExtractorSharp {
 
 
 
-
-
-
-        /// <summary>
-        /// 是否选择到了图片上
-        /// </summary>
-        /// <returns></returns>
-        private int IsSelctImage(Point p) {
-            var entity = Connector.SelectedImage;
-            if (Rule.Visible && !Rule.Locked) {//是否在圆心上
-                if (Rule.Contains(p)) {
-                    return 1;
-                }
-            }
-            return Drawer.IndexOfLayer(p);
-        }
-
         /// <summary>
         /// 鼠标左键单击
         /// </summary>
@@ -1231,7 +1123,7 @@ namespace ExtractorSharp {
         private void OnMouseDown(object sender, MouseEventArgs e) {
             if (e.Button == MouseButtons.Left) {
                 var point = e.Location;
-                move_mode = IsSelctImage(point);
+                move_mode = Drawer.IndexOfLayer(point);
                 Drawer.CusorLocation = point;
             }
         }
@@ -1240,7 +1132,7 @@ namespace ExtractorSharp {
             Hotpot = e.Location;
             if (e.Button == MouseButtons.Left) {
                 if (!Drawer.IsSelect("MoveTool")) {
-                    Drawer.Brush.Draw(Drawer.CurrentLayer, Hotpot, ImageScale);
+                    Drawer.Brush.Draw(Drawer.CurrentLayer, Hotpot, Drawer.ImageScale);
                 }
             } else if (e.Button == MouseButtons.Right) {
                 canvasMenu.Show(box, Hotpot);
@@ -1256,6 +1148,7 @@ namespace ExtractorSharp {
         private void OnMouseUp(object sender, MouseEventArgs e) {
             if (e.Button == MouseButtons.Left) {
                 move_mode = -1;
+                layerList.Invalidate();
             }
         }
 
@@ -1268,7 +1161,7 @@ namespace ExtractorSharp {
         private void OnMouseMove(object sender, MouseEventArgs e) {
             if (e.Button == MouseButtons.Left && move_mode != -1) {
                 var newPoint = e.Location;
-                Drawer.Brush.Draw(Drawer.LayerList[move_mode], newPoint, ImageScale);
+                Drawer.Brush.Draw(Drawer.LayerList[move_mode], newPoint, Drawer.ImageScale);
                 Drawer.CusorLocation = e.Location;
                 CanvasFlush();
             }
@@ -1329,7 +1222,7 @@ namespace ExtractorSharp {
             }
             var dialog = new SaveFileDialog();
             var name = Connector.SelectedFile.Name.RemoveSuffix(".");
-            dialog.Filter = $"GIF|*.gif";
+            dialog.Filter = "GIF|*.gif";
             dialog.FileName = name;
             if (dialog.ShowDialog() == DialogResult.OK) {
                 Connector.Do("saveGif", Connector.SelectedFile, array, dialog.FileName, Config["GifTransparent"].Color, Config["GifDelay"].Integer);

@@ -236,8 +236,8 @@ namespace Gif.Components
 					if (lastDispose == 2) 
 					{
 						// fill last image rect area with background color
-						Graphics g = Graphics.FromImage( image );
-						Color c = Color.Empty;
+						var g = Graphics.FromImage( image );
+						var c = Color.Empty;
 						if (transparency) 
 						{
 							c = Color.FromArgb( 0, 0, 0, 0 ); 	// assume background is transparent
@@ -247,7 +247,7 @@ namespace Gif.Components
 							c = Color.FromArgb( lastBgColor ) ;
 							//						c = new Color(lastBgColor); // use given background color
 						}
-						Brush brush = new SolidBrush( c );
+						var brush = new SolidBrush( c );
 						g.FillRectangle( brush, lastRect );
 						brush.Dispose();
 						g.Dispose();
@@ -634,13 +634,12 @@ namespace Gif.Components
 				tab = new int[256]; // max size to avoid bounds checks
 				int i = 0;
 				int j = 0;
-				while (i < ncolors) 
-				{
-					int r = ((int) c[j++]) & 0xff;
-					int g = ((int) c[j++]) & 0xff;
-					int b = ((int) c[j++]) & 0xff;
-					tab[i++] = (int) (0xff000000 | (r << 16) | (g << 8) | b );
-				}
+                while (i < ncolors) {
+                    int r = ((int)c[j++]) & 0xff;
+                    int g = ((int)c[j++]) & 0xff;
+                    int b = ((int)c[j++]) & 0xff;
+                    tab[i++] = (int)(0xff << 24) | ((r << 16) | (g << 8) | b);
+                }
 			}
 			return tab;
 		}
