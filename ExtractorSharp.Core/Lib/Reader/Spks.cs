@@ -1,5 +1,6 @@
 ﻿using ICSharpCode.SharpZipLib.BZip2;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -7,7 +8,7 @@ namespace ExtractorSharp.Core.Lib {
     public static class Spks {
         private static byte[] HEADER = { 0x42, 0x5a, 0x68, 0x39, 0x31, 0x41, 0x59, 0x26, 0x53, 0x59 };
         private static byte[] MARK = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x0e, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xef, 0xf1, 0xff };
-        private static byte[] TAIL = { 0x01, 0x00, 0x00, 0x00 };
+        private static byte[] TAIL = { 0x00, 0x00, 0x00, 0x01 };
 
 
         public static byte[] Decompress(byte[] bs) {
@@ -38,7 +39,7 @@ namespace ExtractorSharp.Core.Lib {
                             ms.Write(list[j].Sub(32));
                         }
                         var last = list.Last();
-                        var pos = last.LastIndexOf(TAIL);
+                        var pos = last.LastIndexof(TAIL);
                         if (pos > -1) {
                             ms.Write(last.Sub(32, pos + 1));
                         }
@@ -48,7 +49,7 @@ namespace ExtractorSharp.Core.Lib {
             }
         }
 
-        public static int LastIndexOf(this byte[] data, byte[] pattern) {
+        public static int LastIndexof(this byte[] data, byte[] pattern) {
             for (var i = data.Length - 1; i > 0; i--) {
                 var j = i;
                 while (data[j] == pattern[j - i]) {
@@ -69,6 +70,34 @@ namespace ExtractorSharp.Core.Lib {
             var newArray = new byte[length];
             Buffer.BlockCopy(array, start, newArray, 0, length);
             return newArray;
+        }
+
+        public static byte[][] Split(this byte[] data, byte[] pattern) {
+            var last = 0;
+            var list = new List<byte[]>();
+            var next = 0;
+            while (last < data.Length) {
+                last = data.Indexof(pattern, next);
+                last = last == -1 ? data.Length : last;
+                list.Add(data.Sub(next, last - next));
+                if (last < data.Length) {
+                    next = last += pattern.Length;
+                }
+            }
+            return list.ToArray();
+        }
+
+        public static int Indexof(this byte[] data,byte[] pattern,int start) {
+            for (var i = start; i < data.Length; i++) {
+                var j = i;
+                while (j < data.Length && data[j] == pattern[j - i]) {
+                    j++;
+                    if (j - i == pattern.Length) {
+                        return j - pattern.Length;
+                    }
+                }
+            }
+            return -1;
         }
 
 
