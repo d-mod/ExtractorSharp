@@ -40,7 +40,7 @@ namespace ExtractorSharp.Core.Lib {
                         var last = list.Last();
                         var pos = last.LastIndexOf(TAIL);
                         if (pos > -1) {
-                            ms.Write(last.Sub(32, pos + 1 - TAIL.Length));
+                            ms.Write(last.Sub(32, pos + 1));
                         }
                     }
                 }
