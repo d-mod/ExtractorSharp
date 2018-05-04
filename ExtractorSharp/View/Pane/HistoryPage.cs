@@ -35,7 +35,7 @@ namespace ExtractorSharp.View.Pane {
         }
 
         public void Refresh(object sender, CommandEventArgs e) {
-            if (e.Command.CanUndo) {
+            if (e.Type == CommandEventType.Clear || e.Command.CanUndo) {
                 Refresh();
             }
         }

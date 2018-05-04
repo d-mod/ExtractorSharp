@@ -99,7 +99,7 @@ namespace ExtractorSharp {
             Controller.Registry("newImg", typeof(NewFile));
             Controller.Registry("hideImg", typeof(HideFile));
             Controller.Registry("sortImg", typeof(SortFile));
-            Controller.Registry("saveImg", typeof(SaveFile));
+            Controller.Registry("saveImg", typeof(SaveFile));      
 
             Controller.Registry("cutImg", typeof(CutFile));
             Controller.Registry("pasteImg", typeof(PasteFile));

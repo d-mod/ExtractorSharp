@@ -311,6 +311,7 @@ namespace ExtractorSharp.Core {
             undoStack.Clear();
             redoStack.Clear();
             OnCommandClear(new CommandEventArgs() {
+                Type = CommandEventType.Clear
             });
         }
 

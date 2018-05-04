@@ -4,6 +4,7 @@ using ExtractorSharp.Core;
 using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Data;
 using ExtractorSharp.Draw;
+using ExtractorSharp.Json;
 using ExtractorSharp.Support;
 using System;
 using System.Collections.Generic;
@@ -19,11 +20,36 @@ namespace ExtractorSharp {
         private class MainConnector : IConnector {
             internal MainForm MainForm { get; set; }
             internal Dictionary<string, IFileConverter> FileConverters { get; } = new Dictionary<string, IFileConverter>();
+            public List<string> Recent {
+                set {
+                    this._recent = value;
+                    OnRecentChanged(new EventArgs());
+                }
+                get => _recent;
+            }
+            private string RecentConfigPath => $"{Config["RootPath"].Value}/conf/recent.json";
+
+            private List<string> _recent = new List<string>();
+   
+            public event FileChangeEventHandler FileOpened;
+
+            private void OnFileOpened(EventArgs e) => FileOpened?.Invoke(this, e);
+
+            public event FileChangeEventHandler RecentChanged;
+
+            public void OnRecentChanged(EventArgs e) => RecentChanged?.Invoke(this, e);
 
             internal MainConnector() {
                 SaveChanged += (o, e) => OnSaveChanged();
                 FileConverters.Add("gif", new GifSupport());
                 FileConverters.Add("spk", new SpkSupport());
+                var builder = new LSBuilder();
+                if (File.Exists(RecentConfigPath)) {
+                    Recent = builder.Read(RecentConfigPath).GetValue(typeof(List<string>)) as List<string>;
+                }
+                RecentChanged += (o,e)=> {
+                    builder.WriteObject(Recent, RecentConfigPath);
+                };
             }
 
             public Language Language => Language.Default;
@@ -99,7 +125,7 @@ namespace ExtractorSharp {
 
             private readonly List<Album> _list = new List<Album>();
 
-            public event EventHandler SaveChanged;
+            public event FileChangeEventHandler SaveChanged;
 
 
 
@@ -128,21 +154,29 @@ namespace ExtractorSharp {
                 if (args.Length < 1) {
                     return;
                 }
+                AddRecent(args);
                 var list = new List<Album>();
                 for(var i = 0; i < args.Length; i++) {
                     var index = args[i].LastIndexOf(".") + 1;
                     var suffix = args[i].Substring(index);
                     var arr = new List<Album>();
                     if (FileConverters.ContainsKey(suffix)) {
-                        arr = FileConverters[suffix].Load(args[i]);
+                        arr = FileConverters[suffix].Decode(args[i]);
                     } else {
                         arr = Npks.Load(args[i]);
                     }
                     list.AddRange(arr);
                 }
-                if (args.Length > 0) {
-                    MainForm.Controller.Do("addImg", list.ToArray(), clear);
+                if (list.Count > 0) {
+                    Do("addImg", list.ToArray(), clear);
+                } else {
+                    ImageListFlush();
                 }
+            }
+
+            private void AddRecent(params string[] args) {
+                Recent.InsertRange(0, args);
+                Recent = Recent.Distinct().ToList();
             }
 
             public void AddFile(bool clear, params Album[] array) {
@@ -163,6 +197,7 @@ namespace ExtractorSharp {
                     List.Remove(album);
                 }
             }
+
             public void Save() {
                 if (SavePath.Trim().Length == 0) {
                     SelectSavePath();
@@ -174,10 +209,12 @@ namespace ExtractorSharp {
             }
 
             public void Save(string file) {
-                Npks.Save(file, List);
+                Do("saveImg", List.ToArray(), file, 2);
+                AddRecent(file);
                 IsSave = true;
-                SendSuccess("SaveFile");
             }
+
+
 
             public void SelectSavePath() {
                 var dir = SavePath;
@@ -202,6 +239,11 @@ namespace ExtractorSharp {
                     Config["GamePath"] = new ConfigValue(dialog.SelectedPath);
                     Config.Save();
                 }
+            }
+
+
+            public string GetPath(string path) {
+                return $"{Config["RootPath"]}/{path}";
             }
 
             public void Do(string name, params object[] args) {

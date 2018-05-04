@@ -13,6 +13,8 @@ namespace ExtractorSharp.Composition {
    /// </summary>
     public interface IFileConverter{
 
-        List<Album> Load(string filename);
+        List<Album> Decode(string filename);
+
+        void Encode(string file,List<Album> album);
     }
 }

@@ -119,7 +119,9 @@ namespace ExtractorSharp.Data {
             var sprites = new Sprite[array.Length];
             for (var i = 0; i < array.Length; i++) {
                 sprites[i] = new Sprite(this);
+                sprites[i].Index = i;
                 sprites[i].Picture = array[i];
+                sprites[i].Compress = Compress.ZLIB;
             }
             List.AddRange(sprites);
         }

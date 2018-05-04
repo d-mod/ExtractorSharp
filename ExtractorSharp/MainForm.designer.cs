@@ -77,8 +77,20 @@ namespace ExtractorSharp {
             newImageItem = new ToolStripMenuItem();
             saveSingleImageItem = new ToolStripMenuItem();
             saveAllImageItem = new ToolStripMenuItem();
+
+            openItem = new ToolStripMenuItem();
             openFileItem = new ToolStripMenuItem();
+            openRecentItem = new ToolStripMenuItem();
+
+            addItem = new ToolStripMenuItem();
+            addDirItem = new ToolStripMenuItem();
+            addRecentItem = new ToolStripMenuItem();
+
+            saveItem = new ToolStripMenuItem();
             saveFileItem = new ToolStripMenuItem();
+            saveRecentItem = new ToolStripMenuItem();     
+            saveDirItem = new ToolStripMenuItem();
+
             exitItem = new ToolStripMenuItem();
 
             convertItem = new ToolStripMenuItem();
@@ -88,7 +100,6 @@ namespace ExtractorSharp {
             addFileItem = new ToolStripMenuItem();
             openDirItem = new ToolStripMenuItem();
             saveAsFileItem = new ToolStripMenuItem();
-            saveDirItem = new ToolStripMenuItem();
 
             lineDodgeItem = new ToolStripMenuItem();
 
@@ -374,39 +385,68 @@ namespace ExtractorSharp {
             // 
             // fileMenu
             // 
-            fileMenu.DropDownItems.Add(openFileItem);
-            fileMenu.DropDownItems.Add(addFileItem);
+            fileMenu.DropDownItems.Add(openItem);
+            fileMenu.DropDownItems.Add(addItem);
             fileMenu.DropDownItems.AddSeparator();
-            fileMenu.DropDownItems.Add(saveFileItem);
+            fileMenu.DropDownItems.Add(saveItem);
             fileMenu.DropDownItems.Add(saveAsFileItem);
-            fileMenu.DropDownItems.AddSeparator();
-            fileMenu.DropDownItems.Add(openDirItem);
-            fileMenu.DropDownItems.Add(saveDirItem);
             fileMenu.DropDownItems.AddSeparator();
             fileMenu.DropDownItems.Add(exitItem);
             fileMenu.Text = Language["File"];
-            openFileItem.Text = Language["Open"];
+
+            openItem.Text = Language["Open"];
+            openItem.ShowShortcutKeys = false;
+            openItem.Image = Resources.open;
+
+            openFileItem.Text = Language["File"];
             openFileItem.ShowShortcutKeys = false;
             openFileItem.ShortcutKeys = Keys.Control | Keys.O;
-            openFileItem.Image = Resources.open;
-            saveFileItem.Text = Language["Save"];
-            saveFileItem.ShowShortcutKeys = false;
-            saveFileItem.ShortcutKeys = Keys.Control | Keys.S;
-            saveFileItem.Image = Resources.save;
 
-            addFileItem.Text = Language["Add"];
+            openDirItem.Text = Language["Directory"];
+            openRecentItem.Text = Language["Recent"];
+            openRecentItem.DropDownItems.AddSeparator();
+
+            openItem.DropDownItems.Add(openFileItem);
+            openItem.DropDownItems.Add(openDirItem);
+            openItem.DropDownItems.Add(openRecentItem);
+
+
+            addItem.Text = Language["Add"];
+            addItem.Image = Resources.addFile;
+            addRecentItem.Text = Language["Recent"];
+            addRecentItem.DropDownItems.AddSeparator();
+
+
+            addFileItem.Text = Language["File"];
             addFileItem.ShowShortcutKeys = false;
-            addFileItem.Image = Resources.addFile;
             addFileItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.O;
+
+            addDirItem.Text = Language["Directory"];
+
+            addItem.DropDownItems.Add(addFileItem);
+            addItem.DropDownItems.Add(addDirItem);
+            addItem.DropDownItems.Add(addRecentItem);
+
+
+            saveItem.Text = Language["Save"];
+            saveItem.ShowShortcutKeys = false;
+            saveItem.Image = Resources.save;
+            saveRecentItem.Text = Language["Recent"];
+            saveRecentItem.DropDownItems.AddSeparator();
+
+            saveFileItem.Text = Language["File"];
+            saveFileItem.ShortcutKeys = Keys.Control | Keys.S;
+            saveDirItem.Text = Language["Directory"];
+
+            saveItem.DropDownItems.Add(saveFileItem);
+            saveItem.DropDownItems.Add(saveDirItem);
+            saveItem.DropDownItems.Add(saveRecentItem);
 
             saveAsFileItem.Text = Language["SaveAs"];
             saveAsFileItem.ShowShortcutKeys = false;
             saveAsFileItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.S;
             saveAsFileItem.Image = Resources.saveAs;
 
-            openDirItem.Text = Language["OpenDir"];
-
-            saveDirItem.Text = Language["SaveDir"];
 
             exitItem.Text = Language["Exit"];
             exitItem.ShortcutKeys = Keys.Alt | Keys.F4;
@@ -661,13 +701,25 @@ namespace ExtractorSharp {
         private ESListBox<IPaint> layerList;
 
         private MenuStrip mainMenu;
-        private ToolStripMenuItem fileMenu; 
-        private ToolStripMenuItem addFileItem;
-        private ToolStripMenuItem saveFileItem;
-        private ToolStripMenuItem saveAsFileItem;
-        private ToolStripMenuItem saveDirItem;
-        private ToolStripMenuItem openDirItem;
+        private ToolStripMenuItem fileMenu;
+
+        private ToolStripMenuItem openItem;
         private ToolStripMenuItem openFileItem;
+        private ToolStripMenuItem openDirItem;
+        private ToolStripMenuItem openRecentItem;
+
+        private ToolStripMenuItem addItem;
+        private ToolStripMenuItem addFileItem;
+        private ToolStripMenuItem addDirItem;
+        private ToolStripMenuItem addRecentItem;
+
+        private ToolStripMenuItem saveItem;
+        private ToolStripMenuItem saveFileItem;
+        private ToolStripMenuItem saveDirItem;
+        private ToolStripMenuItem saveRecentItem;
+
+        private ToolStripMenuItem saveAsFileItem;
+
         private ToolStripMenuItem exitItem;
 
         private ToolStripMenuItem editMenu;

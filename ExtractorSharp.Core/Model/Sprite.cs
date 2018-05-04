@@ -242,23 +242,7 @@ namespace ExtractorSharp.Data {
             };
         }
 
-        public void Save(Stream stream) {
-            var data = Picture.ToArray();
-            if (Compress != Compress.NONE) {
-                data = Zlib.Compress(data);
-            }
-            stream.WriteString("");
-            stream.WriteInt((int)Type);
-            stream.WriteInt((int)Compress);
-            stream.WriteInt(Width);
-            stream.WriteInt(Height);
-            stream.WriteInt(data.Length);
-            stream.WriteInt(X);
-            stream.WriteInt(Y);
-            stream.WriteInt(Canvas_Width);
-            stream.WriteInt(Canvas_Height);
-            stream.Write(data);
-        }
+
     }
 
     /// <summary>

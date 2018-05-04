@@ -27,28 +27,7 @@ namespace ExtractorSharp.Command.ImgCommand {
             Array = args as Album[];
             List = new List<Album>();
             foreach (var al in Array) {
-                var arr = new Album[al.Tables.Count];
-                var path = al.Name;
-                var regex = new Regex("\\d+");
-                var match = regex.Match(path);
-                if (!match.Success) {
-                    continue;
-                }
-                var prefix = path.Substring(0, match.Index);
-                var suffix = path.Substring(match.Index + match.Length);
-                var code = int.Parse(match.Value);
-                al.Adjust();
-                var data = al.Data;
-                var ms = new MemoryStream(data);
-                for (var i = 0; i < arr.Length; i++) {
-                    var name = prefix + Npks.CompleteCode(code + i) + suffix;
-                    arr[i] = Npks.ReadNPK(ms,al.Name)[0];
-                    arr[i].Path = al.Path.Replace(al.Name, name);
-                    arr[i].Tables.Clear();
-                    arr[i].Tables.Add(al.Tables[i]);
-                    ms.Seek(0, SeekOrigin.Begin);
-                }
-                ms.Close();
+                var arr = Npks.SplitFile(al);
                 Connector.RemoveFile(al);
                 Connector.AddFile(false, arr);
                 List.AddRange(arr);

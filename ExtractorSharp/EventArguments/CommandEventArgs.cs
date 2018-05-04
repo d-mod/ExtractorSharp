@@ -13,6 +13,6 @@ namespace ExtractorSharp {
     }
 
     public enum CommandEventType {
-        Do, Undo, Redo
+        Do, Undo, Redo,Clear
     }
 }

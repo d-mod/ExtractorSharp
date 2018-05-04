@@ -223,8 +223,9 @@ namespace ExtractorSharp {
         /// </summary>
         private void AddListenter() {
             addFileItem.Click += AddFile;
-            openDirItem.Click += InputDirectory;
-            saveAsFileItem.Click += OutputFile;
+            openDirItem.Click += OpenDirectory;
+            addDirItem.Click += OpenDirectory;
+            saveAsFileItem.Click += SaveAsFile;
             saveDirItem.Click += OutputDirectory;
             exitItem.Click += (o, e) => Application.Exit();
             replaceItem.Click += ReplaceFile;
@@ -315,8 +316,70 @@ namespace ExtractorSharp {
             selectThisLinkItm.Click += SelectThisLink;
             selectThisTargetItem.Click += SelectThisTarget;
             Controller.CommandDid += CommandDid;
+            Connector.RecentChanged += RecentChanged;
             addLayerItem.Click += AddLayer;
         }
+
+        private void RecentChanged(object sender, EventArgs e) {
+            var recent = Connector.Recent;
+            openRecentItem.DropDownItems.Clear();
+            addRecentItem.DropDownItems.Clear();
+            saveRecentItem.DropDownItems.Clear();
+            var count = Math.Min(10, recent.Count);
+            var openArr = new ToolStripMenuItem[count];
+            var addArr = new ToolStripMenuItem[count];
+            var saveArr = new ToolStripMenuItem[count];
+            for (var i = 0; i <count; i++) {
+                var re = recent[i];
+                openArr[i] = _GetRecentItem(re);
+                openArr[i].Click += (o, ex) => {
+                    Connector.AddFile(true, re);
+                };
+                addArr[i] = _GetRecentItem(re);
+                addArr[i].Click += (o, ex) => {
+                    Connector.AddFile(false, re);
+                };
+                saveArr[i] = _GetRecentItem(re);
+                saveArr[i].Click += (o, ex) => {
+                    Connector.Save(re);
+                };
+            }
+            openRecentItem.DropDownItems.AddRange(openArr);
+            addRecentItem.DropDownItems.AddRange(addArr);
+            saveRecentItem.DropDownItems.AddRange(saveArr);
+            if (recent.Count ==0) {
+                return;
+            }
+            var clearAdd = new ToolStripMenuItem();
+            clearAdd.Text = Language["ClearRecent"];
+            clearAdd.Click += (o, ex) => {
+                Connector.Recent = new List<string>();
+            };
+            var clearOpen = new ToolStripMenuItem();
+            clearOpen.Text = Language["ClearRecent"];
+            clearOpen.Click += (o, ex) => {
+                Connector.Recent = new List<string>();
+            };
+            var clearSave = new ToolStripMenuItem();
+            clearSave.Text = Language["ClearRecent"];
+            clearSave.Click += (o, ex) => {
+                Connector.Recent = new List<string>();
+            };
+            openRecentItem.DropDownItems.AddSeparator();
+            addRecentItem.DropDownItems.AddSeparator();
+            saveRecentItem.DropDownItems.AddSeparator();
+            openRecentItem.DropDownItems.Add(clearOpen);
+            addRecentItem.DropDownItems.Add(clearAdd);
+            saveRecentItem.DropDownItems.Add(clearSave);
+        }
+
+        private ToolStripMenuItem _GetRecentItem(string recent) {
+            var item = new ToolStripMenuItem();
+            item.Text = recent.GetSuffix();
+            item.ToolTipText = recent;
+            return item;
+        }
+
 
         private void AddLayer(object sender, EventArgs e) {
             var image = Connector.SelectedImage;
@@ -504,7 +567,7 @@ namespace ExtractorSharp {
                 Entity = Connector.SelectedImage,
                 Album = Connector.SelectedFile
             });
-            ImageFlush(true);
+            ImageFlush();
         }
 
         private void PreviewChanged(object sender, EventArgs e) {
@@ -651,14 +714,14 @@ namespace ExtractorSharp {
         private void Classify(object sender, EventArgs e) {
             ListFlush();
         }
-       
+
 
         /// <summary>
         /// 列表刷新
         /// </summary>
         public void ListFlush() {
             var items = albumList.CheckedItems;
-            var index = albumList.SelectedIndex;
+            var item = albumList.SelectedItem;
             var itemArray = new Album[items.Count];
             items.CopyTo(itemArray, 0);
             albumList.Items.Clear();
@@ -671,7 +734,7 @@ namespace ExtractorSharp {
                     if (p != path) {
                         path = p;
                         var sp = new Album();
-                        sp.Path = "---------------分割线---------------";
+                        sp.Path = $"---------------{Config["ClassifySeparator"].Value}---------------";
                         albumList.Items.Add(sp);
                     }
                     albumList.Items.Add(al);
@@ -684,13 +747,11 @@ namespace ExtractorSharp {
                     albumList.SetItemChecked(i, true);
                 }
             }
-            if (albumList.Items.Count > 0) {
-                if (index < 1 || index > albumList.Items.Count - 1) {
-                    index = Math.Min(index, albumList.Items.Count - 1);
-                    index = Math.Max(index, 0);
-                }
-                albumList.SelectedIndex = index;
+
+            if (item != null && albumList.Items.Contains(item)) {
+                albumList.SelectedItem = item;
             }
+
         }
 
 
@@ -883,10 +944,9 @@ namespace ExtractorSharp {
             if (array.Length == 1) {
                 var dialog = new SaveFileDialog();
                 dialog.FileName = array[0].Name;
-                dialog.Filter = "img|*.img|ogg|*.ogg|mp3|*.mp3|wav|*.wav";
-                dialog.FilterIndex = array[0].Version != Img_Version.Other ? 1 : 2;
+                dialog.Filter = "IMG|*.img|GIF|*.gif|OGG|*.ogg|MP3|*.mp3|WAV|*.wav";
                 if (dialog.ShowDialog() == DialogResult.OK) {
-                    array[0].Save(dialog.FileName);
+                    Connector.Do("saveImg", array, dialog.FileName,1);
                 }
             } else if (array.Length > 1) {
                 var dialog = new FolderBrowserDialog();
@@ -968,12 +1028,10 @@ namespace ExtractorSharp {
         private void Flush(object sender, EventArgs e) => CanvasFlush();
 
 
-        public void ImageFlush() => ImageFlush(false);
-
         /// <summary>
         /// 贴图列表刷新
         /// </summary>
-        public void ImageFlush(bool clear) {
+        public void ImageFlush() {
             var al = albumList.SelectedItem;            //记录当前所选img
             var index = imageList.SelectedIndex;        //记录当前选择贴图
             var items = imageList.CheckedItems;
@@ -1025,10 +1083,10 @@ namespace ExtractorSharp {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void InputDirectory(object sender, EventArgs e) {
+        private void OpenDirectory(object sender, EventArgs e) {
             var dialog = new FolderBrowserDialog();
             if (dialog.ShowDialog() == DialogResult.OK) {
-                Connector.AddFile(true, new string[] { dialog.SelectedPath });
+                Connector.AddFile(sender.Equals(openFileItem), new string[] { dialog.SelectedPath });
             }
         }
 
@@ -1037,9 +1095,9 @@ namespace ExtractorSharp {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OutputFile(object sender, EventArgs e) {
+        private void SaveAsFile(object sender, EventArgs e) {
             var dialog = new SaveFileDialog();
-            dialog.Filter = "npk文件|*.npk";
+            dialog.Filter = "NPK|*.npk";
             dialog.FileName = Path.GetSuffix();
             if (dialog.ShowDialog() == DialogResult.OK) {
                 Connector.Save(dialog.FileName);

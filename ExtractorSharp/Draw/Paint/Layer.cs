@@ -52,10 +52,11 @@ namespace ExtractorSharp.Draw {
         public void Draw(Graphics g) {
             g.DrawImage(Image, Location.X, Location.Y, Size.Width, Size.Height);
         }
-        
 
-        public override string ToString() => Name;
-        
+
+        public override string ToString() {
+            return $"{Name},{Language.Default["Position"]}:({Location.X},{Location.Y}),{Language.Default["Size"]}({Size.Width},{Size.Height})";
+        }
 
     }
 }

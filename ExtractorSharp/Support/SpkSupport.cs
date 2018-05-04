@@ -10,7 +10,11 @@ using System.Threading.Tasks;
 
 namespace ExtractorSharp.Support {
     class SpkSupport : IFileConverter {
-        public List<Album> Load(string filename) {
+        public void Encode(string file, List<Album> album) {
+
+        }
+
+        public List<Album> Decode(string filename) {
             var fs = File.Open(filename, FileMode.Open);
             var data = Spks.Decompress(fs);
             fs.Close();

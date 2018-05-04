@@ -49,6 +49,8 @@ namespace ExtractorSharp.Core {
 
         List<Language> LanguageList { get; }
 
+        List<string> Recent { set; get; }
+
         string SavePath { set; get; }
 
         bool IsSave { set; get; }
@@ -114,10 +116,19 @@ namespace ExtractorSharp.Core {
 
         void OnSaveChanged();
 
-        event EventHandler SaveChanged;
+        void OnRecentChanged(EventArgs e);
+
+
+
+        event FileChangeEventHandler SaveChanged;
+
+        event FileChangeEventHandler RecentChanged;
 
         List<IEffect> SpriteEffects { get; }
 
         SpriteEffect SpirteConverter { get; }
     }
+
+
+    public delegate void FileChangeEventHandler(object sender, EventArgs e);
 }

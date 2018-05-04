@@ -40,7 +40,7 @@ namespace ExtractorSharp.Core.Lib {
                         var last = list.Last();
                         var pos = last.LastIndexOf(TAIL);
                         if (pos > -1) {
-                            ms.Write(last.Sub(32, pos + 1));
+                            ms.Write(last.Sub(32, pos + 1 - TAIL.Length));
                         }
                     }
                 }
@@ -49,19 +49,16 @@ namespace ExtractorSharp.Core.Lib {
         }
 
         public static int LastIndexOf(this byte[] data, byte[] pattern) {
-            var last = data.Length - 1;
             for (var i = data.Length - 1; i > 0; i--) {
                 var j = i;
                 while (data[j] == pattern[j - i]) {
                     j++;
+                    if (j - i == pattern.Length) {
+                        return j;
+                    }
                 }
-                if (j - i == pattern.Length) {
-                    last = j;
-                    break;
-                }
-                i = j;
             }
-            return last;
+            return -1;
         }
 
         public static byte[] Sub(this byte[] array, int start) {

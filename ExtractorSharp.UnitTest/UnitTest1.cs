@@ -33,7 +33,7 @@ namespace ExtractorSharp.UnitTest {
                 {"gunner_at",8},
                 {"mage",10 },
                 {"mage_at",8 },
-                {"priest",0 },
+                {"priest",150 },
                 {"priest_at",0 },
                 {"thief",10 },
                 {"knight",0 },
@@ -95,33 +95,36 @@ namespace ExtractorSharp.UnitTest {
 
         [TestMethod]
         public void TestMethod1() {
-            var dir = "d:/avatar_51/icon";
-            foreach (var prof in pairs.Keys) {
-                foreach (var part in part_array) {
-                    var file = $"{GAME_PATH}/sprite_character_{prof}{(prof.EndsWith("_at") ? "" : "_")}equipment_avatar_{part}.NPK";
-                    var list = Npks.Load(file);
-                    var ps = $"{dir}/{prof}/{part}";
-                    if (!Directory.Exists(ps)) {
-                        continue;
-                    }
-                    var images = Directory.GetFiles(ps);
+            var dir = "d:/nginx-1.12.2/avatar/";
+            var prof = "priest";
+            GetImage(dir, "d:/target/", prof);
+        }
 
-                    var path = $"d:/avatar_51/image/{prof}/{part}";
-                    if (!Directory.Exists(path)) {
-                        Directory.CreateDirectory(path);
-                    }
-                    for (var i = 0; i < images.Length; i++) {
-                        var regex = new Regex("\\d+");
-                        var match = regex.Match(images[i].GetSuffix());
-                        if (match.Success) {
-                            var code = match.Value;
-                            var arr = list.Where(item => Npks.MatchCode(item.Name, code)).ToList();
-                            var rs = FindImg(arr, int.Parse(code), part.Equals("skin") ? "body" : part);
-                            foreach (var img in rs) {
-                                var builder = new LSBuilder();
-                                var image = img[pairs[prof]];
-                                ImageToJson(path, prof, part, img.Name, match.Value, image);
-                            }
+        public void GetImage(string source,string target,string prof) {
+            foreach (var part in part_array) {
+                var file = $"{GAME_PATH}/sprite_character_{prof}{(prof.EndsWith("_at") ? "" : "_")}equipment_avatar_{part}.NPK";
+                var list = Npks.Load(file);
+                var ps = $"{source}/icon/{prof}/{part}";
+                if (!Directory.Exists(ps)) {
+                    continue;
+                }
+                var images = Directory.GetFiles(ps);
+
+                var path = $"{target}/image/{prof}/{part}";
+                if (!Directory.Exists(path)) {
+                    Directory.CreateDirectory(path);
+                }
+                for (var i = 0; i < images.Length; i++) {
+                    var regex = new Regex("\\d+");
+                    var match = regex.Match(images[i].GetSuffix());
+                    if (match.Success) {
+                        var code = match.Value;
+                        var arr = list.Where(item => Npks.MatchCode(item.Name, code)).ToList();
+                        var rs = FindImg(arr, int.Parse(code), part.Equals("skin") ? "body" : part);
+                        foreach (var img in rs) {
+                            var builder = new LSBuilder();
+                            var image = img[pairs[prof]];
+                            ImageToJson(path, prof, part, img.Name, match.Value, image);
                         }
                     }
                 }

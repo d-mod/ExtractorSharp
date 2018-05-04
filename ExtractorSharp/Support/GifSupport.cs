@@ -6,8 +6,9 @@ using System.IO;
 
 namespace ExtractorSharp.Support {
     class GifSupport : IFileConverter {
+        public void Encode(string file, List<Album> album) { }
 
-        public List<Album> Load(string filename) {
+        public List<Album> Decode(string filename) {
             var fs = File.Open(filename, FileMode.Open);
             var array = Bitmaps.ReadGif(fs);
             fs.Close();

@@ -54,12 +54,16 @@ namespace ExtractorSharp.Command.ImgCommand {
                     }
                 }
            }
+            Indexes = new int[array.Length];
             if (array.Length > 0) {
                 if (Connector.FileCount > 0) {
                     Connector.SelectedFileIndex = Connector.FileCount - 1;
                 }
                 Index = Index > Connector.List.Count ? Connector.List.Count : Index;
                 Index = Index < 0 ? 0 : Index;
+                for(var i = 0; i < array.Length; i++) {
+                    Indexes[i] = Index + i;
+                }
                 Connector.List.InsertRange(Index, array);
             }
         }

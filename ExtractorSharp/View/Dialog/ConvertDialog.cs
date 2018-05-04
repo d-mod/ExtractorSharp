@@ -31,8 +31,9 @@ namespace ExtractorSharp.View {
         public void Convert(object sender, EventArgs e) {
             var Version = (Img_Version)combo.SelectedItem;
             var count = 0;
-            foreach (var al in Array)
+            foreach (var al in Array) {
                 count += al.List.Count;
+            }
             progress.Maximum = count;
             progress.Value = 0;
             progress.Visible = true;

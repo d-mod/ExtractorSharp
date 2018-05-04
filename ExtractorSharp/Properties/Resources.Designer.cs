@@ -119,6 +119,7 @@ namespace ExtractorSharp.Properties {
         ///      &quot;Apply&quot;: &quot;应用&quot;,
         ///      &quot;OK&quot;: &quot;确定&quot;,
         ///      &quot;Cancel&quot;: &quot;取消&quot;,
+        ///      &quot;Exit&quot;: &quot;退出&quot;,
         ///      &quot;GamePath&quot;: &quot;游戏路径&quot;,
         ///      &quot;Browse&quot;: &quot;浏览&quot;,
         ///      &quot;HandleObject&quot;: &quot;处理对象&quot;,
@@ -130,9 +131,7 @@ namespace ExtractorSharp.Properties {
         ///      &quot;CheckImage&quot;: &quot;当前所选贴图&quot;,
         ///      &quot;AllImage&quot;: &quot;所有贴图&quot;,
         ///      &quot;ImageResources&quot;: &quot;图片资源&quot;,
-        ///      &quot;SoundResources&quot;: &quot;音效资源&quot;,
-        ///      &quot;Width&quot;: &quot;宽&quot;,
-        /// [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///      &quot;SoundResources&quot;: &quot;音效资源&quot;,        /// [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Chinese {
             get {

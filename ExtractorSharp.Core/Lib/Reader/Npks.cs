@@ -201,8 +201,9 @@ namespace ExtractorSharp.Core.Lib {
             var position = 52 + List.Count * 264;
             for (var i = 0; i < List.Count; i++) {
                 List[i].Adjust();
-                if (i > 0)
+                if (i > 0) {
                     position += List[i - 1].Length;
+                }
                 List[i].Offset = position;
             }
             var ms = new MemoryStream();
@@ -291,12 +292,8 @@ namespace ExtractorSharp.Core.Lib {
         public static void Compare(string gamePath, string dir, Action<Album, Album> restore, params Album[] Array) {
             var dic = new Dictionary<string, List<string>>();//将img按NPK分类
             foreach (var item in Array) {
-                var path = item.Path;
-                var index = path.LastIndexOf("/"); //判断是否有前缀
-                if (index > 0)
-                    path = path.Substring(0, index);//获得img所在的文件夹
-                path = path.Replace("/", "_");//通常情况下，游戏原文件名和img文件夹对应
-                path = $"{gamePath}/{dir}/{path}.NPK";//得到游戏原文件路径
+                var path = GetFilePath(item);
+                path = $"{gamePath}/{dir}/{path}";//得到游戏原文件路径
                 if (!dic.ContainsKey(path))
                     dic.Add(path, new List<string>());
                 dic[path].Add(item.Name);
@@ -376,6 +373,50 @@ namespace ExtractorSharp.Core.Lib {
             }
             return str;
         }   
+
+        /// <summary>
+        /// 根据文件路径得到NPK名
+        /// </summary>
+        /// <param name="album"></param>
+        /// <returns></returns>
+        public static string GetFilePath(Album file) {
+            var path = file.Path;
+            var index = path.LastIndexOf("/");
+            if (index > -1) {
+                path = path.Substring(0, index);
+            }
+            path = path.Replace("/", "_");
+            path += ".NPK";
+            return path;
+        }
+
+        public static Album[] SplitFile(Album file) {
+            var arr = new Album[Math.Max(1,file.Tables.Count)];
+            var regex = new Regex("\\d+");
+            var path = file.Name;
+            var match = regex.Match(path);
+            if (!match.Success) {
+                return arr;
+            }
+            var prefix = path.Substring(0, match.Index);
+            var suffix = path.Substring(match.Index + match.Length);
+            var code = int.Parse(match.Value);
+            file.Adjust();
+            var data = file.Data;
+            var ms = new MemoryStream(data);
+            for (var i = 0; i < arr.Length; i++) {
+                var name = prefix + CompleteCode(code + i) + suffix;
+                arr[i] = ReadNPK(ms, file.Name)[0];
+                arr[i].Path = file.Path.Replace(file.Name, name);
+                arr[i].Tables.Clear();
+                if (file.Tables.Count > 0) {
+                    arr[i].Tables.Add(file.Tables[i]);
+                }
+                ms.Seek(0, SeekOrigin.Begin);
+            }
+            ms.Close();
+            return arr;
+        }
 
     }
 }

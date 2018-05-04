@@ -11,7 +11,7 @@ namespace ExtractorSharp.Command.ImageCommand {
     class UnCanvasImage : ISingleAction,ICommandMessage{
         public int[] Indices { set; get; }
 
-        public string Name => "UnCanvas";
+        public string Name => "UnCanvasImage";
 
         private Album Album;
 
