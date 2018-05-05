@@ -3,13 +3,13 @@ using ExtractorSharp.Data;
 using System.Drawing;
 
 namespace ExtractorSharp.Command.ImageCommand {
-    class LineDodge : ISingleAction {
+    class LinearDodge : ISingleAction {
 
         private Bitmap[] Image;
 
         private Sprite[] Array;
 
-        public string Name => "LineDodge";
+        public string Name => "LinearDodge";
 
         public bool CanUndo => true;
 
@@ -44,9 +44,6 @@ namespace ExtractorSharp.Command.ImageCommand {
                 Array[i].Picture = Image[i];
             }
         }
-
-        public override string ToString() {
-            return Language.Default["LineDodge"];
-        }
+        
     }
 }

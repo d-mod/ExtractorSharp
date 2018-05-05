@@ -297,7 +297,7 @@ namespace ExtractorSharp {
             previewItem.CheckedChanged += PreviewChanged;
             Drawer.ColorChanged += ColorChanged;
             colorPanel.MouseClick += ColorChanged;
-            lineDodgeItem.Click += LinearDodge;
+            lineDodgeItem.Click += (o,e)=>Connector.Do("linearDodge", Connector.CheckedImages);
             splitFileItem.Click += (o, e) => Connector.Do("splitFile", Connector.CheckedFiles);
             mixFileItem.Click += (o, e) => Connector.Do("mixFile", Connector.CheckedFiles);
             cutImageItem.Click += CutImage;
@@ -427,9 +427,7 @@ namespace ExtractorSharp {
             if (currentTag != null) {
                 var lastTag = Drawer.LastLayer.Tag as Sprite;
                 var isRelative = realPositionBox.Checked;
-                if (isRelative) {
-                    Drawer.CurrentLayer.Location = currentTag.Location;
-                }
+                Drawer.CurrentLayer.Location = isRelative ? currentTag.Location : Point.Empty;
             }
             Flush(sender, e);
         }
@@ -747,9 +745,11 @@ namespace ExtractorSharp {
                     albumList.SetItemChecked(i, true);
                 }
             }
-
             if (item != null && albumList.Items.Contains(item)) {
                 albumList.SelectedItem = item;
+            }
+            if (albumList.SelectedIndex == -1 && albumList.Items.Count > 0) {
+                albumList.SelectedIndex = 0;
             }
 
         }
@@ -1233,12 +1233,11 @@ namespace ExtractorSharp {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void SaveImage(object sender, EventArgs e) {
-            var indexes = Connector.CheckedImageIndices;
             var album = Connector.SelectedFile;
-            if (album == null || indexes.Length < 1) {
+            if (album == null || album.List.Count < 1) {
                 return;
             }
-            Viewer.Show("saveImage", album, indexes);
+            Viewer.Show("saveImage", new { allImage = false });
         }
 
         private void SaveSingleImage(object sender, EventArgs e) {
@@ -1260,11 +1259,7 @@ namespace ExtractorSharp {
             if (album == null || album.List.Count < 1) {
                 return;
             }
-            var indexes = new int[album.List.Count];
-            for (var i = 0; i < indexes.Length; i++) {
-                indexes[i] = i;
-            }
-            Viewer.Show("saveImage", album, indexes);
+            Viewer.Show("saveImage", new { allImage = true });
         }
 
 

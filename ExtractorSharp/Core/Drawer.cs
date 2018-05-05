@@ -115,7 +115,7 @@ namespace ExtractorSharp.Core {
         #region event
         public delegate void FileHandler(object sender, FileEventArgs e);
         public event FileHandler ImageChanged;
-        public void OnImageChanged(FileEventArgs e) => ImageChanged(this, e);
+        public void OnImageChanged(FileEventArgs e) => ImageChanged?.Invoke(this, e);
 
         public delegate void DrawHandler(object sender, DrawEventArgs e);
 

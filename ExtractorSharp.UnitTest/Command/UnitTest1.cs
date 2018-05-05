@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using ExtractorSharp.Core;
 using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Handle;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -50,6 +51,13 @@ namespace ExtractorSharp.UnitTest.Command {
             }
             img.List.ForEach(e => e.Picture.Save( dir+ e.Index + ".png"));
             Assert.IsTrue(Directory.GetFiles(dir, "*.png").Length == img.Count);
+        }
+
+
+        [TestMethod]
+        public void TestDoCommand() {
+            var controller = new Controller();
+          
         }
 
 

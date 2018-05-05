@@ -127,7 +127,7 @@
     <Compile Include="Command\FileCommand\MoveFile.cs" />
     <Compile Include="Command\ImageCommand\ChangeSize.cs" />
     <Compile Include="Command\ImageCommand\CutImage.cs" />
-    <Compile Include="Command\ImageCommand\LineDodge.cs" />
+    <Compile Include="Command\ImageCommand\LinearDodge.cs" />
     <Compile Include="Command\DrawCommand\PencilDraw.cs" />
     <Compile Include="Command\ImageCommand\MoveImage.cs" />
     <Compile Include="Command\ImageCommand\PasteImage.cs" />

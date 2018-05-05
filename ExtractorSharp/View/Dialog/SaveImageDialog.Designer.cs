@@ -27,7 +27,8 @@ namespace ExtractorSharp.View {
         private void InitializeComponent() {
             this.pathBox = new System.Windows.Forms.TextBox();
             this.loadButton = new ExtractorSharp.Component.ESButton();
-            this.allPathCheck = new System.Windows.Forms.CheckBox();
+            this.fullPathCheck = new System.Windows.Forms.CheckBox();
+            this.allImagesCheck = new System.Windows.Forms.CheckBox();
             this.tipsCheck = new System.Windows.Forms.CheckBox();
             this.yesButton = new ExtractorSharp.Component.ESButton();
             this.cancelButton = new ExtractorSharp.Component.ESButton();
@@ -60,7 +61,7 @@ namespace ExtractorSharp.View {
             // tipsCheck
             // 
             this.tipsCheck.AutoSize = true;
-            this.tipsCheck.Location = new System.Drawing.Point(100, 195);
+            this.tipsCheck.Location = new System.Drawing.Point(100, 275);
             this.tipsCheck.Name = "tipsCheck";
             this.tipsCheck.Size = new System.Drawing.Size(108, 16);
             this.tipsCheck.TabIndex = 2;
@@ -69,9 +70,13 @@ namespace ExtractorSharp.View {
             //
             //
             //
-            this.allPathCheck.AutoSize = true;
-            this.allPathCheck.Location = new System.Drawing.Point(250,195);
-            this.allPathCheck.Text = Language["SavePathTips"];
+            this.fullPathCheck.AutoSize = true;
+            this.fullPathCheck.Location = new System.Drawing.Point(250,185);
+            this.fullPathCheck.Text = Language["SavePathTips"];
+
+            this.allImagesCheck.AutoSize = true;
+            this.allImagesCheck.Location = new System.Drawing.Point(100, 185);
+            this.allImagesCheck.Text = Language["SaveAllImage"];
 
 
             nameLabel.Location = new System.Drawing.Point(100,140);
@@ -106,7 +111,8 @@ namespace ExtractorSharp.View {
             this.ClientSize = new System.Drawing.Size(550, 330);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.yesButton);
-            this.Controls.Add(this.allPathCheck);
+            this.Controls.Add(this.fullPathCheck);
+            this.Controls.Add(this.allImagesCheck);
             this.Controls.Add(this.tipsCheck);
             this.Controls.Add(this.loadButton);
             this.Controls.Add(this.pathLabel);
@@ -125,7 +131,8 @@ namespace ExtractorSharp.View {
         private System.Windows.Forms.TextBox pathBox;
         private Component.ESButton loadButton;
         private System.Windows.Forms.CheckBox tipsCheck;
-        private System.Windows.Forms.CheckBox allPathCheck;
+        private System.Windows.Forms.CheckBox fullPathCheck;
+        private System.Windows.Forms.CheckBox allImagesCheck;
         private Component.ESButton yesButton;
         private Component.ESButton cancelButton;
         private Label pathLabel;

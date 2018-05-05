@@ -8,11 +8,10 @@ using System.Text.RegularExpressions;
 using System.Drawing;
 using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Composition;
+using System.Collections.Generic;
 
 namespace ExtractorSharp.View {
     public partial class SaveImageDialog : ESDialog {
-        private int[] Indexes;
-        private Album Album;
         public SaveImageDialog(IConnector Connector) : base(Connector) {
             InitializeComponent();
             pathBox.Click += LoadPath;
@@ -23,17 +22,27 @@ namespace ExtractorSharp.View {
 
         public override DialogResult Show(params object[] args) {
             pathBox.Text = Config["SaveImagePath"].Value;
-            allPathCheck.Checked = Config["SaveImageAllPath"].Boolean;
-            Album = args[0] as Album;
-            Indexes = args[1] as int[];
+            fullPathCheck.Checked = Config["SaveImageAllPath"].Boolean;
+            dynamic config = args[0];
+            allImagesCheck.Checked = config.allImage;
             if (Config["SaveImageTip"].Boolean) {
                 return ShowDialog();
             }
-            Save();
-            return DialogResult.None;
+            return Save();
         }
-
-        private void Save() {
+        
+        private DialogResult Save() {
+            var file = Connector.SelectedFile;
+            var indices = Connector.CheckedImageIndices;
+            if (file == null||indices.Length==0) {
+                return DialogResult.Cancel;
+            }
+            if (allImagesCheck.Checked) {
+                indices = new int[file.List.Count];
+                for(var i = 0; i < indices.Length; i++) {
+                    indices[i] = i;
+                }
+            }
             var name = nameBox.Text;
             var match = Regex.Match(name, @"\d+$", RegexOptions.Compiled);
             var value = match.Value;
@@ -45,17 +54,16 @@ namespace ExtractorSharp.View {
                 prefix = prefix.Remove(match.Index, match.Length);
                 digit = value.Length;
             }
-            prefix = (allPathCheck.Checked ? Album.Path : Album.Name) + "/" + prefix;
-            Connector.Do("saveImage", Album, 1, Indexes, pathBox.Text, prefix, incre, digit,Connector.SpirteConverter);
+            Connector.Do("saveImage", file, 1, indices, pathBox.Text, prefix, incre, digit,fullPathCheck.Checked,Connector.SpirteConverter);
+            return DialogResult.OK;
         }
 
         private void Replace(object sender, EventArgs e) {
             Config["SaveImagePath"] = new ConfigValue(pathBox.Text);
             Config["SaveImageTip"] = new ConfigValue(!tipsCheck.Checked);
-            Config["SaveImageAllPath"] = new ConfigValue(allPathCheck.Checked);
+            Config["SaveImageFullPath"] = new ConfigValue(fullPathCheck.Checked);
             Config.Save();
-            Save();
-            DialogResult = DialogResult.OK;
+            DialogResult = Save();
         }
 
         public void LoadPath(object sender, EventArgs e) {

@@ -83,8 +83,8 @@ namespace ExtractorSharp.Core.Lib {
                 var sub = min;
                 data[i + 3] = Math.Max(data[i + 3], min);
                 data[i + 2] = Math.Max((byte)0, (byte)(data[i + 2] - min));
-                data[i + 1] =Math.Max((byte)0, (byte)(data[i + 1] - min));
-                data[i + 0] =Math.Max((byte)0, (byte)(data[i + 2] - min));
+                data[i + 1] = Math.Max((byte)0, (byte)(data[i + 1] - min));
+                data[i + 0] = Math.Max((byte)0, (byte)(data[i + 2] - min));
             }
             bmp = FromArray(data, bmp.Size);
             return bmp;

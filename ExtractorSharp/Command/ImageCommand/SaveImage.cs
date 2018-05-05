@@ -12,10 +12,11 @@ namespace ExtractorSharp.Command.ImageCommand {
     /// 不可撤销
     /// 可宏命令
     /// </summary>
-    class SaveImage : ISingleAction,ICommandMessage{
+    class SaveImage : ISingleAction, ICommandMessage {
         public int[] Indices { set; get; }
         private Album Album;
         private string Path;
+        private bool FullPath;
         private int Increment = 0;
         private string Prefix = string.Empty;
         private int Digit = 0;
@@ -35,9 +36,8 @@ namespace ExtractorSharp.Command.ImageCommand {
                 Prefix = (args[4] as string).Replace("\\", "/");
                 Increment = (int)args[5];
                 Digit = (int)args[6];
-            }
-            if (args.Length > 7) {
-                OnSaving = args[7] as SpriteEffect;
+                FullPath = (bool)args[7];
+                OnSaving = args[8] as SpriteEffect;
             }
             Action(Album, Indices);
         }
@@ -54,11 +54,12 @@ namespace ExtractorSharp.Command.ImageCommand {
             if (Mode == 0) {//当保存模式为单张贴图时
                 album.List[indexes[0]].Picture.Save(Path);
             } else {//是否加入文件的路径
-                var index = Prefix.LastIndexOf("/");
-                var suffix = Prefix.Substring(0, index + 1);
-                var prefix = Prefix.Substring(index, Prefix.Length - index);
-                var dir = Path.Replace('\\', '/');
-                dir = dir.Complete("/" + suffix);
+                var dir = $"{Path}/{(FullPath ? album.Path : album.Name)}/{Prefix}";
+                dir = dir.Replace('\\', '/');
+                var index = dir.LastIndexOf("/");
+                dir = dir.Substring(0,index + 1);
+                var prefix = dir.Substring(index);
+               
                 if (File.Exists(dir)) {//当已存在同名的文件时,文件夹加上下划线后缀
                     dir += "_";
                 }
@@ -67,7 +68,7 @@ namespace ExtractorSharp.Command.ImageCommand {
                 }
                 var max = Math.Min(indexes.Length, album.List.Count);
                 for (var i = 0; i < max; i++) {
-                    if (indexes[i] < 0 || i > album.List.Count - 1) {
+                    if (indexes[i] < 0 || i > Indices.Length - 1 || i > album.List.Count - 1) {
                         continue;
                     }
                     var entity = album.List[indexes[i]];
@@ -75,14 +76,17 @@ namespace ExtractorSharp.Command.ImageCommand {
                     while (name.Length < Digit) {
                         name = "0" + name;
                     }
-                    var path = $"{dir}/{prefix}{name}.png";//文件名格式:文件路径/贴图索引.png
-
-                    Bitmap image = null;
-                    foreach (SpriteEffect action in OnSaving?.GetInvocationList()) {
-                        if (image == null) {
-                            image = entity.Picture;
+                    var path = $"{dir}{prefix}{name}.png";//文件名格式:文件路径/贴图索引.png
+                    Bitmap image = entity.Picture; ;
+                    if (OnSaving != null) {
+                        foreach (SpriteEffect action in OnSaving.GetInvocationList()) {
+                            action.Invoke(entity, ref image);
+                            image = image ?? entity.Picture;
                         }
-                        action.Invoke(entity,ref image);
+                    }
+                    var parent = System.IO.Path.GetDirectoryName(path);
+                    if (Directory.Exists(parent)) {
+
                     }
                     image.Save(path);//保存贴图
                 }
