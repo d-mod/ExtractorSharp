@@ -6,6 +6,7 @@ using System.Windows.Forms;
 namespace ExtractorSharp.View.Pane {
     partial class HistoryPage : TabPage {
         private Controller Controller;
+        private Language Language => Language.Default;
         
         public HistoryPage() {
             InitializeComponent();
@@ -15,9 +16,19 @@ namespace ExtractorSharp.View.Pane {
             Controller.CommandUndid += RefreshList;
             Controller.CommandRedid += RefreshList;
             Controller.CommandCleared += Refresh;
+            gotoItem.Click += Move;
+            addItem.Click += Add;
             historyList.Items.Add("...");
             historyList.Items.AddRange(Controller.History);
             historyList.SelectedIndex = 0;
+        }
+
+        private void Add(object sender, EventArgs e) {
+            var index = historyList.SelectedIndex - 1;
+            if (index > -1) {
+                var command = Controller.History[index];
+                Controller.AddMacro(command);
+            }
         }
 
         protected override void OnTabIndexChanged(EventArgs e) {
@@ -44,8 +55,9 @@ namespace ExtractorSharp.View.Pane {
             if (Parent.Visible) {
                 historyList.Items.Clear();
                 historyList.Items.Add("...");
-                foreach (var item in Controller.History) {
-                    historyList.Items.Add(Language.Default[item.Name]);
+                var history = Controller.History;
+                for (var i = 0; i < history.Length; i++) {
+                    historyList.Items.Add($"{(i == Controller.Index - 1 ? "-> " : "")}{Language[history[i].Name]}");
                 }
                 if (Controller.Index < historyList.Items.Count) {
                     historyList.SelectedIndex = Controller.Index;
@@ -54,9 +66,17 @@ namespace ExtractorSharp.View.Pane {
             }
         }
 
+        private void Move(object sender,EventArgs e) {
+            if (historyList.SelectedIndex > -1) {
+                Controller.Move(historyList.SelectedIndex - Controller.Index);
+                Refresh();
+            }
+        }
+
         private void Goto(object sender, MouseEventArgs e) {
-            if (e.Button == MouseButtons.Left && e.Clicks == 2 && historyList.SelectedIndices.Count > 0)
-                Controller.Move(historyList.SelectedIndices[0] - Controller.Index);
+            if (e.Button == MouseButtons.Left && e.Clicks == 2) {
+                Move(sender, e);
+            }
         }
 
     }

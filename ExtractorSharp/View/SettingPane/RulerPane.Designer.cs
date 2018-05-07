@@ -1,7 +1,5 @@
-﻿using System.Windows.Forms;
-
-namespace ExtractorSharp.View.SettingPane {
-    partial class PluginListPane {
+﻿namespace ExtractorSharp.View.SettingPane {
+    partial class RulerPane {
         /// <summary> 
         /// 必需的设计器变量。
         /// </summary>
@@ -26,26 +24,8 @@ namespace ExtractorSharp.View.SettingPane {
         /// </summary>
         private void InitializeComponent() {
             components = new System.ComponentModel.Container();
-            list = new ListView();
-            browseButton = new Button();
-
-            list.View = System.Windows.Forms.View.SmallIcon;
-            list.SmallImageList = new ImageList();
-            list.Size = new System.Drawing.Size(300, 300);
-
-            browseButton.Text = Language["Browse"];
-            browseButton.Location = new System.Drawing.Point(0,310);
-
-            this.Name = "PluginList";
-            this.Parent = "Plugin";
-            Controls.Add(list);
-            Controls.Add(browseButton);
         }
 
         #endregion
-
-        private ListView list;
-
-        private Button browseButton;
     }
 }

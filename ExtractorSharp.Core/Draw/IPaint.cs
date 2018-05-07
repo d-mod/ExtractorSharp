@@ -8,10 +8,6 @@ namespace ExtractorSharp.Draw {
 
         string Name { set; get; }
         /// <summary>
-        /// 是否全屏
-        /// </summary>
-        bool FullCanvas { set; get; }
-        /// <summary>
         /// 是否可见
         /// </summary>
         bool Visible { set; get; }

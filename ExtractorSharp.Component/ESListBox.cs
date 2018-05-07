@@ -7,12 +7,17 @@ using System.Windows.Forms;
 namespace ExtractorSharp.Component {
     public partial class ESListBox<T> : CheckedListBox {
         public Language Language { set; get; }= Language.Default;
-        public Action Deleted;
-        public Action Cleared;
 
-        public delegate void ItemDragEventHandler(object sender,ItemDragEventArgs<T> e);
-        public event ItemDragEventHandler ItemDraged;
-        protected void OnItemDraged(ItemDragEventArgs<T> e) => ItemDraged?.Invoke(this,e);
+       
+
+        public delegate void ItemEventHandler(object sender,ItemEventArgs e);
+        public event ItemEventHandler ItemDraged;
+        public event ItemEventHandler ItemDeleted;
+        public event ItemEventHandler ItemCleared;
+
+        protected void OnItemDeleted(ItemEventArgs e) => ItemDeleted?.Invoke(this, e);
+        protected void OnItemDraged(ItemEventArgs e) => ItemDraged?.Invoke(this,e);
+        protected void OnItemCleared(ItemEventArgs e) => ItemCleared?.Invoke(this, e);
 
         public T HoverItem { private set;get; }
         public int HoverIndex { private set; get; }
@@ -63,7 +68,7 @@ namespace ExtractorSharp.Component {
                 var indexes = CheckedIndices;
                 var array = new int[indexes.Count];
                 indexes.CopyTo(array, 0);
-                if (array.Length > 0) {
+                if (array.Length > 0 || SelectedIndex == -1) {
                     return array;
                 }
                 return new int[] { SelectedIndex };
@@ -74,13 +79,10 @@ namespace ExtractorSharp.Component {
             get {
                 var array = new T[CheckedItems.Count];
                 CheckedItems.CopyTo(array, 0);
-                if (array.Length < 2) {
-                    var item = SelectedItem;
-                    if (item != null) {
-                        array = new T[] { item };
-                    }
+                if (array.Length >0||SelectedItem==null) {
+                    return array;
                 }
-                return array;
+                return new T[] { SelectedItem};
             }
         }
 
@@ -106,7 +108,7 @@ namespace ExtractorSharp.Component {
 
         public ESListBox() {
             InitializeComponent();
-            deleteItem.Click += (o, e) => Deleted?.Invoke();
+            deleteItem.Click += DeleteItem;
             clearItem.Click += (o, e) => Clear();
             checkAllItem.Click += (o, e) => CheckAll();
             checkAllItem.ShortcutKeys = Keys.Control | Keys.A;
@@ -172,6 +174,10 @@ namespace ExtractorSharp.Component {
             DoDragDrop(SelectedItem, DragDropEffects.Move);
         }
 
+        private void DeleteItem(object sender,EventArgs e) {
+            ItemDeleted?.Invoke(sender, new ItemEventArgs() { Indices=SelectIndexes });
+        }
+
         
         public void CheckAll() {
             for (var i = 0; i < Items.Count; i++) {
@@ -214,7 +220,7 @@ namespace ExtractorSharp.Component {
 
         public void Clear() {
             Items.Clear();
-            Cleared?.Invoke();
+            OnItemCleared(new ItemEventArgs());
         }
 
 
@@ -224,7 +230,7 @@ namespace ExtractorSharp.Component {
                 return;
             }
             target = (target < Items.Count && target > -1) ? target : Items.Count - 1;
-            var args = new ItemDragEventArgs<T>();
+            var args = new ItemEventArgs();
             args.Index = SelectedIndex;
             args.Target = target;
             OnItemDraged(args);

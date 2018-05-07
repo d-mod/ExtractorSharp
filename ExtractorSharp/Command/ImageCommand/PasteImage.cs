@@ -29,6 +29,10 @@ namespace ExtractorSharp.Command.ImageCommand {
             Target = args[0] as Album;
             Index = (int)args[1];
             Clipboarder = Clipboarder.Default;
+            Redo();
+        }
+
+        public void Redo() {
             var array = new Sprite[0];
             if (Clipboarder != null) {
                 Indexes = Clipboarder.Indexes;
@@ -69,14 +73,10 @@ namespace ExtractorSharp.Command.ImageCommand {
             Target.Adjust();
         }
 
-        public void Redo() {
-            Do(Target, Index);
-        }
-
         public void Undo() {
             var array = Target.List.GetRange(Index, Indexes.Length);
             Target.List.RemoveRange(Index, Indexes.Length);
-            if (Clipboarder.Mode == ClipMode.Cut) {
+            if (Clipboarder != null && Clipboarder.Mode == ClipMode.Cut) {
                 for (var i = 0; i < array.Count; i++) {
                     Source.List.Insert(Indexes[i], array[i]);
                 }

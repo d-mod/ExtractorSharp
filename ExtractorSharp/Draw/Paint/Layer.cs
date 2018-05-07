@@ -7,10 +7,6 @@ namespace ExtractorSharp.Draw {
     /// <summary>
     /// 图层
     /// </summary>
-    
-    enum Model_Version {
-        Ver1=0x01
-    }
 
     public class Layer:IPaint{
         public Point Location { set; get; }
@@ -20,8 +16,6 @@ namespace ExtractorSharp.Draw {
         }
         public bool Locked { set; get; }
         public bool Visible { set; get; }
-
-        public bool FullCanvas { set; get; }
 
         public string Name { get; set; }
 

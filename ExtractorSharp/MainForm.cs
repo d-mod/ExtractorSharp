@@ -35,7 +35,7 @@ namespace ExtractorSharp {
         private Point Hotpot { set; get; }
         
 
-        private IPaint Rule { set; get; }
+        private IPaint Ruler { set; get; }
 
         private IPaint Grid { set; get; }
 
@@ -64,6 +64,7 @@ namespace ExtractorSharp {
             AddPaint();
             AddConfig();
             AddSpriteConverter();
+            LayerFlush();
         }
         
 
@@ -84,8 +85,9 @@ namespace ExtractorSharp {
             realPositionBox.Checked = Config["RealPosition"].Boolean;
             pixelateBox.Checked = Config["Pixelate"].Boolean;
             scaleBox.Value = Config["CanvasScale"].Integer;
-            onionskinBox.Checked = Config["OnionSkin"].Boolean;
+            dyeBox.Checked = Config["Dye"].Boolean;
             displayBox.Checked = Config["Animation"].Boolean;
+            Ruler.Visible = Config["Ruler"].Boolean;
         }
 
         private void AddBrush() {
@@ -107,10 +109,10 @@ namespace ExtractorSharp {
         }
 
         private void AddPaint() {
-            Rule = new Ruler();
+            Ruler = new Ruler();
             Grid = new Grid();
             Border = new Border();
-            AddPaint(displayRuleItem, Rule);
+            AddPaint(displayRuleItem, Ruler);
             AddPaint(gridItem, Grid);
             AddPaint(borderItem, Border);
         }
@@ -235,7 +237,7 @@ namespace ExtractorSharp {
             addOutsideMergeItem.Click += AddOutMerge;
             runMergeItem.Click += DisplayMerge;
             albumList.SelectedIndexChanged += ImageChanged;
-            albumList.Deleted = DeleteImg;
+            albumList.ItemDeleted += DeleteImg;
             albumList.ItemDraged += MoveFileIndex;
             albumList.DragDrop += DragDropInput;
             box.Paint += OnPainting;
@@ -251,7 +253,7 @@ namespace ExtractorSharp {
             replaceImageItem.Click += ReplaceImage;
             hideCheckImageItem.Click += (o, e) => Connector.Do("hideImage", Connector.SelectedFile, Connector.CheckedImageIndices);
             linkImageItem.Click += LinkImage;
-            imageList.Deleted = DeleteImage;
+            imageList.ItemDeleted += DeleteImage;
             imageList.ItemDraged += MoveImageIndex;
             imageList.SelectedIndexChanged += SelectImageChanged;
             imageList.ItemHoverChanged += PreviewHover;
@@ -291,11 +293,12 @@ namespace ExtractorSharp {
             Drawer.BrushChanged += (o, e) => box.Cursor = e.Brush.Cursor;
             Drawer.LayerChanged += (o, e) => LayerFlush();
             Drawer.LayerVisibleChanged += LayerVisibleChanged;
+            Drawer.ColorChanged += ColorChanged;
+            Drawer.LayerDrawing += BeforeDraw;
 
             linearDodge.CheckedChanged += LinearDodge;
-            onionskinBox.CheckedChanged += Onionskin;
+            dyeBox.CheckedChanged += Flush;
             previewItem.CheckedChanged += PreviewChanged;
-            Drawer.ColorChanged += ColorChanged;
             colorPanel.MouseClick += ColorChanged;
             lineDodgeItem.Click += (o,e)=>Connector.Do("linearDodge", Connector.CheckedImages);
             splitFileItem.Click += (o, e) => Connector.Do("splitFile", Connector.CheckedFiles);
@@ -317,7 +320,66 @@ namespace ExtractorSharp {
             selectThisTargetItem.Click += SelectThisTarget;
             Controller.CommandDid += CommandDid;
             Connector.RecentChanged += RecentChanged;
+
+            layerList.ItemDraged += MoveLayer;
+            layerList.ItemDeleted += DeleteLayer;
             addLayerItem.Click += AddLayer;
+            upLayerItem.Click += UpLayer;
+            downLayerItem.Click += DownLayer;
+            renameLayerItem.Click += RenameLayer;
+        }
+
+        private void DeleteLayer(object sender,ItemEventArgs e) {
+            var indices = e.Indices;
+            if (indices.Length > 0 && MessageBox.Show(Language["DeleteTips"], Language["Tips"], MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) {
+                Connector.Do("deleteLayer", indices);
+            }
+        }
+
+        private void MoveLayer(object sender, ItemEventArgs e) {
+            var index = e.Index;
+            var target = e.Target;
+            if (index > 1 && target > 1) {
+                Connector.Do("moveLayer", index, target);
+            }
+        }
+
+        private void UpLayer(object sender, EventArgs e) {
+            var index = layerList.SelectedIndex;
+            if (index > 2) {
+                Connector.Do("moveLayer", index, index - 1);
+            }
+        }
+
+        private void DownLayer(object sender, EventArgs e) {
+            var index = layerList.SelectedIndex;
+            if (index > 1 && index < layerList.Items.Count - 1) {
+                Connector.Do("moveLayer", index, index + 1);
+            }
+        }
+
+        private void RenameLayer(object sender,EventArgs e) {
+            var item = layerList.SelectedItem;
+            if (item is Layer layer) {
+                var dialog = new ESTextDialog(Connector);
+                dialog.InputText = layer.Name;
+                dialog.Text = Language["Rename"];
+                if (dialog.Show() == DialogResult.OK) {
+                    Connector.Do("renameLayer", layer, dialog.InputText);
+                    layerList.Refresh();
+                }
+            } else {
+                messager.ShowWarnning(Language["RenameLayerTips"]);
+            }
+        }
+
+        private void BeforeDraw(object sender, LayerEventArgs e) {
+            Border.Tag = Drawer.CurrentLayer.Rectangle;
+            Ruler.Tag = Drawer.CurrentLayer.Location.Minus(Ruler.Location);
+            Ruler.Size = box.Size;
+            Grid.Tag = Config["GridGap"].Integer;
+            Grid.Size = box.Size;
+            Drawer.CurrentLayer.Tag = Connector.SelectedFile;
         }
 
         private void RecentChanged(object sender, EventArgs e) {
@@ -382,9 +444,8 @@ namespace ExtractorSharp {
 
 
         private void AddLayer(object sender, EventArgs e) {
-            var image = Connector.SelectedImage;
-            Drawer.AddLayer(image);
-            LayerFlush();
+            var array = Connector.CheckedImages;
+            Connector.Do("addLayer", array);
         }
 
         private void LayerVisibleChanged(object sender, LayerEventArgs e) {
@@ -432,10 +493,6 @@ namespace ExtractorSharp {
             Flush(sender, e);
         }
 
-        private void Onionskin(object sender, EventArgs e) {
-            Drawer.LastLayerVisible = onionskinBox.Checked;
-            this.Flush(sender, e);
-        }
 
         private void SelectThisLink(object sender, EventArgs e) {
             var cur = imageList.SelectedItem;
@@ -508,6 +565,7 @@ namespace ExtractorSharp {
             if (al != null) {
                 var image = Connector.SelectedImage;
                 Connector.Do("pasteSingleImage", image, Hotpot);
+                Drawer.CurrentLayer.Location = Hotpot;
             }
         }
 
@@ -543,6 +601,9 @@ namespace ExtractorSharp {
         /// <param name="e"></param>
         private void ColorChanged(object sender, ColorEventArgs e) {
             colorPanel.BackColor = e.NewColor;
+            if (dyeBox.Checked) {
+                Flush(sender, e);
+            }
         }
 
         /// <summary>
@@ -561,7 +622,7 @@ namespace ExtractorSharp {
         }
 
         private void ImageChanged(object sender, EventArgs e) {
-            Drawer.OnImageChanged(new FileEventArgs {
+            Drawer.OnPalatteChanged(new FileEventArgs {
                 Entity = Connector.SelectedImage,
                 Album = Connector.SelectedFile
             });
@@ -612,14 +673,14 @@ namespace ExtractorSharp {
 
 
         private void LockRule(object sender, EventArgs e) {
-            Rule.Locked = lockRuleItem.Checked;
+            Ruler.Locked = lockRuleItem.Checked;
         }
 
 
         /// <summary>
         /// 移动文件序列
         /// </summary>
-        private void MoveFileIndex(object sender, ItemDragEventArgs<Album> e) {
+        private void MoveFileIndex(object sender, ItemEventArgs e) {
             if (e.Index > -1 && Connector.FileCount > 0) {
                 Connector.Do("moveFile", e.Index, e.Target);
                 Connector.SelectedFileIndex = e.Target;
@@ -630,7 +691,7 @@ namespace ExtractorSharp {
         /// <summary>
         /// 移动贴图序列
         /// </summary>
-        private void MoveImageIndex(object sender, ItemDragEventArgs<Sprite> e) {
+        private void MoveImageIndex(object sender, ItemEventArgs e) {
             var al = Connector.SelectedFile;
             if (al != null && e.Index > -1 && Connector.ImageCount > 0) {
                 Connector.Do("moveImage", al, e.Index, e.Target);
@@ -664,15 +725,15 @@ namespace ExtractorSharp {
             Config["BrushColor"] = new ConfigValue(Drawer.Color);
 
             Config["LinearDodge"] = new ConfigValue(linearDodge.Checked);
-            Config["OnionSkin"] = new ConfigValue(onionskinBox.Checked);
+            Config["Dye"] = new ConfigValue(dyeBox.Checked);
             Config["RealPosition"] = new ConfigValue(realPositionBox.Checked);
             Config["Animation"] = new ConfigValue(displayBox.Checked);
 
-            Config["Ruler"] = new ConfigValue(displayRuleItem.Checked);
+            Config["Ruler"] = new ConfigValue(Ruler.Visible);
             Config["RulerCrosshair"] = new ConfigValue(displayRuleCrossHairItem.Checked);
-            Config["RulerLocked"] = new ConfigValue(lockRuleItem.Checked);
+            Config["RulerLocked"] = new ConfigValue(Ruler.Locked);
 
-            Config["Grid"] = new ConfigValue(gridItem.Checked);
+            Config["Grid"] = new ConfigValue(Grid.Visible);
             Config.Save();
         }
 
@@ -688,7 +749,7 @@ namespace ExtractorSharp {
 
 
         private void AjustRule(object sender, EventArgs e) {
-            Rule.Location = Drawer.CurrentLayer.Location;
+            Ruler.Location = Drawer.CurrentLayer.Location;
             Flush(sender, e);
         }
 
@@ -759,7 +820,7 @@ namespace ExtractorSharp {
         private void AddOutMerge(object sender, EventArgs e) {
             var dialog = new OpenFileDialog();
             dialog.Multiselect = true;
-            dialog.Filter = $"${Language["ImageSources"]}|*.img;*.gif;*.npk";
+            dialog.Filter = $"{Language["ImageSources"]}|*.img;*.gif;*.npk";
             if (dialog.ShowDialog() == DialogResult.OK) {
                 var array = Npks.Load(dialog.FileNames).ToArray();
                 Connector.Do("addMerge", array);
@@ -780,9 +841,10 @@ namespace ExtractorSharp {
             imageList.Items.Clear();
             Controller.Dispose();
             Viewer.Dispose();
-            ImageFlush();
+            Clipboarder.Clear();
             Connector.List.Clear();
             Connector.IsSave = true;
+            ImageChanged(this, e);
             pathBox.Text = string.Empty;
         }
 
@@ -961,9 +1023,9 @@ namespace ExtractorSharp {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void DeleteImg() {
+        private void DeleteImg(object sender,EventArgs e) {
             var indices = Connector.CheckedFileIndices;
-            if (indices.Length > 0 && MessageBox.Show(Language["DeleteTips"],Language["Tips"], MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) {
+            if (indices.Length > 0&& MessageBox.Show(Language["DeleteTips"],Language["Tips"], MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) {
                 Connector.Do("deleteImg", indices);
             }
         }
@@ -1009,7 +1071,7 @@ namespace ExtractorSharp {
         private void RenameImg(object sender, EventArgs e) {
             var album = Connector.SelectedFile;
             if (album != null) {
-                var dialog = new ESTextDialog();
+                var dialog = new ESTextDialog(Connector);
                 dialog.InputText = album.Path;
                 dialog.Text = Language["Rename"];
                 if (dialog.Show() == DialogResult.OK) {
@@ -1135,21 +1197,6 @@ namespace ExtractorSharp {
             var g = e.Graphics;
             g.InterpolationMode = pixelateBox.Checked ? InterpolationMode.NearestNeighbor : InterpolationMode.High;
             var entity = Connector.SelectedImage;//获得当前选择的贴图
-
-            if (Rule.Visible) {//显示标尺        
-                Rule.Tag = Drawer.CurrentLayer.Location.Minus(Rule.Location);
-                Rule.Size = box.Size;
-                Rule.Draw(g);
-            }
-
-            if (Grid.Visible) {//显示网格
-                Grid.Tag = Config["GridGap"].Integer;
-                Grid.Size = box.Size;
-                Grid.Draw(g);
-            }
-            if (Drawer.LastLayer.Visible) {
-                Drawer.LastLayer?.Draw(g);
-            }
             if (entity?.Picture != null) {
                 if (entity.Type == ColorBits.LINK && entity.Target != null) {
                     entity = entity.Target;
@@ -1159,16 +1206,13 @@ namespace ExtractorSharp {
                 if (linearDodge.Checked) {
                     pictrue = pictrue.LinearDodge();
                 }
-
-                Drawer.CurrentLayer.Tag = entity;
+                if (dyeBox.Checked) {
+                    pictrue = pictrue.Dye(Drawer.Color);
+                }
                 Drawer.CurrentLayer.Size = size;//校正当前图层的宽高
                 Drawer.CurrentLayer.Image = pictrue;//校正贴图
-                Drawer.DrawLayer(g);
-            } 
-            if (Border.Visible) {
-                Border.Tag = Drawer.CurrentLayer.Rectangle;
-                Border.Draw(g);
             }
+            Drawer.DrawLayer(g);
         }
 
 
@@ -1326,7 +1370,7 @@ namespace ExtractorSharp {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void DeleteImage() {
+        private void DeleteImage(object sender,EventArgs e) {
             var indexes = Connector.CheckedImageIndices;
             var album = Connector.SelectedFile;
             if (album != null && indexes.Length > 0 && MessageBox.Show(Language["DeleteTips"], Language["Tips"], MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) {

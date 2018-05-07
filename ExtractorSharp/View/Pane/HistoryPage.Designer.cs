@@ -12,6 +12,9 @@ namespace ExtractorSharp.View.Pane {
         public void InitializeComponent() {
 
             this.historyList = new System.Windows.Forms.ListBox();
+            this.menu = new System.Windows.Forms.ContextMenuStrip();
+            this.gotoItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SuspendLayout();
             // 
             // list
@@ -21,10 +24,21 @@ namespace ExtractorSharp.View.Pane {
             this.historyList.Size = new System.Drawing.Size(190, 280);
             this.historyList.TabIndex = 0;
 
+            this.historyList.ContextMenuStrip = menu;
+
+            gotoItem.Text = Language["Goto"];
+            addItem.Text = Language["AddAction"];
+
+            menu.Items.Add(gotoItem);
+            menu.Items.Add(addItem);
             Controls.Add(historyList);
             Text = Language.Default["History"];
         }
         private System.Windows.Forms.ListBox historyList;
+
+        private System.Windows.Forms.ContextMenuStrip menu;
+        private System.Windows.Forms.ToolStripMenuItem gotoItem;
+        private System.Windows.Forms.ToolStripMenuItem addItem;
 
     }
 }

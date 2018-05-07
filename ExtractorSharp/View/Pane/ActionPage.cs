@@ -20,12 +20,12 @@ namespace ExtractorSharp.View.Pane {
             recordButton.Click += Record;
             pauseButton.Click += Pause;
             runButton.Click += Run;
-            deleteButton.Click += (o, e) => Delete();
-            actionList.Deleted += Delete;
-            actionList.Cleared += ()=>Controller.ClearMacro();
+            deleteButton.Click += Delete;
+            actionList.ItemDeleted += Delete;
+            actionList.ItemCleared += (o,e)=>Controller.ClearMacro();
         }
 
-        private void Delete() {
+        private void Delete(object sender,EventArgs e) {
             var items = actionList.SelectItems;
             var array = Array.ConvertAll(items, item => item.Action);
             Controller.Delete(array);

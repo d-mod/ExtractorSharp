@@ -11,7 +11,7 @@ namespace ExtractorSharp.Draw.Paint {
         public Point Offset { set; get; } = Point.Empty;
         public Size CanvasSize { set; get; }
         public void Draw(Graphics g) {
-            if (Image != null) {
+            if (Tag != null && Image != null) {
                 g.DrawImage(Image, Rectangle);
             }
         }
@@ -19,7 +19,6 @@ namespace ExtractorSharp.Draw.Paint {
         public Point Location { set; get; } = Point.Empty;
         public Size Size { set; get; }
         public object Tag { set; get; }
-        public bool FullCanvas { set; get; }
         public bool Visible { set; get; }
         public bool Locked { set; get; }
 

@@ -40,7 +40,7 @@
 
   "UpdateExeName": "install.exe",
 
-  "AutoUpdate": true,
+  "AutoUpdate": false,
 
   "ClassifySeparator": "·Ö¸îÏß",
 

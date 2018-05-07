@@ -21,7 +21,6 @@ namespace ExtractorSharp.View.SettingPane {
             InitializeComponent();
             this.refreshButton.Click += Refresh;
             this.installButton.Click += Install;
-            this.Refresh(null, null);
         }
 
         public void Refresh(object sender,EventArgs e) {

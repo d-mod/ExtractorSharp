@@ -27,6 +27,7 @@
             this.browseButton = new ExtractorSharp.Component.ESButton();
             this.gamePathGroup = new System.Windows.Forms.GroupBox();
             this.autoSaveCheck = new System.Windows.Forms.CheckBox();
+            this.autoUpdateCheck = new System.Windows.Forms.CheckBox();
             this.gamePathGroup.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -62,10 +63,18 @@
             this.autoSaveCheck.TabIndex = 3;
             this.autoSaveCheck.Text = Language["AutoSave"];
             this.autoSaveCheck.UseVisualStyleBackColor = true;
+
+            this.autoUpdateCheck.AutoSize = true;
+            this.autoUpdateCheck.Location = new System.Drawing.Point(13, 169);
+            this.autoUpdateCheck.Size = new System.Drawing.Size(78, 16);
+            this.autoUpdateCheck.TabIndex = 3;
+            this.autoUpdateCheck.Text = Language["AutoUpdate"];
+            this.autoUpdateCheck.UseVisualStyleBackColor = true;
             // 
             // FilePane
             // 
             this.Controls.Add(this.autoSaveCheck);
+            this.Controls.Add(this.autoUpdateCheck);
             this.Controls.Add(this.gamePathGroup);
             this.Parent = "Gerneral";
             this.Size = new System.Drawing.Size(329, 244);
@@ -82,5 +91,6 @@
         private Component.ESButton browseButton;
         private System.Windows.Forms.GroupBox gamePathGroup;
         private System.Windows.Forms.CheckBox autoSaveCheck;
+        private System.Windows.Forms.CheckBox autoUpdateCheck;
     }
 }

@@ -134,6 +134,9 @@ namespace ExtractorSharp {
             Controller.Registry("uncanvasImage", typeof(UnCanvasImage));
             Controller.Registry("linearDodge", typeof(LinearDodge));
 
+            Controller.Registry("addLayer", typeof(AddLayer));
+            Controller.Registry("moveLayer", typeof(MoveLayer));
+            Controller.Registry("deleteLayer", typeof(DeleteLayer));
             Controller.Registry("renameLayer", typeof(RenameLayer));
 
             Controller.Registry("changeColor", typeof(ChangeColor));

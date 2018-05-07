@@ -1,4 +1,5 @@
-﻿using ExtractorSharp.Core;
+﻿using System.Linq;
+using ExtractorSharp.Core;
 using ExtractorSharp.Data;
 
 namespace ExtractorSharp.Command.ImageCommand {
@@ -27,13 +28,14 @@ namespace ExtractorSharp.Command.ImageCommand {
             }
             foreach (var entity in Array) {
                 if (entity != null) {
-                    var frist = Album.List.Find(item => item.Target == entity);
+                    var frist = Album.List.Find(item => item?.Target == entity);
                     if (frist != null) {
                         Album.List[frist.Index] = entity;
                     }
-                    Album.List.RemoveAt(entity.Index);
+                    Album.List[entity.Index] = null;
                 }
             }
+            Album.List.RemoveAll(e => e == null);
             Album.AdjustIndex();
         }
 

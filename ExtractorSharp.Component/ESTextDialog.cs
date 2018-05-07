@@ -52,9 +52,8 @@ namespace ExtractorSharp.Component {
         public void Submit(object sender, EventArgs e) {
             var i = textBox.Text.LastIndexOf("/") + 1;
             var text = textBox.Text.Substring(i);
-            if (!CanEmpty && text.Trim().Equals(string.Empty)) {
+            if (Connector != null && !CanEmpty && text.Trim().Equals(string.Empty)) {
                 Connector.SendWarning("InputCannotEmpty");
-                DialogResult = DialogResult.Retry;
                 return;
             }
             DialogResult = DialogResult.OK;

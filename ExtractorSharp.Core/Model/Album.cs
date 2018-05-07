@@ -59,16 +59,10 @@ namespace ExtractorSharp.Data {
 
         public List<Color> CurrentTable {
             get {
-                if (TableIndex < Tables.Count) {
+                if (TableIndex > -1 && TableIndex < Tables.Count) {
                     return Tables[TableIndex];
                 }
-                TableIndex = 0;
-                if (Tables.Count > 0) {
-                    return Tables[0];
-                }
-                var table = new List<Color>();
-                Tables.Add(table);
-                return table;
+                return new List<Color>();
             }
         }
 

@@ -23,6 +23,11 @@ namespace ExtractorSharp.Draw.Paint {
         public bool Locked { set; get; }
 
 
+        public bool DrawSpan { set; get; } = true;
+        public int SmallSpan { set; get; } = 5;
+        public int BigSpan { set; get; } = 200;
+        public int Span { set; get; } = 50;
+
         private int rule_radius = 20;
 
         public bool Contains(Point point) {
@@ -33,16 +38,51 @@ namespace ExtractorSharp.Draw.Paint {
             return false;
         }
 
+        private void DrawSpans(Graphics g) {
+            var rp = Location;
+            var font = SystemFonts.DefaultFont;
+
+            for (var i = rp.X % SmallSpan; i < Size.Width; i += SmallSpan) {
+                g.DrawLine(Pens.White, new Point(i, rp.Y), new Point(i, rp.Y - 5));
+            }
+            for (var i = 0; i < rp.X; i += Span) {
+                var h = (i % (BigSpan)) == 0 ? 15 : 10;
+                g.DrawString($"{-i}px", font, Brushes.White, new Point(rp.X - i, rp.Y));
+                g.DrawLine(Pens.White, new Point(rp.X - i, rp.Y), new Point(rp.X - i, rp.Y - h));
+            }
+            for (var i = rp.X; i < Size.Width; i += Span) {
+                var h = ((i - rp.X) % (BigSpan)) == 0 ? 15 : 10;
+                g.DrawString($"{i - rp.X}px", font, Brushes.White, new Point(i, rp.Y));
+                g.DrawLine(Pens.White, new Point(i, rp.Y), new Point(i, rp.Y - h));
+            }
+
+            for (var i = rp.Y % SmallSpan; i < Size.Height; i += SmallSpan) {
+                g.DrawLine(Pens.White, new Point(rp.X, i), new Point(rp.X - 5, i));
+            }
+            for (var i = 0; i < rp.Y; i += Span) {
+                var h = (i % (BigSpan)) == 0 ? 15 : 10;
+                g.DrawString($"{-i}px", font, Brushes.White, new Point(rp.X, rp.Y - i));
+                g.DrawLine(Pens.White, new Point(rp.X, rp.Y - i), new Point(rp.X - h, rp.Y - i));
+            }
+
+            for (var i = rp.Y; i < Size.Height; i += Span) {
+                var h = ((i - rp.Y) % (BigSpan)) == 0 ? 15 : 10;
+                g.DrawString($"{i - rp.Y}px", font, Brushes.White, new Point(rp.X, i));
+                g.DrawLine(Pens.White, new Point(rp.X, i), new Point(rp.X - h, i));
+            }
+        }
+
         public void Draw(Graphics g) {
             var rp = Location;
             var rule_point = (Point)Tag;
             var font = SystemFonts.DefaultFont;
-            g.DrawString($"{Language.Default["AbsolutePosition"]}:{rp.GetString()}", font, Brushes.White, new Point(rp.X + rule_radius, rp.Y - rule_radius - font.Height));
-            g.DrawString($"{Language.Default["RealativePosition"]}:{rule_point.Reverse().GetString()}", font, Brushes.White, new Point(rp.X + rule_radius, rp.Y - rule_radius - font.Height * 2));
-            g.DrawLine(Pens.White, new Point(rp.X, 0), new Point(rp.X, Size.Height));
-            g.DrawLine(Pens.White, new Point(0, rp.Y), new Point(Size.Width, rp.Y));
             var x = rp.X - rule_radius;
             var y = rp.Y - rule_radius;
+            if (DrawSpan) {
+                DrawSpans(g);
+            }
+            g.DrawLine(Pens.White, new Point(rp.X, 0), new Point(rp.X, Size.Height));
+            g.DrawLine(Pens.White, new Point(0, rp.Y), new Point(Size.Width, rp.Y));
             g.DrawEllipse(Pens.WhiteSmoke, x, y, rule_radius * 2, rule_radius * 2);
         }
 

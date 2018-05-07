@@ -45,7 +45,7 @@ namespace ExtractorSharp.View.Pane {
 
             Controls.Add(list);
             Controls.Add(combo);
-            Text = Language["ColorChart"];
+            Text = Language["Palette"];
 
             ContextMenuStrip = new ContextMenuStrip();
             menu = new ContextMenu();

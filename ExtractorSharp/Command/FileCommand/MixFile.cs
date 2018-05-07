@@ -24,6 +24,7 @@ namespace ExtractorSharp.Command.ImgCommand {
                     var code_str = Npks.CompleteCode(code / 100 * 100);
                     Album = Array[0].Clone();
                     Album.ConvertTo(Handle.Img_Version.Ver6);
+                    Album.Adjust();
                     Album.Tables.Clear();
                     Album.Path = Array[0].Path.Replace(match.Value, code_str);
                     var max = 0;

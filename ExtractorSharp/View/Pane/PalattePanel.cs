@@ -12,7 +12,7 @@ namespace ExtractorSharp.View.Pane {
         private IConnector Connector => Program.Connector;
         public PalattePanel() {
             InitializeComponent();
-            Program.Drawer.ImageChanged += SelectImageChanged;
+            Program.Drawer.PalatteChanged += SelectImageChanged;
             combo.SelectedIndexChanged += ColorChanged;
             changeColorItem.Click += ChangeColor;
             changeToCurrentItem.Click += ChangeToCurrentColor;
@@ -50,18 +50,20 @@ namespace ExtractorSharp.View.Pane {
 
         private void SelectImageChanged(object sender, FileEventArgs e) {
             Album = e.Album;
+            combo.Items.Clear();
             if (Album != null) {
-                combo.Items.Clear();
                 for (var i = 0; i < Album.Tables.Count; i++) {
-                    combo.Items.Add($"{Language["ColorChart"]} - {i}");
+                    combo.Items.Add($"{Language["Palette"]} - {i}");
                 }
                 if (Album.TableIndex < Album.Tables.Count) {
                     combo.SelectedIndex = Album.TableIndex;
                 }
             }
+            ColorChanged(sender, e);
         }
 
         private void ColorChanged(object sender,EventArgs e) {
+            list.Colors = new Color[0];
             if (Album != null) {
                 Album.TableIndex = combo.SelectedIndex;
                 list.Colors = Album.CurrentTable.ToArray();

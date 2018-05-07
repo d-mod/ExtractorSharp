@@ -32,6 +32,7 @@ namespace ExtractorSharp.View {
             this._8888_Radio = new System.Windows.Forms.RadioButton();
             this._4444_Radio = new System.Windows.Forms.RadioButton();
             this._1555_Radio = new System.Windows.Forms.RadioButton();
+            this._default_Radio = new System.Windows.Forms.RadioButton();
             this.group = new System.Windows.Forms.GroupBox();
             this.allImageRadio = new System.Windows.Forms.RadioButton();
             this.seletImageRadio = new System.Windows.Forms.RadioButton();
@@ -64,9 +65,10 @@ namespace ExtractorSharp.View {
             this.channelGroup.Controls.Add(this._8888_Radio);
             this.channelGroup.Controls.Add(this._4444_Radio);
             this.channelGroup.Controls.Add(this._1555_Radio);
+            this.channelGroup.Controls.Add(this._default_Radio);
             this.channelGroup.Location = new System.Drawing.Point(297, 32);
             this.channelGroup.Name = "channelBox";
-            this.channelGroup.Size = new System.Drawing.Size(184, 120);
+            this.channelGroup.Size = new System.Drawing.Size(184, 150);
             this.channelGroup.TabIndex = 4;
             this.channelGroup.TabStop = false;
             this.channelGroup.Text = Language["ColorBits"];
@@ -74,7 +76,7 @@ namespace ExtractorSharp.View {
             // _8888_Radio
             // 
             this._8888_Radio.AutoSize = true;
-            this._8888_Radio.Location = new System.Drawing.Point(40, 88);
+            this._8888_Radio.Location = new System.Drawing.Point(40, 121);
             this._8888_Radio.Name = "_8888_Radio";
             this._8888_Radio.Size = new System.Drawing.Size(125, 16);
             this._8888_Radio.TabIndex = 2;
@@ -84,7 +86,7 @@ namespace ExtractorSharp.View {
             // _4444_Radio
             // 
             this._4444_Radio.AutoSize = true;
-            this._4444_Radio.Location = new System.Drawing.Point(40, 55);
+            this._4444_Radio.Location = new System.Drawing.Point(40, 88);
             this._4444_Radio.Name = "_4444_Radio";
             this._4444_Radio.Size = new System.Drawing.Size(125, 16);
             this._4444_Radio.TabIndex = 1;
@@ -95,13 +97,23 @@ namespace ExtractorSharp.View {
             // 
             this._1555_Radio.AutoSize = true;
             this._1555_Radio.Checked = true;
-            this._1555_Radio.Location = new System.Drawing.Point(40,22);
+            this._1555_Radio.Location = new System.Drawing.Point(40,55);
             this._1555_Radio.Name = "_1555_Radio";
             this._1555_Radio.Size = new System.Drawing.Size(125, 16);
             this._1555_Radio.TabIndex = 0;
             this._1555_Radio.TabStop = true;
             this._1555_Radio.Text = "ARGB_1555";
             this._1555_Radio.UseVisualStyleBackColor = true;
+
+            this._default_Radio.AutoSize = true;
+            this._default_Radio.Checked = true;
+            this._default_Radio.Location = new System.Drawing.Point(40, 22);
+            this._default_Radio.Name = "_default_Radio";
+            this._default_Radio.Size = new System.Drawing.Size(125, 16);
+            this._default_Radio.TabIndex = 0;
+            this._default_Radio.TabStop = true;
+            this._default_Radio.Text = Language["Default"];
+            this._default_Radio.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
@@ -183,6 +195,7 @@ namespace ExtractorSharp.View {
         private System.Windows.Forms.Button yesButton;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.GroupBox channelGroup;
+        private System.Windows.Forms.RadioButton _default_Radio;
         private System.Windows.Forms.RadioButton _1555_Radio;
         private System.Windows.Forms.RadioButton _4444_Radio;
         private System.Windows.Forms.RadioButton _8888_Radio;

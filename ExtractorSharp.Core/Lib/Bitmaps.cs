@@ -90,6 +90,28 @@ namespace ExtractorSharp.Core.Lib {
             return bmp;
         }
 
+        public static Bitmap Dye(this Bitmap bmp, Color color) {
+            var data = ToArray(bmp);
+            for (var i = 0; i < data.Length; i += 4) {
+                var a = data[i + 3];
+                var r = data[i + 2];
+                var g = data[i + 1];
+                var b = data[i + 0];
+
+                a = (byte)((Math.Min(a, color.A)) / (color.A + 1.0) * color.A);
+                r = (byte)((Math.Min(r, color.R)) / (color.R + 1.0) * color.R);
+                g = (byte)((Math.Min(g, color.G)) / (color.G + 1.0) * color.G);
+                b = (byte)((Math.Min(b, color.B)) / (color.B + 1.0) * color.B);
+
+                data[i + 3] = a;
+                data[i + 2] = r;
+                data[i + 1] = g;
+                data[i + 0] = b;
+            }
+            bmp = FromArray(data, bmp.Size);
+            return bmp;
+        }
+
 
         public static Bitmap Star(this Bitmap bmp, decimal scale) {
             var size = bmp.Size.Star(scale);

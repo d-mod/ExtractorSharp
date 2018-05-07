@@ -33,6 +33,7 @@ namespace ExtractorSharp.Core {
 
         public delegate void CommandHandler(object sender, CommandEventArgs e);
 
+
         /// <summary>
         /// 操作执行事件
         /// </summary>
@@ -153,7 +154,16 @@ namespace ExtractorSharp.Core {
         }
 
         public void Pause() => IsRecord = !IsRecord;
-        
+
+
+        public void AddMacro(ICommand command) {
+            if(command is IAction action) {//可宏
+                Macro.Add(action);
+                actArgs.Mode = QueueChangeMode.Add;
+                actArgs.Action = action;
+                OnActionChanged(actArgs);
+            }
+        }
 
         /// <summary>
         /// 执行宏命令
@@ -183,6 +193,7 @@ namespace ExtractorSharp.Core {
             }
             Connector.FileListFlush();
             Connector.ImageListFlush();//刷新画布
+            ClearCommand();
             Connector.SendMessage(MessageType.Success, Language.Default["ActionRun"]);
         }
 
@@ -236,11 +247,8 @@ namespace ExtractorSharp.Core {
                     if (cmd.CanUndo) {//可撤销
                         undoStack.Push(cmd);
                     }
-                    if (IsRecord && cmd is IAction action) {//可宏
-                        Macro.Add(action);
-                        actArgs.Mode = QueueChangeMode.Add;
-                        actArgs.Action = action;
-                        OnActionChanged(actArgs);
+                    if (IsRecord) {
+                        AddMacro(cmd);
                     }
                     redoStack.Clear();
                     OnComandDid(new CommandEventArgs() {
@@ -305,14 +313,17 @@ namespace ExtractorSharp.Core {
 
         #region
 
-
-        
-        public void Dispose() {
+        public void ClearCommand() {
             undoStack.Clear();
             redoStack.Clear();
             OnCommandClear(new CommandEventArgs() {
                 Type = CommandEventType.Clear
             });
+        }
+        
+        public void Dispose() {
+            this.ClearCommand();
+            this.ClearMacro();
         }
 
 

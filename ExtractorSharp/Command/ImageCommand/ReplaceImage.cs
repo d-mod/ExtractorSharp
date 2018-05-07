@@ -15,7 +15,7 @@ namespace ExtractorSharp.Command.ImageCommand {
 
         private Bitmap[] oldImages;
 
-        private ColorBits type;
+        private ColorBits Type;
 
         private ColorBits[] types;
 
@@ -24,7 +24,7 @@ namespace ExtractorSharp.Command.ImageCommand {
         private int Mode;//替换模式 0为替换贴图 1为替换gif 2为替换文件夹
 
         public void Do(params object[] args) {
-            type = (ColorBits)args[0];
+            Type = (ColorBits)args[0];
             isAdjust = (bool)args[1];
             Mode = (int)args[2];
             Path = args[3] as string;
@@ -36,7 +36,7 @@ namespace ExtractorSharp.Command.ImageCommand {
                         var image = Album[Indices[0]];
                         oldImages = new Bitmap[] { image.Picture };
                         types = new ColorBits[] { image.Type };
-                        image.ReplaceImage(type, isAdjust, Image.FromFile(Path) as Bitmap);
+                        image.ReplaceImage(Type, isAdjust, Image.FromFile(Path) as Bitmap);
                     }
                     break;
                 case 1:
@@ -50,7 +50,7 @@ namespace ExtractorSharp.Command.ImageCommand {
                         var image = Album[Indices[i]];
                         oldImages[i] = image.Picture;
                         types[i] = image.Type;
-                        image.ReplaceImage(type, isAdjust, gifentry[i]);
+                        image.ReplaceImage(Type, isAdjust, gifentry[i]);
                     }
                     break;
                 case 2:
@@ -58,12 +58,13 @@ namespace ExtractorSharp.Command.ImageCommand {
                     oldImages = new Bitmap[Indices.Length];
                     types = new ColorBits[Indices.Length];
                     for (var i = 0; i < Indices.Length && i < images.Length; i++) {
-                        if (Indices[i] > Album.List.Count - 1 || Indices[i] < 0)
+                        if (Indices[i] > Album.List.Count - 1 || Indices[i] < 0) {
                             continue;
+                        }
                         var image = Album[Indices[i]];
                         oldImages[i] = image.Picture;
                         types[i] = image.Type;
-                        image.ReplaceImage(type, isAdjust, images[i]);
+                        image.ReplaceImage(Type, isAdjust, images[i]);
                     }
                     break;
                 default:
@@ -115,7 +116,7 @@ namespace ExtractorSharp.Command.ImageCommand {
             return bmps;
         }
 
-        public void Redo() => Do(type, isAdjust, Mode, Path, Album, Indices);
+        public void Redo() => Do(Type, isAdjust, Mode, Path, Album, Indices);
         
 
         public void Undo() {
@@ -130,23 +131,26 @@ namespace ExtractorSharp.Command.ImageCommand {
             var path = Path;
             switch (Mode) {
                 case 0:
-                    if (Album.List.Count > 0) 
-                         Album[indexes[0]].ReplaceImage(type, isAdjust, Image.FromFile(path) as Bitmap);               
+                    if (Album.List.Count > 0) {
+                        Album[indexes[0]].ReplaceImage(Type, isAdjust, Image.FromFile(path) as Bitmap);
+                    }
                     break;
                 case 1:
                     var gifentry = Bitmaps.ReadGif(path);
                     for (var i = 0; i < indexes.Length && i < gifentry.Length; i++) {
-                        if (indexes[i] > Album.List.Count - 1 && indexes[i] < 0)
+                        if (indexes[i] > Album.List.Count - 1 && indexes[i] < 0) {
                             continue;
-                        Album[indexes[i]].ReplaceImage(type, isAdjust, gifentry[i]);
+                        }
+                        Album[indexes[i]].ReplaceImage(Type, isAdjust, gifentry[i]);
                     }
                     break;
                 case 2:
                     var images = GetImages(Album,indexes.Length);
                     for (var i = 0; i < indexes.Length && i < images.Length; i++) {
-                        if (indexes[i] > Album.List.Count - 1 || indexes[i] < 0)
+                        if (indexes[i] > Album.List.Count - 1 || indexes[i] < 0) {
                             continue;
-                        Album[indexes[i]].ReplaceImage(type, isAdjust, images[i]);
+                        }
+                        Album[indexes[i]].ReplaceImage(Type, isAdjust, images[i]);
                     }
                     break;
                 default:

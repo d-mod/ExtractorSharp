@@ -23,21 +23,22 @@ namespace ExtractorSharp.Core {
         public int Count => FlashList.Count;
         public int CustomLayerCount { set; get; }
         public decimal ImageScale { set; get; }
-        
+
+  
         public IPaint CurrentLayer {
             set {
-
-
                 var lastPoint = LayerList[0].Location;
+                var lastVisible = LayerList[0].Visible;
                 var curPoint = LayerList[1].Location;
+                var curVisible = LayerList[1].Visible;
                 LayerList[0] = LayerList[1];//图层更新
                 LayerList[0].Location = lastPoint;
                 LayerList[0].Name = "LastLayer";
-                LayerList[0].Visible = false;
+                LayerList[0].Visible = lastVisible;
                 LayerList[1] = value;
                 LayerList[1].Location = curPoint;
                 LayerList[1].Name = "CurrentLayer";
-                LayerList[1].Visible = true;
+                LayerList[1].Visible = curVisible;
                 OnLayerChanged(new LayerEventArgs() {
                     Last = LayerList[0],
                     Current = LayerList[1],
@@ -114,8 +115,8 @@ namespace ExtractorSharp.Core {
 
         #region event
         public delegate void FileHandler(object sender, FileEventArgs e);
-        public event FileHandler ImageChanged;
-        public void OnImageChanged(FileEventArgs e) => ImageChanged?.Invoke(this, e);
+        public event FileHandler PalatteChanged;
+        public void OnPalatteChanged(FileEventArgs e) => PalatteChanged?.Invoke(this, e);
 
         public delegate void DrawHandler(object sender, DrawEventArgs e);
 
@@ -130,6 +131,9 @@ namespace ExtractorSharp.Core {
         public event LayerHandler LayerVisibleChanged;
         public void OnLayerChanged(LayerEventArgs e) => LayerChanged?.Invoke(this, e);
         public void OnLayerVisibleChanged(LayerEventArgs e) => LayerVisibleChanged?.Invoke(this, e);
+
+        public event LayerHandler LayerDrawing;
+        public void OnLayerDrawing(LayerEventArgs e) => LayerDrawing?.Invoke(this, e);
 
         #endregion
 
@@ -146,19 +150,17 @@ namespace ExtractorSharp.Core {
 
         public void AddLayer(params IPaint[] array) {
             LayerList.AddRange(array);
+            OnLayerChanged(new LayerEventArgs());
         }
 
-        public void AddLayer(params Sprite[] array) {
-            var layers = new Layer[array.Length];
-            for (var i = 0; i < layers.Length; i++) {
-                layers[i] = new Layer();
-                layers[i].Name = $"{Language.Default["NewLayer"]}{CustomLayerCount++}";
-                layers[i].Sprite = array[i];
-                layers[i].ImageScale = ImageScale;
-                layers[i].Visible = false;
-            }
-            this.AddLayer(layers);
+        public void MoveLayer(int soureIndex, int targetIndex) {
+            var list = LayerList;
+            var temp = list[soureIndex];
+            list[soureIndex] = list[targetIndex];
+            list[targetIndex] = temp;
+            OnLayerChanged(new LayerEventArgs());
         }
+
 
 
         public void ReplaceLayer(params Sprite[] array) {
@@ -179,6 +181,7 @@ namespace ExtractorSharp.Core {
         }
 
         public void DrawLayer(Graphics g) {
+            OnLayerDrawing(new LayerEventArgs());
             LayerList.ForEach(l => {
                 if (l.Visible) {
                     l.Draw(g);
@@ -215,6 +218,7 @@ namespace ExtractorSharp.Core {
                 { new Canvas() { Name="LastLayer"} },
                 { new Canvas() { Name="CurrentLayer"} }
             };
+            CurrentLayer.Visible = true;
             FlashList = new List<List<IPaint>>() { { LayerList } };
         }
     }

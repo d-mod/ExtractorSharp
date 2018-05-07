@@ -99,7 +99,7 @@
     </Compile>
     <Compile Include="EventArguments\DialogDataEventArgs.cs" />
     <Compile Include="EventArguments\DialogEventArgs.cs" />
-    <Compile Include="EventArguments\ItemDragEventArgs.cs" />
+    <Compile Include="EventArguments\ItemEventArgs.cs" />
     <Compile Include="EventArguments\ItemHoverEventArgs.cs" />
     <Compile Include="ESMessager.cs">
       <SubType>Component</SubType>

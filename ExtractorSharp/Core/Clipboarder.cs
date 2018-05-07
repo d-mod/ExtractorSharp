@@ -34,7 +34,10 @@ namespace ExtractorSharp.Core {
         }
 
         private Clipboarder() {}
-        
+
+        public static void Clear() {
+            Default = null;
+        }
     }
 
     public enum ClipMode {

@@ -122,6 +122,9 @@
     <Compile Include="Command\FileCommand\SaveFile.cs" />
     <Compile Include="Command\ImageCommand\PasteSingleImage.cs" />
     <Compile Include="Command\ImageCommand\SaveGif.cs" />
+    <Compile Include="Command\LayerCommand\AddLayer.cs" />
+    <Compile Include="Command\LayerCommand\DeleteLayer.cs" />
+    <Compile Include="Command\LayerCommand\MoveLayer.cs" />
     <Compile Include="Command\PaletteCommand\ChangeColor.cs" />
     <Compile Include="Command\DrawCommand\EraserDraw.cs" />
     <Compile Include="Command\FileCommand\MoveFile.cs" />
@@ -265,11 +268,17 @@
     <Compile Include="View\SettingPane\MarketplacePane.Designer.cs">
       <DependentUpon>MarketplacePane.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\SettingPane\PluginListPane.cs">
+    <Compile Include="View\SettingPane\InstalledPluginPane.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\SettingPane\PluginListPane.Designer.cs">
-      <DependentUpon>PluginListPane.cs</DependentUpon>
+    <Compile Include="View\SettingPane\InstalledPluginPane.Designer.cs">
+      <DependentUpon>InstalledPluginPane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SettingPane\RulerPane.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\SettingPane\RulerPane.Designer.cs">
+      <DependentUpon>RulerPane.cs</DependentUpon>
     </Compile>
     <Compile Include="View\SettingPane\SaveImagePane.cs">
       <SubType>Component</SubType>
@@ -432,8 +441,8 @@
     <EmbeddedResource Include="View\SettingPane\LanguagePane.resx">
       <DependentUpon>LanguagePane.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\SettingPane\PluginListPane.resx">
-      <DependentUpon>PluginListPane.cs</DependentUpon>
+    <EmbeddedResource Include="View\SettingPane\InstalledPluginPane.resx">
+      <DependentUpon>InstalledPluginPane.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\SettingPane\SaveImagePane.resx">
       <DependentUpon>SaveImagePane.cs</DependentUpon>

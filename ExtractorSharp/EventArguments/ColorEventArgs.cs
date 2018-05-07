@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ExtractorSharp.EventArguments {
-    class ColorEventArgs {
+    class ColorEventArgs :EventArgs{
         public Color OldColor { set; get; }
         public Color NewColor { set; get; }
     }

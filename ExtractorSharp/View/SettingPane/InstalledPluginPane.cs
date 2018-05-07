@@ -13,9 +13,9 @@ using ExtractorSharp.Core;
 using System.IO;
 
 namespace ExtractorSharp.View.SettingPane {
-    public partial class PluginListPane : AbstractSettingPane {
+    public partial class InstalledPluginPane : AbstractSettingPane {
         private Hoster Hoster => Program.Hoster;
-        public PluginListPane(IConnector Connector) : base(Connector) {
+        public InstalledPluginPane(IConnector Connector) : base(Connector) {
             InitializeComponent();
             Flush();
             browseButton.Click += BrowsePlugin;

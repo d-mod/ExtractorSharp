@@ -131,7 +131,7 @@ namespace ExtractorSharp {
             box = new PictureBox();
             linearDodge = new CheckBox();
             realPositionBox = new CheckBox();
-            onionskinBox = new CheckBox();
+            dyeBox = new CheckBox();
             displayBox = new CheckBox();
 
             openButton = new ESButton();
@@ -152,6 +152,10 @@ namespace ExtractorSharp {
             settingItem = new ToolStripMenuItem();
 
             layerList = new ESListBox<IPaint>();
+            layerMenu = layerList.ContextMenuStrip;
+            upLayerItem = new ToolStripMenuItem();
+            downLayerItem = new ToolStripMenuItem();
+            renameLayerItem = new ToolStripMenuItem();
 
             canvasMenu = new ContextMenuStrip();
             canvasCutItem = new ToolStripMenuItem();
@@ -598,9 +602,9 @@ namespace ExtractorSharp {
             ///
             //
             //
-            onionskinBox.Location = new Point(1170, 50);
-            onionskinBox.AutoSize = true;
-            onionskinBox.Text = Language["OnionSkin"];
+            dyeBox.Location = new Point(1170, 50);
+            dyeBox.AutoSize = true;
+            dyeBox.Text = Language["Dye"];
             //
             //
             //
@@ -628,7 +632,17 @@ namespace ExtractorSharp {
             layerList.Size = new Size(240, 280);
             layerList.TabIndex = 4;
             layerList.CanClear = false;
-            layerList.CanDelete = false;
+            layerList.CanDelete = true;
+
+
+            layerMenu.Items.Add(upLayerItem);
+            layerMenu.Items.Add(downLayerItem);
+            layerMenu.Items.Add(renameLayerItem);
+
+            upLayerItem.Text = Language["MoveUp"];
+            downLayerItem.Text = Language["MoveDown"];
+            renameLayerItem.Text = Language["Rename"];
+
 
 
             colorDialog = new ColorDialog();
@@ -665,7 +679,7 @@ namespace ExtractorSharp {
             Controls.Add(realPositionBox);
             Controls.Add(displayBox);
             Controls.Add(linearDodge);
-            Controls.Add(onionskinBox);
+            Controls.Add(dyeBox);
             Controls.Add(box);
             Controls.Add(historyButton);
             Controls.Add(colorPanel);
@@ -794,11 +808,16 @@ namespace ExtractorSharp {
 
         private ColorDialog colorDialog;
 
+        private ContextMenuStrip layerMenu;
+        private ToolStripMenuItem upLayerItem;
+        private ToolStripMenuItem downLayerItem;
+        private ToolStripMenuItem renameLayerItem;
+
         
         private CheckBox realPositionBox;        //真实坐标
         private CheckBox displayBox;            //动画播放
         private CheckBox linearDodge;          //线性减淡
-        private CheckBox onionskinBox;             //模拟残影
+        private CheckBox dyeBox;             //染色
 
         private Label scaleLabel;
         private NumericUpDown scaleBox;         //画布比例

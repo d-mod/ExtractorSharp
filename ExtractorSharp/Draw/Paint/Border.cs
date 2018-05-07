@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 namespace ExtractorSharp.Draw.Paint {
     class Border : IPaint {
         public string Name { set; get; } = "Border";
-        public bool FullCanvas { set; get; }
         public bool Locked { set; get; }
         public bool Visible { set; get; }
         public Bitmap Image { set; get; }

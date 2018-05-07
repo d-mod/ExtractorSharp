@@ -42,7 +42,7 @@ namespace ExtractorSharp.View.Dialog {
             AddConfig(typeof(GridPane));
             AddConfig(typeof(FlashPane));
             AddConfig(typeof(LanguagePane));
-            AddConfig(typeof(PluginListPane));
+            AddConfig(typeof(InstalledPluginPane));
             AddConfig(typeof(MarketplacePane));
         }
 
@@ -87,6 +87,7 @@ namespace ExtractorSharp.View.Dialog {
 
 
         private void Initialize() {
+            Config.Save();
             foreach (var control in Dictionary.Values) {
                 control.Initialize();
             }
@@ -96,6 +97,7 @@ namespace ExtractorSharp.View.Dialog {
             foreach (var control in Dictionary.Values) {
                 control.Save();
             }
+            Config.Save();
         }
 
         public override DialogResult Show(params object[] args) {
@@ -110,7 +112,7 @@ namespace ExtractorSharp.View.Dialog {
 
         private void Apply(object sender,EventArgs e) {
             Save();
-            Config.Save();
+            Connector.CanvasFlush();
         }
 
         private void Yes(object sender,EventArgs e) {

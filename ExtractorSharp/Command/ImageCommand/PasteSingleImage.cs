@@ -17,7 +17,7 @@ namespace ExtractorSharp.Command.ImageCommand {
 
         private System.Drawing.Point Location;
            
-        public string Name => "PasteSingleImage";
+        public string Name => "PasteImage";
 
         public bool CanUndo => true;
 

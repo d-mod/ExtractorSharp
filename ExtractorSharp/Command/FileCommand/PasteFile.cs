@@ -28,7 +28,7 @@ namespace ExtractorSharp.Command.ImgCommand {
             if (Clipboarder != null) {
                 array = Clipboarder.Albums;
                 if (Clipboarder.Mode == ClipMode.Cut) {
-                    Clipboarder.Default = null;
+                    Clipboarder.Clear();
                     Clipboard.Clear();
                     Connector.RemoveFile(array);
                 }

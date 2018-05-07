@@ -17,11 +17,14 @@ namespace ExtractorSharp.View {
             for (var i = 0; i < array.Length; i++) {
                 indexes[i] = array[i].Index;
             }
-            var type = ColorBits.ARGB_1555;
-            if (_4444_Radio.Checked)
+            var type = ColorBits.UNKOWN;
+            if (_1555_Radio.Checked) {
+                type = ColorBits.ARGB_1555;
+            } else if (_4444_Radio.Checked) {
                 type = ColorBits.ARGB_4444;
-            else if (_8888_Radio.Checked)
+            } else if (_8888_Radio.Checked) {
                 type = ColorBits.ARGB_8888;
+            }
             var path = string.Empty;
             int mode = 0;
             if (array.Length == 1) {

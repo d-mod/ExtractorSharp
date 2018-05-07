@@ -16,10 +16,9 @@ namespace ExtractorSharp.Draw.Paint {
 
         public Rectangle Rectangle { set; get; }
 
-        public object Tag { set; get; }
-        public bool FullCanvas { set; get; }
+        public object Tag { set; get; } = 100;
         public bool Visible { set; get; }
-        public bool Locked { set; get; }
+        public bool Locked { set { } get => true; }
 
         public bool Contains(Point point) {
             return false;

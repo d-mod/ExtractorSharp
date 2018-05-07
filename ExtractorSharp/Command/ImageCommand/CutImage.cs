@@ -19,14 +19,16 @@ namespace ExtractorSharp.Command.ImageCommand {
 
         private int[] Indexes;
 
+        private ClipMode Mode;
+
         private Clipboarder Clipboarder;
 
         public void Do(params object[] args) {
             Album = args[0] as Album;
             Indexes = args[1] as int[];
-            var mode = (ClipMode)args[2];
+            Mode = (ClipMode)args[2];
             Clipboarder = Clipboarder.Default;
-            Clipboarder.Default = Clipboarder.CreateClipboarder(Album, Indexes, mode);
+            Clipboarder.Default = Clipboarder.CreateClipboarder(Album, Indexes, Mode);
 
             var arr = new string[Indexes.Length];
             var dir = $"{Program.Config["RootPath"]}/temp/clipbord_image";
@@ -48,7 +50,7 @@ namespace ExtractorSharp.Command.ImageCommand {
         }
 
         public void Redo() {
-            Do(Album, Indexes);
+            Do(Album, Indexes, Mode);
         }
 
         public void Undo() {

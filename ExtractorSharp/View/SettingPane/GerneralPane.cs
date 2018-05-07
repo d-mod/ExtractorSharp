@@ -36,10 +36,14 @@ namespace ExtractorSharp.View.SettingPane {
 
         public override void Initialize() {
             gamePathBox.Text = Config["GamePath"].Value;
+            autoSaveCheck.Checked = Config["AutoSave"].Boolean;
+            autoUpdateCheck.Checked = Config["AutoUpdate"].Boolean;
         }
 
         public override void Save() {
             Config["GamePath"] = new ConfigValue(gamePathBox.Text);
+            Config["AutoSave"] = new ConfigValue(autoSaveCheck.Checked);
+            Config["AutoUpdate"] = new ConfigValue(autoUpdateCheck.Checked);
         }
     }
 }

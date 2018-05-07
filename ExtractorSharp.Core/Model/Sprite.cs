@@ -154,7 +154,7 @@ namespace ExtractorSharp.Data {
             }
             Picture = bmp;
             Target = null;
-            Type = type;
+            Type = type == ColorBits.UNKOWN ? Type : type;
             if (isAdjust) {
                 X += bmp.Width - Size.Width;
                 Y += bmp.Height - Size.Height;
@@ -198,6 +198,9 @@ namespace ExtractorSharp.Data {
         /// </summary>
         /// <param name="Target"></param>
         public void CanvasImage(Size Target) {
+            if (Type == ColorBits.LINK) {
+                return;
+            }
             Picture = Picture.Canvas(new Rectangle(Location, Target));
             Size = Target;
             Location = Point.Empty;
