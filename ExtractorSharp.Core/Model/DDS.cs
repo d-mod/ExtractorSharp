@@ -8,14 +8,14 @@ namespace ExtractorSharp.Data {
     /// DDS文件信息
     /// </summary>
     public class DDS {
-        public int Index;
-        public int Width;
-        public int Height;
-        public int Size;
-        public int DDS_Size;
-        public byte[] Data;
-        public DDS_Version Version;
-        public ColorBits Type = ColorBits.DXT_1;
+        public int Index { set; get; }
+        public int Width { set; get; } = 4;
+        public int Height { set; get; } = 4;
+        public int Size { set; get; }
+        public int DDS_Size { set; get; }
+        public byte[] Data { set; get; }
+        public DDS_Version Version {set; get;} = DDS_Version.DXT1;
+        public ColorBits Type { set; get; } = ColorBits.DXT_1;
         public Bitmap Pictrue {
             get {
                 if (image != null) {
@@ -25,7 +25,7 @@ namespace ExtractorSharp.Data {
                 if (Type < ColorBits.DXT_1) {
                     return Bitmaps.FromArray(data, new Size(Width, Height), Type);
                 }
-                var dds = Ddss.Parse(data);
+                var dds = Ddss.Decode(data);
                 data = dds.Mipmaps[0].Data;
                 var bmp = Bitmaps.FromArray(data, new Size(Width, Height));
                 return bmp;
@@ -35,27 +35,42 @@ namespace ExtractorSharp.Data {
 
         private Bitmap image;
 
-        internal static DDS CreateFromBitmap(Bitmap picture, Compress compress) => throw new NotImplementedException();
+        public static DDS CreateFromBitmap(Bitmap bmp,ColorBits type) {
+            var data= bmp.ToArray(type);
+            var dds_size = data.Length;
+            data = Zlib.Compress(data);
+            var dds = new DDS() {
+                Data = data,
+                DDS_Size = dds_size,
+                Size = data.Length,
+                Width = (int)Math.Round(bmp.Width / 4.0) * 4,
+                Height = (int)Math.Round(bmp.Height / 4.0) * 4,
+                Type = type
+            };
+            return dds;
+        }
     }
 
     public class DDS_Info {
-        public DDS DDS;
+        public DDS DDS { set; get; }
         /// <summary>
         /// 左上角顶点坐标
         /// </summary>
-        public Point LeftUp;
+        public Point LeftUp { set; get; }
         /// <summary>
         /// 右下角顶点坐标
         /// </summary>
-        public Point RightDown;
+        public Point RightDown { set; get; }
         /// <summary>
         /// 大小
         /// </summary>
         public Size Size => new Size(RightDown.X - LeftUp.X, RightDown.Y - LeftUp.Y);
 
-        public int Top;
+        public int Top { set; get; }
         
         public Rectangle Rectangle => new Rectangle(LeftUp, Size);
+
+        public int Unknown { get; set; }
     }
 
     public enum DDS_Version {

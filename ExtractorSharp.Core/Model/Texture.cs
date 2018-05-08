@@ -15,8 +15,8 @@ namespace ExtractorSharp.Data {
     public class Texture {
         public int Length { get;  set; }
         public int Flags { get;  set; }
-        public int Width { get;  set; }
-        public int Height { get;  set; }
+        public int Width { get; set; } = 4;
+        public int Height { get; set; } = 4;
         public int Count { set; get; } = 1;
         public TextureFormat Format { set; get; }
         public bool IsCubemap { get; internal set; }

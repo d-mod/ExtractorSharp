@@ -31,8 +31,9 @@ namespace ExtractorSharp.Handle {
 
 
         public override byte[] ConvertToByte(Sprite entity) {
-            if (entity.Compress == Compress.NONE)
+            if (entity.Compress == Compress.NONE) {
                 return base.ConvertToByte(entity);
+            }
             var data = entity.Picture.ToArray();
             var ms = new MemoryStream();
             for (var i = 0; i < data.Length; i += 4) {

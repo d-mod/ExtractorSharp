@@ -19,10 +19,7 @@ namespace ExtractorSharp.Handle {
         }
 
         public override byte[] ConvertToByte(Sprite entity) {
-            using (var ms = new MemoryStream()) {
-                Npks.WriteImage(ms, entity);
-                return ms.ToArray();
-            }
+            return entity.Picture.ToArray(entity.Type);
         }
 
         public override void NewImage(int count, ColorBits type, int index) {

@@ -139,6 +139,18 @@ namespace ExtractorSharp.Core.Lib {
             bmp.UnlockBits(bmpData);
         }
 
+        public static byte[] ToArray(this Bitmap bmp, ColorBits type) {
+            var data = bmp.ToArray();
+            var ms = new MemoryStream();
+            for (var i = 0; i < data.Length; i += 4) {
+                var temp = new byte[4];
+                Array.Copy(data, i, temp, 0, 4);
+                Colors.WriteColor(ms, temp, type);
+            }
+            ms.Close();
+            return ms.ToArray();
+        }
+
         /// <summary>
         /// 将rgb数组转换为Bitmap
         /// </summary>

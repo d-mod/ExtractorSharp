@@ -850,7 +850,7 @@ namespace ExtractorSharp {
 
         private void OnMouseWheel(object sender, MouseEventArgs e) {
             if (ModifierKeys == Keys.Alt) {
-                var i = scaleBox.Value + e.Delta / 2;
+                var i = scaleBox.Value + e.Delta / 12;
                 i = i < scaleBox.Maximum ? i : scaleBox.Maximum;
                 i = i > scaleBox.Minimum ? i : scaleBox.Minimum;
                 scaleBox.Value = i;

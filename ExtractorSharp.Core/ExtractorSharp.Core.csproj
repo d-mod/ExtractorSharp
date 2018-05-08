@@ -81,7 +81,7 @@
     <Compile Include="Lib\Bitmaps.cs" />
     <Compile Include="Lib\Colors.cs" />
     <Compile Include="Lib\Drawings.cs" />
-    <Compile Include="Lib\Reader\Ddss.cs" />
+    <Compile Include="Lib\Reader\Ddss.Decoder.cs" />
     <Compile Include="Lib\Reader\Gif\AnimatedGifEncoder.cs" />
     <Compile Include="Lib\Reader\Gif\GifDecoder.cs" />
     <Compile Include="Lib\Reader\Gif\LZWEncoder.cs" />
@@ -107,6 +107,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Lib\Reader\Ddss.Encoder.cs" />
     <None Include="packages.config" />
     <None Include="README.md" />
     <None Include="Resources\end.ogg" />

@@ -1,13 +1,9 @@
 ﻿using ExtractorSharp.Data;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExtractorSharp.Core.Lib {
-    public class Ddss {
+    public partial class Ddss {
 
         const int DXT_1 = 0x31545844;
         const int DXT_3 = 0x33545844;
@@ -15,7 +11,7 @@ namespace ExtractorSharp.Core.Lib {
         const int DDS_MAGIC = 0x20534444;
         const int DDS_MIPMAP_COUNT = 0x20000;
 
-        public static Texture Parse(byte[] data) {
+        public static Texture Decode(byte[] data) {
             using (var ms = new MemoryStream(data)) {
                 return Decode(ms);
             }

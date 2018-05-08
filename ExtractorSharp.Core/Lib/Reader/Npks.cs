@@ -91,15 +91,8 @@ namespace ExtractorSharp.Core.Lib {
         }
 
 
-        public static void WriteImage(Stream stream, Sprite entity) {
-            var bits = entity.Type;
-            var data = entity.Picture.ToArray();
-            for (var i = 0; i < data.Length; i += 4) {
-                var temp = new byte[4];
-                Array.Copy(data, i, temp, 0, 4);
-                Colors.WriteColor(stream, temp, bits);
-            }
-        }
+
+
 
 
         /// <summary>
@@ -234,7 +227,7 @@ namespace ExtractorSharp.Core.Lib {
             if (!File.Exists(file)) {
                 return List;
             }
-            using (var stream = new FileStream(file, FileMode.Open)) {
+            using (var stream = File.Open(file, FileMode.Open)) {
                 if (onlyPath) {
                     return ReadInfo(stream);
                 }

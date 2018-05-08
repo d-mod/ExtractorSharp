@@ -219,7 +219,7 @@ namespace ExtractorSharp.Data {
             if (!IsOpen)
                 return;
             Data = Parent.ConvertToByte(this);
-            if (Compress == Compress.ZLIB) {
+            if (Data.Length > 0 && Compress == Compress.ZLIB) {
                 Data = Zlib.Compress(Data);
             }
             Length = Data.Length;            //不压缩时，按原长度保存
