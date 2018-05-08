@@ -31,7 +31,7 @@
             // textBox1
             // 
             this.gridGapBox.Location = new System.Drawing.Point(15, 37);
-            this.gridGapBox.Size = new System.Drawing.Size(158, 21);
+            this.gridGapBox.AutoSize = true;
             this.gridGapBox.Maximum = 500;
             this.gridGapBox.Minimum = 1;
             this.gridGapBox.TabIndex = 0;

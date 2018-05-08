@@ -1,5 +1,7 @@
-﻿namespace ExtractorSharp.View.SettingPane {
-    partial class RulerPane {
+﻿using System.Drawing;
+
+namespace ExtractorSharp.Component {
+    partial class ColorPanel {
         /// <summary> 
         /// 必需的设计器变量。
         /// </summary>
@@ -24,28 +26,9 @@
         /// </summary>
         private void InitializeComponent() {
             components = new System.ComponentModel.Container();
-            this.displaySpanBox = new System.Windows.Forms.CheckBox();
-            this.displayCrosshairBox = new System.Windows.Forms.CheckBox();
-
-            displaySpanBox.Text = Language["DisplayRulerSpan"];
-            displaySpanBox.AutoSize = true;
-            displaySpanBox.Location = new System.Drawing.Point(20, 40);
-
-            displayCrosshairBox.Text= Language["DisplayRulerCrosshair"];
-            displayCrosshairBox.AutoSize = true;
-            displayCrosshairBox.Location = new System.Drawing.Point(20, 100);
-
-            this.Controls.Add(displaySpanBox);
-            this.Controls.Add(displayCrosshairBox);
-            this.Parent = "View";
-            this.Name = "Ruler";
+            Size = new Size(25, 25);
+            BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
         }
-
-
-        
-        private System.Windows.Forms.CheckBox displaySpanBox;
-        private System.Windows.Forms.CheckBox displayCrosshairBox;
-
 
         #endregion
     }

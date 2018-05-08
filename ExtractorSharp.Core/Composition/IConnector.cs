@@ -88,6 +88,8 @@ namespace ExtractorSharp.Core {
         /// <param name="array">文件对象</param>
         void AddFile(bool clear, params Album[] array);
 
+        List<Album> LoadFile(params string[] args);
+
         void RemoveFile(params Album[] array);
 
         void Save();

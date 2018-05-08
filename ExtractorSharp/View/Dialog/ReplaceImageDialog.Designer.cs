@@ -124,7 +124,7 @@ namespace ExtractorSharp.View {
             this.group.Size = new System.Drawing.Size(184, 120);
             this.group.TabIndex = 5;
             this.group.TabStop = false;
-            this.group.Text = Language["HandleObject"];
+            this.group.Text = Language["Target"];
             // 
             // allImageRadio
             // 

@@ -55,6 +55,12 @@
     <Compile Include="ColorList.Designer.cs">
       <DependentUpon>ColorList.cs</DependentUpon>
     </Compile>
+    <Compile Include="ColorPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ColorPanel.Designer.cs">
+      <DependentUpon>ColorPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="ESButton.cs">
       <SubType>Component</SubType>
     </Compile>

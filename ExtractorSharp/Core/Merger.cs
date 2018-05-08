@@ -8,6 +8,7 @@ using ExtractorSharp.Data;
 using ExtractorSharp.Core.Sorter;
 using ExtractorSharp.Json;
 using ExtractorSharp.Core.Lib;
+using System;
 
 namespace ExtractorSharp.Core {
     /// <summary>
@@ -235,39 +236,10 @@ namespace ExtractorSharp.Core {
         }
 
         public void Priview(int index, Graphics g) {
-            var x = 800;
-            var y = 600;
-            foreach (var al in Queues) {
-                if (index < al.List.Count) {
-                    var source = al.List[index];
-                    if (source.Type == ColorBits.LINK) {//如果为链接贴图。则引用指向贴图的属性
-                        source = source.Target;
-                    }
-                    if (source.Compress == Compress.NONE && source.Width * source.Height == 1) {//将透明图层过滤
-                        continue;
-                    }
-                    if (source.X < x) {//获得最左点坐标
-                        x = source.X;
-                    }
-                    if (source.Y < y) {//获得最上点坐标
-                        y = source.Y;
-                    }
-                }
-            }
-            for (var i = Queues.Count - 1; i > 0; i--) {
-                var img = Queues[i];
-                if (index > img.List.Count - 1) {
-                    continue;
-                }
-                var source = img[index];
-                if (source.Type == ColorBits.LINK) {//如果为链接贴图。则引用指向贴图的属性
-                    source = source.Target;
-                }
-                if (source.Compress == Compress.NONE && source.Width * source.Height == 1) {//将透明图层过滤
-                    continue;
-                }
-                g.DrawImage(source.Picture, source.X - x, source.Y - y);
-            }
+            var array = Queues.ToArray();
+            Array.Reverse(array);
+            var bmp=Npks.Preview(array, index);
+            g.DrawImage(bmp, new Point(20,20));
         }
 
 

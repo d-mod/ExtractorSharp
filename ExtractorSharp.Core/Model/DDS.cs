@@ -38,13 +38,15 @@ namespace ExtractorSharp.Data {
         public static DDS CreateFromBitmap(Bitmap bmp,ColorBits type) {
             var data= bmp.ToArray(type);
             var dds_size = data.Length;
+            var width = bmp.Width;
+            var height = bmp.Height;
             data = Zlib.Compress(data);
             var dds = new DDS() {
                 Data = data,
                 DDS_Size = dds_size,
                 Size = data.Length,
-                Width = (int)Math.Round(bmp.Width / 4.0) * 4,
-                Height = (int)Math.Round(bmp.Height / 4.0) * 4,
+                Width = width,
+                Height = height,
                 Type = type
             };
             return dds;

@@ -120,6 +120,7 @@
   <ItemGroup>
     <Compile Include="Command\DrawCommand\MoveToolsDraw.cs" />
     <Compile Include="Command\FileCommand\SaveFile.cs" />
+    <Compile Include="Command\ImageCommand\DyeImage.cs" />
     <Compile Include="Command\ImageCommand\PasteSingleImage.cs" />
     <Compile Include="Command\ImageCommand\SaveGif.cs" />
     <Compile Include="Command\LayerCommand\AddLayer.cs" />
@@ -250,6 +251,12 @@
     <Compile Include="View\SettingPane\FlashPane.Designer.cs">
       <DependentUpon>FlashPane.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\SettingPane\GifPane.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\SettingPane\GifPane.Designer.cs">
+      <DependentUpon>GifPane.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\SettingPane\GridPane.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -376,6 +383,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Kritsu.snk" />
+    <Compile Include="MainForm.DyeEffect.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <None Include="README.md" />
     <None Include="Resources\chinese.json" />
     <None Include="Resources\end.ogg" />

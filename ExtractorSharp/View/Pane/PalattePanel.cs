@@ -64,7 +64,7 @@ namespace ExtractorSharp.View.Pane {
 
         private void ColorChanged(object sender,EventArgs e) {
             list.Colors = new Color[0];
-            if (Album != null) {
+            if (Album != null && Album.Tables.Count > 0) {
                 Album.TableIndex = combo.SelectedIndex;
                 list.Colors = Album.CurrentTable.ToArray();
                 Connector.CanvasFlush();

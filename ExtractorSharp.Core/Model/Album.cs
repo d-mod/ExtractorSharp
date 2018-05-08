@@ -116,8 +116,11 @@ namespace ExtractorSharp.Data {
                 sprites[i].Index = i;
                 sprites[i].Picture = array[i];
                 sprites[i].Compress = Compress.ZLIB;
+                sprites[i].Size = array[i].Size;
+                sprites[i].Canvas_Size = array[i].Size;
             }
             List.AddRange(sprites);
+            Adjust();
         }
 
 

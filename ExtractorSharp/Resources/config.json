@@ -62,9 +62,11 @@
 
   "Ruler": false,
 
-  "RuleCrosshair": false,
+  "RulerCrosshair": false,
 
   "RulerLocked": false,
+
+  "RulerSpan": true,
 
   "Profile": "release",
 

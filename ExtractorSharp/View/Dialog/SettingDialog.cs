@@ -38,7 +38,9 @@ namespace ExtractorSharp.View.Dialog {
 
         private void AddConfig() {
             AddConfig(typeof(GerneralPane));
+            AddConfig(typeof(GifPane));
             AddConfig(typeof(SaveImagePane));
+            AddConfig(typeof(RulerPane));
             AddConfig(typeof(GridPane));
             AddConfig(typeof(FlashPane));
             AddConfig(typeof(LanguagePane));

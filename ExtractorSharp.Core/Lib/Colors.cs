@@ -126,5 +126,14 @@ namespace ExtractorSharp.Core.Lib {
                 stream.Write(data);
             }
         }
+
+        public static string ToHexString(this Color color) {
+            var val = color.ToArgb();
+            var str = val.ToString("x2");
+            for(var i = str.Length; i < 8; i++) {
+                str = "0" + str;
+            }
+            return $"#{str}";
+        }
     }
 }

@@ -122,16 +122,18 @@ namespace ExtractorSharp.Properties {
         ///      &quot;Exit&quot;: &quot;退出&quot;,
         ///      &quot;GamePath&quot;: &quot;游戏路径&quot;,
         ///      &quot;Browse&quot;: &quot;浏览&quot;,
-        ///      &quot;HandleObject&quot;: &quot;处理对象&quot;,
-        ///      &quot;HandleContent&quot;: &quot;处理内容&quot;,
-        ///      &quot;HandleImg&quot;: &quot;Img处理&quot;,
-        ///      &quot;HandleImage&quot;: &quot;贴图处理&quot;,
-        ///      &quot;CheckImg&quot;: &quot;当前所选Img&quot;,
-        ///      &quot;AllImg&quot;: &quot;所有Img&quot;,
+        ///      &quot;Target&quot;: &quot;目标&quot;,
+        ///      &quot;CheckImg&quot;: &quot;当前所选IMG&quot;,
+        ///      &quot;AllImg&quot;: &quot;所有IMG&quot;,
         ///      &quot;CheckImage&quot;: &quot;当前所选贴图&quot;,
         ///      &quot;AllImage&quot;: &quot;所有贴图&quot;,
         ///      &quot;ImageResources&quot;: &quot;图片资源&quot;,
-        ///      &quot;SoundResources&quot;: &quot;音效资源&quot;,        /// [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///      &quot;SoundResources&quot;: &quot;音效资源&quot;,
+        ///      &quot;Width&quot;: &quot;宽&quot;,
+        ///      &quot;Height&quot;: &quot;高&quot;,
+        ///      &quot;Size&quot;: &quot;宽高&quot;,
+        ///      &quot;Position&quot;: &quot;坐标&quot;,
+        ///      &quot;Ca [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Chinese {
             get {
@@ -171,7 +173,7 @@ namespace ExtractorSharp.Properties {
         ///
         ///  &quot;LCID&quot;: 2052,
         ///
-        ///  &quot;SaveImageAllPath&quot;: false,
+        ///  &quot;SaveImageFullPath&quot;: false,
         ///
         ///  &quot;LayerMaximum&quot;: 20,
         ///
@@ -184,7 +186,7 @@ namespace ExtractorSharp.Properties {
         ///
         ///  &quot;UpdateUrl&quot;: &quot;http://extractorsharp.kritsu.net/api/program/update&quot;,
         ///
-        ///  &quot;UpdateExeUrl&quot;: &quot;http://static.kritsu.net [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///  &quot;UpdateExeUrl&quot;: &quot;http://static.kritsu.ne [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Config {
             get {

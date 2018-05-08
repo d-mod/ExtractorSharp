@@ -101,7 +101,8 @@ namespace ExtractorSharp {
             openDirItem = new ToolStripMenuItem();
             saveAsFileItem = new ToolStripMenuItem();
 
-            lineDodgeItem = new ToolStripMenuItem();
+            linearDodgeItem = new ToolStripMenuItem();
+            dyeItem = new ToolStripMenuItem();
 
             editMenu = new ToolStripMenuItem();
             undoItem = new ToolStripMenuItem();
@@ -112,9 +113,7 @@ namespace ExtractorSharp {
 
             ruleItem = new ToolStripMenuItem();
             displayRuleItem = new ToolStripMenuItem();
-            displayRuleCrossHairItem = new ToolStripMenuItem();
             adjustRuleItem = new ToolStripMenuItem();
-            lockRuleItem = new ToolStripMenuItem();
             previewItem = new ToolStripMenuItem();
 
             gridItem = new ToolStripMenuItem();
@@ -129,7 +128,7 @@ namespace ExtractorSharp {
             
             saveGifItem = new ToolStripMenuItem();
             box = new PictureBox();
-            linearDodge = new CheckBox();
+            linearDodgeBox = new CheckBox();
             realPositionBox = new CheckBox();
             dyeBox = new CheckBox();
             displayBox = new CheckBox();
@@ -170,8 +169,9 @@ namespace ExtractorSharp {
             selectThisTargetItem = new ToolStripMenuItem();
 
             previewPanel = new Panel();
-            colorPanel = new Panel();
+            colorPanel = new ColorPanel();
             messager = new ESMessager(Connector);
+
             albumListMenu.SuspendLayout();
             imageListMenu.SuspendLayout();
             mainMenu.SuspendLayout();
@@ -302,7 +302,8 @@ namespace ExtractorSharp {
             editImageItem.DropDownItems.Add(copyImageItem);
             editImageItem.DropDownItems.Add(pasteImageItem);
             editImageItem.DropDownItems.AddSeparator();
-            editImageItem.DropDownItems.Add(lineDodgeItem);
+            editImageItem.DropDownItems.Add(linearDodgeItem);
+            editImageItem.DropDownItems.Add(dyeItem);
 
             cutImageItem.Text = Language["Cut"];
             cutImageItem.Image = Resources.cut;
@@ -312,6 +313,10 @@ namespace ExtractorSharp {
 
             pasteImageItem.Text = Language["Paste"];
             pasteImageItem.Image = Resources.paste;
+
+            linearDodgeItem.Text = Language["LinearDodge"];
+
+            dyeItem.Text = Language["Dye"];
 
 
             saveImageItem.Text = Language["SaveImage"];
@@ -355,7 +360,6 @@ namespace ExtractorSharp {
             selectItem.DropDownItems.Add(selectAllLinkItem);
             selectItem.DropDownItems.Add(selectThisLinkItm);
             selectItem.DropDownItems.Add(selectThisTargetItem);
-            lineDodgeItem.Text = Language["LinearDodge"];
 
             // 
             // mainMenu
@@ -493,8 +497,6 @@ namespace ExtractorSharp {
             ruleItem.Text = Language["Ruler"];
             ruleItem.Image = Resources.ruler;
             ruleItem.DropDownItems.Add(displayRuleItem);
-            ruleItem.DropDownItems.Add(displayRuleCrossHairItem);
-            ruleItem.DropDownItems.Add(lockRuleItem);
             ruleItem.DropDownItems.Add(adjustRuleItem);
 
             displayRuleItem.Text = Language["DisplayRuler"];
@@ -502,16 +504,9 @@ namespace ExtractorSharp {
             displayRuleItem.ShortcutKeys = Keys.Control | Keys.N;
             displayRuleItem.ShowShortcutKeys = true;
             displayRuleItem.CheckOnClick = true;
-            displayRuleCrossHairItem.Text = Language["DisplayRulerCrosshair"];
-            displayRuleCrossHairItem.Checked = Config["RulerCrosshair"].Boolean;
-
-            displayRuleCrossHairItem.CheckOnClick = true;
-            displayRuleCrossHairItem.Checked = true;
+            
             adjustRuleItem.Text = Language["ResetRuler"];
 
-            lockRuleItem.Text = Language["LockRuler"];
-            lockRuleItem.CheckOnClick = true;
-            lockRuleItem.Checked = Config["RulerLocked"].Boolean;
             previewItem.Text = Language["Preview"];
             previewItem.CheckOnClick = true;
             previewItem.Checked = Config["Preview"].Boolean;
@@ -554,9 +549,7 @@ namespace ExtractorSharp {
             //colorPanel
             //
             colorPanel.Location = new Point(800, 48);
-            colorPanel.BackColor = Config["BrushColor"].Color;
-            colorPanel.Size = new Size(25, 25);
-            colorPanel.BorderStyle = BorderStyle.FixedSingle;
+            colorPanel.Color = Config["BrushColor"].Color;
             ///
             ///
             ///
@@ -596,9 +589,9 @@ namespace ExtractorSharp {
             //
             //
             //
-            linearDodge.Location = new Point(1050, 50);
-            linearDodge.AutoSize = true;
-            linearDodge.Text = Language["LinearDodge"];
+            linearDodgeBox.Location = new Point(1050, 50);
+            linearDodgeBox.AutoSize = true;
+            linearDodgeBox.Text = Language["LinearDodge"];
             ///
             //
             //
@@ -678,7 +671,7 @@ namespace ExtractorSharp {
             Controls.Add(pathBox);
             Controls.Add(realPositionBox);
             Controls.Add(displayBox);
-            Controls.Add(linearDodge);
+            Controls.Add(linearDodgeBox);
             Controls.Add(dyeBox);
             Controls.Add(box);
             Controls.Add(historyButton);
@@ -751,9 +744,7 @@ namespace ExtractorSharp {
         private ToolStripMenuItem viewMenu;         //视图
         private ToolStripMenuItem ruleItem;         //标尺
         private ToolStripMenuItem displayRuleItem;  //显示标尺
-        private ToolStripMenuItem displayRuleCrossHairItem; //显示标尺准心
         private ToolStripMenuItem adjustRuleItem;   //校正标尺
-        private ToolStripMenuItem lockRuleItem;      //锁定标尺
         private ToolStripMenuItem previewItem;      //贴图预览
 
         private ToolStripMenuItem gridItem;         //网格
@@ -804,7 +795,9 @@ namespace ExtractorSharp {
 
         private ToolStripMenuItem adjustPositionItem;//校正坐标
         private ToolStripMenuItem addLayerItem; //加入图层
-        private ToolStripMenuItem lineDodgeItem;
+
+        private ToolStripMenuItem linearDodgeItem;
+        private ToolStripMenuItem dyeItem;
 
         private ColorDialog colorDialog;
 
@@ -816,7 +809,7 @@ namespace ExtractorSharp {
         
         private CheckBox realPositionBox;        //真实坐标
         private CheckBox displayBox;            //动画播放
-        private CheckBox linearDodge;          //线性减淡
+        private CheckBox linearDodgeBox;          //线性减淡
         private CheckBox dyeBox;             //染色
 
         private Label scaleLabel;
@@ -848,7 +841,7 @@ namespace ExtractorSharp {
         private DropPanel dropPanel;
         private AudioPlayer player;
         private Panel previewPanel;
-        private Panel colorPanel;
+        private ColorPanel colorPanel;
         private ESMessager messager;
     }
 }

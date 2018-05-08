@@ -71,6 +71,7 @@ namespace ExtractorSharp {
         private void AddSpriteConverter() {
             AddSpriteConverter(new UnCanvasEffect());
             AddSpriteConverter(new LinearDodgeEffect(Config));
+            AddSpriteConverter(new DyeEffect(Config));
             AddSpriteConverter(new RealPositionEffect(Config));
         }
 
@@ -81,7 +82,7 @@ namespace ExtractorSharp {
         }
 
         private void AddConfig() {
-            linearDodge.Checked = Config["LinearDodge"].Boolean;
+            linearDodgeBox.Checked = Config["LinearDodge"].Boolean;
             realPositionBox.Checked = Config["RealPosition"].Boolean;
             pixelateBox.Checked = Config["Pixelate"].Boolean;
             scaleBox.Value = Config["CanvasScale"].Integer;
@@ -278,14 +279,12 @@ namespace ExtractorSharp {
             pixelateBox.CheckedChanged += Flush;
             sortItem.Click += Sort;
             classifyItem.CheckedChanged += Classify;
-            displayRuleCrossHairItem.Click += Flush;
             adjustRuleItem.Click += AjustRule;
             openButton.Click += AddFile;
             pathBox.TextChanged += (o, e) => pathBox.SelectionStart = pathBox.Text.Length;//光标移到最后，以便显示名称
             pathBox.Click += SelectSavePath;
             openFileItem.Click += AddFile;
             saveFileItem.Click += (o, e) => Connector.Save();
-            lockRuleItem.Click += LockRule;
             layerList.ItemCheck += HideLayer;
             adjustPositionItem.Click += AdjustPosition;
             repairFileItem.Click += (o, e) => Connector.Do("repairFile", Connector.CheckedFiles);
@@ -296,11 +295,15 @@ namespace ExtractorSharp {
             Drawer.ColorChanged += ColorChanged;
             Drawer.LayerDrawing += BeforeDraw;
 
-            linearDodge.CheckedChanged += LinearDodge;
-            dyeBox.CheckedChanged += Flush;
+            linearDodgeBox.CheckedChanged += LinearDodge;
+            dyeBox.CheckedChanged += Dye;
+
+
             previewItem.CheckedChanged += PreviewChanged;
             colorPanel.MouseClick += ColorChanged;
-            lineDodgeItem.Click += (o,e)=>Connector.Do("linearDodge", Connector.CheckedImages);
+            linearDodgeItem.Click += (o,e)=>Connector.Do("linearDodge", Connector.CheckedImages);
+            dyeItem.Click += (o, e) => Connector.Do("dyeImage", Connector.CheckedImages, Drawer.Color);
+
             splitFileItem.Click += (o, e) => Connector.Do("splitFile", Connector.CheckedFiles);
             mixFileItem.Click += (o, e) => Connector.Do("mixFile", Connector.CheckedFiles);
             cutImageItem.Click += CutImage;
@@ -327,6 +330,12 @@ namespace ExtractorSharp {
             upLayerItem.Click += UpLayer;
             downLayerItem.Click += DownLayer;
             renameLayerItem.Click += RenameLayer;
+            RecentChanged(null, null);
+        }
+
+        private void Dye(object sender, EventArgs e) {
+            Config["Dye"] = new ConfigValue(dyeBox.Checked);
+            Flush(sender, e);
         }
 
         private void DeleteLayer(object sender,ItemEventArgs e) {
@@ -375,22 +384,40 @@ namespace ExtractorSharp {
 
         private void BeforeDraw(object sender, LayerEventArgs e) {
             Border.Tag = Drawer.CurrentLayer.Rectangle;
-            Ruler.Tag = Drawer.CurrentLayer.Location.Minus(Ruler.Location);
-            Ruler.Size = box.Size;
+
+            var ruler = Ruler as Ruler;
+            ruler.DrawSpan = Config["RulerSpan"].Boolean;
+            ruler.DrawCrosshair = Config["RulerCrosshair"].Boolean;
+            ruler.Tag = Drawer.CurrentLayer.Location.Minus(Ruler.Location);
+            ruler.Size = box.Size;
+
             Grid.Tag = Config["GridGap"].Integer;
             Grid.Size = box.Size;
-            Drawer.CurrentLayer.Tag = Connector.SelectedFile;
+            var entity = Connector.SelectedImage;
+            Drawer.CurrentLayer.Tag = entity;
+            if (entity?.Picture != null) {
+                if (entity.Type == ColorBits.LINK && entity.Target != null) {
+                    entity = entity.Target;
+                }
+                var pictrue = entity.Picture;
+                if (linearDodgeBox.Checked) {
+                    pictrue = pictrue.LinearDodge();
+                }
+                if (dyeBox.Checked) {
+                    pictrue = pictrue.Dye(Drawer.Color);
+                }
+                Drawer.CurrentLayer.Image = pictrue;//校正贴图
+            }
         }
 
         private void RecentChanged(object sender, EventArgs e) {
             var recent = Connector.Recent;
+            
             openRecentItem.DropDownItems.Clear();
             addRecentItem.DropDownItems.Clear();
-            saveRecentItem.DropDownItems.Clear();
             var count = Math.Min(10, recent.Count);
             var openArr = new ToolStripMenuItem[count];
             var addArr = new ToolStripMenuItem[count];
-            var saveArr = new ToolStripMenuItem[count];
             for (var i = 0; i <count; i++) {
                 var re = recent[i];
                 openArr[i] = _GetRecentItem(re);
@@ -401,11 +428,22 @@ namespace ExtractorSharp {
                 addArr[i].Click += (o, ex) => {
                     Connector.AddFile(false, re);
                 };
+            }
+
+            saveRecentItem.DropDownItems.Clear();
+            //保存文件的最近记录只取NPK后缀名
+            recent = recent.FindAll(r => r.ToUpper().EndsWith(".NPK"));
+            var saveArr = new ToolStripMenuItem[count];
+            count = Math.Min(10, recent.Count);
+            for (var i = 0; i < count; i++) {
+                var re = recent[i];
                 saveArr[i] = _GetRecentItem(re);
                 saveArr[i].Click += (o, ex) => {
                     Connector.Save(re);
+                    Connector.SavePath = re;
                 };
             }
+
             openRecentItem.DropDownItems.AddRange(openArr);
             addRecentItem.DropDownItems.AddRange(addArr);
             saveRecentItem.DropDownItems.AddRange(saveArr);
@@ -463,6 +501,7 @@ namespace ExtractorSharp {
             for(var i = 0; i < arr.Length; i++) {
                 layerList.Items.Add(arr[i], arr[i].Visible);
             }
+            layerList.Refresh();
         }
 
         private void CommandDid(object sender,CommandEventArgs e) {
@@ -590,7 +629,7 @@ namespace ExtractorSharp {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void LinearDodge(object sender, EventArgs e) {
-            Config["LinearDodge"] = new ConfigValue(linearDodge.Checked);
+            Config["LinearDodge"] = new ConfigValue(linearDodgeBox.Checked);
             Flush(sender, e);
         }
 
@@ -670,13 +709,6 @@ namespace ExtractorSharp {
 
 
 
-
-
-        private void LockRule(object sender, EventArgs e) {
-            Ruler.Locked = lockRuleItem.Checked;
-        }
-
-
         /// <summary>
         /// 移动文件序列
         /// </summary>
@@ -724,13 +756,12 @@ namespace ExtractorSharp {
             Config["Brush"] = new ConfigValue(Drawer.Brush.Name);
             Config["BrushColor"] = new ConfigValue(Drawer.Color);
 
-            Config["LinearDodge"] = new ConfigValue(linearDodge.Checked);
+            Config["LinearDodge"] = new ConfigValue(linearDodgeBox.Checked);
             Config["Dye"] = new ConfigValue(dyeBox.Checked);
             Config["RealPosition"] = new ConfigValue(realPositionBox.Checked);
             Config["Animation"] = new ConfigValue(displayBox.Checked);
 
             Config["Ruler"] = new ConfigValue(Ruler.Visible);
-            Config["RulerCrosshair"] = new ConfigValue(displayRuleCrossHairItem.Checked);
             Config["RulerLocked"] = new ConfigValue(Ruler.Locked);
 
             Config["Grid"] = new ConfigValue(Grid.Visible);
@@ -760,10 +791,14 @@ namespace ExtractorSharp {
             var lastLayerVisible = Drawer.LastLayer.Visible;
             Drawer.CurrentLayer = new Canvas();
             Drawer.LastLayerVisible = lastLayerVisible;
+            if (Connector.SelectedImage != null) {
+                Drawer.CurrentLayer.Size = Connector.SelectedImage.Size;
+            }
             if (realPositionBox.Checked) {
                 Drawer.CurrentLayer.Location = Connector.SelectedImage.Location.Add(lastPosition);
             }
             Flush(sender, e);
+            Drawer.OnLayerChanged(new LayerEventArgs());
         }
 
         private void Sort(object sender, EventArgs e) {
@@ -820,9 +855,9 @@ namespace ExtractorSharp {
         private void AddOutMerge(object sender, EventArgs e) {
             var dialog = new OpenFileDialog();
             dialog.Multiselect = true;
-            dialog.Filter = $"{Language["ImageSources"]}|*.img;*.gif;*.npk";
+            dialog.Filter = $"{Language["ImageResources"]}|*.img;*.gif;*.spk;*.npk";
             if (dialog.ShowDialog() == DialogResult.OK) {
-                var array = Npks.Load(dialog.FileNames).ToArray();
+                var array = Connector.LoadFile(dialog.FileNames).ToArray();
                 Connector.Do("addMerge", array);
             }
         }
@@ -978,17 +1013,8 @@ namespace ExtractorSharp {
                 }
                 if (dialog.ShowDialog() == DialogResult.OK) {
                     var filename = dialog.FileName;
-                    Album file = null;
-                    if (filename.EndsWith(".gif")) {
-                        var fs = File.Open(filename, FileMode.Open);
-                        var array = Bitmaps.ReadGif(fs);
-                        fs.Close();
-                        file = new Album(array);
-                        file.Path = filename.GetSuffix();
-                    } else {
-                        var list = Npks.Load(dialog.FileName);
-                        file = list.Count > 0 ? list[0] : null;
-                    }
+                    var list = Connector.LoadFile(filename);
+                    var file = list.Count > 0 ? list[0] : null;
                     if (file != null) {
                         Connector.Do("replaceImg", item, file);
                     }
@@ -1133,7 +1159,7 @@ namespace ExtractorSharp {
         /// <param name="e"></param>
         private void AddFile(object sender, EventArgs e) {
             var dialog = new OpenFileDialog();
-            dialog.Filter = $"{Language["ImageSources"]}|*.npk;*.spk;*.img;*.gif;|{Language["SoundResources"]}|*.mp3;*.wav;*.ogg";
+            dialog.Filter = $"{Language["ImageResources"]}|*.npk;*.spk;*.img;*.gif;|{Language["SoundResources"]}|*.mp3;*.wav;*.ogg";
             dialog.Multiselect = true;
             if (dialog.ShowDialog() == DialogResult.OK) {
                 Connector.AddFile(!sender.Equals(addFileItem), dialog.FileNames);
@@ -1196,22 +1222,6 @@ namespace ExtractorSharp {
         private void OnPainting(object sender, PaintEventArgs e) {
             var g = e.Graphics;
             g.InterpolationMode = pixelateBox.Checked ? InterpolationMode.NearestNeighbor : InterpolationMode.High;
-            var entity = Connector.SelectedImage;//获得当前选择的贴图
-            if (entity?.Picture != null) {
-                if (entity.Type == ColorBits.LINK && entity.Target != null) {
-                    entity = entity.Target;
-                }
-                var pictrue = entity.Picture;
-                var size = entity.Size.Star(Drawer.ImageScale);
-                if (linearDodge.Checked) {
-                    pictrue = pictrue.LinearDodge();
-                }
-                if (dyeBox.Checked) {
-                    pictrue = pictrue.Dye(Drawer.Color);
-                }
-                Drawer.CurrentLayer.Size = size;//校正当前图层的宽高
-                Drawer.CurrentLayer.Image = pictrue;//校正贴图
-            }
             Drawer.DrawLayer(g);
         }
 

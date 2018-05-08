@@ -39,11 +39,6 @@ namespace ExtractorSharp.Core {
                 LayerList[1].Location = curPoint;
                 LayerList[1].Name = "CurrentLayer";
                 LayerList[1].Visible = curVisible;
-                OnLayerChanged(new LayerEventArgs() {
-                    Last = LayerList[0],
-                    Current = LayerList[1],
-                    ChangedIndex = 1
-                });
             }
             get {
                 return LayerList[1];

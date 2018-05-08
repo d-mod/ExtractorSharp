@@ -39,7 +39,7 @@ namespace ExtractorSharp {
 
             public void OnRecentChanged(EventArgs e) => RecentChanged?.Invoke(this, e);
 
-            internal MainConnector() {
+            public MainConnector() {
                 SaveChanged += (o, e) => OnSaveChanged();
                 FileConverters.Add("gif", new GifSupport());
                 FileConverters.Add("spk", new SpkSupport());
@@ -172,6 +172,22 @@ namespace ExtractorSharp {
                 } else {
                     ImageListFlush();
                 }
+            }
+
+            public List<Album> LoadFile(params string[] args) {
+                var list = new List<Album>();
+                for (var i = 0; i < args.Length; i++) {
+                    var index = args[i].LastIndexOf(".") + 1;
+                    var suffix = args[i].Substring(index);
+                    var arr = new List<Album>();
+                    if (FileConverters.ContainsKey(suffix)) {
+                        arr = FileConverters[suffix].Decode(args[i]);
+                    } else {
+                        arr = Npks.Load(args[i]);
+                    }
+                    list.AddRange(arr);
+                }
+                return list;
             }
 
             private void AddRecent(params string[] args) {

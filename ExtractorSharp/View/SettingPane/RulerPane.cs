@@ -17,11 +17,13 @@ namespace ExtractorSharp.View.SettingPane {
         }
 
         public override void Initialize() {
-
+            displayCrosshairBox.Checked = Config["RulerCrosshair"].Boolean;
+            displaySpanBox.Checked = Config["RulerSpan"].Boolean;
         }
 
         public override void Save() {
-
+            Config["RulerCrosshair"] = new Config.ConfigValue(displayCrosshairBox.Checked);
+            Config["RulerSpan"] = new Config.ConfigValue(displaySpanBox.Checked);
         }
     }
 }

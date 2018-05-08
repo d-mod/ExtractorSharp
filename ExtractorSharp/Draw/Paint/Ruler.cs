@@ -16,7 +16,7 @@ namespace ExtractorSharp.Draw.Paint {
 
         public Rectangle Rectangle { set; get; }
 
-        public object Tag { set; get; }
+        public object Tag { set; get; } = Point.Empty;
 
         public bool FullCanvas { set; get; }= true;
         public bool Visible { set; get; }
@@ -24,11 +24,15 @@ namespace ExtractorSharp.Draw.Paint {
 
 
         public bool DrawSpan { set; get; } = true;
+        public bool DrawCrosshair { set; get; } = true;
+
         public int SmallSpan { set; get; } = 5;
         public int BigSpan { set; get; } = 200;
         public int Span { set; get; } = 50;
 
         private int rule_radius = 20;
+
+        private Language Language => Language.Default;
 
         public bool Contains(Point point) {
             var rp = Location.Minus(point);
@@ -72,6 +76,10 @@ namespace ExtractorSharp.Draw.Paint {
             }
         }
 
+        private void DrawCrosshairs(Graphics g,int x,int y) {
+            g.DrawEllipse(Pens.WhiteSmoke, x, y, rule_radius * 2, rule_radius * 2);
+        }
+
         public void Draw(Graphics g) {
             var rp = Location;
             var rule_point = (Point)Tag;
@@ -81,13 +89,16 @@ namespace ExtractorSharp.Draw.Paint {
             if (DrawSpan) {
                 DrawSpans(g);
             }
+            if (DrawCrosshair) {
+                DrawCrosshairs(g, x, y);
+            }
             g.DrawLine(Pens.White, new Point(rp.X, 0), new Point(rp.X, Size.Height));
             g.DrawLine(Pens.White, new Point(0, rp.Y), new Point(Size.Width, rp.Y));
-            g.DrawEllipse(Pens.WhiteSmoke, x, y, rule_radius * 2, rule_radius * 2);
         }
 
         public override string ToString() {
-            return $"{Language.Default[Name]},{Language.Default["Position"]}({Location.X},{Location.Y})";
+            var point = (Point)Tag;
+            return $"{Language[Name]},{Language["Position"]}({Location.X},{Location.Y}),{Language["RealativePosition"]},({point.X},{point.Y})";
         }
     }
 }

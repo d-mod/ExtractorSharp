@@ -411,5 +411,45 @@ namespace ExtractorSharp.Core.Lib {
             return arr;
         }
 
+        public static Bitmap Preview(Album[]Array, int index) {
+            var bmp = new Bitmap(130, 180);
+            var g = Graphics.FromImage(bmp);
+            var x = 800;
+            var y = 600;
+            foreach (var al in Array) {
+                if (index < al.List.Count) {
+                    var source = al.List[index];
+                    if (source.Type == ColorBits.LINK) {//如果为链接贴图。则引用指向贴图的属性
+                        source = source.Target;
+                    }
+                    if (source.Compress == Compress.NONE && source.Width * source.Height == 1) {//将透明图层过滤
+                        continue;
+                    }
+                    if (source.X < x) {//获得最左点坐标
+                        x = source.X;
+                    }
+                    if (source.Y < y) {//获得最上点坐标
+                        y = source.Y;
+                    }
+                }
+            }
+            for (var i = 0; i < Array.Length; i++) {
+                var img = Array[i];
+                if (index > img.List.Count - 1) {
+                    continue;
+                }
+                var source = img[index];
+                if (source.Type == ColorBits.LINK) {//如果为链接贴图。则引用指向贴图的属性
+                    source = source.Target;
+                }
+                if (source.Compress == Compress.NONE && source.Width * source.Height == 1) {//将透明图层过滤
+                    continue;
+                }
+                g.DrawImage(source.Picture, source.X - x, source.Y - y);
+            }
+            g.Dispose();
+            return bmp;
+        }
+
     }
 }
