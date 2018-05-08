@@ -3,7 +3,7 @@ ExtractorSharp
 [![Stars](https://img.shields.io/github/stars/Kritsu/ExtractorSharp.svg?style=flat-square)](https://github.com/Kritsu/ExtractorSharp/stargazers)
 [![Fork](https://img.shields.io/github/forks/Kritsu/ExtractorSharp.svg?style=flat-square)](https://github.com/Kritsu/ExtractorSharp/network/members)
 [![Release](https://img.shields.io/github/release/Kritsu/ExtractorSharp.svg?style=flat-square)](https://github.com/Kritsu/ExtractorSharp/releases/latest)
-[![Downloads](https://img.shields.io/github/downloads/Kritsu/ExtractorSharp/latest/total.svg?style=flat-square)](https://github.com/Kritsu/ExtractorSharp/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/Kritsu/ExtractorSharp/total.svg?style=flat-square)](https://github.com/Kritsu/ExtractorSharp/releases/latest)
 [![License](https://img.shields.io/github/license/Kritsu/ExtractorSharp.svg?style=flat-square)](https://github.com/Kritsu/ExtractorSharp/blob/master/LICENSE)
 
 游戏资源编辑器
