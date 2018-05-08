@@ -143,9 +143,9 @@ namespace ExtractorSharp.Core {
         public void RunMerge() {
             var e = new MergeEventArgs();
             var Array = Queues.ToArray().Reverse();//序列反转
-            int count = 0;
+            var count = 0;
             var version = Img_Version.Ver2;
-            foreach (Album al in Array) {
+            foreach (var al in Array) {
                 if (al.List.Count > count) {//获得最大帧数
                     count = al.List.Count;
                 }
@@ -157,7 +157,6 @@ namespace ExtractorSharp.Core {
                 Version = version
             };
             Album.InitHandle(null);
-            Album.Tables = new List<List<Color>>();
             e.Count = count;
             e.Album = Album;
             OnMergeStarted(e);//启动拼合事件

@@ -105,19 +105,20 @@ namespace ExtractorSharp.Data {
 
 
         public Album() {
-            Tables = new List<List<Color>>();
+            Tables = new List<List<Color>> { new List<Color>()};
             Handler = Handler.CreateHandler(Version,this);
         }
 
         public Album(Bitmap[] array) : this() {
             var sprites = new Sprite[array.Length];
             for (var i = 0; i < array.Length; i++) {
-                sprites[i] = new Sprite(this);
-                sprites[i].Index = i;
-                sprites[i].Picture = array[i];
-                sprites[i].Compress = Compress.ZLIB;
-                sprites[i].Size = array[i].Size;
-                sprites[i].Canvas_Size = array[i].Size;
+                sprites[i] = new Sprite(this) {
+                    Index = i,
+                    Picture = array[i],
+                    Compress = Compress.ZLIB,
+                    Size = array[i].Size,
+                    Canvas_Size = array[i].Size
+                };
             }
             List.AddRange(sprites);
             Adjust();
