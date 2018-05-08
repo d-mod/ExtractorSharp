@@ -259,7 +259,6 @@ namespace ExtractorSharp {
             Config.LoadConfig(Resources.Config);
             Config.LoadConfig(Resources.View);
             Config["RootPath"] = new ConfigValue(Application.StartupPath);
-            Config["ResourcePath"] = new ConfigValue($"{Config["GamePath"]}/ImagePacks2");
         }
 
         /// <summary>
@@ -270,7 +269,8 @@ namespace ExtractorSharp {
                 if (Config["GamePath"].Value.Equals(string.Empty) || !Directory.Exists(Config["GamePath"].Value)) {
                     var path = Registry.CurrentUser.OpenSubKey("software\\tencent\\dnf", RegistryKeyPermissionCheck.Default, RegistryRights.ReadKey).GetValue("InstallPath").ToString();
                     Config["GamePath"] = new ConfigValue(path);
-                 }
+                }
+                Config["ResourcePath"] = new ConfigValue($"{Config["GamePath"]}/ImagePacks2");
                 Config.Save();
             } catch (Exception e) {
                 Console.Write(e);
