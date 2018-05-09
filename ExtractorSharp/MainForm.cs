@@ -430,24 +430,9 @@ namespace ExtractorSharp {
                 };
             }
 
-            saveRecentItem.DropDownItems.Clear();
-            //保存文件的最近记录只取NPK后缀名
-            recent = recent.FindAll(r => r.ToUpper().EndsWith(".NPK"));
-            var saveArr = new ToolStripMenuItem[count];
-            count = Math.Min(10, recent.Count);
-            for (var i = 0; i < count; i++) {
-                var re = recent[i];
-                saveArr[i] = _GetRecentItem(re);
-                saveArr[i].Click += (o, ex) => {
-                    Connector.Save(re);
-                    Connector.SavePath = re;
-                };
-            }
-
             openRecentItem.DropDownItems.AddRange(openArr);
             addRecentItem.DropDownItems.AddRange(addArr);
-            saveRecentItem.DropDownItems.AddRange(saveArr);
-            if (recent.Count ==0) {
+            if (recent.Count == 0) {
                 return;
             }
             var clearAdd = new ToolStripMenuItem();
@@ -460,16 +445,33 @@ namespace ExtractorSharp {
             clearOpen.Click += (o, ex) => {
                 Connector.Recent = new List<string>();
             };
+            openRecentItem.DropDownItems.AddSeparator();
+            addRecentItem.DropDownItems.AddSeparator();
+
+            openRecentItem.DropDownItems.Add(clearOpen);
+            addRecentItem.DropDownItems.Add(clearAdd);
+
+            saveRecentItem.DropDownItems.Clear();
+            //保存文件的最近记录只取NPK后缀名
+            recent = recent.FindAll(r => r.ToUpper().EndsWith(".NPK"));
+            count = Math.Min(10, recent.Count);
+            var saveArr = new ToolStripMenuItem[count];
+            for (var i = 0; i < count; i++) {
+                var re = recent[i];
+                saveArr[i] = _GetRecentItem(re);
+                saveArr[i].Click += (o, ex) => {
+                    Connector.Save(re);
+                    Connector.SavePath = re;
+                };
+            }
+            saveRecentItem.DropDownItems.AddRange(saveArr);
+
             var clearSave = new ToolStripMenuItem();
             clearSave.Text = Language["ClearRecent"];
             clearSave.Click += (o, ex) => {
                 Connector.Recent = new List<string>();
             };
-            openRecentItem.DropDownItems.AddSeparator();
-            addRecentItem.DropDownItems.AddSeparator();
             saveRecentItem.DropDownItems.AddSeparator();
-            openRecentItem.DropDownItems.Add(clearOpen);
-            addRecentItem.DropDownItems.Add(clearAdd);
             saveRecentItem.DropDownItems.Add(clearSave);
         }
 
