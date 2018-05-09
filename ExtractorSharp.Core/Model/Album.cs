@@ -149,6 +149,7 @@ namespace ExtractorSharp.Data {
             album = album.Clone();
             Version = album.Version;
             Tables = album.Tables;
+            TableIndex = album.TableIndex;
             Handler = album.Handler;
             Handler.Album = this;
             List.Clear();
@@ -182,6 +183,8 @@ namespace ExtractorSharp.Data {
         public void Hide() {
             var count = List.Count;
             List.Clear();
+            Tables = new List<List<Color>> { new List<Color>() };
+            TableIndex = 0;
             ConvertTo(Img_Version.Ver2);
             NewImage(count, ColorBits.LINK, -1);
         }

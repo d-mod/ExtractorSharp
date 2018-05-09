@@ -406,6 +406,9 @@ namespace ExtractorSharp {
                 if (dyeBox.Checked) {
                     pictrue = pictrue.Dye(Drawer.Color);
                 }
+                var size = entity.Size;
+                size = size.Star(Drawer.ImageScale);
+                Drawer.CurrentLayer.Size = size;
                 Drawer.CurrentLayer.Image = pictrue;//校正贴图
             }
         }
