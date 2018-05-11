@@ -69,7 +69,7 @@ namespace ExtractorSharp.Core.Lib {
             bmp = FromArray(data, bmp.Size);
             return bmp;
         }
-
+   
         /// <summary>
         /// 线性减淡
         /// </summary>
@@ -185,7 +185,7 @@ namespace ExtractorSharp.Core.Lib {
         }
 
         public static Bitmap[] ReadGif(string path) {
-            using (var fs = File.Open(path, FileMode.Open)) {
+            using (var fs = File.OpenRead(path)) {
                 return ReadGif(fs);
             }
         }

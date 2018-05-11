@@ -159,9 +159,7 @@ namespace ExtractorSharp {
                     Directory.CreateDirectory(dir);
                 }
                 var current = $"{dir}/{DateTime.Now.ToString("yyyyMMddHHmmss")}.log";
-                using (var fs = new FileStream(current, FileMode.Create)) {
-                    fs.Write(data);
-                }
+                File.WriteAllBytes(current, data);
                 if ((e.Exception is ProgramException && Connector != null)) {
                     Connector.SendError(e.Exception.Message);
                 } else if (Config["Profile"].Value.Equals("release")) {

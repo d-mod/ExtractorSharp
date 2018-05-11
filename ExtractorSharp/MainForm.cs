@@ -383,13 +383,7 @@ namespace ExtractorSharp {
         }
 
         private void BeforeDraw(object sender, LayerEventArgs e) {
-            Border.Tag = Drawer.CurrentLayer.Rectangle;
 
-            var ruler = Ruler as Ruler;
-            ruler.DrawSpan = Config["RulerSpan"].Boolean;
-            ruler.DrawCrosshair = Config["RulerCrosshair"].Boolean;
-            ruler.Tag = Drawer.CurrentLayer.Location.Minus(Ruler.Location);
-            ruler.Size = box.Size;
 
             Grid.Tag = Config["GridGap"].Integer;
             Grid.Size = box.Size;
@@ -411,6 +405,13 @@ namespace ExtractorSharp {
                 Drawer.CurrentLayer.Size = size;
                 Drawer.CurrentLayer.Image = pictrue;//校正贴图
             }
+            Border.Tag = Drawer.CurrentLayer.Rectangle;
+            var ruler = Ruler as Ruler;
+            ruler.DrawSpan = Config["RulerSpan"].Boolean;
+            ruler.DrawCrosshair = Config["RulerCrosshair"].Boolean;
+            ruler.Tag = Drawer.CurrentLayer.Location.Minus(Ruler.Location);
+            ruler.Size = box.Size;
+
         }
 
         private void RecentChanged(object sender, EventArgs e) {
@@ -529,10 +530,9 @@ namespace ExtractorSharp {
 
         private void RealPosition(object sender, EventArgs e) {
             var currentTag = Drawer.CurrentLayer.Tag as Sprite;
-            if (currentTag != null) {
-                var lastTag = Drawer.LastLayer.Tag as Sprite;
-                var isRelative = realPositionBox.Checked;
-                Drawer.CurrentLayer.Location = isRelative ? currentTag.Location : Point.Empty;
+            var lastTag = Drawer.LastLayer.Tag as Sprite;
+            if (currentTag != null&&!currentTag.Equals(lastTag)) {
+                Drawer.CurrentLayer.Location = realPositionBox.Checked ? currentTag.Location : Point.Empty;
             }
             Flush(sender, e);
         }

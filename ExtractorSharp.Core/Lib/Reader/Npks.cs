@@ -162,8 +162,9 @@ namespace ExtractorSharp.Core.Lib {
                     album.Count = stream.ReadInt();
                     album.InitHandle(stream);
                 } else if (album_flag == IMAGE_FLAG) {
-                    stream.Seek(10);
-                    album.Version = Img_Version.Ver1;
+                    album.Info_Length = stream.ReadInt();
+                    stream.Seek(2);
+                    album.Version = (Img_Version)stream.ReadInt();
                     album.Count = stream.ReadInt();
                     album.InitHandle(stream);
                 } else {
@@ -227,7 +228,7 @@ namespace ExtractorSharp.Core.Lib {
             if (!File.Exists(file)) {
                 return List;
             }
-            using (var stream = File.Open(file, FileMode.Open)) {
+            using (var stream = File.OpenRead(file)) {
                 if (onlyPath) {
                     return ReadInfo(stream);
                 }
@@ -260,7 +261,7 @@ namespace ExtractorSharp.Core.Lib {
         }   
 
         public static void Save(string file, List<Album> list) {
-            using (var fs = new FileStream(file, FileMode.Create)) {
+            using (var fs = File.OpenWrite(file)) {
                 WriteNpk(fs, list);
             }
         }

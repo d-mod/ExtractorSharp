@@ -15,7 +15,7 @@ namespace ExtractorSharp.Handle {
         public override Bitmap ConvertToBitmap(Sprite entity) {
             var data = entity.Data;
             var size = entity.Width * entity.Height;
-            if (entity.Compress == Compress.ZLIB) {
+            if (entity.Type==ColorBits.ARGB_1555&&entity.Compress == Compress.ZLIB) {
                 data = Zlib.Decompress(data, size);
                 var table = Album.CurrentTable;
                 if (table.Count > 0) {
@@ -28,7 +28,7 @@ namespace ExtractorSharp.Handle {
                     }
                 }
             }
-            return Bitmaps.FromArray(data, entity.Size);
+            return base.ConvertToBitmap(entity);
         }
 
         public override byte[] ConvertToByte(Sprite entity) {

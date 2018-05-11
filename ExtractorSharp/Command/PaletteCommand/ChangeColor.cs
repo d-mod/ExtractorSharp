@@ -28,11 +28,11 @@ namespace ExtractorSharp.Command.PaletteCommand {
             Indexes = args[2] as int[];  
             NewColor = (Color)args[3];
             OldColor = new Color[Indexes.Length];
+            var table = Album.Tables[TableIndex];
             for (var i =0;i<Indexes.Length;i++) {
                 var index = Indexes[i];
-                var table = Album.Tables[TableIndex];
                 OldColor[i] = table[index];
-                table[i] = NewColor;
+                table[index] = NewColor;
             }
             Album.Refresh();
         }

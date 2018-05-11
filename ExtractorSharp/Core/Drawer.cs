@@ -27,12 +27,11 @@ namespace ExtractorSharp.Core {
   
         public IPaint CurrentLayer {
             set {
-                var lastPoint = LayerList[0].Location;
                 var lastVisible = LayerList[0].Visible;
                 var curPoint = LayerList[1].Location;
                 var curVisible = LayerList[1].Visible;
                 LayerList[0] = LayerList[1];//图层更新
-                LayerList[0].Location = lastPoint;
+                LayerList[0].Location = curPoint;
                 LayerList[0].Name = "LastLayer";
                 LayerList[0].Visible = lastVisible;
                 LayerList[1] = value;

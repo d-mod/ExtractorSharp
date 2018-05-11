@@ -58,9 +58,14 @@ namespace ExtractorSharp.Handle {
             var ms = new MemoryStream();
             var data = AdjustData();
             if (Album.Version > Img_Version.Other) {
-                var flag = Album.Version == Img_Version.Ver1 ? Npks.IMAGE_FLAG : Npks.IMG_FLAG;
-                ms.WriteString(flag);
-                ms.WriteLong(Album.Info_Length);
+                if (Album.Version == Img_Version.Ver1) {
+                    ms.WriteString(Npks.IMAGE_FLAG);
+                    ms.WriteInt((int)Album.Info_Length);
+                    ms.WriteShort(0);
+                } else {
+                    ms.WriteString(Npks.IMG_FLAG);
+                    ms.WriteLong(Album.Info_Length);
+                }
                 ms.WriteInt((int)Album.Version);
                 ms.WriteInt(Album.Count);
             }
