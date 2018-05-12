@@ -27,7 +27,7 @@ namespace ExtractorSharp {
                 }
                 get => _recent;
             }
-            private string RecentConfigPath => $"{Config["RootPath"].Value}/conf/recent.json";
+            private string RecentConfigPath => $"{Application.StartupPath}/conf/recent.json";
 
             private List<string> _recent = new List<string>();
    
