@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using System.IO;
 
 namespace ExtractorSharp.Support {
-    class GifSupport : IFileConverter {
+    class GifSupport : IFileSupport {
+        public string Pattern => "\\.gif$";
+
         public void Encode(string file, List<Album> album) { }
 
         public List<Album> Decode(string filename) {

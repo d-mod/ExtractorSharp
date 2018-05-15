@@ -29,14 +29,14 @@ namespace ExtractorSharp.View {
         public void ChangePosition(object sender, EventArgs e) {
             var indexes = Connector.CheckedImageIndices;
             var album = Connector.SelectedFile;
-            if (allImageRadio.Checked) {
+            if (allImageCheck.Checked) {
                 indexes = new int[album.List.Count];
                 for (var i = 0; i < album.List.Count; i++) {
                     indexes[i] = i;
                 }
             }
             var ins = new int[] {(int)x_box.Value, (int)y_box.Value, (int)max_width_box.Value, (int)max_height_box.Value };
-            var checkes = new bool[] {x_radio.Checked,y_radio.Checked,max_width_radio.Checked,max_height_radio.Checked,checkbox.Checked};
+            var checkes = new bool[] {x_radio.Checked,y_radio.Checked,max_width_radio.Checked,max_height_radio.Checked,realativePositionCheck.Checked};
             Connector.Do("changePosition", album,indexes,ins,checkes);
             DialogResult = DialogResult.OK;
         }

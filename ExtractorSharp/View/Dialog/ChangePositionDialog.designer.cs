@@ -36,17 +36,14 @@ namespace ExtractorSharp.View{
             this.max_width_radio = new CheckBox();
             this.max_height_radio = new CheckBox();
             this.yesButton = new ESButton();
-            this.checkbox = new CheckBox();
+            this.realativePositionCheck = new CheckBox();
             this.cancelButton = new ESButton();
-            this.group = new GroupBox();
             this.propertiesGroup = new GroupBox();
-            this.allImageRadio = new RadioButton();
-            this.checkImageRadio = new RadioButton();
+            this.allImageCheck = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.x_box)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.y_box)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.max_width_box)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.max_height_box)).BeginInit();
-            this.group.SuspendLayout();
             this.SuspendLayout();
             // 
             // x_box
@@ -169,13 +166,13 @@ namespace ExtractorSharp.View{
             // 
             // checkbox
             // 
-            this.checkbox.AutoSize = true;
-            this.checkbox.Location = new System.Drawing.Point(400, 200);
-            this.checkbox.Name = "checkbox";
-            this.checkbox.Size = new System.Drawing.Size(72, 16);
-            this.checkbox.TabIndex = 9;
-            this.checkbox.Text = Language["RealativePosition"];
-            this.checkbox.UseVisualStyleBackColor = true;
+            this.realativePositionCheck.AutoSize = true;
+            this.realativePositionCheck.Location = new System.Drawing.Point(140, 200);
+            this.realativePositionCheck.Name = "checkbox";
+            this.realativePositionCheck.Size = new System.Drawing.Size(72, 16);
+            this.realativePositionCheck.TabIndex = 9;
+            this.realativePositionCheck.Text = Language["RealativePosition"];
+            this.realativePositionCheck.UseVisualStyleBackColor = true;
             // 
             // cancelButton
             // 
@@ -187,38 +184,15 @@ namespace ExtractorSharp.View{
             this.cancelButton.Text = Language["Cancel"];
             this.cancelButton.UseVisualStyleBackColor = true;
             // 
-            // groupBox1
-            // 
-            this.group.Controls.Add(this.allImageRadio);
-            this.group.Controls.Add(this.checkImageRadio);
-            this.group.Location = new System.Drawing.Point(45, 185);
-            this.group.Name = "groupBox1";
-            this.group.Size = new System.Drawing.Size(325, 50);
-            this.group.TabIndex = 11;
-            this.group.TabStop = false;
-            this.group.Text = Language["HandleObject"];
-            // 
             // allImageRadio
             // 
-            this.allImageRadio.AutoSize = true;
-            this.allImageRadio.Location = new System.Drawing.Point(175, 20);
-            this.allImageRadio.Name = "allImageRadio";
-            this.allImageRadio.Size = new System.Drawing.Size(71, 16);
-            this.allImageRadio.TabIndex = 1;
-            this.allImageRadio.Text = Language["AllImage"];
-            this.allImageRadio.UseVisualStyleBackColor = true;
-            // 
-            // checkImageRadio
-            // 
-            this.checkImageRadio.AutoSize = true;
-            this.checkImageRadio.Checked = true;
-            this.checkImageRadio.Location = new System.Drawing.Point(26, 20);
-            this.checkImageRadio.Name = "checkImageRadio";
-            this.checkImageRadio.Size = new System.Drawing.Size(71, 16);
-            this.checkImageRadio.TabIndex = 0;
-            this.checkImageRadio.TabStop = true;
-            this.checkImageRadio.Text = Language["CheckImage"];
-            this.checkImageRadio.UseVisualStyleBackColor = true;
+            this.allImageCheck.AutoSize = true;
+            this.allImageCheck.Size = new System.Drawing.Size(72, 16);
+            this.allImageCheck.Location = new System.Drawing.Point(35, 200);
+            this.allImageCheck.TabIndex = 1;
+            this.allImageCheck.Text = Language["AllImage"];
+            this.allImageCheck.UseVisualStyleBackColor = true;
+
             // 
             // ChangePositonDialog
             // 
@@ -226,9 +200,9 @@ namespace ExtractorSharp.View{
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(550, 330);
-            this.Controls.Add(this.group);
             this.Controls.Add(this.cancelButton);
-            this.Controls.Add(this.checkbox);
+            this.Controls.Add(this.allImageCheck);
+            this.Controls.Add(this.realativePositionCheck);
             this.Controls.Add(this.yesButton);
             this.Controls.Add(this.propertiesGroup);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -238,8 +212,6 @@ namespace ExtractorSharp.View{
             ((System.ComponentModel.ISupportInitialize)(this.y_box)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.max_width_box)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.max_height_box)).EndInit();
-            this.group.ResumeLayout(false);
-            this.group.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -255,11 +227,9 @@ namespace ExtractorSharp.View{
         private CheckBox max_width_radio;
         private CheckBox max_height_radio;
         private Button yesButton;
-        private CheckBox checkbox;
+        private CheckBox realativePositionCheck;
         private Button cancelButton;
-        private GroupBox group;
         private GroupBox propertiesGroup;
-        private RadioButton checkImageRadio;
-        private RadioButton allImageRadio;
+        private CheckBox allImageCheck;
     }
 }

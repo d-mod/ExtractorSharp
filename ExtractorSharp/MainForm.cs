@@ -63,22 +63,22 @@ namespace ExtractorSharp {
             AddBrush();
             AddPaint();
             AddConfig();
-            AddSpriteConverter();
+            AddEffect();
             LayerFlush();
         }
         
 
-        private void AddSpriteConverter() {
-            AddSpriteConverter(new UnCanvasEffect());
-            AddSpriteConverter(new LinearDodgeEffect(Config));
-            AddSpriteConverter(new DyeEffect(Config));
-            AddSpriteConverter(new RealPositionEffect(Config));
+        private void AddEffect() {
+            AddEffect(new UnCanvasEffect());
+            AddEffect(new LinearDodgeEffect(Config));
+            AddEffect(new DyeEffect(Config));
+            AddEffect(new RealPositionEffect(Config));
         }
 
-        private void AddSpriteConverter(IEffect converter) {
-            Connector.SpriteEffects.Add(converter);
-            converter.Enable = Config[$"{converter.Name}SpriteEffect"].Boolean;
-            converter.Index = Config[$"{converter.Name}SpriteEffectIndex"].Integer;
+        private void AddEffect(IEffect effect) {
+            Connector.Effects.Add(effect);
+            effect.Enable = Config[$"{effect.Name}SpriteEffect"].Boolean;
+            effect.Index = Config[$"{effect.Name}SpriteEffectIndex"].Integer;
         }
 
         private void AddConfig() {
@@ -249,7 +249,6 @@ namespace ExtractorSharp {
             box.MouseWheel += OnMouseWheel;
             saveImageItem.Click += SaveImage;
             saveSingleImageItem.Click += SaveSingleImage;
-            saveAllImageItem.Click += SaveAllImage;
             saveGifItem.Click += SaveGif;
             replaceImageItem.Click += ReplaceImage;
             hideCheckImageItem.Click += (o, e) => Connector.Do("hideImage", Connector.SelectedFile, Connector.CheckedImageIndices);
@@ -1313,13 +1312,6 @@ namespace ExtractorSharp {
             }
         }
 
-        private void SaveAllImage(object sender, EventArgs e) {
-            var album = Connector.SelectedFile;
-            if (album == null || album.List.Count < 1) {
-                return;
-            }
-            Viewer.Show("saveImage", new { allImage = true });
-        }
 
 
         /// <summary>

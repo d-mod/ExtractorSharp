@@ -33,8 +33,11 @@ namespace ExtractorSharp.Composition {
         [ImportMany(typeof(ESDialog))]
         private IEnumerable<Lazy<ESDialog, IGuid>> dialogs;
 
-        [ImportMany(typeof(ESDialog))]
+        [ImportMany(typeof(Handler))]
         private IEnumerable<Lazy<Handler, IGuid>> handlers;
+
+        [ImportMany(typeof(IFileSupport))]
+        private IEnumerable<Lazy<IFileSupport, IGuid>> supports;
 
         public string Directory { set; get; }
 
@@ -53,6 +56,8 @@ namespace ExtractorSharp.Composition {
 
         private Controller Controller=>Program.Controller;
 
+        private IConnector Connector => Program.Connector;
+
         private MainForm MainForm => Program.Form;
 
         private Viewer Viewer => Program.Viewer;
@@ -64,6 +69,7 @@ namespace ExtractorSharp.Composition {
             InstallCommand();
             InstallItem();
             InstallDialog();
+            InstallSupport();
         }
 
         private void InstallCommand() {
@@ -72,6 +78,17 @@ namespace ExtractorSharp.Composition {
                     if (guid == this.Guid) {
                         var cmd = lazy.Value;
                         Controller.Registry(cmd.Name,cmd.GetType());
+                    }
+                }
+            }
+        }
+
+        private void InstallSupport() {
+            foreach (var lazy in supports) {
+                if (Guid.TryParse(lazy.Metadata.Guid, out Guid guid)) {
+                    if (guid == this.Guid) {
+                        var support= lazy.Value;
+                        Connector.FileSupports.Add(support);
                     }
                 }
             }

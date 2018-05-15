@@ -76,7 +76,7 @@ namespace ExtractorSharp.View {
 
             this.allImagesCheck.AutoSize = true;
             this.allImagesCheck.Location = new System.Drawing.Point(100, 185);
-            this.allImagesCheck.Text = Language["SaveAllImage"];
+            this.allImagesCheck.Text = Language["AllImage"];
 
 
             nameLabel.Location = new System.Drawing.Point(100,140);

@@ -12,6 +12,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -19,7 +20,7 @@ namespace ExtractorSharp {
     partial class MainForm {
         private class MainConnector : IConnector {
             internal MainForm MainForm { get; set; }
-            internal Dictionary<string, IFileConverter> FileConverters { get; } = new Dictionary<string, IFileConverter>();
+            public List<IFileSupport> FileSupports { get; } = new List<IFileSupport>();
             public List<string> Recent {
                 set {
                     this._recent = value;
@@ -27,7 +28,6 @@ namespace ExtractorSharp {
                 }
                 get => _recent;
             }
-            private string RecentConfigPath => $"{Application.StartupPath}/conf/recent.json";
 
             private List<string> _recent = new List<string>();
    
@@ -41,14 +41,14 @@ namespace ExtractorSharp {
 
             public MainConnector() {
                 SaveChanged += (o, e) => OnSaveChanged();
-                FileConverters.Add("gif", new GifSupport());
-                FileConverters.Add("spk", new SpkSupport());
+                FileSupports.Add(new GifSupport());
                 var builder = new LSBuilder();
-                if (File.Exists(RecentConfigPath)) {
-                    Recent = builder.Read(RecentConfigPath).GetValue(typeof(List<string>)) as List<string>;
+                var recentConfigPath = $"{Config["RootPath"]}/conf/recent.json";
+                if (File.Exists(recentConfigPath)) {
+                    Recent = builder.Read(recentConfigPath).GetValue(typeof(List<string>)) as List<string>;
                 }
                 RecentChanged += (o,e)=> {
-                    builder.WriteObject(Recent, RecentConfigPath);
+                    builder.WriteObject(Recent, recentConfigPath);
                 };
             }
 
@@ -107,12 +107,12 @@ namespace ExtractorSharp {
 
             public SpriteEffect OnSpriteSaving { set; get; }
 
-            public List<IEffect> SpriteEffects { get; } = new List<IEffect>();
+            public List<IEffect> Effects { get; } = new List<IEffect>();
 
-            public SpriteEffect SpirteConverter {
+            public SpriteEffect Effect {
                 get {
                     SpriteEffect result = null;
-                    var arr = SpriteEffects.ToList();
+                    var arr = Effects.ToList();
                     arr.Sort((a, b) => a.Index - b.Index);
                     foreach (var converter in arr) {
                         if (converter.Enable) {
@@ -155,18 +155,7 @@ namespace ExtractorSharp {
                     return;
                 }
                 AddRecent(args);
-                var list = new List<Album>();
-                for(var i = 0; i < args.Length; i++) {
-                    var index = args[i].LastIndexOf(".") + 1;
-                    var suffix = args[i].Substring(index);
-                    var arr = new List<Album>();
-                    if (FileConverters.ContainsKey(suffix)) {
-                        arr = FileConverters[suffix].Decode(args[i]);
-                    } else {
-                        arr = Npks.Load(args[i]);
-                    }
-                    list.AddRange(arr);
-                }
+                var list = LoadFile(args);
                 if (list.Count > 0) {
                     Do("addImg", list.ToArray(), clear);
                 } else {
@@ -177,11 +166,10 @@ namespace ExtractorSharp {
             public List<Album> LoadFile(params string[] args) {
                 var list = new List<Album>();
                 for (var i = 0; i < args.Length; i++) {
-                    var index = args[i].LastIndexOf(".") + 1;
-                    var suffix = args[i].Substring(index);
+                    var support = FileSupports.Find(e => new Regex(e.Pattern).IsMatch(args[i].ToLower()));
                     var arr = new List<Album>();
-                    if (FileConverters.ContainsKey(suffix)) {
-                        arr = FileConverters[suffix].Decode(args[i]);
+                    if (support != null) {
+                        arr = support.Decode(args[i]);
                     } else {
                         arr = Npks.Load(args[i]);
                     }

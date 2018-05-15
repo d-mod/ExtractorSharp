@@ -214,7 +214,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Support\GifSupport.cs" />
-    <Compile Include="Support\SpkSupport.cs" />
     <Compile Include="View\Dialog\AboutDialog.cs">
       <SubType>Form</SubType>
     </Compile>

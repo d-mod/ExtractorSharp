@@ -76,7 +76,6 @@ namespace ExtractorSharp {
             linkImageItem = new ToolStripMenuItem();
             newImageItem = new ToolStripMenuItem();
             saveSingleImageItem = new ToolStripMenuItem();
-            saveAllImageItem = new ToolStripMenuItem();
 
             openItem = new ToolStripMenuItem();
             openFileItem = new ToolStripMenuItem();
@@ -287,7 +286,6 @@ namespace ExtractorSharp {
             imageListMenu.Items.AddSeparator();
             imageListMenu.Items.Add(saveImageItem);
             imageListMenu.Items.Add(saveSingleImageItem);
-            imageListMenu.Items.Add(saveAllImageItem);
             imageListMenu.Items.Add(saveGifItem);
             imageListMenu.Items.AddSeparator();
             imageListMenu.Items.Add(hideCheckImageItem);
@@ -324,9 +322,7 @@ namespace ExtractorSharp {
 
             saveSingleImageItem.Text = Language["SaveAs"];
             saveSingleImageItem.Image = Resources.saveAs;
-
-            saveAllImageItem.Text = Language["SaveAllImage"];
-
+           
             saveGifItem.Text = Language["SaveGif"];
 
             saveGifItem.Image = Resources.gif;
@@ -783,7 +779,6 @@ namespace ExtractorSharp {
 
         private ToolStripMenuItem saveImageItem;    //提取贴图到文件夹
         private ToolStripMenuItem saveSingleImageItem;   //提取贴图
-        private ToolStripMenuItem saveAllImageItem; //提取所有贴图
         private ToolStripMenuItem saveGifItem;      //保存为gif
         private ToolStripMenuItem changePositionItem;//修改坐标
         private ToolStripMenuItem changeSizeItem;    //修改大小

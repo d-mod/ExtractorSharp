@@ -36,7 +36,7 @@ namespace ExtractorSharp.View.SettingPane {
             var i = 0;
             converterList = new List<CheckBox>();
             converterGroup.Controls.Clear();
-            foreach (var converter in Connector.SpriteEffects) {
+            foreach (var converter in Connector.Effects) {
                 var checkbox = new CheckBox();
                 checkbox.Text = Language[converter.Name];
                 checkbox.Tag = converter;

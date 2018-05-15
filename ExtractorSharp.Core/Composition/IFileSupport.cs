@@ -11,7 +11,9 @@ namespace ExtractorSharp.Composition {
    /// 文件转换器
    /// 将其他格式的文件转为IMG格式
    /// </summary>
-    public interface IFileConverter{
+    public interface IFileSupport{
+
+        string Pattern { get; }
 
         List<Album> Decode(string filename);
 

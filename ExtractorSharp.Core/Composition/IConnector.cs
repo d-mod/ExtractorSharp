@@ -118,17 +118,15 @@ namespace ExtractorSharp.Core {
 
         void OnSaveChanged();
 
-        void OnRecentChanged(EventArgs e);
-
-
-
         event FileChangeEventHandler SaveChanged;
 
         event FileChangeEventHandler RecentChanged;
 
-        List<IEffect> SpriteEffects { get; }
+        List<IEffect> Effects { get; }
 
-        SpriteEffect SpirteConverter { get; }
+        SpriteEffect Effect { get; }
+
+        List<IFileSupport> FileSupports { get; }
     }
 
 

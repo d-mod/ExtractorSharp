@@ -2,13 +2,8 @@
 using System.Windows.Forms;
 using ExtractorSharp.Component;
 using ExtractorSharp.Config;
-using ExtractorSharp.Data;
 using ExtractorSharp.Core;
 using System.Text.RegularExpressions;
-using System.Drawing;
-using ExtractorSharp.Core.Lib;
-using ExtractorSharp.Composition;
-using System.Collections.Generic;
 
 namespace ExtractorSharp.View {
     public partial class SaveImageDialog : ESDialog {
@@ -54,7 +49,7 @@ namespace ExtractorSharp.View {
                 prefix = prefix.Remove(match.Index, match.Length);
                 digit = value.Length;
             }
-            Connector.Do("saveImage", file, 1, indices, pathBox.Text, prefix, incre, digit,fullPathCheck.Checked,Connector.SpirteConverter);
+            Connector.Do("saveImage", file, 1, indices, pathBox.Text, prefix, incre, digit,fullPathCheck.Checked,Connector.Effect);
             return DialogResult.OK;
         }
 

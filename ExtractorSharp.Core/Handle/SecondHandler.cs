@@ -91,9 +91,10 @@ namespace ExtractorSharp.Handle {
                 image.Canvas_Width = stream.ReadInt();
                 image.Canvas_Height = stream.ReadInt();
             }
+            stream.Seek(pos - stream.Position);
             if (stream.Position < pos) {
-                Album.List.Clear();
-                return;
+              //  Album.List.Clear();
+              //  return;
             }
             foreach (var image in Album.List.ToArray()) {
                 if (image.Type == ColorBits.LINK) {
@@ -103,7 +104,7 @@ namespace ExtractorSharp.Handle {
                         image.Canvas_Size = image.Target.Canvas_Size;
                         image.Location = image.Target.Location;
                     } else {
-                        Album.List.Clear();
+                   //     Album.List.Clear();
                         return;
                     }
                     continue;
