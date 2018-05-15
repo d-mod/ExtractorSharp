@@ -22,8 +22,8 @@ namespace ExtractorSharp.Handle {
                         }
                         data = os.ToArray();
                     }
+                    return Bitmaps.FromArray(data, entity.Size);
                 }
-                return Bitmaps.FromArray(data, entity.Size);
             }
             return base.ConvertToBitmap(entity);
         }
