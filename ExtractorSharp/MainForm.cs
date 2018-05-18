@@ -528,11 +528,8 @@ namespace ExtractorSharp {
         }
 
         private void RealPosition(object sender, EventArgs e) {
-            var currentTag = Drawer.CurrentLayer.Tag as Sprite;
-            var lastTag = Drawer.LastLayer.Tag as Sprite;
-            if (currentTag != null&&!currentTag.Equals(lastTag)) {
-                Drawer.CurrentLayer.Location = realPositionBox.Checked ? currentTag.Location : Point.Empty;
-            }
+            Drawer.CurrentLayer.RealPosition = realPositionBox.Checked;
+            Drawer.LastLayer.RealPosition = realPositionBox.Checked;
             Flush(sender, e);
         }
 
@@ -789,18 +786,14 @@ namespace ExtractorSharp {
         }
 
         private void SelectImageChanged(object sender, EventArgs e) {
-            var lastSprite = Drawer.CurrentLayer.Tag as Sprite;
-            var lastSpritePosition = lastSprite != null ? lastSprite.Location : Point.Empty;
-            var lastPosition = Drawer.CurrentLayer.Location.Minus(lastSpritePosition);
+            var lastPosition = Drawer.CurrentLayer.Location;
             var lastLayerVisible = Drawer.LastLayer.Visible;
             Drawer.CurrentLayer = new Canvas();
             Drawer.LastLayerVisible = lastLayerVisible;
             if (Connector.SelectedImage != null) {
                 Drawer.CurrentLayer.Size = Connector.SelectedImage.Size;
             }
-            if (realPositionBox.Checked) {
-                Drawer.CurrentLayer.Location = Connector.SelectedImage.Location.Add(lastPosition);
-            }
+            Drawer.CurrentLayer.Location = lastPosition;
             Flush(sender, e);
             Drawer.OnLayerChanged(new LayerEventArgs());
         }

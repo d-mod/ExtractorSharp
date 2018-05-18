@@ -25,31 +25,38 @@ namespace ExtractorSharp.Core {
         public decimal ImageScale { set; get; }
 
   
-        public IPaint CurrentLayer {
+        public Canvas CurrentLayer {
             set {
-                var lastVisible = LayerList[0].Visible;
-                var curPoint = LayerList[1].Location;
-                var curVisible = LayerList[1].Visible;
+
+                var lastVisible = LastLayer.Visible;
+                var lastRealPosition = LastLayer.RealPosition;
+
+                var curPoint = CurrentLayer.Location;
+                var curVisible = CurrentLayer.Visible;
+                var curRealPosition = CurrentLayer.RealPosition;
+
                 LayerList[0] = LayerList[1];//图层更新
                 LayerList[0].Location = curPoint;
                 LayerList[0].Name = "LastLayer";
                 LayerList[0].Visible = lastVisible;
+                (LayerList[0] as Canvas).RealPosition = lastRealPosition;
                 LayerList[1] = value;
                 LayerList[1].Location = curPoint;
                 LayerList[1].Name = "CurrentLayer";
                 LayerList[1].Visible = curVisible;
+                (LayerList[1] as Canvas).RealPosition = curRealPosition;
             }
             get {
-                return LayerList[1];
+                return LayerList[1] as Canvas;
             }
         }
 
-        public IPaint LastLayer {
+        public Canvas LastLayer {
             set {
                 LayerList[0] = value;
             }
             get {
-                return LayerList[0];
+                return LayerList[0] as Canvas;
             }
         }
 
