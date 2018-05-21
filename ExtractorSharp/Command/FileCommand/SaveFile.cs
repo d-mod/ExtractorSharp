@@ -8,7 +8,7 @@ using System.IO;
 using ExtractorSharp.Core.Lib;
 
 namespace ExtractorSharp.Command.FileCommand {
-    class SaveFile : IMutipleAciton {
+    class SaveFile : IMutipleAciton,ICommandMessage{
         public string Name => "SaveFile";
 
         public bool CanUndo => false;

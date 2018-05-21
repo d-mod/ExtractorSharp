@@ -340,6 +340,26 @@ namespace ExtractorSharp.Core.Lib {
             return list;
         }
 
+
+        public static List<Album> FindByCode(IEnumerable<Album> array, string code) {
+            var list = new List<Album>(array.Where(item => {
+                var regex = new Regex("\\d+");
+                var match = regex.Match(item.Name);
+                return match.Success && match.Value.Equals(code);
+            }));
+            if (list.Count == 0) {
+                list.AddRange(array.Where(item => MatchCode(item.Name, code)));
+            }
+            return list;
+        }
+
+
+        public static List<Album> FindByCode(IEnumerable<Album> array,int codeNumber) {
+            var code = CompleteCode(codeNumber);
+            return FindByCode(array, code);
+        }
+
+
         /// <summary>
         /// v6 匹配规则
         /// </summary>

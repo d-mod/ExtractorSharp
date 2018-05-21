@@ -34,8 +34,8 @@ namespace ExtractorSharp.Handle {
         }
 
         public override byte[] ConvertToByte(Sprite entity) {
-            if (entity.Compress == Compress.ZLIB && entity.Type < ColorBits.LINK) {
-                return entity.Picture.ToArray(entity.Type);
+            if (entity.Compress < Compress.DDS_ZLIB && entity.Type < ColorBits.LINK) {
+                return base.ConvertToByte(entity);
             } else {
                 var dds = DDS.CreateFromBitmap(entity.Picture, entity.Type -4);
                 Map[entity] = new DDS_Info() {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using ExtractorSharp.Core.Lib;
@@ -69,7 +70,7 @@ namespace ExtractorSharp.Data {
         /// <summary>
         /// 色表
         /// </summary>
-        public List<List<Color>> Tables { set; get; }
+        public List<List<Color>> Tables { set; get; } = new List<List<Color>> { new List<Color>() };
 
         /// <summary>
         /// 色表索引
@@ -78,7 +79,7 @@ namespace ExtractorSharp.Data {
             set {
                 if (_tabindex != value) {
                     Refresh();
-                    _tabindex = value;
+                    _tabindex = Math.Min(value,Tables.Count-1);
                 }
             }
             get {
@@ -104,8 +105,7 @@ namespace ExtractorSharp.Data {
         }
 
 
-        public Album() {
-            Tables = new List<List<Color>> { new List<Color>()};
+        public Album() {         
             Handler = Handler.CreateHandler(Version,this);
         }
 

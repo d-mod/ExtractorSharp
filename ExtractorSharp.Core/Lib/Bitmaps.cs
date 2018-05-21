@@ -49,6 +49,16 @@ namespace ExtractorSharp.Core.Lib {
             return image;
         }
 
+        public static Bitmap UnCanvas(this Bitmap bmp) {
+            var rct = bmp.Scan();
+            var image = new Bitmap(rct.Width, rct.Height);
+            var g = Graphics.FromImage(image);
+            var empty = new Rectangle(Point.Empty, rct.Size);
+            g.DrawImage(bmp, empty, rct, GraphicsUnit.Pixel);
+            g.Dispose();
+            return image;
+        }
+
 
         /// <summary>
         /// 线性减淡

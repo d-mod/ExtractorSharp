@@ -387,6 +387,7 @@ namespace ExtractorSharp {
             Grid.Tag = Config["GridGap"].Integer;
             Grid.Size = box.Size;
             var entity = Connector.SelectedImage;
+            entity = entity!=null&&entity.Type == ColorBits.LINK ? entity.Target : entity;
             Drawer.CurrentLayer.Tag = entity;
             if (entity?.Picture != null) {
                 if (entity.Type == ColorBits.LINK && entity.Target != null) {
@@ -687,7 +688,12 @@ namespace ExtractorSharp {
             var index = Connector.SelectedImageIndex;
             var item = Connector.SelectedFile;
             if (index > -1 && item != null) {
-                Connector.Do("changePosition", item, new int[] { index }, new int[] { Drawer.CurrentLayer.Location.X, Drawer.CurrentLayer.Location.Y, 0, 0 }, new bool[] { true, true, false, false, false });
+                var location = Drawer.CurrentLayer.Rectangle.Location;
+                if (realPositionBox.Checked) {
+                    location = location.Minus(item[index].Location);
+                }
+                Drawer.CurrentLayer.Location = Point.Empty;
+                Connector.Do("changePosition", item, new int[] { index }, new int[] { location.X, location.Y, 0, 0 }, new bool[] { true, true, false, false, true });
             }
         }
 

@@ -21,9 +21,13 @@ namespace ExtractorSharp.Command.ImageCommand {
             old_Locations = new Point[Indices.Length];
             old_Max_Sizes = new Size[Indices.Length];
             for (var i = 0; i < Indices.Length; i++) {
-                if (Indices[i] > Album.List.Count - 1 || Indices[i] < 0)
+                if (Indices[i] > Album.List.Count - 1 || Indices[i] < 0) {
                     continue;
+                }
                 var entity = Album.List[Indices[i]];
+                if (entity.Type == ColorBits.LINK) {
+                    continue;
+                }
                 old_Locations[i] = entity.Location;
                 old_Max_Sizes[i] = entity.Canvas_Size;
                 if (Checkes[0]) {

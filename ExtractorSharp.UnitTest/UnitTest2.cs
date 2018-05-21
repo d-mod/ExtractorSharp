@@ -7,6 +7,7 @@ using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Data;
 using ExtractorSharp.Handle;
 using ExtractorSharp.Json;
+using ExtractorSharp.UnitTest.Properties;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ExtractorSharp.UnitTest {
@@ -36,7 +37,8 @@ namespace ExtractorSharp.UnitTest {
                 {"priest_at",0 },
                 {"thief",10 },
                 {"knight",0 },
-                {"demoniclancer",0 }
+                {"demoniclancer",0 },
+                {"gunblader",0 }
             };
             p2 = new Dictionary<string, string>() {
                 {"swordman","sm"},
@@ -53,6 +55,9 @@ namespace ExtractorSharp.UnitTest {
                 {"knight","kn" },
                 {"demoniclancer","dl"}
             };
+            var builder = new LSBuilder();
+            var obj = builder.ReadJson(Resources.queues);
+            obj["Rules"].GetValue(ref sorts);
         }
         public string[] part_array = { "cap", "coat", "belt", "neck", "hair", "face", "skin", "pants", "shoes" };
 
@@ -76,6 +81,38 @@ namespace ExtractorSharp.UnitTest {
                     }
                 }
             }
+        }
+
+
+        [TestMethod]
+        public void TestMethod3() {
+            var dir = @"D:\avatar_ex\image";
+            var prof = "gunblader";
+                foreach (var part in part_array) {
+                    var file = $@"{dir}\{prof}\{part}.NPK";                 
+
+                    var path = $"d:/avatar_ex/new_image/{prof}/{part}";
+                    if (!Directory.Exists(path)) {
+                        Directory.CreateDirectory(path);
+                    }
+                    var list = Npks.Load(file);
+
+
+                    foreach (var img in list) {
+                        var tables = img.Tables;
+                        var match = Regex.Match(img.Name, "\\d+");
+                        if (match.Success) {
+                            var code = int.Parse(match.Value);
+                            for (var i = 0; i < tables.Count; i++) {
+                                img.TableIndex = i;
+                                var image = img[pairs[prof]];
+                                ImageToJson(path, prof, part, img.Name, Npks.CompleteCode(code + i), image);
+                            }
+                        }
+                    }
+                }
+            
+
         }
 
         [TestMethod]
@@ -114,7 +151,8 @@ namespace ExtractorSharp.UnitTest {
                 }
             }
         }
-            
+
+
             
             private IEnumerable<Album> FindImg(List<Album> list, int code, string part) {
                 foreach (var album in list) {//二次过滤

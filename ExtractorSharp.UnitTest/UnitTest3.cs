@@ -22,13 +22,13 @@ namespace ExtractorSharp.UnitTest {
         }
 
         public string[] part_array = {"cap","coat","belt","neck","hair","face","skin","pants","shoes" };
-        public const string API_HOST = "http://193.112.3.202:8080/";
+        public const string API_HOST = "http://193.112.3.202/api";
         public const string GAME_DIR = "D:/地下城与勇士";
         public const string SAVE_DIR = "D:/avatar_ex";
 
         private List<string> GetProfession() {
             LSBuilder builder = new LSBuilder();
-            var obj = builder.Get($"{API_HOST}/api/dressing/profession/list");
+            var obj = builder.Get($"{API_HOST}/profession/list");
             List<Profession> list = new List<Profession>();
             obj.GetValue(ref list);
             return list.ConvertAll(profesion => profesion.Name);
@@ -36,7 +36,7 @@ namespace ExtractorSharp.UnitTest {
 
         private List<string> GetAvatar(string profession, string part) {
             LSBuilder builder = new LSBuilder();
-            var obj = builder.Get($"{API_HOST}/api/dressing/avatar/list/{profession}/{part}");
+            var obj = builder.Get($"{API_HOST}/avatar/list/{profession}/{part}");
             List<Avatar> list = new List<Avatar>();
             obj.GetValue(ref list);
             return list.ConvertAll(avatar => avatar.Code);
@@ -45,7 +45,6 @@ namespace ExtractorSharp.UnitTest {
         [TestMethod]
         public void Test01() {
             var prof_list = GetProfession();
-
             foreach (var prof in prof_list) {
                 var dir = $"{SAVE_DIR}/image/{prof}";
                 if (Directory.Exists(dir)) {
@@ -69,9 +68,14 @@ namespace ExtractorSharp.UnitTest {
                         }
                         return false;
                     }).ToList();
-                    Npks.Save($"{dir}/{part}.NPK", list);
+                    var target = $"{dir}/{part}/";
+                    if (!Directory.Exists(target)) {
+                        Directory.CreateDirectory(target);
+                    }
+                    Npks.SaveToDirectory($"{dir}/{part}/", list);
                 }
             }
+
         }
 
 
