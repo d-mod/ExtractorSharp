@@ -51,4 +51,10 @@ ExtractorSharp
  **ExtractorSharp自带了一个英文的语言文件。请打开设置(Setting)-语言(Language)切换**
 
 许可(License)
-+ [MIT LICENSE](https://github.com/Kritsu/ExtractorSharp/blob/master/LICENSE)
+---
++ [ExtractorSharp MIT LICENSE](https://github.com/Kritsu/ExtractorSharp/blob/master/LICENSE)
++ [Bass LiCENSE](https://github.com/Kritsu/ExtractorSharp/blob/master/Licenses/bass-license.txt)
++ [Zlib LiCENSE](https://github.com/Kritsu/ExtractorSharp/blob/master/Licenses/zlib-license.txt)
++ [Zlib LiCENSE](https://github.com/Kritsu/ExtractorSharp/blob/master/Licenses/SharpZipLib-license.txt)
+
+
