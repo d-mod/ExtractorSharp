@@ -155,6 +155,10 @@ namespace ExtractorSharp.Data {
             Picture = bmp;
             Target = null;
             Type = type == ColorBits.UNKOWN ? Type : type;
+            if (type == ColorBits.UNKOWN) {
+                type = Type == ColorBits.LINK ? ColorBits.ARGB_1555 : Type;
+            }
+            Type = type;
             if (isAdjust) {
                 X += bmp.Width - Size.Width;
                 Y += bmp.Height - Size.Height;

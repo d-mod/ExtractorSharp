@@ -14,7 +14,7 @@ namespace ExtractorSharp.Data {
         public int Size { set; get; }
         public int DDS_Size { set; get; }
         public byte[] Data { set; get; }
-        public DDS_Version Version {set; get;} = DDS_Version.DXT1;
+        public DDS_Version Version { set; get; } = DDS_Version.DXT1;
         public ColorBits Type { set; get; } = ColorBits.DXT_1;
         public Bitmap Pictrue {
             get {
@@ -35,8 +35,8 @@ namespace ExtractorSharp.Data {
 
         private Bitmap image;
 
-        public static DDS CreateFromBitmap(Bitmap bmp,ColorBits type) {
-            var data= bmp.ToArray(type);
+        public static DDS CreateFromBitmap(Bitmap bmp, ColorBits type) {
+            var data = bmp.ToArray(type);
             var dds_size = data.Length;
             var width = bmp.Width;
             var height = bmp.Height;

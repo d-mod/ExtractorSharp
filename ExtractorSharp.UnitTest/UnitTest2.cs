@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -33,7 +34,7 @@ namespace ExtractorSharp.UnitTest {
                 {"gunner_at",8},
                 {"mage",10 },
                 {"mage_at",8 },
-                {"priest",0 },
+                {"priest",150 },
                 {"priest_at",0 },
                 {"thief",10 },
                 {"knight",0 },
@@ -53,7 +54,8 @@ namespace ExtractorSharp.UnitTest {
                 {"priest_at","pg" },
                 {"thief","th"},
                 {"knight","kn" },
-                {"demoniclancer","dl"}
+                {"demoniclancer","dl"},
+                {"gunblader" ,"gb"},
             };
             var builder = new LSBuilder();
             var obj = builder.ReadJson(Resources.queues);
@@ -61,42 +63,37 @@ namespace ExtractorSharp.UnitTest {
         }
         public string[] part_array = { "cap", "coat", "belt", "neck", "hair", "face", "skin", "pants", "shoes" };
 
+
         [TestMethod]
-        public void TestMethod2() {
-            var dir = @"C:\Users\kritsu\Desktop\avatar\icon";
-            var target = @"d:\avatar_51\icon";
-            foreach (var prof in pairs.Keys) {
-                foreach (var part in part_array) {
-                    var ps = $"{dir}/{p2[prof]}_a{part}.img";
-                    if (!Directory.Exists(ps)) {
-                        continue;
-                    }
-                    var list = Directory.GetFiles(ps);
-                    foreach (var f in list) {
-                        var floder = $@"{ target }\{ prof}\{ part}\";
-                        if (!Directory.Exists(floder)) {
-                            Directory.CreateDirectory(floder);
-                        }
-                        File.Move(f, $@"{floder}\{f.GetSuffix()}");
+        public void LinearDodge() {
+            var dir = @"D:\nginx-1.12.2\avatar\image";
+            Dictionary<string, Bitmap> map = new Dictionary<string, Bitmap>();
+            foreach (var prof in Directory.GetDirectories(dir)) {
+                foreach (var part in Directory.GetDirectories(prof)) {
+                    foreach (var file in Directory.GetFiles(part,"*f.png")) {
+                        Bitmap bmp = Image.FromFile(file) as Bitmap;
+                        map.Add(file.Replace(@"\nginx-1.12.2\avatar",@"\avatar_ex"), bmp.LinearDodge());
                     }
                 }
+            }
+            foreach(var key in map.Keys) {
+                map[key].Save(key);
             }
         }
 
 
         [TestMethod]
         public void TestMethod3() {
-            var dir = @"D:\avatar_ex\image";
-            var prof = "gunblader";
+            var dir = @"D:\avatar_new\image";
+            foreach (var prof in pairs.Keys) {
                 foreach (var part in part_array) {
-                    var file = $@"{dir}\{prof}\{part}.NPK";                 
+                    var file = $@"{dir}\{prof}\{part}";
 
-                    var path = $"d:/avatar_ex/new_image/{prof}/{part}";
+                    var path = $"d:/avatar_ex/image/{prof}/{part}";
                     if (!Directory.Exists(path)) {
                         Directory.CreateDirectory(path);
                     }
                     var list = Npks.Load(file);
-
 
                     foreach (var img in list) {
                         var tables = img.Tables;
@@ -111,24 +108,26 @@ namespace ExtractorSharp.UnitTest {
                         }
                     }
                 }
-            
-
+            }
         }
+
+
+
 
         [TestMethod]
         public void TestMethod1() {
-            var dir = @"C:\Users\kritsu\Desktop\avatar\icon";
+            var dir = @"D:\avatar_ex\icon";
             foreach (var prof in pairs.Keys) {
                 foreach (var part in part_array) {
                     var file = $"{GAME_PATH}/sprite_character_{prof}{(prof.EndsWith("_at") ? "" : "_")}equipment_avatar_{part}.NPK";
                     var list = Npks.Load(file);
-                    var ps = $"{dir}/{p2[prof]}_a{part}.img";
+                    var ps = $"{dir}/{prof}/{part}";
                     if (!Directory.Exists(ps)) {
                         continue;
                     }
                     var images = Directory.GetFiles(ps);
 
-                    var path = $"d:/avatar_51/image/{prof}/{part}";
+                    var path = $"d:/avatar_ex/image/{prof}/{part}";
                     if (!Directory.Exists(path)) {
                         Directory.CreateDirectory(path);
                     }
@@ -137,9 +136,8 @@ namespace ExtractorSharp.UnitTest {
                         var match = regex.Match(images[i]);
                         if (match.Success) {
                             var code = match.Value;
-                            var arr = list.Where(item => Npks.MatchCode(item.Name, code)).ToList();
+                            var arr = Npks.FindByCode(list, code);
                             var rs = FindImg(arr, int.Parse(code), part.Equals("skin") ? "body" : part);
-
                             var builder = new LSBuilder();
                             foreach (var img in rs) {
                                 var image = img[pairs[prof]];

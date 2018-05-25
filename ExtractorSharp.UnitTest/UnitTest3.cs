@@ -1,4 +1,5 @@
 ﻿using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Data;
 using ExtractorSharp.Handle;
 using ExtractorSharp.Json;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -22,9 +23,9 @@ namespace ExtractorSharp.UnitTest {
         }
 
         public string[] part_array = {"cap","coat","belt","neck","hair","face","skin","pants","shoes" };
-        public const string API_HOST = "http://193.112.3.202/api";
+        public const string API_HOST = "http://localhost:8080/dressing";
         public const string GAME_DIR = "D:/地下城与勇士";
-        public const string SAVE_DIR = "D:/avatar_ex";
+        public const string SAVE_DIR = "D:/avatar_new";
 
         private List<string> GetProfession() {
             LSBuilder builder = new LSBuilder();
@@ -55,6 +56,7 @@ namespace ExtractorSharp.UnitTest {
                     var file = $"{GAME_DIR}/ImagePacks2/sprite_character_{prof}{(prof.EndsWith("_at") ? "" : "_")}equipment_avatar_{part}.NPK";
                     var avatars = GetAvatar(prof, part);
                     var list = Npks.Load(file);
+                    var arr = new List<Album>();
                     list = list.Where(item => {
                         var name = item.Name;
                         if (name.Contains("(tn)") || name.Contains("_mask")) {
@@ -63,8 +65,13 @@ namespace ExtractorSharp.UnitTest {
                         var regex = new Regex("\\d+");
                         var match = regex.Match(name);
                         if (match.Success) {
-                            var code = match.Value;
-                            return !avatars.Contains(code);
+                            var codeStr = match.Value;
+                            var code = int.Parse(codeStr);
+                            var rs = false;
+                            for (var i = 0; i < item.Tables.Count; i++) {
+                                rs = rs || !avatars.Contains((code + i).ToString());
+                            }
+                            return rs;
                         }
                         return false;
                     }).ToList();

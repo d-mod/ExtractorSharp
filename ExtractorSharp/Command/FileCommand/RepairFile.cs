@@ -25,15 +25,18 @@ namespace ExtractorSharp.Command.ImgCommand {
             Array = args as Album[];
             Counts = new int[Array.Length];
             var i = 0;
-            Npks.Compare(Program.Config["GamePath"].Value, (a1,a2) => {
+            Npks.Compare(Program.Config["GamePath"].Value, (a1, a2) => {
                 Counts[i] = a1.List.Count - a2.List.Count;
                 if (Counts[i] > 0) {
                     var source = a1.List.GetRange(a2.List.Count, Counts[i]);//获得源文件比当前文件多的贴图集合
+                    source.ForEach(e => {
+                        e.Load();
+                        e.Parent = a2;
+                    });
                     a2.List.AddRange(source);//加入到当前文件中,不修改原贴图。
-                    a2.List.ForEach(item => item.Parent = a2);
                 }
-                i++;        
-            }, Array);          
+                i++;
+            }, Array);
         }
 
 
@@ -42,10 +45,15 @@ namespace ExtractorSharp.Command.ImgCommand {
 
 
         public void Action(params Album[] array) {
-            Npks.Compare(Program.Config["GamePath"].Value,(a1, a2) => {
+            Npks.Compare(Program.Config["GamePath"].Value, (a1, a2) => {
                 var count = a1.List.Count - a2.List.Count;
                 if (count > 0) {
-                    a2.List.AddRange(a1.List.GetRange(a2.List.Count, count));
+                    var source = a1.List.GetRange(a2.List.Count, count);
+                    source.ForEach(e => {
+                        e.Load();
+                        e.Parent = a2;
+                    });
+                    a2.List.AddRange(source);
                 }
             }, array);
         }

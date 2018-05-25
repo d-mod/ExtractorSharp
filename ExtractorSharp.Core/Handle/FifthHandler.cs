@@ -34,15 +34,15 @@ namespace ExtractorSharp.Handle {
         }
 
         public override byte[] ConvertToByte(Sprite entity) {
-            if (entity.Compress < Compress.DDS_ZLIB && entity.Type < ColorBits.LINK) {
+            if (entity.Type < ColorBits.LINK && entity.Length > 0) {
                 return base.ConvertToByte(entity);
-            } else {
-                var dds = DDS.CreateFromBitmap(entity.Picture, entity.Type -4);
-                Map[entity] = new DDS_Info() {
-                    DDS = dds,
-                    RightDown = new Point(dds.Width, dds.Height)
-                };
             }
+            var type = entity.Type < ColorBits.LINK ? entity.Type : entity.Type - 4;
+            var dds = DDS.CreateFromBitmap(entity.Picture, type);
+            Map[entity] = new DDS_Info() {
+                DDS = dds,
+                RightDown = new Point(dds.Width, dds.Height)
+            };
             return new byte[0];
         }
 
