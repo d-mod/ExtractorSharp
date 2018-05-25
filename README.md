@@ -49,7 +49,8 @@ ExtractorSharp
 ---
    + 中文(简体) (default)
    + English 
- **ExtractorSharp自带了一个英文的语言文件。请打开设置(Setting)-语言(Language)切换 ExtractorSharp itself has a English language file. Use Setting-Language wo switch. **
+**ExtractorSharp自带了一个英文的语言文件。请打开设置(Setting)-语言(Language)切换 **
+**ExtractorSharp itself has a English language file. Use Setting-Language wo switch. **
 
 许可(License)
 + [MIT LICENSE](https://github.com/Kritsu/ExtractorSharp/blob/master/LICENSE)
