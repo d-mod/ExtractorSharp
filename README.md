@@ -52,7 +52,7 @@ ExtractorSharp
 
 许可(License)
 ---
-+ [ExtractorSharp MIT LICENSE](https://github.com/Kritsu/ExtractorSharp/blob/master/LICENSE)
++ [ExtractorSharp LICENSE](https://github.com/Kritsu/ExtractorSharp/blob/master/LICENSE)
 + [Bass LiCENSE](https://github.com/Kritsu/ExtractorSharp/blob/master/Licenses/bass-license.txt)
 + [Zlib LiCENSE](https://github.com/Kritsu/ExtractorSharp/blob/master/Licenses/zlib-license.txt)
 + [Zlib LiCENSE](https://github.com/Kritsu/ExtractorSharp/blob/master/Licenses/SharpZipLib-license.txt)
