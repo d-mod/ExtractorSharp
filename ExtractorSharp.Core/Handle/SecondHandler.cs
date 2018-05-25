@@ -22,6 +22,9 @@ namespace ExtractorSharp.Handle {
             if (entity.Type > ColorBits.LINK) {
                 entity.Type -= 4;
             }
+            if (entity.Compress > Compress.ZLIB) {
+                entity.Compress = Compress.ZLIB;
+            }
             return entity.Picture.ToArray(entity.Type);
         }
 

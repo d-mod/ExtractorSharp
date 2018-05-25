@@ -307,7 +307,7 @@ namespace ExtractorSharp.Core.Lib {
         }
 
         #endregion
-        
+
 
         /// <summary>
         /// 根据已有的文件名获得img集合
@@ -317,7 +317,9 @@ namespace ExtractorSharp.Core.Lib {
         /// <returns></returns>
         public static List<Album> FindAll(string file, params string[] args) {
             var list = Load(file);
-            return Find(list, args);
+            var rs = new List<Album>();
+            list = new List<Album>(list.Where(item => args.Any(arg => item.Path.Contains(arg))));
+            return list;
         }
 
 
