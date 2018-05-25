@@ -156,7 +156,13 @@ namespace ExtractorSharp.Data {
             Target = null;
             Type = type == ColorBits.UNKOWN ? Type : type;
             if (type == ColorBits.UNKOWN) {
-                type = Type == ColorBits.LINK ? ColorBits.ARGB_1555 : Type;
+                if (Type == ColorBits.LINK) {
+                    type = ColorBits.ARGB_1555;
+                } else if (Type > ColorBits.LINK) {
+                    type = Type - 4;
+                } else {
+                    type = Type;
+                }
             }
             Type = type;
             if (isAdjust) {

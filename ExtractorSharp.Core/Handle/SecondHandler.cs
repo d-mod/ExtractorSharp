@@ -19,6 +19,9 @@ namespace ExtractorSharp.Handle {
         }
 
         public override byte[] ConvertToByte(Sprite entity) {
+            if (entity.Type > ColorBits.LINK) {
+                entity.Type -= 4;
+            }
             return entity.Picture.ToArray(entity.Type);
         }
 
