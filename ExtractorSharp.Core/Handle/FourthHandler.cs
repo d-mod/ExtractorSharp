@@ -65,8 +65,12 @@ namespace ExtractorSharp.Handle {
         }
 
         public override void ConvertToVersion(Img_Version Version) {
-            if (Version == Img_Version.Ver2) {
-                Album.List.ForEach(item => item.Type = item.Type == ColorBits.ARGB_1555 && item.Compress == Compress.ZLIB ? ColorBits.ARGB_8888 : item.Type);
+            if (Album.Version <= Img_Version.Ver2 || Album.Version == Img_Version.Ver5) {
+                foreach (var item in Album.List) {
+                    if (item.Type != ColorBits.LINK) {
+                        item.Type = ColorBits.ARGB_8888;
+                    }
+                }
             }
         }
 

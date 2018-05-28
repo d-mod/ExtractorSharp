@@ -125,18 +125,18 @@ namespace ExtractorSharp.Handle {
             Album.Length = stream.ReadInt();
             int count = stream.ReadInt();
             var table = new List<Color>(Colors.ReadPalette(stream, count));
-            Album.Tables = new List<List<Color>>();
-            Album.Tables.Add(table);
+            Album.Tables = new List<List<Color>> { table };
             var list = new List<DDS>();
             for (int i = 0; i < index_count; i++) {
-                var dds = new DDS();
-                dds.Version = (DDS_Version)stream.ReadInt();
-                dds.Type = (ColorBits)stream.ReadInt();
-                dds.Index = stream.ReadInt();
-                dds.Size = stream.ReadInt();
-                dds.DDS_Size = stream.ReadInt();
-                dds.Width = stream.ReadInt();
-                dds.Height = stream.ReadInt();
+                var dds = new DDS {
+                    Version = (DDS_Version)stream.ReadInt(),
+                    Type = (ColorBits)stream.ReadInt(),
+                    Index = stream.ReadInt(),
+                    Size = stream.ReadInt(),
+                    DDS_Size = stream.ReadInt(),
+                    Width = stream.ReadInt(),
+                    Height = stream.ReadInt()
+                };
                 list.Add(dds);
             }
             var dic = new Dictionary<Sprite, int>();
@@ -195,7 +195,7 @@ namespace ExtractorSharp.Handle {
         public override void ConvertToVersion(Img_Version Version) {
             foreach (var entity in Album.List) {
                 entity.Load();
-                if (Version == Img_Version.Ver2) {
+                if (Version <= Img_Version.Ver2) {
                     if (entity.Type == ColorBits.DXT_1) {
                         entity.Type = ColorBits.ARGB_1555;
                     }

@@ -33,13 +33,16 @@ namespace ExtractorSharp.Handle {
                 return;
             }
             var array = new Sprite[count];
-            array[0] = new Sprite(Album);
-            array[0].Index = index;
-            if (type != ColorBits.LINK)
+            array[0] = new Sprite(Album) {
+                Index = index
+            };
+            if (type != ColorBits.LINK) {
                 array[0].Type = type;
+            }
             for (var i = 1; i < count; i++) {
-                array[i] = new Sprite(Album);
-                array[i].Type = type;
+                array[i] = new Sprite(Album) {
+                    Type = type
+                };
                 if (type == ColorBits.LINK) {
                     array[i].Target = array[0];
                 }
@@ -97,10 +100,9 @@ namespace ExtractorSharp.Handle {
                 image.Canvas_Width = stream.ReadInt();
                 image.Canvas_Height = stream.ReadInt();
             }
-            stream.Seek(pos - stream.Position);
             if (stream.Position < pos) {
-              //  Album.List.Clear();
-              //  return;
+                Album.List.Clear();
+                return;
             }
             foreach (var image in Album.List.ToArray()) {
                 if (image.Type == ColorBits.LINK) {
@@ -110,7 +112,7 @@ namespace ExtractorSharp.Handle {
                         image.Canvas_Size = image.Target.Canvas_Size;
                         image.Location = image.Target.Location;
                     } else {
-                   //     Album.List.Clear();
+                        Album.List.Clear();
                         return;
                     }
                     continue;
