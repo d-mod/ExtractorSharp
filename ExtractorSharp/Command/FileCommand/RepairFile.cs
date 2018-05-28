@@ -61,7 +61,7 @@ namespace ExtractorSharp.Command.ImgCommand {
 
         public void Undo() {
             for (var i = 0; i < Array.Length; i++) {
-                if (Counts[i] > 0) {
+                if (Counts[i] > 0 && Counts[i] < Array[i].List.Count) {
                     Array[i].List.RemoveRange(Array[i].List.Count - Counts[i], Counts[i]);
                 }
             }

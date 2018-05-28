@@ -6,15 +6,20 @@ namespace ExtractorSharp.Draw.Paint {
     public class Canvas : IPaint {
         public string Name { set; get; }
         public Bitmap Image { set; get; }
-        public Rectangle Rectangle {
+        public Rectangle Rectangle => new Rectangle(_Location, Size);
+
+        private Point _Location {
             get {
                 var location = Location;
-                if (Tag is Sprite sprite && RealPosition) {
-                    location = location.Add(sprite.Location);
-                }
-                return new Rectangle(location, Size);
+                if (RealPosition) {
+                    if (Tag is Sprite sprite) {
+                        location = location.Add(sprite.Location);
+                    }
+                } 
+                return location;
             }
         }
+
         public bool Contains(Point point) => Rectangle.Contains(point);
         public Point Offset { set; get; } = Point.Empty;
         public Size CanvasSize { set; get; }
@@ -30,14 +35,22 @@ namespace ExtractorSharp.Draw.Paint {
         public bool Visible { set; get; }
         public bool Locked { set; get; }
 
-        public bool RealPosition { set; get; }
+        public bool RealPosition {
+            set {
+                _realPostion = value;
+                if (!value) {
+                    Location = Point.Empty;
+                }
+            }
+            get {
+                return _realPostion;
+            }
+        }
+
+        private bool _realPostion;
 
         public override string ToString() {
-            var location = Location;
-            if (Tag is Sprite sprite && RealPosition) {
-                location = location.Add(sprite.Location);
-            }
-            return $"{Language.Default[Name]},{Language.Default["Position"]}({location.X},{location.Y}),{Language.Default["Size"]}({Size.Width},{Size.Height})";
+            return $"{Language.Default[Name]},{Language.Default["Position"]}({_Location.GetString()}),{Language.Default["Size"]}({Size.GetString()})";
         }
     }
 }

@@ -11,6 +11,7 @@ using ExtractorSharp.Component;
 using System.IO;
 using ExtractorSharp.Config;
 using ExtractorSharp.Core;
+using ExtractorSharp.Core.Lib;
 
 namespace ExtractorSharp.View.SettingPane {
     public partial class GerneralPane : AbstractSettingPane {
@@ -24,11 +25,11 @@ namespace ExtractorSharp.View.SettingPane {
         private void Browse(object sender, EventArgs e) {
             var dialog = new FolderBrowserDialog();
             if (dialog.ShowDialog() == DialogResult.OK) {
-                var rsPath = $"{dialog.SelectedPath}/ImagePacks2";
+                var rsPath = $"{dialog.SelectedPath}/{Npks.IMAGE_DIR}";
                 if (Directory.Exists(rsPath)) {
                     gamePathBox.Text = dialog.SelectedPath;
-                    Config["GamePath"] = new ConfigValue(dialog.SelectedPath);
-                    Config["ResourcePath"] = new ConfigValue($"{dialog.SelectedPath}/ImagePacks2");
+                } else {
+                    Connector.SendError("SelectPathIsInvalid");
                 }
             }
         }
@@ -42,6 +43,7 @@ namespace ExtractorSharp.View.SettingPane {
 
         public override void Save() {
             Config["GamePath"] = new ConfigValue(gamePathBox.Text);
+            Config["ResourcePath"] = new ConfigValue($"{gamePathBox.Text}/{Npks.IMAGE_DIR}");
             Config["AutoSave"] = new ConfigValue(autoSaveCheck.Checked);
             Config["AutoUpdate"] = new ConfigValue(autoUpdateCheck.Checked);
         }

@@ -1,4 +1,5 @@
 ﻿using ExtractorSharp.Command;
+using ExtractorSharp.Command.ImgCommand;
 using ExtractorSharp.Component;
 using ExtractorSharp.Composition;
 using ExtractorSharp.Config;
@@ -286,7 +287,7 @@ namespace ExtractorSharp {
             saveFileItem.Click += (o, e) => Connector.Save();
             layerList.ItemCheck += HideLayer;
             adjustPositionItem.Click += AdjustPosition;
-            repairFileItem.Click += (o, e) => Connector.Do("repairFile", Connector.CheckedFiles);
+            repairFileItem.Click += RepairFile;
 
             Drawer.BrushChanged += (o, e) => box.Cursor = e.Brush.Cursor;
             Drawer.LayerChanged += (o, e) => LayerFlush();
@@ -330,6 +331,14 @@ namespace ExtractorSharp {
             downLayerItem.Click += DownLayer;
             renameLayerItem.Click += RenameLayer;
             RecentChanged(null, null);
+        }
+
+        private void RepairFile(object sender,EventArgs e) {
+            if (!Directory.Exists(Config["ResourcePath"].Value)) {
+                Connector.SendError("SelectPathIsInvalid");
+                return;
+            }
+            Connector.Do("repairFile", Connector.CheckedFiles);
         }
 
         private void Dye(object sender, EventArgs e) {

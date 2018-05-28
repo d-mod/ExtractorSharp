@@ -342,9 +342,17 @@ namespace ExtractorSharp.Core.Lib {
             return list;
         }
 
+        public static List<Album> FindByCode(IEnumerable<Album> array, string code) => FindByCode(array, code, false, false);
 
-        public static List<Album> FindByCode(IEnumerable<Album> array, string code) {
+
+        public static List<Album> FindByCode(IEnumerable<Album> array, string code, bool mask, bool ban) {
             var list = new List<Album>(array.Where(item => {
+                if (!mask && item.Name.Contains("mask")) {
+                    return false;
+                }
+                if (!ban && Regex.IsMatch(item.Name, @"\(.*\)+")) { //过滤掉和谐图层
+                    return false;
+                }
                 var regex = new Regex("\\d+");
                 var match = regex.Match(item.Name);
                 return match.Success && match.Value.Equals(code);

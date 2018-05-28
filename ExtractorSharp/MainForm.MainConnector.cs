@@ -198,7 +198,9 @@ namespace ExtractorSharp {
 
             public void RemoveFile(params Album[] array) {
                 foreach (var album in array) {
-                    List.Remove(album);
+                    if (album != null) {
+                        List.Remove(album);
+                    }
                 }
             }
 
