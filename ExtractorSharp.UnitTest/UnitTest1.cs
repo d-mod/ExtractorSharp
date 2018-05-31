@@ -170,7 +170,6 @@ namespace ExtractorSharp.UnitTest {
             builder.WriteObject(dressImage, $"{path}/{name}.json");
         }
 
-
         public int IndexOf(string name) {
             if (sorts.ContainsKey(name)) {
                 return sorts[name];

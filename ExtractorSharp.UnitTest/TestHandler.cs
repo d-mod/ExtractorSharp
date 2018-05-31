@@ -7,25 +7,31 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ExtractorSharp.Json;
 
 namespace ExtractorSharp.UnitTest {
     [TestClass]
     public class TestHandler {
 
         static TestHandler() {
-            Handler.Regisity(Img_Version.Other, typeof(OtherHandler));
-            Handler.Regisity(Img_Version.Ver1, typeof(FirstHandler));
-            Handler.Regisity(Img_Version.Ver2, typeof(SecondHandler));
-            Handler.Regisity(Img_Version.Ver4, typeof(FourthHandler));
             Handler.Regisity(Img_Version.Ver5, typeof(FifthHandler));
-            Handler.Regisity(Img_Version.Ver6, typeof(SixthHandler));
 
         }
 
         [TestMethod]
         public void Test() {
-            foreach(string f in Directory.GetFiles(@"D:\地下城与勇士\ImagePacks2")) {
-                Npks.Load(f);
+            foreach(var f in Directory.GetFiles(@"D:\地下城与勇士\ImagePacks2")) {
+                var list=Npks.Load(f);
+                foreach (var e in list) {
+                    if (e.Version == Img_Version.Ver5) {
+                        var handler = e.Handler as FifthHandler;
+                        foreach (var a in handler.List) {
+                            var image = a.Pictrue;
+                        }
+                    }
+
+                    GC.Collect();
+                }
             }
         }
     }

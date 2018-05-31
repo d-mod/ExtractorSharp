@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.IO;
 using ExtractorSharp.Core.Lib;
 
 namespace ExtractorSharp.Data {
@@ -11,18 +10,19 @@ namespace ExtractorSharp.Data {
         public int Index { set; get; }
         public int Width { set; get; } = 4;
         public int Height { set; get; } = 4;
-        public int Size { set; get; }
-        public int DDS_Size { set; get; }
+        public int Length { set; get; }
+        public int FullLength { set; get; }
         public byte[] Data { set; get; }
         public DDS_Version Version { set; get; } = DDS_Version.DXT1;
         public ColorBits Type { set; get; } = ColorBits.DXT_1;
+
         public Bitmap Pictrue {
             get {
                 if (image != null) {
                     return image;
                 }
-                var data = Zlib.Decompress(Data, DDS_Size);
-                if (Type < ColorBits.DXT_1) {
+                var data = Zlib.Decompress(Data, FullLength);
+                if (Type < ColorBits.LINK) {
                     return Bitmaps.FromArray(data, new Size(Width, Height), Type);
                 }
                 var dds = Ddss.Decode(data);
@@ -35,16 +35,21 @@ namespace ExtractorSharp.Data {
 
         private Bitmap image;
 
-        public static DDS CreateFromBitmap(Bitmap bmp, ColorBits type) {
+        public static DDS CreateFromBitmap(Sprite sprite) {
+            var bmp = sprite.Picture;
+            var type = sprite.Type;
+            if (type > ColorBits.LINK) {
+                type -= 4;
+            }
             var data = bmp.ToArray(type);
-            var dds_size = data.Length;
+            var fullLength = data.Length;
             var width = bmp.Width;
             var height = bmp.Height;
             data = Zlib.Compress(data);
-            var dds = new DDS() {
+            var dds = new DDS {
                 Data = data,
-                DDS_Size = dds_size,
-                Size = data.Length,
+                FullLength = fullLength,
+                Length = data.Length,
                 Width = width,
                 Height = height,
                 Type = type
@@ -55,21 +60,24 @@ namespace ExtractorSharp.Data {
 
     public class DDS_Info {
         public DDS DDS { set; get; }
+
         /// <summary>
         /// 左上角顶点坐标
         /// </summary>
         public Point LeftUp { set; get; }
+
         /// <summary>
         /// 右下角顶点坐标
         /// </summary>
         public Point RightDown { set; get; }
+
         /// <summary>
         /// 大小
         /// </summary>
         public Size Size => new Size(RightDown.X - LeftUp.X, RightDown.Y - LeftUp.Y);
 
         public int Top { set; get; }
-        
+
         public Rectangle Rectangle => new Rectangle(LeftUp, Size);
 
         public int Unknown { get; set; }

@@ -48,7 +48,7 @@ namespace ExtractorSharp {
         [Export(typeof(IConnector))]
         internal static IConnector Connector { set; get; }
 
-        internal readonly static string Version = Assembly.GetAssembly(typeof(Program)).GetName().Version.ToString();
+        internal static readonly string Version = Assembly.GetAssembly(typeof(Program)).GetName().Version.ToString();
 
         private static string[] Arguments;
 
@@ -160,10 +160,19 @@ namespace ExtractorSharp {
                 }
                 var current = $"{dir}/{DateTime.Now.ToString("yyyyMMddHHmmss")}.log";
                 File.WriteAllBytes(current, data);
-                if ((e.Exception is ProgramException && Connector != null)) {
-                    Connector.SendError(e.Exception.Message);
-                } else if (Config["Profile"].Value.Equals("release")) {
-                    Viewer.Show("debug", "debug", log);
+                switch (e.Exception) {
+                    case IOException _:
+                        Connector.SendError("FileHandleError");
+                        break;;
+                    case ProgramException _ when Connector != null:
+                        Connector.SendError(e.Exception.Message);
+                        break;
+                    default:
+                        if (Config["Profile"].Value.Equals("release")) {
+                            Viewer.Show("debug", "debug", log);
+                        }
+
+                        break;
                 }
             } catch (Exception ex) {
 

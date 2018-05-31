@@ -31,7 +31,7 @@ namespace ExtractorSharp.View.SettingPane {
 
         public override void Initialize() {
             promptCheck.Checked = Config["SaveImageTip"].Boolean;
-            fullPathCheck.Checked = Config["SaveImageAllPath"].Boolean;
+            fullPathCheck.Checked = Config["SaveImageFullPath"].Boolean;
             savePathBox.Text = Config["SaveImagePath"].Value;
             var i = 0;
             converterList = new List<CheckBox>();
@@ -50,7 +50,7 @@ namespace ExtractorSharp.View.SettingPane {
 
         public override void Save() {
             Config["SaveImageTip"] = new ConfigValue(promptCheck.Checked);
-            Config["SaveImageAllPath"] = new ConfigValue(fullPathCheck.Checked);
+            Config["SaveImageFullPath"] = new ConfigValue(fullPathCheck.Checked);
             Config["SaveImagePath"] = new ConfigValue(savePathBox.Text);
             foreach(var box in converterList) {
                 var converter = box.Tag as IEffect;

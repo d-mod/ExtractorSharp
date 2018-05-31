@@ -191,7 +191,7 @@ namespace ExtractorSharp.Core.Lib {
         /// 保存为NPK
         /// </summary>
         /// <param name="fileName"></param>
-        public static void WriteNpk(Stream stream, List<Album> List) {
+        public static void WriteNpk(this Stream stream, List<Album> List) {
             var position = 52 + List.Count * 264;
             for (var i = 0; i < List.Count; i++) {
                 List[i].Adjust();
@@ -221,18 +221,18 @@ namespace ExtractorSharp.Core.Lib {
         public static List<Album> Load(string file) => Load(false, file);
 
         public static List<Album> Load(bool onlyPath, string file) {
-            var List = new List<Album>();
+            var list = new List<Album>();
             if (Directory.Exists(file)) {
                 return Load(onlyPath, Directory.GetFiles(file));
             }
             if (!File.Exists(file)) {
-                return List;
+                return list;
             }
             using (var stream = File.OpenRead(file)) {
                 if (onlyPath) {
                     return ReadInfo(stream);
                 }
-                List<Album> enums = stream.ReadNPK(file);
+                var enums = stream.ReadNPK(file);
                 return enums;
             }
         }

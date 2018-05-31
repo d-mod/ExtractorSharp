@@ -1,82 +1,43 @@
 {
-  "UserConfig": "conf.json",
-
-  "FlashSpeed": 20,
-
-  "GamePath": "",
-
-  "SaveImagePath": "",
-
-  "SaveImageTip": true,
-
-  "Version": "1.6.0.1",
-
-  "GridGap": 100,
-
-  "AutoSave": false,
-
-  "LineLevel": 0.5,
-
-  "LCID": 2052,
-
-  "SaveImageFullPath": false,
-
-  "LayerMaximum": 20,
-
-  "GifTransparent": "0,0,0,0",
-
-  "GifDelay": 75,
-
-  "ApiHost": "http://localhost",
-
-
-  "UpdateUrl": "http://extractorsharp.kritsu.net/api/program/update",
-
-  "UpdateExeUrl": "http://static.kritsu.net/install.exe",
-
-  "FeedbackUrl": "http://extractorsharp.kritsu.net/api/feedback/post",
-
-  "MarketUrl": "http://extractorsharp.kritsu.net/api/plugin/list",
-
-  "UpdateExeName": "install.exe",
-
-  "AutoUpdate": false,
-
-  "ClassifySeparator": "分割线",
-
-  "Preview": false,
-
-  "CanvasScale": 100,
-
-  "CanvasImageSize": "800,600",
-
-  "Pixelate": true,
-
-  "LinearDodge": false,
-
-  "OnionSkin": false,
-
-  "RealPosition": false,
-
   "Animation": false,
-
-  "Ruler": false,
-
-  "RulerCrosshair": false,
-
-  "RulerLocked": false,
-
-  "RulerSpan": true,
-
-  "Profile": "release",
-
-  "LinearDodgeSpriteConverter": true,
-
-  "RealPositionSpriteConverter": false,
-
+  "ApiHost": "http://localhost",
+  "AutoSave": false,
   "AutoSort": true,
-
+  "AutoUpdate": false,
+  "CanvasImageSize": "800,600",
+  "CanvasScale": 100,
+  "ClassifySeparator": "分割线",
+  "FeedbackUrl": "http://kritsu.net/api/app/feedback/post",
+  "FlashSpeed": 20,
+  "GamePath": "",
+  "GifDelay": 75,
+  "GifTransparent": "0,0,0,0",
+  "GridGap": 100,
+  "LayerMaximum": 20,
+  "LCID": 2052,
+  "LinearDodge": false,
+  "LinearDodgeSpriteConverter": true,
+  "LineLevel": 0.5,
+  "MarketUrl": "http://kritsu.net/api/app/plugin/list",
   "MergeCompletedHide": true,
-
-  "ProgramId": 1
+  "OnionSkin": false,
+  "Pixelate": true,
+  "Preview": false,
+  "Profile": "release",
+  "ProgramId": 1,
+  "RealPosition": false,
+  "RealPositionSpriteConverter": false,
+  "Ruler": false,
+  "RulerCrosshair": false,
+  "RulerLocked": false,
+  "RulerSpan": true,
+  "SaveAllImage": false,
+  "SaveImageFullPath": false,
+  "SaveImagePath": "",
+  "SaveImageTip": true,
+  "UpdateExeName": "install.exe",
+  "UpdateExeUrl": "http://kritsu.net/install.exe",
+  "UpdateUrl": "http://kritsu.net/api/app/update",
+  "UserConfig": "conf.json",
+  "Version": "1.6.0.1"
 }

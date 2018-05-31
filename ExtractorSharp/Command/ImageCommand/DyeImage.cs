@@ -24,7 +24,7 @@ namespace ExtractorSharp.Command.ImageCommand {
         public void Action(Album al, int[] indices) {
             foreach (var i in indices) {
                 if (i > -1 && i < al.List.Count) {
-                    al[i].Picture = al[i].Picture.LinearDodge();
+                    al[i].Picture = al[i].Picture.Dye(Color);
                 }
             }
         }

@@ -209,7 +209,7 @@ namespace ExtractorSharp.Data {
         }
 
         public void Save(string file) {
-            using(var fs=File.OpenWrite(file)) {
+            using(var fs=new FileStream(file,FileMode.Create)) {
                 Save(fs);
             }
         }

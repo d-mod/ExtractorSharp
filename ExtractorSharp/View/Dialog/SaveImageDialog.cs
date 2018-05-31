@@ -17,9 +17,8 @@ namespace ExtractorSharp.View {
 
         public override DialogResult Show(params object[] args) {
             pathBox.Text = Config["SaveImagePath"].Value;
-            fullPathCheck.Checked = Config["SaveImageAllPath"].Boolean;
-            dynamic config = args[0];
-            allImagesCheck.Checked = config.allImage;
+            fullPathCheck.Checked = Config["SaveImageFullPath"].Boolean;
+            allImagesCheck.Checked = Config["SaveAllImage"].Boolean;
             if (Config["SaveImageTip"].Boolean) {
                 return ShowDialog();
             }
@@ -57,6 +56,7 @@ namespace ExtractorSharp.View {
             Config["SaveImagePath"] = new ConfigValue(pathBox.Text);
             Config["SaveImageTip"] = new ConfigValue(!tipsCheck.Checked);
             Config["SaveImageFullPath"] = new ConfigValue(fullPathCheck.Checked);
+            Config["SaveAllImage"]=new ConfigValue(allImagesCheck.Checked);
             Config.Save();
             DialogResult = Save();
         }

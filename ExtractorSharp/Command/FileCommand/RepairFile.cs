@@ -8,7 +8,7 @@ namespace ExtractorSharp.Command.ImgCommand {
     /// <summary>
     /// 补帧
     /// </summary>
-    class RepairFile : IMutipleAciton {
+    class RepairFile : IMutipleAciton,ICommandMessage{
         private Album[] Array;
 
         private int[] Counts;

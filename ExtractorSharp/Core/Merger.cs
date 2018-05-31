@@ -71,8 +71,6 @@ namespace ExtractorSharp.Core {
                     var obj = builder.Read(json);
                     InitSorter(obj);
                 }
-            } else {
-                Directory.CreateDirectory(RulePath);
             }
         }
 

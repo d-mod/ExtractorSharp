@@ -147,6 +147,8 @@ namespace ExtractorSharp.Data {
         /// <summary>
         /// 替换贴图
         /// </summary>
+        /// <param name="type"></param>
+        /// <param name="isAdjust"></param>
         /// <param name="bmp"></param>
         public void ReplaceImage(ColorBits type, bool isAdjust, Bitmap bmp) {
             if (bmp == null) {
@@ -158,7 +160,7 @@ namespace ExtractorSharp.Data {
             if (type == ColorBits.UNKOWN) {
                 if (Type == ColorBits.LINK) {
                     type = ColorBits.ARGB_1555;
-                } else if (Type > ColorBits.LINK) {
+                } else if (Version != Img_Version.Ver5 && Type > ColorBits.LINK) {
                     type = Type - 4;
                 } else {
                     type = Type;
@@ -229,7 +231,7 @@ namespace ExtractorSharp.Data {
             if (!IsOpen)
                 return;
             Data = Parent.ConvertToByte(this);
-            if (Data.Length > 0 && Compress == Compress.ZLIB) {
+            if (Data.Length > 0 && Compress >= Compress.ZLIB) {
                 Data = Zlib.Compress(Data);
             }
             Length = Data.Length;            //不压缩时，按原长度保存

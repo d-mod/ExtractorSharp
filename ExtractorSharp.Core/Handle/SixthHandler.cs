@@ -36,13 +36,13 @@ namespace ExtractorSharp.Handle {
             }
             var data = entity.Picture.ToArray();
             var ms = new MemoryStream();
-            for (var i = 0; i < data.Length; i += 4) {
+            var table = Album.CurrentTable;
+            for (var i = 0; i < data.Length && table.Count <= 256; i += 4) {
                 var color = Color.FromArgb(data[i + 3], data[i + 2], data[i + 1], data[i]);
-                var table = Album.CurrentTable;
                 if (!table.Contains(color)) {
                     table.Add(color);
                 }
-                ms.WriteByte((byte)table.IndexOf(color));
+                ms.WriteByte((byte) table.IndexOf(color));
             }
             ms.Close();
             data = ms.ToArray();
