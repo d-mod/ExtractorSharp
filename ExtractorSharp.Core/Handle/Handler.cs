@@ -60,8 +60,7 @@ namespace ExtractorSharp.Handle {
             if (Album.Version > Img_Version.Other) {
                 if (Album.Version == Img_Version.Ver1) {
                     ms.WriteString(Npks.IMAGE_FLAG);
-                    ms.WriteInt((int)Album.Info_Length);
-                    ms.WriteShort(0);
+                    ms.Write(new byte[6]);
                 } else {
                     ms.WriteString(Npks.IMG_FLAG);
                     ms.WriteLong(Album.Info_Length);

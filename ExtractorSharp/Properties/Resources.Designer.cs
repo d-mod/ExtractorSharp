@@ -91,16 +91,6 @@ namespace ExtractorSharp.Properties {
         }
         
         /// <summary>
-        ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
-        /// </summary>
-        internal static System.Drawing.Icon aww {
-            get {
-                object obj = ResourceManager.GetObject("aww", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
         internal static System.Drawing.Bitmap change {
@@ -127,13 +117,13 @@ namespace ExtractorSharp.Properties {
         ///      &quot;AllImg&quot;: &quot;所有IMG&quot;,
         ///      &quot;CheckImage&quot;: &quot;当前所选贴图&quot;,
         ///      &quot;AllImage&quot;: &quot;所有贴图&quot;,
+        ///      &quot;AllFormat&quot;: &quot;所有格式&quot;,
         ///      &quot;ImageResources&quot;: &quot;图片资源&quot;,
         ///      &quot;SoundResources&quot;: &quot;音效资源&quot;,
         ///      &quot;Width&quot;: &quot;宽&quot;,
         ///      &quot;Height&quot;: &quot;高&quot;,
         ///      &quot;Size&quot;: &quot;宽高&quot;,
-        ///      &quot;Position&quot;: &quot;坐标&quot;,
-        ///      &quot;Ca [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///       [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Chinese {
             get {
@@ -153,40 +143,26 @@ namespace ExtractorSharp.Properties {
         
         /// <summary>
         ///   查找类似 {
-        ///  &quot;UserConfig&quot;: &quot;conf.json&quot;,
-        ///
-        ///  &quot;FlashSpeed&quot;: 20,
-        ///
-        ///  &quot;GamePath&quot;: &quot;&quot;,
-        ///
-        ///  &quot;SaveImagePath&quot;: &quot;&quot;,
-        ///
-        ///  &quot;SaveImageTip&quot;: true,
-        ///
-        ///  &quot;Version&quot;: &quot;1.6.0.1&quot;,
-        ///
-        ///  &quot;GridGap&quot;: 100,
-        ///
-        ///  &quot;AutoSave&quot;: false,
-        ///
-        ///  &quot;LineLevel&quot;: 0.5,
-        ///
-        ///  &quot;LCID&quot;: 2052,
-        ///
-        ///  &quot;SaveImageFullPath&quot;: false,
-        ///
-        ///  &quot;LayerMaximum&quot;: 20,
-        ///
-        ///  &quot;GifTransparent&quot;: &quot;0,0,0,0&quot;,
-        ///
-        ///  &quot;GifDelay&quot;: 75,
-        ///
+        ///  &quot;Animation&quot;: false,
         ///  &quot;ApiHost&quot;: &quot;http://localhost&quot;,
-        ///
-        ///
-        ///  &quot;UpdateUrl&quot;: &quot;http://extractorsharp.kritsu.net/api/program/update&quot;,
-        ///
-        ///  &quot;UpdateExeUrl&quot;: &quot;http://static.kritsu.ne [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///  &quot;AutoSave&quot;: false,
+        ///  &quot;AutoSort&quot;: true,
+        ///  &quot;AutoUpdate&quot;: false,
+        ///  &quot;CanvasImageSize&quot;: &quot;800,600&quot;,
+        ///  &quot;CanvasScale&quot;: 100,
+        ///  &quot;ClassifySeparator&quot;: &quot;�ָ���&quot;,
+        ///  &quot;FeedbackUrl&quot;: &quot;http://kritsu.net/api/app/feedback/post&quot;,
+        ///  &quot;FlashSpeed&quot;: 20,
+        ///  &quot;GamePath&quot;: &quot;&quot;,
+        ///  &quot;GifDelay&quot;: 75,
+        ///  &quot;GifTransparent&quot;: &quot;0,0,0,0&quot;,
+        ///  &quot;GridGap&quot;: 100,
+        ///  &quot;LayerMaximum&quot;: 20,
+        ///  &quot;LCID&quot;: 2052,
+        ///  &quot;LinearDodge&quot;: false,
+        ///  &quot;LinearDodgeSpriteConverter&quot;: true,
+        ///  &quot;LineLevel&quot;: 0.5,
+        /// [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Config {
             get {

@@ -65,7 +65,7 @@
     <StartupObject>ExtractorSharp.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>aww.ico</ApplicationIcon>
+    <ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -473,6 +473,7 @@
     <Content Include="dictionary.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="logo.ico" />
     <None Include="Resources\last.png" />
     <None Include="Resources\next.png" />
     <None Include="Resources\add.png" />
@@ -485,7 +486,6 @@
     <None Include="Resources\gif.png" />
     <None Include="Resources\position.png" />
     <None Include="Resources\edit.png" />
-    <None Include="Resources\修改信息.png" />
     <None Include="Resources\link.png" />
     <None Include="Resources\paste.png" />
     <None Include="Resources\copy.png" />
@@ -510,10 +510,6 @@
     <None Include="Resources\save.png" />
     <None Include="Resources\undo.png" />
     <None Include="Resources\redo.png" />
-    <None Include="Resources\aww.ico" />
-    <Content Include="aww.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <None Include="Resources\pencil.png" />
     <None Include="Resources\run.png" />
     <None Include="Resources\config.json" />

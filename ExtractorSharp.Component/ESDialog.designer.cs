@@ -30,7 +30,6 @@ namespace ExtractorSharp.Component {
             components = new Container();
             ShowInTaskbar = false;
             AutoScaleMode = AutoScaleMode.Font;
-            Icon = Resources.aww;
             StartPosition = FormStartPosition.CenterScreen;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;

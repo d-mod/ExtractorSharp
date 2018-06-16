@@ -27,7 +27,7 @@ namespace ExtractorSharp.Core.Lib {
                 var cs = new char[256];
                 var temp = "puchikon@neople dungeon and fighter ".ToArray();
                 temp.CopyTo(cs, 0);
-                var ds = new char[] { 'D', 'N', 'F' };
+                var ds = new[] { 'D', 'N', 'F' };
                 for (var i = temp.Length; i < 255; i++) {
                     cs[i] = ds[i % 3];
                 }
@@ -261,7 +261,7 @@ namespace ExtractorSharp.Core.Lib {
         }   
 
         public static void Save(string file, List<Album> list) {
-            using (var fs = File.OpenWrite(file)) {
+            using (var fs = File.Open(file,FileMode.Create)) {
                 WriteNpk(fs, list);
             }
         }

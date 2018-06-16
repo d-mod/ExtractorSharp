@@ -34,7 +34,6 @@ namespace ExtractorSharp.Handle {
         
         public override void CreateFromStream(Stream stream) {
             var dic = new Dictionary<Sprite, int>();
-            long pos = stream.Position + Album.Info_Length;
             for (var i = 0; i < Album.Count; i++) {
                 var image = new Sprite(Album) {
                     Index = Album.List.Count,
@@ -59,7 +58,7 @@ namespace ExtractorSharp.Handle {
                 var data = new byte[image.Length];
                 stream.Read(data);
                 image.Data = data;
-            }
+            }        
             foreach (var image in Album.List) {
                 if (image.Type == ColorBits.LINK) {
                     if (dic.ContainsKey(image) && dic[image] > -1 && dic[image] < Album.List.Count && dic[image] != image.Index) {
