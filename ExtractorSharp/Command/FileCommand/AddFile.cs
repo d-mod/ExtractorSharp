@@ -25,7 +25,7 @@ namespace ExtractorSharp.Command.ImgCommand {
 
 
         public void Undo() {
-            Connector.RemoveFile(List);
+            Connector.RemoveFile(Array);
             if (Clear) {
                 Connector.AddFile(true, List);
             }

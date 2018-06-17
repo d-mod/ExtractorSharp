@@ -22,7 +22,7 @@ namespace ExtractorSharp.Handle {
                     using (var os = new MemoryStream()) {
                         for (var i = 0; i < data.Length; i++) {
                             var j = data[i] % table.Count;
-                            Colors.WriteColor(os, table[j], ColorBits.ARGB_8888);
+                            os.WriteColor(table[j], ColorBits.ARGB_8888);
                         }
                         data = os.ToArray();
                     }
@@ -65,7 +65,7 @@ namespace ExtractorSharp.Handle {
         }
 
         public override void ConvertToVersion(Img_Version Version) {
-            if (Album.Version <= Img_Version.Ver2 || Album.Version == Img_Version.Ver5) {
+            if (Version <= Img_Version.Ver2 || Version == Img_Version.Ver5) {
                 foreach (var item in Album.List) {
                     if (item.Type != ColorBits.LINK) {
                         item.Type = ColorBits.ARGB_8888;
