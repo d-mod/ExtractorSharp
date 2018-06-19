@@ -23,7 +23,7 @@ namespace ExtractorSharp.UnitTest {
         }
 
         public string[] part_array = {"cap","coat","belt","neck","hair","face","skin","pants","shoes" };
-        public const string API_HOST = "http://localhost:8080/dressing";
+        public const string API_HOST = "http://localhost:8080/api/dressing";
         public const string GAME_DIR = "D:/地下城与勇士";
         public const string SAVE_DIR = "D:/avatar_new";
 
