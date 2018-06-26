@@ -1,23 +1,20 @@
-﻿using ExtractorSharp.Core;
-using ExtractorSharp.Data;
-using ExtractorSharp.View;
-using System;
-using System.Drawing;
+﻿using System.Drawing;
+using ExtractorSharp.Core.Command;
+using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.Command.ImageCommand {
     /// <summary>
-    /// 去画布化
+    ///     去画布化
     /// </summary>
-    class UnCanvasImage : ISingleAction,ICommandMessage{
+    internal class UnCanvasImage : ISingleAction, ICommandMessage {
+        private Album Album { set; get; }
+
+        private Bitmap[] Images { set; get; }
+
+        private Point[] Locations { set; get; }
         public int[] Indices { set; get; }
 
         public string Name => "UnCanvasImage";
-
-        private Album Album;
-
-        private Bitmap[] Images;
-
-        private Point[] Locations;
 
         public void Do(params object[] args) {
             Album = args[0] as Album;
@@ -25,9 +22,7 @@ namespace ExtractorSharp.Command.ImageCommand {
             Images = new Bitmap[Indices.Length];
             Locations = new Point[Indices.Length];
             for (var i = 0; i < Indices.Length; i++) {
-                if (Indices[i] > Album.List.Count - 1 || Indices[i] < 0) {
-                    continue;
-                }
+                if (Indices[i] > Album.List.Count - 1 || Indices[i] < 0) continue;
                 var entity = Album.List[Indices[i]];
                 Images[i] = entity.Picture;
                 Locations[i] = entity.Location;
@@ -35,7 +30,9 @@ namespace ExtractorSharp.Command.ImageCommand {
             }
         }
 
-        public void Redo() => Do(Album, Indices);
+        public void Redo() {
+            Do(Album, Indices);
+        }
 
 
         public void Undo() {
@@ -46,19 +43,17 @@ namespace ExtractorSharp.Command.ImageCommand {
             }
         }
 
-        public void Action(Album Album, int[] indexes) {
+        public void Action(Album album, int[] indexes) {
             foreach (var i in indexes) {
-                if (i < Album.List.Count && i > -1) {
-                    Album.List[i].UnCanvasImage();
+                if (i < album.List.Count && i > -1) {
+                    album.List[i].UnCanvasImage();
                 }
             }
         }
-        
+
 
         public bool CanUndo => true;
 
         public bool IsChanged => true;
-
-        public bool IsFlush => false;
     }
 }

@@ -6,8 +6,10 @@ using ExtractorSharp.Component;
 using ExtractorSharp.Draw;
 using ExtractorSharp.Core;
 using System.IO;
-using ExtractorSharp.Data;
+using ExtractorSharp.Core.Draw;
+using ExtractorSharp.Core.Model;
 using ExtractorSharp.Properties;
+using ExtractorSharp.View.Pane;
 
 namespace ExtractorSharp {
     partial class MainForm {

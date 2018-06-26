@@ -1,21 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using ExtractorSharp.Component;
-using ExtractorSharp.Config;
-using ExtractorSharp.Core;
-using ExtractorSharp.Composition;
+using ExtractorSharp.Core.Composition;
+using ExtractorSharp.Core.Config;
 
 namespace ExtractorSharp.View.SettingPane {
     public partial class SaveImagePane : AbstractSettingPane {
         private List<CheckBox> converterList;
-        public SaveImagePane(IConnector Connector) :base(Connector) {
+
+        public SaveImagePane(IConnector Connector) : base(Connector) {
             InitializeComponent();
             savePathBox.Click += Browse;
             browseButton.Click += Browse;
@@ -24,9 +19,7 @@ namespace ExtractorSharp.View.SettingPane {
 
         private void Browse(object sender, EventArgs e) {
             var dialog = new FolderBrowserDialog();
-            if (dialog.ShowDialog() == DialogResult.OK) {
-                savePathBox.Text = dialog.SelectedPath;
-            }
+            if (dialog.ShowDialog() == DialogResult.OK) savePathBox.Text = dialog.SelectedPath;
         }
 
         public override void Initialize() {
@@ -45,6 +38,7 @@ namespace ExtractorSharp.View.SettingPane {
                 converterList.Add(checkbox);
                 i++;
             }
+
             converterGroup.Controls.AddRange(converterList.ToArray());
         }
 
@@ -52,7 +46,7 @@ namespace ExtractorSharp.View.SettingPane {
             Config["SaveImageTip"] = new ConfigValue(promptCheck.Checked);
             Config["SaveImageFullPath"] = new ConfigValue(fullPathCheck.Checked);
             Config["SaveImagePath"] = new ConfigValue(savePathBox.Text);
-            foreach(var box in converterList) {
+            foreach (var box in converterList) {
                 var converter = box.Tag as IEffect;
                 Config[$"{converter.Name}SpriteConverter"] = new ConfigValue(box.Checked);
                 converter.Enable = box.Checked;

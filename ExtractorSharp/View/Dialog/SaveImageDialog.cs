@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using ExtractorSharp.Component;
-using ExtractorSharp.Config;
-using ExtractorSharp.Core;
-using System.Text.RegularExpressions;
+using ExtractorSharp.Core.Composition;
+using ExtractorSharp.Core.Config;
 
-namespace ExtractorSharp.View {
+namespace ExtractorSharp.View.Dialog {
     public partial class SaveImageDialog : ESDialog {
         public SaveImageDialog(IConnector Connector) : base(Connector) {
             InitializeComponent();
@@ -19,24 +19,19 @@ namespace ExtractorSharp.View {
             pathBox.Text = Config["SaveImagePath"].Value;
             fullPathCheck.Checked = Config["SaveImageFullPath"].Boolean;
             allImagesCheck.Checked = Config["SaveAllImage"].Boolean;
-            if (Config["SaveImageTip"].Boolean) {
-                return ShowDialog();
-            }
+            if (Config["SaveImageTip"].Boolean) return ShowDialog();
             return Save();
         }
-        
+
         private DialogResult Save() {
             var file = Connector.SelectedFile;
             var indices = Connector.CheckedImageIndices;
-            if (file == null||indices.Length==0) {
-                return DialogResult.Cancel;
-            }
+            if (file == null || indices.Length == 0) return DialogResult.Cancel;
             if (allImagesCheck.Checked) {
                 indices = new int[file.List.Count];
-                for(var i = 0; i < indices.Length; i++) {
-                    indices[i] = i;
-                }
+                for (var i = 0; i < indices.Length; i++) indices[i] = i;
             }
+
             var name = nameBox.Text;
             var match = Regex.Match(name, @"\d+$", RegexOptions.Compiled);
             var value = match.Value;
@@ -48,7 +43,9 @@ namespace ExtractorSharp.View {
                 prefix = prefix.Remove(match.Index, match.Length);
                 digit = value.Length;
             }
-            Connector.Do("saveImage", file, 1, indices, pathBox.Text, prefix, incre, digit,fullPathCheck.Checked,Connector.Effect);
+
+            Connector.Do("saveImage", file, 1, indices, pathBox.Text, prefix, incre, digit, fullPathCheck.Checked,
+                Connector.Effect);
             return DialogResult.OK;
         }
 
@@ -56,18 +53,14 @@ namespace ExtractorSharp.View {
             Config["SaveImagePath"] = new ConfigValue(pathBox.Text);
             Config["SaveImageTip"] = new ConfigValue(!tipsCheck.Checked);
             Config["SaveImageFullPath"] = new ConfigValue(fullPathCheck.Checked);
-            Config["SaveAllImage"]=new ConfigValue(allImagesCheck.Checked);
+            Config["SaveAllImage"] = new ConfigValue(allImagesCheck.Checked);
             Config.Save();
             DialogResult = Save();
         }
 
         public void LoadPath(object sender, EventArgs e) {
             var dialog = new FolderBrowserDialog();
-            if (dialog.ShowDialog() == DialogResult.OK) {
-                pathBox.Text = dialog.SelectedPath;
-            }   
+            if (dialog.ShowDialog() == DialogResult.OK) pathBox.Text = dialog.SelectedPath;
         }
-
-
     }
 }

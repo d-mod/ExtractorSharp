@@ -1,58 +1,63 @@
-﻿using ExtractorSharp.Json.Attr;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using ExtractorSharp.Json.Attr;
 
 namespace ExtractorSharp.Json {
     public static class LSTools {
-        private static Dictionary<char, char> escapes;
-        private static Dictionary<char, string> reescapes;
+        private static readonly Dictionary<char, char> escapes;
+        private static readonly Dictionary<char, string> reescapes;
+
         static LSTools() {
             escapes = new Dictionary<char, char> {
-                { 't', '\t' },
-                { 'r', '\r' },
-                { 'f', '\f' },
-                { 'n', '\n' },
-                { 'b', '\b' },
-                { '\\', '\\' },
-                { '\'', '\'' },
-                { '"', '"' }
+                {'t', '\t'},
+                {'r', '\r'},
+                {'f', '\f'},
+                {'n', '\n'},
+                {'b', '\b'},
+                {'\\', '\\'},
+                {'\'', '\''},
+                {'"', '"'}
             };
             reescapes = new Dictionary<char, string> {
-                { '\\', @"\\" },
-                { '\'', @"\'" },
-                { '\t', @"\t" },
-                { '\r', @"\r" },
-                { '\f', @"\f" },
-                { '\n', @"\n" },
-                { '\b', @"\b" },
+                {'\\', @"\\"},
+                {'\'', @"\'"},
+                {'\t', @"\t"},
+                {'\r', @"\r"},
+                {'\f', @"\f"},
+                {'\n', @"\n"},
+                {'\b', @"\b"}
             };
         }
 
         public static string Format(this string s) {
-            foreach (var c in escapes.Keys)
+            foreach (var c in escapes.Keys) {
                 s = s.Replace(c, escapes[c]);
+            }
             return s;
         }
 
         public static string ReFormat(this string s) {
-            foreach (var c in reescapes.Keys)
+            foreach (var c in reescapes.Keys) {
                 s = s.Replace(c + "", reescapes[c]);
+            }
             return s;
         }
 
         /// <summary>
-        /// 将字符串解析为bool,number,string三种类型的数据
+        ///     将字符串解析为bool,number,string三种类型的数据
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
         public static object Parse(this string s) {
-            if (bool.TryParse(s, out bool b))
+            if (bool.TryParse(s, out var b)) {
                 return b;
-            if (decimal.TryParse(s, out decimal d))
+            }
+            if (decimal.TryParse(s, out var d)) {
                 return d;
+            }
             return s;
         }
 
@@ -72,26 +77,32 @@ namespace ExtractorSharp.Json {
         }
 
         public static string ToUpperFrist(this string s) {
-            if (s.Length > 0)
+            if (s.Length > 0) {
                 return char.ToUpper(s[0]) + s.Substring(1, s.Length - 1);
+            }
             return s;
         }
 
-        public static bool EqualsIgnoreCase(this string s1, string s2) => s1.ToLower().Equals(s2?.ToLower());
+        public static bool EqualsIgnoreCase(this string s1, string s2) {
+            return s1.ToLower().Equals(s2?.ToLower());
+        }
 
 
         public static void AppendTab(this StringBuilder sb, int count) {
-            while (--count > 0)
+            while (--count > 0) {
                 sb.Append('\t');
+            }
         }
 
         public static bool IsNumber(this object obj) {
-            return obj is byte || obj is short || obj is int || obj is long || obj is float || obj is double || obj is decimal;
+            return obj is byte || obj is short || obj is int || obj is long || obj is float || obj is double ||
+                   obj is decimal;
         }
 
         public static object CreateInstance(this Type type, int count) {
-            if (typeof(Array).IsAssignableFrom(type))
+            if (typeof(Array).IsAssignableFrom(type)) {
                 return Array.CreateInstance(type.GetElementType(), count);
+            }
             return type.CreateInstance();
         }
 
@@ -110,19 +121,11 @@ namespace ExtractorSharp.Json {
 
         public static bool NotIgnore(this MemberInfo element) {
             var attr_type = typeof(LSIgnoreAttribute);
-            if (Attribute.IsDefined(element, attr_type)) {
-                return false;
-            }
+            if (Attribute.IsDefined(element, attr_type)) return false;
             Type class_type = null;
-            if (element is FieldInfo f) {
-                class_type = f.FieldType;
-            }
-            if (element is PropertyInfo p) {
-                class_type = p.PropertyType;
-            }
-            if (class_type == null || Attribute.IsDefined(class_type, attr_type)) {
-                return false;
-            }
+            if (element is FieldInfo f) class_type = f.FieldType;
+            if (element is PropertyInfo p) class_type = p.PropertyType;
+            if (class_type == null || Attribute.IsDefined(class_type, attr_type)) return false;
             return true;
         }
     }

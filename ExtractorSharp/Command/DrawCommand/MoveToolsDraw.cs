@@ -1,16 +1,18 @@
-﻿using ExtractorSharp.Core;
+﻿using System.Drawing;
+using ExtractorSharp.Core.Command;
+using ExtractorSharp.Core.Composition;
+using ExtractorSharp.Core.Draw;
 using ExtractorSharp.Core.Lib;
-using ExtractorSharp.Draw;
-using System.Drawing;
 
 namespace ExtractorSharp.Command.DrawCommand {
-    class MoveToolsDraw : ICommand {
+    internal class MoveToolsDraw : ICommand {
+        private Point Dest;
         private IPaint Entity;
 
         private Point Source;
 
-        private Point Dest;
-        
+        private IConnector Connector => Program.Connector;
+
 
         public string Name => "MoveTools";
 
@@ -20,20 +22,16 @@ namespace ExtractorSharp.Command.DrawCommand {
 
         public bool IsFlush => false;
 
-        private IConnector Connector => Program.Connector;
-
         public void Do(params object[] args) {
             Entity = args[0] as IPaint;
-            Source = (Point)args[1];
-            Dest = (Point)args[2];
+            Source = (Point) args[1];
+            Dest = (Point) args[2];
             Entity.Location = Entity.Location.Add(Dest.Minus(Source));
             Connector.CanvasFlush();
         }
 
-        public void Redo() {
-        }
+        public void Redo() { }
 
-        public void Undo() {
-        }
+        public void Undo() { }
     }
 }

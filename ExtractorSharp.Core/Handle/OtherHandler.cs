@@ -1,31 +1,32 @@
-﻿using ExtractorSharp.Core.Lib;
-using ExtractorSharp.Data;
-using System.Drawing;
+﻿using System.Drawing;
 using System.IO;
+using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Core.Model;
 
-namespace ExtractorSharp.Handle {
+namespace ExtractorSharp.Core.Handle {
     /// <summary>
-    /// 其他类型文件的处理
+    ///     其他类型文件的处理
     /// </summary>
     public class OtherHandler : Handler {
-        byte[] Data = new byte[0];
-        public OtherHandler(Album Album) : base(Album) {}
+        private byte[] _data = new byte[0];
+        public OtherHandler(Album album) : base(album) { }
 
         public override byte[] AdjustData() {
-            return Data;
+            return _data;
         }
-        
+
 
         public override Bitmap ConvertToBitmap(Sprite entity) {
             return null;
         }
 
-        public override byte[] ConvertToByte(Sprite entity) => new byte[0];
+        public override byte[] ConvertToByte(Sprite entity) {
+            return new byte[0];
+        }
 
         public override void CreateFromStream(Stream stream) {
-            stream.Read((int)Album.Info_Length,out Data);
-            Album.Data = Data;
+            stream.Read((int) Album.IndexLength, out _data);
+            Album.Data = _data;
         }
-        
     }
 }

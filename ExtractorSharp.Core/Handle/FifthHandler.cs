@@ -1,55 +1,42 @@
-﻿using ExtractorSharp.Core.Lib;
-using ExtractorSharp.Data;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Drawing.Imaging;
 using System.IO;
+using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Core.Model;
 
-namespace ExtractorSharp.Handle {
+namespace ExtractorSharp.Core.Handle {
     /// <summary>
-    /// Ver5处理器
+    ///     Ver5处理器
     /// </summary>
-    public class FifthHandler : SecondHandler{
-        private readonly Dictionary<int, DDS_Info> Map = new Dictionary<int, DDS_Info>();
-        public readonly List<DDS> List = new List<DDS>();
-        public FifthHandler(Album Album) : base(Album) {}
+    public class FifthHandler : SecondHandler {
+        private readonly Dictionary<int, TextureInfo> _map = new Dictionary<int, TextureInfo>();
+        public readonly List<Texture> List = new List<Texture>();
+        public FifthHandler(Album album) : base(album) { }
 
 
         public override Bitmap ConvertToBitmap(Sprite entity) {
-            if (entity.Type < ColorBits.LINK && entity.Length > 0) {
-                return base.ConvertToBitmap(entity);
-            }
+            if (entity.Type < ColorBits.Link && entity.Length > 0) return base.ConvertToBitmap(entity);
 
-            if (!Map.ContainsKey(entity.Index)) {
-                return new Bitmap(1, 1);
-            }
-            var index = Map[entity.Index];
-            var dds = index.DDS;
+            if (!_map.ContainsKey(entity.Index)) return new Bitmap(1, 1);
+            var index = _map[entity.Index];
+            var dds = index.Texture;
             var bmp = dds.Pictrue.Clone(index.Rectangle, PixelFormat.DontCare);
-            if (index.Top != 0) {
-                bmp.RotateFlip(RotateFlipType.Rotate90FlipXY);
-            }
+            if (index.Top != 0) bmp.RotateFlip(RotateFlipType.Rotate90FlipXY);
             return bmp;
-
         }
 
         public override byte[] ConvertToByte(Sprite entity) {
-            if (entity.Type < ColorBits.LINK && entity.Length > 0) {
-                return base.ConvertToByte(entity);
-            }
+            if (entity.Type < ColorBits.Link && entity.Length > 0) return base.ConvertToByte(entity);
 
             if (entity.Width * entity.Height == 1) {
-                entity.Compress = Compress.NONE;
+                entity.CompressMode = CompressMode.None;
                 return base.ConvertToByte(entity);
             }
-            if (entity.Compress == Compress.ZLIB) {
-                //非DDS_ZLIB 不识别
-                entity.Compress = Compress.DDS_ZLIB;
-            }
-            var dds = DDS.CreateFromBitmap(entity);
-            Map[entity.Index] = new DDS_Info{
-                DDS = dds,
+            if (entity.CompressMode == CompressMode.Zlib) entity.CompressMode = CompressMode.DdsZlib;
+            var dds = Texture.CreateFromBitmap(entity);
+            _map[entity.Index] = new TextureInfo {
+                Texture = dds,
                 RightDown = new Point(dds.Width, dds.Height)
             };
             return new byte[0];
@@ -57,27 +44,25 @@ namespace ExtractorSharp.Handle {
 
 
         /// <summary>
-        /// 校正下标
+        ///     校正下标
         /// </summary>
         /// <returns></returns>
         public override byte[] AdjustData() {
             List.Clear();
-            foreach (var index in Map.Values) {
-                var dds = index.DDS;
-                if (List.Contains(dds)) {
-                    continue;
-                }
+            foreach (var index in _map.Values) {
+                var dds = index.Texture;
+                if (List.Contains(dds)) continue;
                 dds.Index = List.Count;
                 List.Add(dds);
-            } 
+            }
 
             var ms = new MemoryStream();
             ms.WriteInt(Album.CurrentTable.Count);
             Colors.WritePalette(ms, Album.CurrentTable);
 
             foreach (var dds in List) {
-                ms.WriteInt((int)dds.Version);
-                ms.WriteInt((int)dds.Type);
+                ms.WriteInt((int) dds.Version);
+                ms.WriteInt((int) dds.Type);
                 ms.WriteInt(dds.Index);
                 ms.WriteInt(dds.Length);
                 ms.WriteInt(dds.FullLength);
@@ -88,40 +73,36 @@ namespace ExtractorSharp.Handle {
             var ver2List = new List<Sprite>();
             var start = ms.Length;
             foreach (var entity in Album.List) {
-                ms.WriteInt((int)entity.Type);
-                if (entity.Type == ColorBits.LINK) {
+                ms.WriteInt((int) entity.Type);
+                if (entity.Type == ColorBits.Link) {
                     ms.WriteInt(entity.Target.Index);
                     continue;
                 }
-                ms.WriteInt((int)entity.Compress);
+                ms.WriteInt((int) entity.CompressMode);
                 ms.WriteInt(entity.Size.Width);
                 ms.WriteInt(entity.Size.Height);
                 ms.WriteInt(entity.Length);
                 ms.WriteInt(entity.Location.X);
                 ms.WriteInt(entity.Location.Y);
-                ms.WriteInt(entity.Canvas_Size.Width);
-                ms.WriteInt(entity.Canvas_Size.Height);
-                if (entity.Type < ColorBits.LINK && entity.Length != 0) {
+                ms.WriteInt(entity.CanvasSize.Width);
+                ms.WriteInt(entity.CanvasSize.Height);
+                if (entity.Type < ColorBits.Link && entity.Length != 0) {
                     ver2List.Add(entity);
                     continue;
                 }
-                var info = Map[entity.Index];
+                var info = _map[entity.Index];
                 ms.WriteInt(info.Unknown);
-                ms.WriteInt(info.DDS.Index);
+                ms.WriteInt(info.Texture.Index);
                 ms.WriteInt(info.LeftUp.X);
                 ms.WriteInt(info.LeftUp.Y);
                 ms.WriteInt(info.RightDown.X);
                 ms.WriteInt(info.RightDown.Y);
                 ms.WriteInt(info.Top);
             }
-            Album.Info_Length = ms.Length - start;
-            foreach (var dds in List) {
-                ms.Write(dds.Data);
-            }
+            Album.IndexLength = ms.Length - start;
+            foreach (var dds in List) ms.Write(dds.Data);
 
-            foreach(var sprite in ver2List) {
-                ms.Write(sprite.Data);
-            }
+            foreach (var sprite in ver2List) ms.Write(sprite.Data);
             ms.Close();
             var data = ms.ToArray();
             Album.Length = data.Length + 40;
@@ -134,16 +115,16 @@ namespace ExtractorSharp.Handle {
         }
 
         public override void CreateFromStream(Stream stream) {
-            var index_count = stream.ReadInt();
+            var indexCount = stream.ReadInt();
             Album.Length = stream.ReadInt();
             var count = stream.ReadInt();
             var table = new List<Color>(Colors.ReadPalette(stream, count));
-            Album.Tables = new List<List<Color>> { table };
-            var list = new List<DDS>();
-            for (var i = 0; i < index_count; i++) {
-                var dds = new DDS {
-                    Version = (DDS_Version)stream.ReadInt(),
-                    Type = (ColorBits)stream.ReadInt(),
+            Album.Tables = new List<List<Color>> {table};
+            var list = new List<Texture>();
+            for (var i = 0; i < indexCount; i++) {
+                var dds = new Texture {
+                    Version = (TextureVersion) stream.ReadInt(),
+                    Type = (ColorBits) stream.ReadInt(),
                     Index = stream.ReadInt(),
                     Length = stream.ReadInt(),
                     FullLength = stream.ReadInt(),
@@ -157,21 +138,21 @@ namespace ExtractorSharp.Handle {
             for (var i = 0; i < Album.Count; i++) {
                 var entity = new Sprite(Album);
                 entity.Index = Album.List.Count;
-                entity.Type = (ColorBits)stream.ReadInt();
+                entity.Type = (ColorBits) stream.ReadInt();
                 Album.List.Add(entity);
-                if (entity.Type == ColorBits.LINK) {
+                if (entity.Type == ColorBits.Link) {
                     dic.Add(entity, stream.ReadInt());
                     continue;
                 }
-                entity.Compress = (Compress)stream.ReadInt();
+                entity.CompressMode = (CompressMode) stream.ReadInt();
                 entity.Width = stream.ReadInt();
                 entity.Height = stream.ReadInt();
-                entity.Length = stream.ReadInt();                    //保留，固定为0
+                entity.Length = stream.ReadInt(); //保留，固定为0
                 entity.X = stream.ReadInt();
                 entity.Y = stream.ReadInt();
-                entity.Canvas_Width = stream.ReadInt();
-                entity.Canvas_Height = stream.ReadInt();
-                if (entity.Type < ColorBits.LINK && entity.Length != 0) {
+                entity.CanvasWidth = stream.ReadInt();
+                entity.CanvasHeight = stream.ReadInt();
+                if (entity.Type < ColorBits.Link && entity.Length != 0) {
                     ver2List.Add(entity);
                     continue;
                 }
@@ -181,19 +162,17 @@ namespace ExtractorSharp.Handle {
                 var leftup = new Point(stream.ReadInt(), stream.ReadInt());
                 var rightdown = new Point(stream.ReadInt(), stream.ReadInt());
                 var top = stream.ReadInt();
-                var info = new DDS_Info() {
+                var info = new TextureInfo {
                     Unknown = j,
-                    DDS = dds,
+                    Texture = dds,
                     LeftUp = leftup,
                     RightDown = rightdown,
                     Top = top
                 };
-                Map.Add(entity.Index, info);
+                _map.Add(entity.Index, info);
             }
 
-            foreach (var entity in dic.Keys) {
-                entity.Target = Album.List[dic[entity]];
-            }
+            foreach (var entity in dic.Keys) entity.Target = Album.List[dic[entity]];
             foreach (var dds in list) {
                 var data = new byte[dds.Length];
                 stream.Read(data);
@@ -206,22 +185,16 @@ namespace ExtractorSharp.Handle {
             }
         }
 
-        public override void ConvertToVersion(Img_Version Version) {
+        public override void ConvertToVersion(ImgVersion version) {
             foreach (var entity in Album.List) {
                 entity.Load();
-                if (Version <= Img_Version.Ver2) {
-                    if (entity.Type == ColorBits.DXT_1) {
-                        entity.Type = ColorBits.ARGB_1555;
-                    }
-                    if (entity.Type == ColorBits.DXT_5) {
-                        entity.Type = ColorBits.ARGB_8888;
-                    }
-                } else if (Version == Img_Version.Ver4) {
-                    entity.Type = ColorBits.ARGB_1555;
+                if (version <= ImgVersion.Ver2) {
+                    if (entity.Type == ColorBits.Dxt1) entity.Type = ColorBits.Argb1555;
+                    if (entity.Type == ColorBits.Dxt5) entity.Type = ColorBits.Argb8888;
+                } else if (version == ImgVersion.Ver4) {
+                    entity.Type = ColorBits.Argb1555;
                 }
-                if (entity.Compress > Compress.ZLIB) {
-                    entity.Compress = Compress.ZLIB;
-                }
+                if (entity.CompressMode > CompressMode.Zlib) entity.CompressMode = CompressMode.Zlib;
             }
         }
     }

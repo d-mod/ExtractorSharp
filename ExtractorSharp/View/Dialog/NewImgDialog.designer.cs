@@ -1,6 +1,6 @@
 ﻿using ExtractorSharp.Component;
 
-namespace ExtractorSharp {
+namespace ExtractorSharp.View.Dialog {
     partial class NewImgDialog {
         /// <summary>
         /// Required designer variable.

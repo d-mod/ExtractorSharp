@@ -1,80 +1,73 @@
-﻿using System.Linq;
-using ExtractorSharp.Core;
-using ExtractorSharp.Data;
+﻿using ExtractorSharp.Core.Command;
+using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.Command.ImageCommand {
     /// <summary>
-    /// 删除贴图
+    ///     删除贴图
     /// </summary>
-    class DeleteImage : ISingleAction,ICommandMessage{
+    internal class DeleteImage : ISingleAction, ICommandMessage {
+        private Album _album;
 
-        private Album Album;
-
-        private Sprite[] Array;
+        private Sprite[] _array;
 
         public int[] Indices { set; get; }
 
         public string Name => "DeleteImage";
 
         public void Do(params object[] args) {
-            Album = args[0] as Album;
+            _album = args[0] as Album;
             Indices = args[1] as int[];
-            Array = new Sprite[Indices.Length];
+            _array = new Sprite[Indices.Length];
             for (var i = 0; i < Indices.Length; i++) {
-                if (Indices[i] > Album.List.Count - 1 || Indices[i] < 0) {
-                    continue;
-                }
-                Array[i] = Album.List[Indices[i]];
+                if (Indices[i] > _album.List.Count - 1 || Indices[i] < 0) continue;
+                _array[i] = _album.List[Indices[i]];
             }
-            foreach (var entity in Array) {
+
+            foreach (var entity in _array) {
                 if (entity != null) {
-                    var frist = Album.List.Find(item => item?.Target == entity);
-                    if (frist != null) {
-                        Album.List[frist.Index] = entity;
-                    }
-                    Album.List[entity.Index] = null;
+                    var frist = _album.List.Find(item => item?.Target == entity);
+                    if (frist != null) _album.List[frist.Index] = entity;
+                    _album.List[entity.Index] = null;
                 }
             }
-            Album.List.RemoveAll(e => e == null);
-            Album.AdjustIndex();
+
+            _album.List.RemoveAll(e => e == null);
+            _album.AdjustIndex();
         }
 
-        public void Redo() => Do( Album, Indices);
+        public void Redo() {
+            Do(_album, Indices);
+        }
 
 
         public void Undo() {
             for (var i = 0; i < Indices.Length; i++) {
-                var entity = Array[i];
-                if (Indices[i] < Album.List.Count) {
-                    Album.List.Insert(Indices[i], entity);
+                var entity = _array[i];
+                if (Indices[i] < _album.List.Count) {
+                    _album.List.Insert(Indices[i], entity);
                 } else {
-                    entity.Index = Album.List.Count;
-                    Album.List.Add(entity);
+                    entity.Index = _album.List.Count;
+                    _album.List.Add(entity);
                 }
             }
-            if (Array.Length > 0) {
-                Album.AdjustIndex();
-            }
+
+            if (_array.Length > 0) _album.AdjustIndex();
         }
 
-        public void Action(Album Album, int[] indexes) {
+        public void Action(Album album, int[] indexes) {
             var array = new Sprite[indexes.Length];
-            for (int i = 0; i < array.Length; i++) {
-                if (indexes[i] < Album.List.Count && indexes[i] > -1) {
-                    array[i] = Album.List[indexes[i]];
+            for (var i = 0; i < array.Length; i++) {
+                if (indexes[i] < album.List.Count && indexes[i] > -1) {
+                    array[i] = album.List[indexes[i]];
                 }
             }
-            foreach (var entity in array) {
-                Album.List.Remove(entity);
-            }
-            Album.AdjustIndex();//校正索引
+            foreach (var entity in array) album.List.Remove(entity);
+            album.AdjustIndex(); //校正索引
         }
-        
+
 
         public bool CanUndo => true;
 
         public bool IsChanged => true;
-
-        public bool IsFlush => false;
     }
 }

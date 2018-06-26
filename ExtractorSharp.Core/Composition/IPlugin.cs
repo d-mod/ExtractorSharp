@@ -1,4 +1,3 @@
-﻿namespace ExtractorSharp.Composition {
-    public interface IPlugin {
-    }
+﻿namespace ExtractorSharp.Core.Composition {
+    public interface IPlugin { }
 }

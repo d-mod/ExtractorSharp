@@ -1,13 +1,13 @@
-﻿using ExtractorSharp.Core;
-using ExtractorSharp.Data;
-using System;
+﻿using System;
 using System.Windows.Forms;
+using ExtractorSharp.Core;
+using ExtractorSharp.Core.Model;
+using ExtractorSharp.EventArguments;
 
 namespace ExtractorSharp.View.Pane {
-    partial class HistoryPage : TabPage {
-        private Controller Controller;
-        private Language Language => Language.Default;
-        
+    internal partial class HistoryPage : TabPage {
+        private readonly Controller Controller;
+
         public HistoryPage() {
             InitializeComponent();
             Controller = Program.Controller;
@@ -23,6 +23,8 @@ namespace ExtractorSharp.View.Pane {
             historyList.SelectedIndex = 0;
         }
 
+        private Language Language => Language.Default;
+
         private void Add(object sender, EventArgs e) {
             var index = historyList.SelectedIndex - 1;
             if (index > -1) {
@@ -37,18 +39,12 @@ namespace ExtractorSharp.View.Pane {
         }
 
 
-
-
         private void RefreshList(object sender, EventArgs e) {
-            if (Parent.Visible) {
-                historyList.SelectedIndex = Controller.Index;
-            }
+            if (Parent.Visible) historyList.SelectedIndex = Controller.Index;
         }
 
         public void Refresh(object sender, CommandEventArgs e) {
-            if (e.Type == CommandEventType.Clear || e.Command.CanUndo) {
-                Refresh();
-            }
+            if (e.Type == CommandEventType.Clear || e.Command.CanUndo) Refresh();
         }
 
         public override void Refresh() {
@@ -59,14 +55,12 @@ namespace ExtractorSharp.View.Pane {
                 for (var i = 0; i < history.Length; i++) {
                     historyList.Items.Add($"{(i == Controller.Index - 1 ? "-> " : "")}{Language[history[i].Name]}");
                 }
-                if (Controller.Index < historyList.Items.Count) {
-                    historyList.SelectedIndex = Controller.Index;
-                }
+                if (Controller.Index < historyList.Items.Count) historyList.SelectedIndex = Controller.Index;
                 base.Refresh();
             }
         }
 
-        private void Move(object sender,EventArgs e) {
+        private void Move(object sender, EventArgs e) {
             if (historyList.SelectedIndex > -1) {
                 Controller.Move(historyList.SelectedIndex - Controller.Index);
                 Refresh();
@@ -74,10 +68,7 @@ namespace ExtractorSharp.View.Pane {
         }
 
         private void Goto(object sender, MouseEventArgs e) {
-            if (e.Button == MouseButtons.Left && e.Clicks == 2) {
-                Move(sender, e);
-            }
+            if (e.Button == MouseButtons.Left && e.Clicks == 2) Move(sender, e);
         }
-
     }
 }

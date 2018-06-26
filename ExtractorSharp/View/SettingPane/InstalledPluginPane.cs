@@ -1,37 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using ExtractorSharp.Composition;
 using ExtractorSharp.Component;
+using ExtractorSharp.Composition;
 using ExtractorSharp.Core;
-using System.IO;
+using ExtractorSharp.Core.Composition;
 
 namespace ExtractorSharp.View.SettingPane {
     public partial class InstalledPluginPane : AbstractSettingPane {
-        private Hoster Hoster => Program.Hoster;
         public InstalledPluginPane(IConnector Connector) : base(Connector) {
             InitializeComponent();
             Flush();
             browseButton.Click += BrowsePlugin;
         }
 
+        private Hoster Hoster => Program.Hoster;
+
         public void Flush() {
             list.Items.Clear();
-            foreach (var plugin in Hoster.List.Values) {
-                list.Items.Add(new PluginListItem(plugin));
-            }
+            foreach (var plugin in Hoster.List.Values) list.Items.Add(new PluginListItem(plugin));
         }
 
         private void BrowsePlugin(object sender, EventArgs e) {
             var dialog = new FolderBrowserDialog();
             if (dialog.ShowDialog() == DialogResult.OK) {
-                var dir=dialog.SelectedPath;
+                var dir = dialog.SelectedPath;
                 if (Hoster.Install(dir)) {
                     Connector.SendSuccess("PluginInstalled");
                     Flush();
@@ -41,22 +33,18 @@ namespace ExtractorSharp.View.SettingPane {
             }
         }
 
-     
 
+        public override void Initialize() { }
 
-        public override void Initialize() {
-
-        }
-        public override void Save() {
-        }
+        public override void Save() { }
 
         private class PluginListItem : ListViewItem {
-            public Plugin Plugin { get; }
             public PluginListItem(Plugin Plugin) {
                 this.Plugin = Plugin;
-                this.Text = Plugin.Name;
+                Text = Plugin.Name;
             }
-        }
 
+            public Plugin Plugin { get; }
+        }
     }
 }

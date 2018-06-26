@@ -1,14 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ExtractorSharp.Data;
-using System.IO;
-using ExtractorSharp.Core.Lib;
+﻿using System.Collections.Generic;
+using ExtractorSharp.Core.Coder;
+using ExtractorSharp.Core.Command;
+using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.Command.FileCommand {
-    class SaveFile : IMutipleAciton,ICommandMessage{
+    internal class SaveFile : IMutipleAciton, ICommandMessage {
+        private const int SaveToDir = 0X00;
+        private const int SaveToImg = 0x01;
+        private const int SaveToNpk = 0X02;
+
+        private Album[] _array;
+        private string _path;
+        private int _type;
         public string Name => "SaveFile";
 
         public bool CanUndo => false;
@@ -17,40 +20,31 @@ namespace ExtractorSharp.Command.FileCommand {
 
         public bool IsFlush => false;
 
-        private Album[] Array;
-        private string Path;
-        private int Type;
-
-        private const int SAVE_TO_DIR = 0X00;
-        private const int SAVE_TO_IMG = 0x01;
-        private const int SAVE_TO_NPK = 0X02;
-
         public void Action(params Album[] array) {
-            switch(Type){
-                case SAVE_TO_DIR:
-                    Npks.SaveToDirectory(Path, array);
+            switch (_type) {
+                case SaveToDir:
+                    NpkCoder.SaveToDirectory(_path, array);
                     break;
-                case SAVE_TO_IMG:
-                    if (array.Length > 0) {
-                        array[0].Save(Path);
-                    }
+                case SaveToImg:
+                    if (array.Length > 0) array[0].Save(_path);
                     break;
-                case SAVE_TO_NPK:
-                    Npks.Save(Path, new List<Album>(array));
+                case SaveToNpk:
+                    NpkCoder.Save(_path, new List<Album>(array));
                     break;
             }
         }
+
         public void Do(params object[] args) {
-            Array = args[0] as Album[];
-            Path = args[1] as string;
+            _array = args[0] as Album[];
+            _path = args[1] as string;
             if (args.Length > 2) {
-                Type = (int)args[2];
+                _type = (int) args[2];
             }
-            Action(Array);
+            Action(_array);
         }
-        public void Redo() {
-        }
-        public void Undo() {
-        }
+
+        public void Redo() { }
+
+        public void Undo() { }
     }
 }

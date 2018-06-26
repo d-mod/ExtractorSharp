@@ -1,22 +1,24 @@
-﻿using ExtractorSharp.Core;
-using ExtractorSharp.EventArguments;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
+using ExtractorSharp.Component.EventArguments;
+using ExtractorSharp.Core.Composition;
 
 namespace ExtractorSharp.Component {
-    public partial class ESDialog:ESForm{
-        /// <summary>
-        /// 向视图层传递数据的事件
-        /// </summary>
-        protected event DialogDataEvent DataSent;
-        protected delegate void DialogDataEvent(object sender,DialogDataEventArgs e);
-        protected void OnDataSent(DialogDataEventArgs e) => DataSent?.Invoke(this, e);
-
-        public ESDialog(IConnector Connector):base(Connector) {
+    public partial class ESDialog : ESForm {
+        public ESDialog(IConnector connector) : base(connector) {
             InitializeComponent();
         }
 
         /// <summary>
-        /// 向视图层传递数据
+        ///     向视图层传递数据的事件
+        /// </summary>
+        protected event DialogDataEvent DataSent;
+
+        protected void OnDataSent(DialogDataEventArgs e) {
+            DataSent?.Invoke(this, e);
+        }
+
+        /// <summary>
+        ///     向视图层传递数据
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -42,11 +44,12 @@ namespace ExtractorSharp.Component {
         protected virtual void OnEscape() {
             DialogResult = DialogResult.Cancel;
         }
-        
 
 
+        public virtual DialogResult Show(params object[] args) {
+            return ShowDialog();
+        }
 
-        public virtual DialogResult Show(params object[] args) => ShowDialog();
-
+        protected delegate void DialogDataEvent(object sender, DialogDataEventArgs e);
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 
 namespace ExtractorSharp.Json.Attr {
-    public class LSIgnoreAttribute :Attribute{
-    }
+    public class LSIgnoreAttribute : Attribute { }
 }

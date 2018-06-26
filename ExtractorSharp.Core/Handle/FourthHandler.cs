@@ -1,28 +1,27 @@
-﻿using ExtractorSharp.Core.Lib;
-using ExtractorSharp.Data;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Core.Model;
 
-namespace ExtractorSharp.Handle {
+namespace ExtractorSharp.Core.Handle {
     /// <summary>
-    /// Ver4处理器
+    ///     Ver4处理器
     /// </summary>
     public class FourthHandler : SecondHandler {
-
-        public FourthHandler(Album Album) : base(Album) {}
+        public FourthHandler(Album album) : base(album) { }
 
         public override Bitmap ConvertToBitmap(Sprite entity) {
             var data = entity.Data;
             var size = entity.Width * entity.Height;
-            if (entity.Type==ColorBits.ARGB_1555&&entity.Compress == Compress.ZLIB) {
+            if (entity.Type == ColorBits.Argb1555 && entity.CompressMode == CompressMode.Zlib) {
                 data = Zlib.Decompress(data, size);
                 var table = Album.CurrentTable;
                 if (table.Count > 0) {
                     using (var os = new MemoryStream()) {
-                        for (var i = 0; i < data.Length; i++) {
-                            var j = data[i] % table.Count;
-                            os.WriteColor(table[j], ColorBits.ARGB_8888);
+                        foreach (var b in data) {
+                            var j = b % table.Count;
+                            os.WriteColor(table[j], ColorBits.Argb8888);
                         }
                         data = os.ToArray();
                     }
@@ -33,22 +32,19 @@ namespace ExtractorSharp.Handle {
         }
 
         public override byte[] ConvertToByte(Sprite entity) {
-            if (entity.Compress == Compress.NONE) {
-                return base.ConvertToByte(entity);
-            }
+            if (entity.CompressMode == CompressMode.None) return base.ConvertToByte(entity);
             using (var ms = new MemoryStream()) {
                 var data = entity.Picture.ToArray();
                 var table = Album.CurrentTable;
                 for (var i = 0; i < data.Length; i += 4) {
                     var color = Color.FromArgb(data[i + 3], data[i + 2], data[i + 1], data[i]);
-                    if (!table.Contains(color))
+                    if (!table.Contains(color)) {
                         table.Add(color);
-                    ms.WriteByte((byte)table.IndexOf(color));
+                    }
+                    ms.WriteByte((byte) table.IndexOf(color));
                 }
                 data = ms.ToArray();
-                if (data.Length < 2) {
-                    data = new byte[2];
-                }
+                if (data.Length < 2) data = new byte[2];
                 return data;
             }
         }
@@ -64,11 +60,11 @@ namespace ExtractorSharp.Handle {
             }
         }
 
-        public override void ConvertToVersion(Img_Version Version) {
-            if (Version <= Img_Version.Ver2 || Version == Img_Version.Ver5) {
+        public override void ConvertToVersion(ImgVersion version) {
+            if (version <= ImgVersion.Ver2 || version == ImgVersion.Ver5) {
                 foreach (var item in Album.List) {
-                    if (item.Type != ColorBits.LINK) {
-                        item.Type = ColorBits.ARGB_8888;
+                    if (item.Type != ColorBits.Link) {
+                        item.Type = ColorBits.Argb8888;
                     }
                 }
             }
@@ -76,11 +72,10 @@ namespace ExtractorSharp.Handle {
 
         public override void CreateFromStream(Stream stream) {
             var size = stream.ReadInt();
-            var Table = new List<Color>(Colors.ReadPalette(stream,size));
+            var Table = new List<Color>(Colors.ReadPalette(stream, size));
             Album.Tables = new List<List<Color>>();
             Album.Tables.Add(Table);
             base.CreateFromStream(stream);
         }
-
     }
 }

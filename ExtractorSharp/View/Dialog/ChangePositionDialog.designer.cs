@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using ExtractorSharp.Component;
 
-namespace ExtractorSharp.View{
+namespace ExtractorSharp.View.Dialog{
     partial class ChangePositonDialog {
         /// <summary>
         /// Required designer variable.

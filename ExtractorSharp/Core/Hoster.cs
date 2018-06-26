@@ -1,34 +1,23 @@
-﻿using ExtractorSharp.Composition;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
-using ExtractorSharp.Config;
-using ExtractorSharp.Data;
-using ExtractorSharp.Json;
 using System.Diagnostics;
+using System.IO;
 using System.Net;
+using System.Reflection;
+using ExtractorSharp.Composition;
+using ExtractorSharp.Core.Config;
+using ExtractorSharp.Core.Model;
 using ExtractorSharp.Exceptions;
+using ExtractorSharp.Json;
 
 namespace ExtractorSharp.Core {
     /// <summary>
-    /// 插件宿主
+    ///     插件宿主
     /// </summary>
     public class Hoster {
-
-        public Dictionary<Guid, Plugin> List { get; }
-
-        public List<Metadata> NetList { set; get; } = new List<Metadata>();
-
-        private IConfig Config => Program.Config;
-
-        private ComposablePartCatalog Catalog { get; }
-
-        private const string MARKET_URL = "http://extractorsharp.kritsu.net/api/plugin/list";
-
 
         public Hoster() {
             List = new Dictionary<Guid, Plugin>();
@@ -44,6 +33,14 @@ namespace ExtractorSharp.Core {
             }
         }
 
+        public Dictionary<Guid, Plugin> List { get; }
+
+        public List<Metadata> NetList { set; get; } = new List<Metadata>();
+
+        private IConfig Config => Program.Config;
+
+        private ComposablePartCatalog Catalog { get; }
+
         public bool Download(Guid guid) {
             var name = $"{Config["RootPath"]}/{Config["UpdateExeName"]}";
             try {
@@ -51,29 +48,28 @@ namespace ExtractorSharp.Core {
                 client.DownloadFile(Config["UpdateExeUrl"].Value, name);
                 client.Dispose();
                 Process.Start(name);
-                Process pro = Process.Start(name, $" -p {guid}");
-                pro.Exited += (sender, e) => Install($"{Config["RootPath"]}/plugin/{guid}");
-            } catch(Exception e) {
+                var pro = Process.Start(name, $" -p {guid}");
+                if (pro != null) {
+                    pro.Exited += (sender, e) => Install($"{Config["RootPath"]}/plugin/{guid}");
+                }
+            } catch (Exception e) {
                 return false;
             }
             return true;
         }
 
         public bool Install(string dir) {
-            var plugin = new Plugin();
-            plugin.Directory = dir;
+            var plugin = new Plugin {Directory = dir};
             //加载主程序模块和插件模块
             var catalog = new AggregateCatalog();
-            catalog.Catalogs.Add(this.Catalog);
+            catalog.Catalogs.Add(Catalog);
             catalog.Catalogs.Add(new DirectoryCatalog(dir));
             var container = new CompositionContainer(catalog);
             //注入插件信息
             container.ComposeParts(plugin);
             //载入设置
             var confDir = $"{dir}/conf/conf.json";
-            if (File.Exists(confDir)) {
-                Config.Load(confDir);
-            }
+            if (File.Exists(confDir)) Config.Load(confDir);
             //载入多语言
             var lanDir = $"{dir}/lan";
             if (Directory.Exists(lanDir)) {
@@ -82,9 +78,10 @@ namespace ExtractorSharp.Core {
             //初始化
             try {
                 plugin.Initialize();
-            } catch(Exception) {
+            } catch (Exception) {
                 return false;
             }
+
             //记录插件
             List.Add(plugin.Guid, plugin);
             return true;

@@ -1,19 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using ExtractorSharp.Component;
-using ExtractorSharp.Config;
-using ExtractorSharp.Core;
+﻿using ExtractorSharp.Component;
+using ExtractorSharp.Core.Composition;
+using ExtractorSharp.Core.Config;
 
 namespace ExtractorSharp.View.SettingPane {
     public partial class GridPane : AbstractSettingPane {
-        public GridPane(IConnector Data):base(Data){
+        public GridPane(IConnector Data) : base(Data) {
             InitializeComponent();
         }
 
@@ -22,7 +13,7 @@ namespace ExtractorSharp.View.SettingPane {
         }
 
         public override void Save() {
-            Config["GridGap"]=new ConfigValue(gridGapBox.Value);
+            Config["GridGap"] = new ConfigValue(gridGapBox.Value);
         }
     }
 }

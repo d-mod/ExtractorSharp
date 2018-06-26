@@ -74,7 +74,6 @@
     ]
   },
   "knight": {
-    "name":,
     "hasAt": false,
     "weapon": ${swordman.weapon}
   },
@@ -83,8 +82,17 @@
     "weapon": [
       "pike",
       "halberd",
-	  "beamspear",
-	  "javelin"
+      "beamspear",
+      "javelin"
+    ]
+  },
+  "gunblader":{
+    "hasAt":false,
+    "weapon":[
+      "mswd",
+      "sblade",
+      "coreswd",
+      "lblade"
     ]
   }
 }

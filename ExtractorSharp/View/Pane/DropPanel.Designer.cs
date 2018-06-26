@@ -1,7 +1,6 @@
-﻿using ExtractorSharp.View.Pane;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
-namespace ExtractorSharp.View {
+namespace ExtractorSharp.View.Pane {
     partial class DropPanel {
         /// <summary> 
         /// 必需的设计器变量。

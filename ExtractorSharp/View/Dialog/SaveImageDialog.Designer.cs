@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace ExtractorSharp.View {
+namespace ExtractorSharp.View.Dialog {
     partial class SaveImageDialog {
         /// <summary>
         /// Required designer variable.

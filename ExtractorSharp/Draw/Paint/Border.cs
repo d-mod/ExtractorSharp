@@ -1,24 +1,27 @@
-﻿using ExtractorSharp.Data;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
+using ExtractorSharp.Core.Draw;
+using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.Draw.Paint {
-    class Border : IPaint {
+    internal class Border : IPaint {
         public string Name { set; get; } = "Border";
         public bool Locked { set; get; }
         public bool Visible { set; get; }
         public Bitmap Image { set; get; }
-        public Size Size { set { } get => Rectangle.Size; }
-        public Point Location { set { } get => Rectangle.Location; }
+
+        public Size Size {
+            set { }
+            get => Rectangle.Size;
+        }
+
+        public Point Location {
+            set { }
+            get => Rectangle.Location;
+        }
+
         public Rectangle Rectangle {
             set { }
-            get {
-                return Tag == null ? Rectangle.Empty : (Rectangle)Tag;
-            }
+            get => Tag == null ? Rectangle.Empty : (Rectangle) Tag;
         }
 
         public object Tag { set; get; }
@@ -33,7 +36,8 @@ namespace ExtractorSharp.Draw.Paint {
         }
 
         public override string ToString() {
-            return $"{Language.Default[Name]},{Language.Default["Position"]}({Location.X},{Location.Y}),{Language.Default["Size"]}:({Size.Width},{Size.Height})";
+            return
+                $"{Language.Default[Name]},{Language.Default["Position"]}({Location.X},{Location.Y}),{Language.Default["Size"]}:({Size.Width},{Size.Height})";
         }
     }
 }

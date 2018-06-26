@@ -65,7 +65,8 @@
     <StartupObject>ExtractorSharp.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>logo.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -387,10 +388,7 @@
     </Compile>
     <None Include="README.md" />
     <None Include="Resources\chinese.json" />
-    <None Include="Resources\end.ogg" />
-    <None Include="Resources\error.ogg" />
     <None Include="Resources\queues.json" />
-    <None Include="Resources\success.ogg" />
     <None Include="Resources\view.json" />
   </ItemGroup>
   <ItemGroup>
@@ -545,7 +543,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Resources_4version_1json__JSONSchema="" />
+      <UserProperties Resources_4version_1json__JSONSchema="http://json.schemastore.org/appsettings" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

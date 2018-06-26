@@ -1,6 +1,6 @@
-﻿namespace ExtractorSharp.Json {
-    enum LSToken {
-        None = -1,           // Used to denote no Lookahead available
+﻿namespace ExtractorSharp.Install.Loose {
+    internal enum LSToken {
+        None = -1, // Used to denote no Lookahead available
         LBrace,
         RBrace,
         LBracket,
@@ -15,6 +15,6 @@
         False,
         Null,
         Identifier,
-        Expression,
+        Expression
     }
 }

@@ -1,4 +1,3 @@
-﻿namespace ExtractorSharp.Command {
-    public interface ICommandMessage {
-    }
+﻿namespace ExtractorSharp.Core.Command {
+    public interface ICommandMessage { }
 }

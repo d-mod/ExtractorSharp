@@ -1,11 +1,11 @@
-﻿using ExtractorSharp.Composition;
-using ExtractorSharp.Core.Lib;
-using ExtractorSharp.Data;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
+using ExtractorSharp.Core.Composition;
+using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.Support {
-    class GifSupport : IFileSupport {
+    internal class GifSupport : IFileSupport {
         public string Pattern => "\\.gif$";
 
         public void Encode(string file, List<Album> album) { }
@@ -16,8 +16,7 @@ namespace ExtractorSharp.Support {
             fs.Close();
             var album = new Album(array);
             album.Path = filename.GetSuffix();
-            return new List<Album>() { album};
+            return new List<Album> {album};
         }
-        
     }
 }

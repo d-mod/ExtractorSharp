@@ -1,33 +1,30 @@
-﻿using ExtractorSharp.Core;
-using ExtractorSharp.Data;
-using ExtractorSharp.Json;
-using System.Drawing;
+﻿using System.Drawing;
 using System.IO;
 using System.Windows;
+using ExtractorSharp.Core;
+using ExtractorSharp.Core.Command;
+using ExtractorSharp.Core.Model;
+using ExtractorSharp.Json;
 
 namespace ExtractorSharp.Command.ImageCommand {
     public class PasteImage : ICommand {
-
-        private Album Source,Target;
-
-        private int[] Indexes;
+        private Clipboarder Clipboarder;
 
         private int Index;
 
-        private Clipboarder Clipboarder;
+        private int[] Indexes;
+
+        private Album Source, Target;
 
         public string Name => "PasteImage";
 
         public bool CanUndo => true;
 
         public bool IsChanged => true;
-
-        public bool IsFlush => false;
-
-
+        
         public void Do(params object[] args) {
             Target = args[0] as Album;
-            Index = (int)args[1];
+            Index = (int) args[1];
             Clipboarder = Clipboarder.Default;
             Redo();
         }
@@ -39,26 +36,21 @@ namespace ExtractorSharp.Command.ImageCommand {
                 Source = Clipboarder.Album;
                 array = new Sprite[Indexes.Length];
                 Source.Adjust();
-                for (var i = 0; i < array.Length; i++) {
-                    array[i] = Source[Indexes[i]].Clone(Target);
-                }
+                for (var i = 0; i < array.Length; i++) array[i] = Source[Indexes[i]].Clone(Target);
                 if (Clipboarder.Mode == ClipMode.Cut) {
                     //如果是剪切，清空剪切板
                     Clipboarder.Default = null;
                     Clipboard.Clear();
-                    for (var i = 0; i < array.Length; i++) {
-                        Source.List.Remove(array[i]);
-                    }
+                    for (var i = 0; i < array.Length; i++) Source.List.Remove(array[i]);
                 }
+
                 Source.Adjust();
             } else if (Clipboard.ContainsFileDropList()) {
                 var collection = Clipboard.GetFileDropList();
                 array = new Sprite[collection.Count];
                 var builder = new LSBuilder();
                 for (var i = 0; i < collection.Count; i++) {
-                    if (!File.Exists(collection[i])) {
-                        continue;
-                    }
+                    if (!File.Exists(collection[i])) continue;
                     var image = Image.FromFile(collection[i]) as Bitmap;
                     var json = collection[i].Replace(".png", ".json");
                     if (File.Exists(json)) {
@@ -69,6 +61,7 @@ namespace ExtractorSharp.Command.ImageCommand {
                     }
                 }
             }
+
             Target.List.InsertRange(Index, array);
             Target.Adjust();
         }
@@ -84,6 +77,5 @@ namespace ExtractorSharp.Command.ImageCommand {
             Target.Adjust();
             Source.Adjust();
         }
-        
     }
 }

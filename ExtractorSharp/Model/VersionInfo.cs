@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
-namespace ExtractorSharp.Data {
-    class VersionInfo {
+namespace ExtractorSharp.Model {
+    internal class VersionInfo {
+        public string[] Info;
         public string Name;
         public string Time;
-        public string[] Info;
 
         public override string ToString() {
             var buf = new StringBuilder();
@@ -22,6 +18,5 @@ namespace ExtractorSharp.Data {
             }
             return buf.ToString();
         }
-
     }
 }

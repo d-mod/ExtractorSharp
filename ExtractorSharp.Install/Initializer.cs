@@ -1,14 +1,8 @@
-﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
+using Microsoft.Win32;
 
 namespace ExtractorSharp.Install {
-    class Initializer {
-
+    internal class Initializer {
         public void SetOpenWith() {
             var path = $"{Application.StartupPath}/extractorsharp.exe";
             var cmd = $"\"{path}\" \"%1\"";

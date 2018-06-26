@@ -7,15 +7,14 @@ using System.Xml;
 
 namespace ExtractorSharp.Json {
     public class LSBuilder {
-
         private readonly LSParser parser;
 
-        public Encoding Encoding { set; get; } = Encoding.UTF8;
-        
 
         public LSBuilder() {
             parser = new LSParser();
         }
+
+        public Encoding Encoding { set; get; } = Encoding.UTF8;
 
         public LSObject Get(string url) {
             try {
@@ -32,27 +31,23 @@ namespace ExtractorSharp.Json {
             }
         }
 
-        public LSObject Get(string url,IDictionary<string,object> dataMap) {
+        public LSObject Get(string url, IDictionary<string, object> dataMap) {
             var builder = new StringBuilder();
             builder.Append(url);
             builder.Append("?");
-            foreach (var entry in dataMap) {
-                builder.Append($"{entry.Key}={entry.Value}&");
-            }
+            foreach (var entry in dataMap) builder.Append($"{entry.Key}={entry.Value}&");
             url = builder.ToString();
             return Get(url);
         }
 
         public LSObject Post(string url) {
-            return Post(url, new Dictionary<string,object>());
+            return Post(url, new Dictionary<string, object>());
         }
 
         public LSObject Post(string url, IDictionary<string, object> dataMap) {
             var builder = new StringBuilder();
             builder.Append(url);
-            foreach (var entry in dataMap) {
-                builder.Append($"&{entry.Key}={entry.Value}");
-            }
+            foreach (var entry in dataMap) builder.Append($"&{entry.Key}={entry.Value}");
             var data = Encoding.GetBytes(builder.ToString());
             var request = WebRequest.Create(url) as HttpWebRequest;
             request.Method = "POST";
@@ -68,7 +63,7 @@ namespace ExtractorSharp.Json {
             }
         }
 
-        public LSObject Post(string url,LSObject obj) {
+        public LSObject Post(string url, LSObject obj) {
             var data = Encoding.GetBytes(obj.ToString());
             var request = WebRequest.Create(url) as HttpWebRequest;
             request.Method = "POST";
@@ -138,9 +133,7 @@ namespace ExtractorSharp.Json {
                 }
             }
             obj.Name = doc.Name;
-            if (obj.Count == 0) {
-                obj.Value = doc.InnerText.Trim().Parse();
-            }
+            if (obj.Count == 0) obj.Value = doc.InnerText.Trim().Parse();
             parent.Add(obj);
         }
 
@@ -148,7 +141,7 @@ namespace ExtractorSharp.Json {
             var obj = new LSObject();
             var props = properties.Split("\r\n");
             foreach (var p in props) {
-                var i = p.IndexOf("//");//过滤注释部分
+                var i = p.IndexOf("//"); //过滤注释部分
                 var tp = i > -1 ? p.Substring(0, i) : p;
                 if (tp.Length > 0) {
                     var entry = tp.Split("=");
@@ -161,18 +154,21 @@ namespace ExtractorSharp.Json {
         }
 
         public void Write(LSObject root, string file) {
-            using (var fs = new FileStream(file, FileMode.Create))
+            using (var fs = new FileStream(file, FileMode.Create)) {
                 Write(root, fs);
+            }
         }
 
         public void Write(LSObject root, Stream stream) {
-            using (var fw = new StreamWriter(stream))
+            using (var fw = new StreamWriter(stream)) {
                 fw.Write(root);
+            }
         }
 
         public void WriteObject(object obj, string file) {
-            using (var fs = new FileStream(file, FileMode.Create))
+            using (var fs = new FileStream(file, FileMode.Create)) {
                 WriteObject(obj, fs);
+            }
         }
 
         public void WriteObject(object obj, Stream stream) {

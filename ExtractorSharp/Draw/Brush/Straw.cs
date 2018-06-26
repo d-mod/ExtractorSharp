@@ -1,26 +1,21 @@
-﻿using ExtractorSharp.Core;
-using ExtractorSharp.Core.Lib;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using System.Windows.Forms;
+using ExtractorSharp.Core;
+using ExtractorSharp.Core.Draw;
+using ExtractorSharp.Core.Lib;
 
-namespace ExtractorSharp.Draw.Brush{
+namespace ExtractorSharp.Draw.Brush {
     /// <summary>
-    /// 吸管
+    ///     吸管
     /// </summary>
-    class Straw : IBrush {
+    internal class Straw : IBrush {
+        public Color Color { get; set; } = Color.Aqua;
+        private Drawer Drawer => Program.Drawer;
         public string Name => "Straw";
 
         public Cursor Cursor => Cursors.Cross;
-
-        public Color Color { get; set; } = Color.Aqua;
         public int Radius { set; get; } = 1;
         public Point Location { set; get; }
-        private Drawer Drawer => Program.Drawer;
 
         public void Draw(IPaint layer, Point point, decimal scale) {
             var image = layer.Image;

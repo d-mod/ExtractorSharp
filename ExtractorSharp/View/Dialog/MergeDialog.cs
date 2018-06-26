@@ -1,19 +1,23 @@
-﻿using System.Windows.Forms;
+﻿using System;
 using System.Drawing;
-using System;
+using System.Windows.Forms;
 using ExtractorSharp.Component;
 using ExtractorSharp.Core;
-using ExtractorSharp.Data;
+using ExtractorSharp.Core.Coder;
+using ExtractorSharp.Core.Composition;
+using ExtractorSharp.Core.Config;
 using ExtractorSharp.Core.Lib;
-using ExtractorSharp.Properties;
+using ExtractorSharp.Core.Model;
+using ExtractorSharp.EventArguments;
 
-namespace ExtractorSharp.View {
-    partial class MergeDialog : ESDialog {
+namespace ExtractorSharp.View.Dialog {
+    internal partial class MergeDialog : ESDialog {
+        private readonly Merger Merger;
         private Album Album;
-        private Merger Merger;
+
         public MergeDialog(IConnector Connector) : base(Connector) {
             InitializeComponent();
-            this.Merger = Program.Merger;
+            Merger = Program.Merger;
             sortButton.Click += (o, e) => Merger.Sort();
             list.MouseDown += ListMouseDown;
             list.DragDrop += ListDragDrop;
@@ -30,8 +34,8 @@ namespace ExtractorSharp.View {
             Merger.MergeCompleted += MergeCompleted;
             priviewPanel.Paint += Priview;
             frameBox.SelectedIndexChanged += (o, e) => priviewPanel.Invalidate();
-            lastButton.Click += lastFrame; 
-            nextButton.Click += nextFrame;
+            lastButton.Click += LastFrame;
+            nextButton.Click += NextFrame;
         }
 
         protected override void OnDragEnter(DragEventArgs e) {
@@ -45,45 +49,43 @@ namespace ExtractorSharp.View {
         protected override void OnDragDrop(DragEventArgs e) {
             if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
                 var args = e.Data.GetData(DataFormats.FileDrop, false) as string[];
-                var array = Npks.Load(args).ToArray();
+                var array = NpkCoder.Load(args).ToArray();
                 Connector.Do("addMerge", array);
             }
         }
 
         protected override void OnVisibleChanged(EventArgs e) {
             base.OnVisibleChanged(e);
-            Config["AutoSort"] = new Config.ConfigValue(autoSortCheck.Checked);
-            Config["MergeCompletedHide"] = new Config.ConfigValue(completedHideCheck.Checked);
+            Config["AutoSort"] = new ConfigValue(autoSortCheck.Checked);
+            Config["MergeCompletedHide"] = new ConfigValue(completedHideCheck.Checked);
             Config.Save();
         }
-        private void nextFrame(object sender, EventArgs e) {
+
+        private void NextFrame(object sender, EventArgs e) {
             var i = frameBox.SelectedIndex + 1;
-            if (i < frameBox.Items.Count) {
-                frameBox.SelectedIndex = i;
-            }
+            if (i < frameBox.Items.Count) frameBox.SelectedIndex = i;
         }
 
-        private void lastFrame(object sender, EventArgs e) {
-            var i = frameBox.SelectedIndex -1;
-            if (i >0) {
-                frameBox.SelectedIndex = i;
-            }
+        private void LastFrame(object sender, EventArgs e) {
+            var i = frameBox.SelectedIndex - 1;
+            if (i > 0) frameBox.SelectedIndex = i;
         }
 
         private void Priview(object sender, PaintEventArgs e) {
-            Merger.Priview(frameBox.SelectedIndex,e.Graphics);
+            Merger.Priview(frameBox.SelectedIndex, e.Graphics);
         }
+
         private void MergeCompleted(object sender, MergeEventArgs e) {
             Connector.Do("replaceImg", Album, e.Album);
             mergerButton.Enabled = true;
             sortButton.Enabled = true;
             prograss.Visible = false;
-            if (completedHideCheck.Checked) {
-                DialogResult = DialogResult.OK;
-            }
+            if (completedHideCheck.Checked) DialogResult = DialogResult.OK;
         }
 
-        private void MergeProcessing(object sender, MergeEventArgs e) => prograss.Value++;
+        private void MergeProcessing(object sender, MergeEventArgs e) {
+            prograss.Value++;
+        }
 
         private void MergeStart(object sender, MergeEventArgs e) {
             mergerButton.Enabled = false;
@@ -95,7 +97,7 @@ namespace ExtractorSharp.View {
 
 
         /// <summary>
-        /// 向上移动
+        ///     向上移动
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -108,7 +110,7 @@ namespace ExtractorSharp.View {
         }
 
         /// <summary>
-        /// 向下移动
+        ///     向下移动
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -126,39 +128,34 @@ namespace ExtractorSharp.View {
             dialog.Filter = $"{Language["ImageResources"]}| *.NPK; *.img";
             dialog.Multiselect = true;
             if (dialog.ShowDialog() == DialogResult.OK) {
-                var array = Npks.Load(dialog.FileNames).ToArray();
+                var array = NpkCoder.Load(dialog.FileNames).ToArray();
                 Connector.Do("addMerge", array);
             }
         }
-        
+
 
         public void Flush(object sender, MergeQueueEventArgs e) {
             if (autoSortCheck.Checked && (e.Mode == QueueChangeMode.Add || e.Mode == QueueChangeMode.Remove)) {
                 Merger.Sort();
                 return;
             }
+
             list.Items.Clear();
             list.Items.AddRange(Merger.Queues.ToArray());
             var count = Merger.GetFrameCount();
             var arr = new string[count];
-            for (var i = 0; i < arr.Length; i++) {
-                arr[i] = $"{Language["FrameCount"]} - {i}";
-            }
+            for (var i = 0; i < arr.Length; i++) arr[i] = $"{Language["FrameCount"]} - {i}";
             frameBox.Items.Clear();
             frameBox.Items.AddRange(arr);
-            if (arr.Length > 0) {
-                frameBox.SelectedIndex = 0;
-            }
+            if (arr.Length > 0) frameBox.SelectedIndex = 0;
             priviewPanel.Invalidate();
         }
-
-       
 
 
         public override DialogResult Show(params object[] args) {
             Album = args[0] as Album;
-            Flush(this, new MergeQueueEventArgs() {
-                Mode=QueueChangeMode.Add
+            Flush(this, new MergeQueueEventArgs {
+                Mode = QueueChangeMode.Add
             });
             albumList.Items.Clear();
             albumList.Items.AddRange(Connector.FileArray);
@@ -168,7 +165,8 @@ namespace ExtractorSharp.View {
 
 
         public void ListMouseDown(object sender, MouseEventArgs e) {
-            if (list.Items.Count == 0 || e.Button != MouseButtons.Left || list.SelectedIndex < 0 || e.Clicks == 2) {
+            if (list.Items.Count == 0 || e.Button != MouseButtons.Left || list.SelectedIndex < 0 ||
+                e.Clicks == 2) {
                 return;
             }
             DoDragDrop(list.SelectedItem, DragDropEffects.Move);
@@ -179,44 +177,45 @@ namespace ExtractorSharp.View {
                 OnDragDrop(e);
                 return;
             }
+
             var index = list.SelectedIndex;
             var target = list.IndexFromPoint(list.PointToClient(new Point(e.X, e.Y)));
             target = target < 0 ? list.Items.Count - 1 : target;
             Connector.Do("moveMerge", index, target);
-            if (target > -1) {
-                list.SelectedIndex = target;
-            }
+            if (target > -1) list.SelectedIndex = target;
         }
 
         public void Remove(object sender, EventArgs e) {
             var album = list.SelectedItem as Album;
-            if (album != null) {
-                Connector.Do("removeMerge", new Album[] { album });
-            }
+            if (album != null) Connector.Do("removeMerge", album);
         }
 
         public void MergeImg(object sender, EventArgs e) {
-            if (list.Items.Count < 1) {//当拼合队列为空时
+            if (list.Items.Count < 1) {
+                //当拼合队列为空时
                 Connector.SendWarning("EmptyMergeTips");
                 return;
             }
-            if (albumList.SelectedItem == null) {//没有选择Img时
+
+            if (albumList.SelectedItem == null) {
+                //没有选择Img时
                 var name = albumList.Text;
                 if (name == string.Empty) {
                     Connector.SendWarning("NotSelectImgTips");
                     return;
+                }
+
+                var rs = Connector.FileArray.Find(al => al.Name.Equals(name));
+                if (rs != null) {
+                    Album = rs;
                 } else {
-                    var rs=Connector.FileArray.Find(al => al.Name.Equals(name));
-                    if (rs!=null) {
-                        Album = rs;
-                    } else {
-                        Album = new Album();
-                        Connector.Do("newImg", Album, albumList.Text);
-                    }
+                    Album = new Album();
+                    Connector.Do("newImg", Album, albumList.Text);
                 }
             } else {
                 Album = albumList.SelectedItem as Album;
             }
+
             Connector.Do("runMerge");
         }
     }

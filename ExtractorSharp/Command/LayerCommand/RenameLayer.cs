@@ -1,33 +1,32 @@
-﻿using ExtractorSharp.Core;
-using ExtractorSharp.Draw;
+﻿using ExtractorSharp.Core.Command;
+using ExtractorSharp.Draw.Paint;
 
 namespace ExtractorSharp.Command.LayerCommand {
-    class RenameLayer : ICommand,ICommandMessage{
-
+    internal class RenameLayer : ICommand, ICommandMessage {
         private Layer Layer;
 
-        private string oldName;
-
         private string newName;
+
+        private string oldName;
 
         public void Do(params object[] args) {
             Layer = args[0] as Layer;
             oldName = Layer.Name;
-            Layer.Name = newName = args[1] as string;           
+            Layer.Name = newName = args[1] as string;
         }
 
         public void Undo() {
             Layer.Name = oldName;
         }
-        public void Redo() => Do(Layer, newName);
+
+        public void Redo() {
+            Do(Layer, newName);
+        }
 
         public bool CanUndo => true;
 
         public bool IsChanged => false;
 
-        public bool IsFlush => false;
-
         public string Name => "RenameLayer";
-
     }
 }

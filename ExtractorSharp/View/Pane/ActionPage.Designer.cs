@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 using ExtractorSharp.Command;
-using ExtractorSharp.Data;
+using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.View.Pane {
     partial class ActionPage {

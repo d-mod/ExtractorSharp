@@ -1,71 +1,61 @@
-﻿using ExtractorSharp.Command;
-using ExtractorSharp.Component;
-using ExtractorSharp.Core;
-using ExtractorSharp.Handle;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using ExtractorSharp.Component;
+using ExtractorSharp.Core;
+using ExtractorSharp.Core.Command;
+using ExtractorSharp.Core.Composition;
+using ExtractorSharp.Core.Handle;
 
 namespace ExtractorSharp.Composition {
     /// <summary>
-    /// 
     /// </summary>
     public class Plugin {
+        [ImportMany(typeof(ICommand))] private IEnumerable<Lazy<ICommand, IGuid>> _commands;
+
+        [ImportMany(typeof(ESDialog))] private IEnumerable<Lazy<ESDialog, IGuid>> _dialogs;
+
+        [ImportMany(typeof(Handler))] private IEnumerable<Lazy<Handler, IGuid>> _handlers;
+
+        [ImportMany(typeof(IMenuItem))] private IEnumerable<Lazy<IMenuItem, IGuid>> _items;
+
+
+        [Import] private Lazy<IPlugin, IMetadata> _lazyMetadata;
+
+        private IMetadata _metadata;
+
+        [ImportMany(typeof(IFileSupport))] private IEnumerable<Lazy<IFileSupport, IGuid>> _supports;
 
         /// <summary>
-        /// 是否启用
+        ///     是否启用
         /// </summary>
         public bool Enable { set; get; } = true;
 
-
-
-        [Import]
-        private Lazy<IPlugin, IMetadata> lazy;
-
-        private IMetadata Metadata;
-
-        [ImportMany(typeof(ICommand))]
-        private IEnumerable<Lazy<ICommand, IGuid>> commands;
-
-        [ImportMany(typeof(IMenuItem))]
-        private IEnumerable<Lazy<IMenuItem, IGuid>> items;
-
-        [ImportMany(typeof(ESDialog))]
-        private IEnumerable<Lazy<ESDialog, IGuid>> dialogs;
-
-        [ImportMany(typeof(Handler))]
-        private IEnumerable<Lazy<Handler, IGuid>> handlers;
-
-        [ImportMany(typeof(IFileSupport))]
-        private IEnumerable<Lazy<IFileSupport, IGuid>> supports;
-
         public string Directory { set; get; }
 
-        public Guid Guid => Guid.Parse(Metadata.Guid);
+        public Guid Guid => Guid.Parse(_metadata.Guid);
 
-        public string Author => Metadata.Author;
+        public string Author => _metadata.Author;
 
-        public string Description => Metadata.Description;
+        public string Description => _metadata.Description;
 
-        public string Version => Metadata.Version;
+        public string Version => _metadata.Version;
 
-        public string Since => Metadata.Since;
+        public string Since => _metadata.Since;
 
-        public string Name => Metadata.Name;
+        public string Name => _metadata.Name;
 
 
-        private Controller Controller=>Program.Controller;
+        private static Controller Controller => Program.Controller;
 
-        private IConnector Connector => Program.Connector;
+        private static IConnector Connector => Program.Connector;
 
-        private MainForm MainForm => Program.Form;
+        private static MainForm MainForm => Program.Form;
 
-        private Viewer Viewer => Program.Viewer;
-
-        public Plugin() {}
+        private static Viewer Viewer => Program.Viewer;
 
         public void Initialize() {
-            Metadata = lazy.Metadata;
+            _metadata = _lazyMetadata.Metadata;
             InstallCommand();
             InstallItem();
             InstallDialog();
@@ -73,56 +63,46 @@ namespace ExtractorSharp.Composition {
         }
 
         private void InstallCommand() {
-            foreach (var lazy in commands) {
-                if (Guid.TryParse(lazy.Metadata.Guid, out Guid guid)) {
-                    if (guid == this.Guid) {
-                        var cmd = lazy.Value;
-                        Controller.Registry(cmd.Name,cmd.GetType());
-                    }
-                }
+            foreach (var lazy in _commands) {
+                if (!Guid.TryParse(lazy.Metadata.Guid, out var guid)) continue;
+                if (guid != Guid) continue;
+                var cmd = lazy.Value;
+                Controller.Registry(cmd.Name, cmd.GetType());
             }
         }
 
         private void InstallSupport() {
-            foreach (var lazy in supports) {
-                if (Guid.TryParse(lazy.Metadata.Guid, out Guid guid)) {
-                    if (guid == this.Guid) {
-                        var support= lazy.Value;
-                        Connector.FileSupports.Add(support);
-                    }
-                }
+            foreach (var lazy in _supports) {
+                if (!Guid.TryParse(lazy.Metadata.Guid, out var guid)) continue;
+                if (guid != Guid) continue;
+                var support = lazy.Value;
+                Connector.FileSupports.Add(support);
             }
         }
 
         private void InstallItem() {
-            foreach (var lazy in items) {
-                if (Guid.TryParse(lazy.Metadata.Guid, out Guid guid)) {
-                    if (guid == this.Guid) {
-                        MainForm.AddMenuItem(lazy.Value);
-                    }
-                }
+            foreach (var lazy in _items) {
+                if (!Guid.TryParse(lazy.Metadata.Guid, out var guid)) continue;
+                if (guid != Guid) continue;
+                MainForm.AddMenuItem(lazy.Value);
             }
         }
 
         private void InstallDialog() {
-            foreach (var lazy in dialogs) {
-                if (Guid.TryParse(lazy.Metadata.Guid, out Guid guid)) {
-                    if (guid == this.Guid) {
-                        var dialog = lazy.Value;
-                        Viewer.Regisity(dialog.Name,dialog);
-                    }
-                }
+            foreach (var lazy in _dialogs) {
+                if (!Guid.TryParse(lazy.Metadata.Guid, out var guid)) continue;
+                if (guid != Guid) continue;
+                var dialog = lazy.Value;
+                Viewer.Regisity(dialog.Name, dialog);
             }
         }
 
         private void InstallHandler() {
-            foreach (var lazy in handlers) {
-                if (Guid.TryParse(lazy.Metadata.Guid, out Guid guid)) {
-                    if (guid == this.Guid) {
-                        var handler = lazy.Value;
-                        Handler.Regisity(handler.Version,handler.GetType());
-                    }
-                }
+            foreach (var lazy in _handlers) {
+                if (!Guid.TryParse(lazy.Metadata.Guid, out var guid)) continue;
+                if (guid != Guid) continue;
+                var handler = lazy.Value;
+                Handler.Regisity(handler.Version, handler.GetType());
             }
         }
     }

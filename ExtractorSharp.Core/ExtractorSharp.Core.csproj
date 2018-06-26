@@ -7,7 +7,7 @@
     <ProjectGuid>{09014DD5-3314-437E-BB2E-6FBD0D1E7864}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ExtractorSharp</RootNamespace>
+    <RootNamespace>ExtractorSharp.Core</RootNamespace>
     <AssemblyName>ExtractorSharp.Core</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -48,6 +48,7 @@
     <Compile Include="Command\IAciton.cs" />
     <Compile Include="Command\ICommand.cs" />
     <Compile Include="Command\ICommandMessage.cs" />
+    <Compile Include="Command\IFileFlushable.cs" />
     <Compile Include="Composition\ClickType.cs" />
     <Compile Include="Composition\IConnector.cs" />
     <Compile Include="Composition\IFileSupport.cs" />
@@ -58,10 +59,10 @@
     <Compile Include="Config\ConfigValue.cs" />
     <Compile Include="Config\IConfig.cs" />
     <Compile Include="Model\Album.cs" />
-    <Compile Include="Model\DDS.cs" />
+    <Compile Include="Model\Texture.cs" />
     <Compile Include="Model\Sprite.cs" />
     <Compile Include="Model\Language.cs" />
-    <Compile Include="Model\Texture.cs" />
+    <Compile Include="Coder\DdsTexture.cs" />
     <Compile Include="Draw\IBrush.cs" />
     <Compile Include="Draw\IPaint.cs" />
     <Compile Include="Draw\Paint\Canvas.cs" />
@@ -78,12 +79,12 @@
     <Compile Include="Lib\Bitmaps.cs" />
     <Compile Include="Lib\Colors.cs" />
     <Compile Include="Lib\Drawings.cs" />
-    <Compile Include="Lib\Reader\Ddss.Decoder.cs" />
-    <Compile Include="Lib\Reader\Gif\AnimatedGifEncoder.cs" />
-    <Compile Include="Lib\Reader\Gif\GifDecoder.cs" />
-    <Compile Include="Lib\Reader\Gif\LZWEncoder.cs" />
-    <Compile Include="Lib\Reader\Gif\NeuQuant.cs" />
-    <Compile Include="Lib\Reader\Npks.cs" />
+    <Compile Include="Coder\DdsDecoder.cs" />
+    <Compile Include="Coder\Gif\AnimatedGifEncoder.cs" />
+    <Compile Include="Coder\Gif\GifDecoder.cs" />
+    <Compile Include="Coder\Gif\LZWEncoder.cs" />
+    <Compile Include="Coder\Gif\NeuQuant.cs" />
+    <Compile Include="Coder\NpkCoder.cs" />
     <Compile Include="Lib\Bass.cs" />
     <Compile Include="Lib\Zlib.cs" />
     <Compile Include="Lib\Streams.cs" />
@@ -100,12 +101,11 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Lib\Reader\Ddss.Encoder.cs" />
     <None Include="README.md" />
-    <None Include="Resources\end.ogg" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ExtractorSharp.Json\ExtractorSharp.Json.csproj">

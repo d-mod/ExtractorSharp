@@ -1,10 +1,10 @@
-﻿using ExtractorSharp.Component;
-using ExtractorSharp.Properties;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
+using ExtractorSharp.Component;
+using ExtractorSharp.Properties;
 
-namespace ExtractorSharp.View{
+namespace ExtractorSharp.View.Dialog{
         partial class MergeDialog {
         /// <summary>
         /// Required designer variable.
