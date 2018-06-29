@@ -7,7 +7,7 @@ using ExtractorSharp.EventArguments;
 
 namespace ExtractorSharp.Command.LayerCommand {
     internal class DeleteLayer : ICommand, ICommandMessage {
-        private IPaint[] Array { set; get; }
+        private ILayer[] Array { set; get; }
         private int[] Indices { set; get; }
         private Drawer Drawer => Program.Drawer;
         private List<IPaint> List => Drawer.LayerList;
@@ -19,17 +19,18 @@ namespace ExtractorSharp.Command.LayerCommand {
 
         public void Do(params object[] args) {
             Indices = args[0] as int[];
-            Array = new IPaint[Indices.Length];
+            Array = new ILayer[Indices.Length];
             for (var i = 0; i < Indices.Length; i++) {
-                if (Indices[i] < 2 || Indices[i] > List.Count - 1) continue;
-                var layer = List[Indices[i]];
-                if (!(layer is Layer)) {
-                    Indices[i] = -1;
+                if (Indices[i] < 2 || Indices[i] > List.Count - 1) {
                     continue;
                 }
-
-                Array[i] = layer;
-                List[Indices[i]] = null;
+                var paint = List[Indices[i]];
+                if (paint is ILayer layer) {
+                    Array[i] = layer;
+                    List[Indices[i]] = null;
+                    continue;
+                }
+                Indices[i] = -1;
             }
 
             Indices = System.Array.FindAll(Indices, e => e > 0);

@@ -154,7 +154,9 @@ namespace ExtractorSharp.Core.Coder.Gif {
                 if (firstFrame) {
                     WriteLSD(); // logical screen descriptior
                     WritePalette(); // global color table
-                    if (repeat >= 0) WriteNetscapeExt();
+                    if (repeat >= 0) {
+                        WriteNetscapeExt();
+                    }
                 }
                 WriteGraphicCtrlExt(); // write graphic control extension
                 WriteImageDesc(); // image descriptor
@@ -174,7 +176,9 @@ namespace ExtractorSharp.Core.Coder.Gif {
 		 * closed.
 		 */
         public bool Finish() {
-            if (!started) return false;
+            if (!started) {
+                return false;
+            }
             var ok = true;
             started = false;
             try {

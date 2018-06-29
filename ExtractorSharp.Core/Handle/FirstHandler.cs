@@ -17,7 +17,7 @@ namespace ExtractorSharp.Core.Handle {
                 ms.WriteInt(Album.Count);
                 foreach (var entity in Album.List) {
                     ms.WriteInt((int) entity.Type);
-                    if (entity.Type == ColorBits.Link) {
+                    if (entity.Type == ColorBits.LINK) {
                         ms.WriteInt(entity.Target.Index);
                         continue;
                     }
@@ -48,7 +48,7 @@ namespace ExtractorSharp.Core.Handle {
                     Type = (ColorBits) stream.ReadInt()
                 };
                 Album.List.Add(image);
-                if (image.Type == ColorBits.Link) {
+                if (image.Type == ColorBits.LINK) {
                     dic.Add(image, stream.ReadInt());
                     continue;
                 }
@@ -60,15 +60,15 @@ namespace ExtractorSharp.Core.Handle {
                 image.Y = stream.ReadInt();
                 image.CanvasWidth = stream.ReadInt();
                 image.CanvasHeight = stream.ReadInt();
-                if (image.CompressMode == CompressMode.None) {
-                    image.Length = image.Size.Width * image.Size.Height * (image.Type == ColorBits.Argb8888 ? 4 : 2);
+                if (image.CompressMode == CompressMode.NONE) {
+                    image.Length = image.Size.Width * image.Size.Height * (image.Type == ColorBits.ARGB_8888 ? 4 : 2);
                 }
                 var data = new byte[image.Length];
                 stream.Read(data);
                 image.Data = data;
             }
             foreach (var image in Album.List) {
-                if (image.Type == ColorBits.Link) {
+                if (image.Type == ColorBits.LINK) {
                     if (dic.ContainsKey(image) && dic[image] > -1 && dic[image] < Album.List.Count &&
                         dic[image] != image.Index) {
                         image.Target = Album.List[dic[image]];

@@ -27,7 +27,7 @@ namespace ExtractorSharp.Command.ImageCommand {
                 if (Index > Album.List.Count - 1 || Index < 0 || Index == Indices[i]) continue;
                 var entity = Album.List[Indices[i]];
                 Types[i] = entity.Type;
-                entity.Type = ColorBits.Link;
+                entity.Type = ColorBits.LINK;
                 entity.Target = Album.List[Index];
             }
         }
@@ -56,7 +56,7 @@ namespace ExtractorSharp.Command.ImageCommand {
                 }
                 var entity = album.List[i];
                 entity.Picture = null; //删除贴图对象
-                entity.Type = ColorBits.Link; //修改为链接类型
+                entity.Type = ColorBits.LINK; //修改为链接类型
                 entity.Target = album.List[Index]; //指向指定文件
             }
         }

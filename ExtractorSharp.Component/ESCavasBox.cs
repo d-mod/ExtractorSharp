@@ -42,7 +42,7 @@ namespace ExtractorSharp.Component {
             var entity = Connector.SelectedImage; //获得当前选择的贴图
             var pos = CurrentLayer.Location;
             if (!Config["MultipleLayer"].Boolean && entity?.Picture != null) {
-                if (entity.Type == ColorBits.Link && entity.Target != null) entity = entity.Target;
+                if (entity.Type == ColorBits.LINK && entity.Target != null) entity = entity.Target;
                 var pictrue = entity.Picture;
                 var size = entity.Size.Star(Config["CanvasScale"].Decimal);
                 if (Config["LinearDodge"].Boolean) pictrue = pictrue.LinearDodge();

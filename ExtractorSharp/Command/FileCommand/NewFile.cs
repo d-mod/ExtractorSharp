@@ -29,7 +29,7 @@ namespace ExtractorSharp.Command.FileCommand {
                 _album.Version = ImgVersion.Other;
             }
             _album.Path = _path;
-            _album.NewImage(_count, ColorBits.Link, -1);
+            _album.NewImage(_count, ColorBits.LINK, -1);
             _index = Connector.List.Count;
             Connector.List.Insert(_index, _album);
         }
@@ -50,7 +50,7 @@ namespace ExtractorSharp.Command.FileCommand {
             foreach (var al in array) {
                 if (_path.EndsWith(".ogg")) _album.Version = ImgVersion.Other;
                 _album.Path = _path;
-                _album.NewImage(_count, ColorBits.Link, -1);
+                _album.NewImage(_count, ColorBits.LINK, -1);
                 Connector.List.Insert(_index, _album);
             }
         }

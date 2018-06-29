@@ -120,10 +120,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command\DrawCommand\MoveToolsDraw.cs" />
+    <Compile Include="Command\FileCommand\RecoverFile.cs" />
     <Compile Include="Command\FileCommand\SaveFile.cs" />
     <Compile Include="Command\ImageCommand\DyeImage.cs" />
     <Compile Include="Command\ImageCommand\PasteSingleImage.cs" />
     <Compile Include="Command\ImageCommand\SaveGif.cs" />
+    <Compile Include="Command\LayerCommand\AddCompareLayer.cs" />
     <Compile Include="Command\LayerCommand\AddLayer.cs" />
     <Compile Include="Command\LayerCommand\DeleteLayer.cs" />
     <Compile Include="Command\LayerCommand\MoveLayer.cs" />
@@ -150,6 +152,7 @@
     <Compile Include="Composition\Metadata.cs" />
     <Compile Include="Composition\Plugin.cs" />
     <Compile Include="Config\JsonConfig.cs" />
+    <Compile Include="Draw\Paint\CompareLayer.cs" />
     <Compile Include="Effect\Sprite\UnCanvasSpriteConverter.cs" />
     <Compile Include="Core\Clipboarder.cs" />
     <Compile Include="Core\Sorter\DefaultSorter.cs" />

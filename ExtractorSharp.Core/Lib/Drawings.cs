@@ -3,7 +3,7 @@
 namespace ExtractorSharp.Core.Lib {
     public static class Drawings {
         public static string GetString(this Size size) {
-            return size.Width + "," + size.Height;
+            return $"[{size.Width},{size.Height}]";
         }
 
         public static Size Star(this Size size, decimal step) {
@@ -16,7 +16,7 @@ namespace ExtractorSharp.Core.Lib {
         #region Point拓展        
 
         public static string GetString(this Point point) {
-            return point.X + "," + point.Y;
+            return $"[{point.X},{point.Y}]";
         }
 
         public static Point Star(this Point point, decimal step) {

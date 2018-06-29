@@ -5,6 +5,7 @@ using ExtractorSharp.Core.Draw;
 using ExtractorSharp.Core.Draw.Paint;
 using ExtractorSharp.Core.Model;
 using ExtractorSharp.Draw.Brush;
+using ExtractorSharp.Draw.Paint;
 using ExtractorSharp.EventArguments;
 
 namespace ExtractorSharp.Core {
@@ -44,6 +45,19 @@ namespace ExtractorSharp.Core {
         public int Count => FlashList.Count;
         public int CustomLayerCount { set; get; }
         public decimal ImageScale { set; get; }
+
+
+        public List<CompareLayer> CompareLayers {
+            get {
+                var list = new List<CompareLayer>();
+                foreach(var layer in LayerList) {
+                    if(layer is CompareLayer compareLayer) {
+                        list.Add(compareLayer);
+                    }
+                }
+                return list;
+            }
+        }
 
 
         public Canvas CurrentLayer {
@@ -150,8 +164,12 @@ namespace ExtractorSharp.Core {
         public int IndexOfLayer(Point point) {
             for (var i = LayerList.Count - 1; i > -1; i--) {
                 var layer = LayerList[i];
-                if (!layer.Visible || layer.Locked) continue;
-                if (LayerList[i].Contains(point)) return i;
+                if (!layer.Visible || layer.Locked) {
+                    continue;
+                }
+                if (LayerList[i].Contains(point)) {
+                    return i;
+                }
             }
 
             return -1;
@@ -159,18 +177,24 @@ namespace ExtractorSharp.Core {
 
         public void DrawLayer(Graphics g) {
             OnLayerDrawing(new LayerEventArgs());
-            LayerList.ForEach(l => {
-                if (l.Visible) l.Draw(g);
-            });
+            for (var i = LayerList.Count - 1; i > 0; i--) {
+                if (LayerList[i].Visible) {
+                    LayerList[i].Draw(g);
+                }
+            }
         }
 
         public void TabLayer(int index) {
-            while (index >= Count) FlashList.Add(new List<IPaint>());
+            while (index >= Count) {
+                FlashList.Add(new List<IPaint>());
+            }
             LayerList = FlashList[index];
         }
 
         public bool IsSelect(string name) {
-            if (Brushes.ContainsKey(name)) return Brushes[name] == Brush;
+            if (Brushes.ContainsKey(name)) {
+                return Brushes[name] == Brush;
+            }
             return false;
         }
 

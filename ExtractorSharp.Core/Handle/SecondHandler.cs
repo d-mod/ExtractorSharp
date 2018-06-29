@@ -11,14 +11,14 @@ namespace ExtractorSharp.Core.Handle {
         public override Bitmap ConvertToBitmap(Sprite entity) {
             var data = entity.Data;
             var type = entity.Type;
-            var size = entity.Width * entity.Height * (type == ColorBits.Argb8888 ? 4 : 2);
-            if (entity.CompressMode == CompressMode.Zlib) data = Zlib.Decompress(data, size);
+            var size = entity.Width * entity.Height * (type == ColorBits.ARGB_8888 ? 4 : 2);
+            if (entity.CompressMode == CompressMode.ZLIB) data = Zlib.Decompress(data, size);
             return Bitmaps.FromArray(data, entity.Size, type);
         }
 
         public override byte[] ConvertToByte(Sprite entity) {
-            if (entity.Type > ColorBits.Link) entity.Type -= 4;
-            if (entity.CompressMode > CompressMode.Zlib) entity.CompressMode = CompressMode.Zlib;
+            if (entity.Type > ColorBits.LINK) entity.Type -= 4;
+            if (entity.CompressMode > CompressMode.ZLIB) entity.CompressMode = CompressMode.ZLIB;
             return entity.Picture.ToArray(entity.Type);
         }
 
@@ -28,12 +28,12 @@ namespace ExtractorSharp.Core.Handle {
             array[0] = new Sprite(Album) {
                 Index = index
             };
-            if (type != ColorBits.Link) array[0].Type = type;
+            if (type != ColorBits.LINK) array[0].Type = type;
             for (var i = 1; i < count; i++) {
                 array[i] = new Sprite(Album) {
                     Type = type
                 };
-                if (type == ColorBits.Link) array[i].Target = array[0];
+                if (type == ColorBits.LINK) array[i].Target = array[0];
                 array[i].Index = index + i;
             }
             Album.List.InsertAt(index, array);
@@ -43,7 +43,7 @@ namespace ExtractorSharp.Core.Handle {
             using (var ms = new MemoryStream()) {
                 foreach (var entity in Album.List) {
                     ms.WriteInt((int) entity.Type);
-                    if (entity.Type == ColorBits.Link && entity.Target != null) {
+                    if (entity.Type == ColorBits.LINK && entity.Target != null) {
                         ms.WriteInt(entity.Target.Index);
                         continue;
                     }
@@ -58,7 +58,7 @@ namespace ExtractorSharp.Core.Handle {
                 }
                 Album.IndexLength = ms.Length;
                 foreach (var entity in Album.List) {
-                    if (entity.Type == ColorBits.Link) continue;
+                    if (entity.Type == ColorBits.LINK) continue;
                     ms.Write(entity.Data);
                 }
                 return ms.ToArray();
@@ -73,7 +73,7 @@ namespace ExtractorSharp.Core.Handle {
                 image.Index = Album.List.Count;
                 image.Type = (ColorBits) stream.ReadInt();
                 Album.List.Add(image);
-                if (image.Type == ColorBits.Link) {
+                if (image.Type == ColorBits.LINK) {
                     dic.Add(image, stream.ReadInt());
                     continue;
                 }
@@ -91,7 +91,7 @@ namespace ExtractorSharp.Core.Handle {
                 return;
             }
             foreach (var image in Album.List.ToArray()) {
-                if (image.Type == ColorBits.Link) {
+                if (image.Type == ColorBits.LINK) {
                     if (dic.ContainsKey(image) && dic[image] < Album.List.Count && dic[image] > -1 &&
                         dic[image] != image.Index) {
                         image.Target = Album.List[dic[image]];
@@ -104,8 +104,8 @@ namespace ExtractorSharp.Core.Handle {
                     }
                     continue;
                 }
-                if (image.CompressMode == CompressMode.None) {
-                    image.Length = image.Width * image.Height * (image.Type == ColorBits.Argb8888 ? 4 : 2);
+                if (image.CompressMode == CompressMode.NONE) {
+                    image.Length = image.Width * image.Height * (image.Type == ColorBits.ARGB_8888 ? 4 : 2);
                 }
                 var data = new byte[image.Length];
                 stream.Read(data);
@@ -115,7 +115,7 @@ namespace ExtractorSharp.Core.Handle {
 
         public override void ConvertToVersion(ImgVersion version) {
             if (version == ImgVersion.Ver4 || version == ImgVersion.Ver6) {
-                Album.List.ForEach(item => item.Type = ColorBits.Argb1555);
+                Album.List.ForEach(item => item.Type = ColorBits.ARGB_1555);
             }
         }
     }

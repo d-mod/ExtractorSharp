@@ -102,6 +102,7 @@ namespace ExtractorSharp {
             Controller.Registry("pasteImg", typeof(PasteFile));
 
             Controller.Registry("repairFile", typeof(RepairFile));
+            Controller.Registry("recoverFile", typeof(RecoverFile));
             Controller.Registry("splitFile", typeof(SplitFile));
             Controller.Registry("mixFile", typeof(MixFile));
             Controller.Registry("moveFile", typeof(MoveFile));
@@ -133,6 +134,7 @@ namespace ExtractorSharp {
             Controller.Registry("dyeImage", typeof(DyeImage));
 
             Controller.Registry("addLayer", typeof(AddLayer));
+            Controller.Registry("addCompareLayer", typeof(AddCompareLayer));
             Controller.Registry("moveLayer", typeof(MoveLayer));
             Controller.Registry("deleteLayer", typeof(DeleteLayer));
             Controller.Registry("renameLayer", typeof(RenameLayer));

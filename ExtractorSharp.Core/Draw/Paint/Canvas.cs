@@ -4,7 +4,7 @@ using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.Core.Draw.Paint {
     public class Canvas : IPaint {
-        private bool _realPostion;
+        private bool _realPosition;
 
         private Point RealLocation {
             get {
@@ -23,10 +23,10 @@ namespace ExtractorSharp.Core.Draw.Paint {
 
         public bool RealPosition {
             set {
-                _realPostion = value;
+                _realPosition = value;
                 if (!value) Location = Point.Empty;
             }
-            get => _realPostion;
+            get => _realPosition;
         }
 
         public string Name { set; get; }
@@ -49,7 +49,7 @@ namespace ExtractorSharp.Core.Draw.Paint {
 
         public override string ToString() {
             return
-                $"{Language.Default[Name]},{Language.Default["Position"]}({RealLocation.GetString()}),{Language.Default["Size"]}({Size.GetString()})";
+                $"{Language.Default[Name]},{Language.Default["Position"]}{RealLocation.GetString()},{Language.Default["Size"]}{Size.GetString()}";
         }
     }
 }

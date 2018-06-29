@@ -30,7 +30,7 @@ namespace ExtractorSharp.Core.Coder {
                 var cs = new char[256];
                 var temp = "puchikon@neople dungeon and fighter ".ToArray();
                 temp.CopyTo(cs, 0);
-                var ds = new[] {'D', 'N', 'F'};
+                var ds = new[] { 'D', 'N', 'F' };
                 for (var i = temp.Length; i < 255; i++) cs[i] = ds[i % 3];
                 cs[255] = '\0';
                 return key = cs;
@@ -46,7 +46,7 @@ namespace ExtractorSharp.Core.Coder {
             var data = new byte[256];
             var i = 0;
             while (i < 256) {
-                data[i] = (byte) (stream.ReadByte() ^ Key[i]);
+                data[i] = (byte)(stream.ReadByte() ^ Key[i]);
                 if (data[i] == 0) break;
                 i++;
             }
@@ -64,7 +64,7 @@ namespace ExtractorSharp.Core.Coder {
             var data = new byte[256];
             var temp = Encoding.Default.GetBytes(str);
             temp.CopyTo(data, 0);
-            for (var i = 0; i < data.Length; i++) data[i] = (byte) (data[i] ^ Key[i]);
+            for (var i = 0; i < data.Length; i++) data[i] = (byte)(data[i] ^ Key[i]);
             stream.Write(data);
         }
 
@@ -78,7 +78,7 @@ namespace ExtractorSharp.Core.Coder {
             var data = new byte[entity.Width * entity.Height * 4];
             for (var i = 0; i < data.Length; i += 4) {
                 var bits = entity.Type;
-                if (entity.Version == ImgVersion.Ver4 && bits == ColorBits.Argb1555) bits = ColorBits.Argb8888;
+                if (entity.Version == ImgVersion.Ver4 && bits == ColorBits.ARGB_1555) bits = ColorBits.ARGB_8888;
                 var temp = Colors.ReadColor(stream, bits);
                 temp.CopyTo(data, i);
             }
@@ -144,7 +144,7 @@ namespace ExtractorSharp.Core.Coder {
                 var albumFlag = stream.ReadString();
                 if (albumFlag == IMG_FLAG) {
                     album.IndexLength = stream.ReadLong();
-                    album.Version = (ImgVersion) stream.ReadInt();
+                    album.Version = (ImgVersion)stream.ReadInt();
                     album.Count = stream.ReadInt();
                     album.InitHandle(stream);
                 } else {
@@ -318,16 +318,16 @@ namespace ExtractorSharp.Core.Coder {
             foreach (var al in array) {
                 if (index >= al.List.Count) continue;
                 var source = al.List[index];
-                if (source.Type == ColorBits.Link) source = source.Target;
-                if (source.CompressMode == CompressMode.None && source.Width * source.Height == 1) continue;
+                if (source.Type == ColorBits.LINK) source = source.Target;
+                if (source.CompressMode == CompressMode.NONE && source.Width * source.Height == 1) continue;
                 if (source.X < x) x = source.X;
                 if (source.Y < y) y = source.Y;
             }
             foreach (var img in array) {
                 if (index > img.List.Count - 1) continue;
                 var source = img[index];
-                if (source.Type == ColorBits.Link) source = source.Target;
-                if (source.CompressMode == CompressMode.None && source.Width * source.Height == 1) continue;
+                if (source.Type == ColorBits.LINK) source = source.Target;
+                if (source.CompressMode == CompressMode.NONE && source.Width * source.Height == 1) continue;
                 g.DrawImage(source.Picture, source.X - x, source.Y - y);
             }
             g.Dispose();
@@ -388,8 +388,8 @@ namespace ExtractorSharp.Core.Coder {
 
         #region 比较
 
-        public static void Compare(string gamePath, Action<Album, Album> restore, params Album[] Array) {
-            Compare(gamePath, IMAGE_DIR, restore, Array);
+        public static void Compare(string gamePath, Action<Album, Album> restore, params Album[] array) {
+            Compare(gamePath, IMAGE_DIR, restore, array);
         }
 
         /// <summary>
@@ -397,10 +397,10 @@ namespace ExtractorSharp.Core.Coder {
         /// </summary>
         /// <param name="gamePath"></param>
         /// <param name="restore"></param>
-        /// <param name="Array"></param>
-        public static void Compare(string gamePath, string dir, Action<Album, Album> restore, params Album[] Array) {
+        /// <param name="array"></param>
+        public static void Compare(string gamePath, string dir, Action<Album, Album> restore, params Album[] array) {
             var dic = new Dictionary<string, List<string>>(); //将img按NPK分类
-            foreach (var item in Array) {
+            foreach (var item in array) {
                 var path = GetFilePath(item);
                 path = $"{gamePath}/{dir}/{path}"; //得到游戏原文件路径
                 if (!dic.ContainsKey(path)) {
@@ -409,13 +409,13 @@ namespace ExtractorSharp.Core.Coder {
                 dic[path].Add(item.Name);
             }
             var list = new List<Album>();
-            foreach (var item in dic.Keys) list.AddRange(FindAll(item, dic[item].ToArray())); //读取游戏原文件
-            for (var i = 0; i < Array.Length; i++) //模型文件
-            {
-                foreach (var item2 in list) //游戏原文件
-                {
-                    if (Array[i].Path.Equals(item2.Path)) {
-                        restore.Invoke(item2, Array[i]);
+            foreach (var item in dic.Keys) {
+                list.AddRange(FindAll(item, dic[item].ToArray())); //读取游戏原文件
+            }
+            foreach(var a2 in array) { //模型文件
+                foreach (var a1 in list) { //游戏原文件
+                    if (a2.Path.Equals(a1.Path)) {
+                        restore.Invoke(a1, a2);
                     }
                 }
             }

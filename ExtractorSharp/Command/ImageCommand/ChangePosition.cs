@@ -34,7 +34,7 @@ namespace ExtractorSharp.Command.ImageCommand {
                     continue;
                 }
                 var entity = _album.List[Indices[i]];
-                if (entity.Type == ColorBits.Link) {
+                if (entity.Type == ColorBits.LINK) {
                     continue;
                 }
                 _oldLocations[i] = entity.Location;

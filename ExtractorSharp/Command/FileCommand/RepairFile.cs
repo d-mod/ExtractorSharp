@@ -4,9 +4,9 @@ using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.Command.FileCommand {
     /// <summary>
-    ///     补帧
+    ///     修复文件，将文件缺少的贴图恢复为原始文件
     /// </summary>
-    internal class RepairFile : IMutipleAciton, ICommandMessage {
+    class RepairFile : IMutipleAciton, ICommandMessage {
         private Album[] _array;
 
         private int[] _counts;
@@ -17,6 +17,9 @@ namespace ExtractorSharp.Command.FileCommand {
        
         public string Name => "RepairFile";
 
+
+        private string GamePath => Program.Config["GamePath"].Value;
+
         public void Do(params object[] args) {
             _array = args as Album[];
             if (_array == null) {
@@ -24,7 +27,7 @@ namespace ExtractorSharp.Command.FileCommand {
             }
             _counts = new int[_array.Length];
             var i = 0;
-            NpkCoder.Compare(Program.Config["GamePath"].Value, (a1, a2) => {
+            NpkCoder.Compare(GamePath, (a1, a2) => {
                 _counts[i] = a1.List.Count - a2.List.Count;
                 if (_counts[i] > 0) {
                     var source = a1.List.GetRange(a2.List.Count, _counts[i]); //获得源文件比当前文件多的贴图集合
@@ -46,7 +49,7 @@ namespace ExtractorSharp.Command.FileCommand {
 
 
         public void Action(params Album[] array) {
-            NpkCoder.Compare(Program.Config["GamePath"].Value, (a1, a2) => {
+            NpkCoder.Compare(GamePath, (a1, a2) => {
                 var count = a1.List.Count - a2.List.Count;
                 if (count <= 0) {
                     return;

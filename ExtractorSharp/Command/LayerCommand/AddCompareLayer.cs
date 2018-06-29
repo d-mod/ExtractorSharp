@@ -1,35 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using ExtractorSharp.Core;
+﻿using ExtractorSharp.Core;
 using ExtractorSharp.Core.Command;
+using ExtractorSharp.Core.Config;
 using ExtractorSharp.Core.Draw;
 using ExtractorSharp.Core.Model;
 using ExtractorSharp.Draw.Paint;
 using ExtractorSharp.EventArguments;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace ExtractorSharp.Command.LayerCommand {
-    internal class AddLayer : ICommand {
-        private Sprite[] Array { set; get; }
+    class AddCompareLayer :ICommand{
+        private Album[] Array { set; get; }
 
-        private Layer[] Layers { set; get; }
+        private CompareLayer[] Layers { set; get; }
 
         private Drawer Drawer => Program.Drawer;
 
-        public string Name => "AddLayer";
+        private IConfig Config => Program.Config;
+
+        public string Name => "AddCompareLayer";
 
         public bool CanUndo => true;
 
         public bool IsChanged => false;
 
         public void Do(params object[] args) {
-            Array = args as Sprite[];
-            Layers = new Layer[Array.Length];
+            Array = args as Album[];
+            Layers = new CompareLayer[Array.Length];
             for (var i = 0; i < Layers.Length; i++) {
-                Layers[i] = new Layer();
-                Layers[i].Name = $"{Language.Default["NewLayer"]}{Drawer.CustomLayerCount++}";
-                Layers[i].Sprite = Array[i];
+                Layers[i] = new CompareLayer();
+                Layers[i].Name = $"{Language.Default["CompareLayer"]}[{Array[i].Name}]";
+                Layers[i].Tag = Array[i];
                 Layers[i].ImageScale = Drawer.ImageScale;
                 Layers[i].Visible = true;
+                Layers[i].Index = -1;
+                Layers[i].RealPosition = Config["RealPosition"].Boolean;
             }
 
             Drawer.AddLayer(Layers);
@@ -44,7 +52,6 @@ namespace ExtractorSharp.Command.LayerCommand {
             foreach (var layer in Layers) {
                 list.Remove(layer);
             }
-            Drawer.CustomLayerCount -= Layers.Length;
             Drawer.OnLayerChanged(new LayerEventArgs());
         }
     }

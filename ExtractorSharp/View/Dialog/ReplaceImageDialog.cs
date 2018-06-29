@@ -16,12 +16,12 @@ namespace ExtractorSharp.View.Dialog {
             var array = seletImageRadio.Checked ? Connector.CheckedImages : Connector.ImageArray;
             var indexes = new int[array.Length];
             for (var i = 0; i < array.Length; i++) indexes[i] = array[i].Index;
-            var type = ColorBits.Unknown;
+            var type = ColorBits.UNKNOWN;
             if (_1555_Radio.Checked) {
-                type = ColorBits.Argb1555;
+                type = ColorBits.ARGB_1555;
             } else if (_4444_Radio.Checked) {
-                type = ColorBits.Argb4444;
-            } else if (_8888_Radio.Checked) type = ColorBits.Argb8888;
+                type = ColorBits.ARGB_4444;
+            } else if (_8888_Radio.Checked) type = ColorBits.ARGB_8888;
             var path = string.Empty;
             var mode = 0;
             if (array.Length == 1) {

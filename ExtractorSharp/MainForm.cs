@@ -290,7 +290,12 @@ namespace ExtractorSharp {
             saveFileItem.Click += (o, e) => Connector.Save();
             layerList.ItemCheck += HideLayer;
             adjustPositionItem.Click += AdjustPosition;
+
+
             repairFileItem.Click += RepairFile;
+            recoverFileItem.Click += RecoverFile;
+
+            compareFileItem.Click += AddCompareLayer;
 
             Drawer.BrushChanged += (o, e) => box.Cursor = e.Brush.Cursor;
             Drawer.LayerChanged += (o, e) => LayerFlush();
@@ -321,7 +326,7 @@ namespace ExtractorSharp {
             canvasPasteItem.Click += CanvasPasteImage;
 
             selectAllHideItem.Click += (o, e) => imageList.Filter(sprite => sprite.Hidden);
-            selectAllLinkItem.Click += (o, e) => imageList.Filter(sprite => sprite.Type == ColorBits.Link);
+            selectAllLinkItem.Click += (o, e) => imageList.Filter(sprite => sprite.Type == ColorBits.LINK);
             selectThisLinkItm.Click += SelectThisLink;
             selectThisTargetItem.Click += SelectThisTarget;
             Controller.CommandDid += CommandDid;
@@ -336,6 +341,18 @@ namespace ExtractorSharp {
             downLayerItem.Click += DownLayer;
             renameLayerItem.Click += RenameLayer;
             RecentChanged(null, null);
+        }
+
+        private void AddCompareLayer(object sender, EventArgs e) {
+            Connector.Do("addCompareLayer",Connector.CheckedFiles);
+        }
+
+        private void RecoverFile(object sender, EventArgs e) {
+            if (!Directory.Exists(Config["ResourcePath"].Value)) {
+                Connector.SendError("SelectPathIsInvalid");
+                return;
+            }
+            Connector.Do("recoverFile", Connector.CheckedFiles);
         }
 
         private void RepairFile(object sender, EventArgs e) {
@@ -353,7 +370,7 @@ namespace ExtractorSharp {
 
         private void DeleteLayer(object sender, ItemEventArgs e) {
             var indices = e.Indices;
-            if (indices.Length > 0 && MessageBox.Show(Language["DeleteTips"], Language["Tips"],
+            if (indices.Length > 0 && MessageBox.Show(Language["DeleteLayerTips"], Language["Tips"],
                     MessageBoxButtons.OKCancel, MessageBoxIcon.Question) ==
                 DialogResult.OK) {
                 Connector.Do("deleteLayer", indices);
@@ -399,10 +416,10 @@ namespace ExtractorSharp {
             Grid.Tag = Config["GridGap"].Integer;
             Grid.Size = box.Size;
             var entity = Connector.SelectedImage;
-            entity = entity != null && entity.Type == ColorBits.Link ? entity.Target : entity;
+            entity = entity != null && entity.Type == ColorBits.LINK ? entity.Target : entity;
             Drawer.CurrentLayer.Tag = entity;
             if (entity?.Picture != null) {
-                if (entity.Type == ColorBits.Link && entity.Target != null) entity = entity.Target;
+                if (entity.Type == ColorBits.LINK && entity.Target != null) entity = entity.Target;
                 var pictrue = entity.Picture;
                 if (linearDodgeBox.Checked) pictrue = pictrue.LinearDodge();
                 if (dyeBox.Checked) pictrue = pictrue.Dye(Drawer.Color);
@@ -524,20 +541,21 @@ namespace ExtractorSharp {
         private void RealPosition(object sender, EventArgs e) {
             Drawer.CurrentLayer.RealPosition = realPositionBox.Checked;
             Drawer.LastLayer.RealPosition = realPositionBox.Checked;
+            Drawer.CompareLayers.ForEach(c => c.RealPosition = realPositionBox.Checked);
             Flush(sender, e);
         }
 
 
         private void SelectThisLink(object sender, EventArgs e) {
             var cur = imageList.SelectedItem;
-            if (cur != null && cur.Type != ColorBits.Link) {
-                imageList.Filter(sprite => sprite.Type == ColorBits.Link && cur.Equals(sprite.Target));
+            if (cur != null && cur.Type != ColorBits.LINK) {
+                imageList.Filter(sprite => sprite.Type == ColorBits.LINK && cur.Equals(sprite.Target));
             }
         }
 
         private void SelectThisTarget(object sender, EventArgs e) {
             var cur = imageList.SelectedItem;
-            if (cur != null && cur.Type == ColorBits.Link) {
+            if (cur != null && cur.Type == ColorBits.LINK) {
                 for (var i = 0; i < imageList.Items.Count; i++) {
                     if (imageList.Items[i].Equals(cur.Target)) {
                         imageList.SelectedIndex = i;
@@ -779,8 +797,11 @@ namespace ExtractorSharp {
             var lastLayerVisible = Drawer.LastLayer.Visible;
             Drawer.CurrentLayer = new Canvas();
             Drawer.LastLayerVisible = lastLayerVisible;
-            if (Connector.SelectedImage != null) Drawer.CurrentLayer.Size = Connector.SelectedImage.Size;
+            if (Connector.SelectedImage != null) {
+                Drawer.CurrentLayer.Size = Connector.SelectedImage.Size;
+            }
             Drawer.CurrentLayer.Location = lastPosition;
+            Drawer.CompareLayers.ForEach(c => c.Index = Connector.SelectedImageIndex);
             Flush(sender, e);
             Drawer.OnLayerChanged(new LayerEventArgs());
         }

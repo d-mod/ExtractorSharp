@@ -15,7 +15,7 @@ namespace ExtractorSharp.Core.Model {
         /// <summary>
         ///     压缩类型
         /// </summary>
-        public CompressMode CompressMode = CompressMode.None;
+        public CompressMode CompressMode = CompressMode.NONE;
 
         /// <summary>
         ///     贴图在V2,V4时的数据
@@ -63,7 +63,7 @@ namespace ExtractorSharp.Core.Model {
         /// <summary>
         ///     色位
         /// </summary>
-        public ColorBits Type { set; get; } = ColorBits.Argb1555;
+        public ColorBits Type { set; get; } = ColorBits.ARGB_1555;
 
         /// <summary>
         ///     贴图内容
@@ -71,7 +71,7 @@ namespace ExtractorSharp.Core.Model {
         [LSIgnore]
         public Bitmap Picture {
             get {
-                if (Type == ColorBits.Link) return Target.Picture;
+                if (Type == ColorBits.LINK) return Target.Picture;
                 if (IsOpen) return _image;
                 return _image = Parent.ConvertToBitmap(this); //使用父容器解析
             }
@@ -121,7 +121,7 @@ namespace ExtractorSharp.Core.Model {
         public ImgVersion Version => Parent.Version;
 
         [LSIgnore]
-        public bool Hidden => Width * Height == 1 && CompressMode == CompressMode.None;
+        public bool Hidden => Width * Height == 1 && CompressMode == CompressMode.NONE;
 
 
         public void Load() {
@@ -138,11 +138,11 @@ namespace ExtractorSharp.Core.Model {
             if (bmp == null) return;
             Picture = bmp;
             Target = null;
-            Type = type == ColorBits.Unknown ? Type : type;
-            if (type == ColorBits.Unknown) {
-                if (Type == ColorBits.Link) {
-                    type = ColorBits.Argb1555;
-                } else if (Version != ImgVersion.Ver5 && Type > ColorBits.Link) {
+            Type = type == ColorBits.UNKNOWN ? Type : type;
+            if (type == ColorBits.UNKNOWN) {
+                if (Type == ColorBits.LINK) {
+                    type = ColorBits.ARGB_1555;
+                } else if (Version != ImgVersion.Ver5 && Type > ColorBits.LINK) {
                     type = Type - 4;
                 } else {
                     type = Type;
@@ -156,7 +156,7 @@ namespace ExtractorSharp.Core.Model {
             Size = bmp.Size;
             if (CanvasHeight < bmp.Height) CanvasHeight = bmp.Height;
             if (CanvasWidth < bmp.Width) CanvasWidth = bmp.Width;
-            if (Width * Height > 1) CompressMode = CompressMode.Zlib;
+            if (Width * Height > 1) CompressMode = CompressMode.ZLIB;
         }
 
 
@@ -164,7 +164,7 @@ namespace ExtractorSharp.Core.Model {
         ///     去画布化
         /// </summary>
         public void UnCanvasImage() {
-            if (Type == ColorBits.Link || CompressMode == CompressMode.None) return;
+            if (Type == ColorBits.LINK || CompressMode == CompressMode.NONE) return;
             if (Picture == null) return;
             var rct = Picture.Scan();
             var image = new Bitmap(rct.Width, rct.Height);
@@ -182,7 +182,7 @@ namespace ExtractorSharp.Core.Model {
         /// </summary>
         /// <param name="target"></param>
         public void CanvasImage(Size target) {
-            if (Type == ColorBits.Link) return;
+            if (Type == ColorBits.LINK) return;
             Picture = Picture.Canvas(new Rectangle(Location, target));
             Size = target;
             Location = Point.Empty;
@@ -193,7 +193,7 @@ namespace ExtractorSharp.Core.Model {
         ///     数据校正
         /// </summary>
         public virtual void Adjust() {
-            if (Type == ColorBits.Link) {
+            if (Type == ColorBits.LINK) {
                 Length = 0;
                 return;
             }
@@ -201,7 +201,7 @@ namespace ExtractorSharp.Core.Model {
                 return;
             }
             Data = Parent.ConvertToByte(this);
-            if (Data.Length > 0 && CompressMode >= CompressMode.Zlib) Data = Zlib.Compress(Data);
+            if (Data.Length > 0 && CompressMode >= CompressMode.ZLIB) Data = Zlib.Compress(Data);
             Length = Data.Length; //不压缩时，按原长度保存
         }
 
@@ -211,12 +211,12 @@ namespace ExtractorSharp.Core.Model {
         }
 
         public override string ToString() {
-            if (Type == ColorBits.Link && Target != null) {
+            if (Type == ColorBits.LINK && Target != null) {
                 return Index + "," + Language.Default["TargetIndex"] + Target.Index;
             }
-            return Index + "," + Type + "," + Language.Default["Position"] + "(" + Location.GetString() + ")," +
-                   Language.Default["Size"] + "(" + Size.GetString() + ")," + Language.Default["CanvasSize"] + "(" +
-                   CanvasSize.GetString() + ")";
+            return Index + "," + Type + "," + Language.Default["Position"] + Location.GetString() + "," +
+                   Language.Default["Size"] + Size.GetString() + "," + Language.Default["CanvasSize"]  +
+                   CanvasSize.GetString();
         }
 
         public Sprite Clone(Album album) {
@@ -235,23 +235,23 @@ namespace ExtractorSharp.Core.Model {
     ///     色位
     /// </summary>
     public enum ColorBits {
-        Argb1555 = 0x0e,
-        Argb4444 = 0x0f,
-        Argb8888 = 0x10,
-        Link = 0x11,
-        Dxt1 = 0x12,
-        Dxt3 = 0x13,
-        Dxt5 = 0x14,
-        Unknown = 0x00
+        ARGB_1555 = 0x0e,
+        ARGB_4444 = 0x0f,
+        ARGB_8888 = 0x10,
+        LINK = 0x11,
+        DXT_1 = 0x12,
+        DXT_3 = 0x13,
+        DXT_5 = 0x14,
+        UNKNOWN = 0x00
     }
 
     /// <summary>
     ///     压缩类型
     /// </summary>
     public enum CompressMode {
-        Zlib = 0x06,
-        None = 0x05,
-        DdsZlib = 0x07,
-        Unknown = 0x01
+        ZLIB = 0x06,
+        NONE = 0x05,
+        DDS_ZLIB = 0x07,
+        UNKNOWN = 0x01
     }
 }

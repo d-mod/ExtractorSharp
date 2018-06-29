@@ -35,7 +35,7 @@ namespace ExtractorSharp.Core.Model {
                 sprites[i] = new Sprite(this) {
                     Index = i,
                     Picture = array[i],
-                    CompressMode = CompressMode.Zlib,
+                    CompressMode = CompressMode.ZLIB,
                     Size = array[i].Size,
                     CanvasSize = array[i].Size
                 };
@@ -189,7 +189,7 @@ namespace ExtractorSharp.Core.Model {
             Tables = new List<List<Color>> {new List<Color>()};
             TableIndex = 0;
             ConvertTo(ImgVersion.Ver2);
-            NewImage(count, ColorBits.Link, -1);
+            NewImage(count, ColorBits.LINK, -1);
         }
 
         public Album Clone() {

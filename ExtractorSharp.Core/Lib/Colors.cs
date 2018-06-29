@@ -58,7 +58,7 @@ namespace ExtractorSharp.Core.Lib {
         /// <param name="data"></param>
         /// <param name="bits"></param>
         public static void WriteColor(Stream stream, byte[] data, ColorBits bits) {
-            if (bits == ColorBits.Argb8888) {
+            if (bits == ColorBits.ARGB_8888) {
                 stream.Write(data);
                 return;
             }
@@ -69,7 +69,7 @@ namespace ExtractorSharp.Core.Lib {
             var left = 0;
             var right = 0;
             switch (bits) {
-                case ColorBits.Argb1555:
+                case ColorBits.ARGB_1555:
                     a = (byte) (a >> 7);
                     r = (byte) (r >> 3);
                     g = (byte) (g >> 3);
@@ -77,7 +77,7 @@ namespace ExtractorSharp.Core.Lib {
                     left = (byte) (((g & 7) << 5) | b);
                     right = (byte) ((a << 7) | (r << 2) | (g >> 3));
                     break;
-                case ColorBits.Argb4444:
+                case ColorBits.ARGB_4444:
                     left = g | (b >> 4);
                     right = a | (r >> 4);
                     break;

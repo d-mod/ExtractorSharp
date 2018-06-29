@@ -144,7 +144,9 @@ namespace ExtractorSharp.View.Dialog {
             list.Items.AddRange(Merger.Queues.ToArray());
             var count = Merger.GetFrameCount();
             var arr = new string[count];
-            for (var i = 0; i < arr.Length; i++) arr[i] = $"{Language["FrameCount"]} - {i}";
+            for (var i = 0; i < arr.Length; i++) {
+                arr[i] = $"{Language["FrameCount"]} - {i}";
+            }
             frameBox.Items.Clear();
             frameBox.Items.AddRange(arr);
             if (arr.Length > 0) frameBox.SelectedIndex = 0;
@@ -154,9 +156,7 @@ namespace ExtractorSharp.View.Dialog {
 
         public override DialogResult Show(params object[] args) {
             Album = args[0] as Album;
-            Flush(this, new MergeQueueEventArgs {
-                Mode = QueueChangeMode.Add
-            });
+            Flush(this, new MergeQueueEventArgs { Mode = QueueChangeMode.Add});
             albumList.Items.Clear();
             albumList.Items.AddRange(Connector.FileArray);
             albumList.SelectedItem = Album;
@@ -177,17 +177,20 @@ namespace ExtractorSharp.View.Dialog {
                 OnDragDrop(e);
                 return;
             }
-
             var index = list.SelectedIndex;
             var target = list.IndexFromPoint(list.PointToClient(new Point(e.X, e.Y)));
             target = target < 0 ? list.Items.Count - 1 : target;
             Connector.Do("moveMerge", index, target);
-            if (target > -1) list.SelectedIndex = target;
+            if (target > -1) {
+                list.SelectedIndex = target;
+            }
         }
 
         public void Remove(object sender, EventArgs e) {
             var album = list.SelectedItem as Album;
-            if (album != null) Connector.Do("removeMerge", album);
+            if (album != null) {
+                Connector.Do("removeMerge", new Album[] { album});
+            }
         }
 
         public void MergeImg(object sender, EventArgs e) {

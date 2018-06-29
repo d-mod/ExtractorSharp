@@ -16,7 +16,7 @@ namespace ExtractorSharp.Core.Handle {
 
 
         public override Bitmap ConvertToBitmap(Sprite entity) {
-            if (entity.Type < ColorBits.Link && entity.Length > 0) return base.ConvertToBitmap(entity);
+            if (entity.Type < ColorBits.LINK && entity.Length > 0) return base.ConvertToBitmap(entity);
 
             if (!_map.ContainsKey(entity.Index)) return new Bitmap(1, 1);
             var index = _map[entity.Index];
@@ -27,13 +27,13 @@ namespace ExtractorSharp.Core.Handle {
         }
 
         public override byte[] ConvertToByte(Sprite entity) {
-            if (entity.Type < ColorBits.Link && entity.Length > 0) return base.ConvertToByte(entity);
+            if (entity.Type < ColorBits.LINK && entity.Length > 0) return base.ConvertToByte(entity);
 
             if (entity.Width * entity.Height == 1) {
-                entity.CompressMode = CompressMode.None;
+                entity.CompressMode = CompressMode.NONE;
                 return base.ConvertToByte(entity);
             }
-            if (entity.CompressMode == CompressMode.Zlib) entity.CompressMode = CompressMode.DdsZlib;
+            if (entity.CompressMode == CompressMode.ZLIB) entity.CompressMode = CompressMode.DDS_ZLIB;
             var dds = Texture.CreateFromBitmap(entity);
             _map[entity.Index] = new TextureInfo {
                 Texture = dds,
@@ -74,7 +74,7 @@ namespace ExtractorSharp.Core.Handle {
             var start = ms.Length;
             foreach (var entity in Album.List) {
                 ms.WriteInt((int) entity.Type);
-                if (entity.Type == ColorBits.Link) {
+                if (entity.Type == ColorBits.LINK) {
                     ms.WriteInt(entity.Target.Index);
                     continue;
                 }
@@ -86,7 +86,7 @@ namespace ExtractorSharp.Core.Handle {
                 ms.WriteInt(entity.Location.Y);
                 ms.WriteInt(entity.CanvasSize.Width);
                 ms.WriteInt(entity.CanvasSize.Height);
-                if (entity.Type < ColorBits.Link && entity.Length != 0) {
+                if (entity.Type < ColorBits.LINK && entity.Length != 0) {
                     ver2List.Add(entity);
                     continue;
                 }
@@ -140,7 +140,7 @@ namespace ExtractorSharp.Core.Handle {
                 entity.Index = Album.List.Count;
                 entity.Type = (ColorBits) stream.ReadInt();
                 Album.List.Add(entity);
-                if (entity.Type == ColorBits.Link) {
+                if (entity.Type == ColorBits.LINK) {
                     dic.Add(entity, stream.ReadInt());
                     continue;
                 }
@@ -152,7 +152,7 @@ namespace ExtractorSharp.Core.Handle {
                 entity.Y = stream.ReadInt();
                 entity.CanvasWidth = stream.ReadInt();
                 entity.CanvasHeight = stream.ReadInt();
-                if (entity.Type < ColorBits.Link && entity.Length != 0) {
+                if (entity.Type < ColorBits.LINK && entity.Length != 0) {
                     ver2List.Add(entity);
                     continue;
                 }
@@ -189,12 +189,12 @@ namespace ExtractorSharp.Core.Handle {
             foreach (var entity in Album.List) {
                 entity.Load();
                 if (version <= ImgVersion.Ver2) {
-                    if (entity.Type == ColorBits.Dxt1) entity.Type = ColorBits.Argb1555;
-                    if (entity.Type == ColorBits.Dxt5) entity.Type = ColorBits.Argb8888;
+                    if (entity.Type == ColorBits.DXT_1) entity.Type = ColorBits.ARGB_1555;
+                    if (entity.Type == ColorBits.DXT_5) entity.Type = ColorBits.ARGB_8888;
                 } else if (version == ImgVersion.Ver4) {
-                    entity.Type = ColorBits.Argb1555;
+                    entity.Type = ColorBits.ARGB_1555;
                 }
-                if (entity.CompressMode > CompressMode.Zlib) entity.CompressMode = CompressMode.Zlib;
+                if (entity.CompressMode > CompressMode.ZLIB) entity.CompressMode = CompressMode.ZLIB;
             }
         }
     }

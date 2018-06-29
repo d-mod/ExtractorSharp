@@ -31,8 +31,7 @@ namespace ExtractorSharp.Draw.Paint {
 
         public bool Contains(Point point) {
             var rp = Location.Minus(point);
-            if (rp.X * rp.X + rp.Y * rp.Y < rule_radius * rule_radius) return true;
-            return false;
+            return rp.X * rp.X + rp.Y * rp.Y < rule_radius * rule_radius;
         }
 
         public void Draw(Graphics g) {
@@ -41,8 +40,12 @@ namespace ExtractorSharp.Draw.Paint {
             var font = SystemFonts.DefaultFont;
             var x = rp.X - rule_radius;
             var y = rp.Y - rule_radius;
-            if (DrawSpan) DrawSpans(g);
-            if (DrawCrosshair) DrawCrosshairs(g, x, y);
+            if (DrawSpan) {
+                DrawSpans(g);
+            }
+            if (DrawCrosshair) {
+                DrawCrosshairs(g, x, y);
+            }
             g.DrawLine(Pens.White, new Point(rp.X, 0), new Point(rp.X, Size.Height));
             g.DrawLine(Pens.White, new Point(0, rp.Y), new Point(Size.Width, rp.Y));
         }
@@ -89,7 +92,7 @@ namespace ExtractorSharp.Draw.Paint {
         public override string ToString() {
             var point = (Point) Tag;
             return
-                $"{Language[Name]},{Language["Position"]}({Location.X},{Location.Y}),{Language["RealativePosition"]},({point.X},{point.Y})";
+                $"{Language[Name]},{Language["Position"]}{Location.GetString()},{Language["RealativePosition"]}{point.GetString()}";
         }
     }
 }

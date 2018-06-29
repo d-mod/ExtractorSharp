@@ -56,6 +56,10 @@ namespace ExtractorSharp {
 
 
             repairFileItem = new ToolStripMenuItem();
+            recoverFileItem = new ToolStripMenuItem();
+
+            compareFileItem = new ToolStripMenuItem();
+
             splitFileItem = new ToolStripMenuItem();
             mixFileItem = new ToolStripMenuItem();
 
@@ -197,6 +201,11 @@ namespace ExtractorSharp {
             albumListMenu.Items.Add(saveAsItem);
             albumListMenu.Items.AddSeparator();
             albumListMenu.Items.Add(repairFileItem);
+            albumListMenu.Items.Add(recoverFileItem);
+            albumListMenu.Items.AddSeparator();
+            //
+            albumListMenu.Items.Add(compareFileItem);
+            //
             albumListMenu.Items.Add(splitFileItem);
             albumListMenu.Items.Add(mixFileItem);
             albumListMenu.Items.AddSeparator();
@@ -261,6 +270,10 @@ namespace ExtractorSharp {
 
             repairFileItem.Text = Language["RepairFile"];
             repairFileItem.Image = Resources.repair;
+
+            recoverFileItem.Text = Language["RecoverFile"];
+
+            compareFileItem.Text = Language["CompareFile"];
 
             splitFileItem.Text = Language["SplitFile"];
             mixFileItem.Text = Language["MixFile"];
@@ -768,7 +781,10 @@ namespace ExtractorSharp {
         private ToolStripMenuItem addMergeItem;    //加入拼合队列
         private ToolStripMenuItem addOutsideMergeItem;//加入外部文件到拼合队列
         private ToolStripMenuItem runMergeItem;    //执行拼合队列
-        private ToolStripMenuItem repairFileItem;    //帧数补正
+
+        private ToolStripMenuItem repairFileItem;    //修复文件
+        private ToolStripMenuItem recoverFileItem;   //恢复文件
+        private ToolStripMenuItem compareFileItem;   //对比文件
         private ToolStripMenuItem splitFileItem;     //拆分文件
         private ToolStripMenuItem mixFileItem;       //合并文件
 

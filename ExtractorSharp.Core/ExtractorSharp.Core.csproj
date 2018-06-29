@@ -58,6 +58,7 @@
     <Compile Include="Composition\MessageType.cs" />
     <Compile Include="Config\ConfigValue.cs" />
     <Compile Include="Config\IConfig.cs" />
+    <Compile Include="Draw\ILayer.cs" />
     <Compile Include="Model\Album.cs" />
     <Compile Include="Model\Texture.cs" />
     <Compile Include="Model\Sprite.cs" />

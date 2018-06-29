@@ -29,6 +29,7 @@ namespace ExtractorSharp.View.Dialog {
             this.pathBox = new System.Windows.Forms.TextBox();
             this.countLabel = new System.Windows.Forms.Label();
             this.indexLabel = new System.Windows.Forms.Label();
+            this.versionLabel = new System.Windows.Forms.Label();
             this.countBox = new System.Windows.Forms.NumericUpDown();
             this.indexBox = new System.Windows.Forms.NumericUpDown();
             this.yesButton = new ESButton();
@@ -70,6 +71,11 @@ namespace ExtractorSharp.View.Dialog {
             this.indexLabel.Size = new System.Drawing.Size(77, 12);
             this.indexLabel.TabIndex = 3;
             this.indexLabel.Text = Language["Offset"];
+
+            this.versionLabel.Text=Language["Version"];
+            
+
+            
             // 
             // countBox
             // 
@@ -130,12 +136,14 @@ namespace ExtractorSharp.View.Dialog {
         #endregion
 
         private System.Windows.Forms.Label pathLabel;
-        public System.Windows.Forms.TextBox pathBox;
+        private System.Windows.Forms.TextBox pathBox;
         private System.Windows.Forms.Label countLabel;
         private System.Windows.Forms.Label indexLabel;
-        public System.Windows.Forms.NumericUpDown countBox;
-        public System.Windows.Forms.NumericUpDown indexBox;
-        public System.Windows.Forms.Button yesButton;
+        private System.Windows.Forms.NumericUpDown countBox;
+        private System.Windows.Forms.NumericUpDown indexBox;
+        private System.Windows.Forms.ComboBox versionBox;
+        private System.Windows.Forms.Label versionLabel;
+        private System.Windows.Forms.Button yesButton;
         private System.Windows.Forms.Button cancelButton;
     }
 }

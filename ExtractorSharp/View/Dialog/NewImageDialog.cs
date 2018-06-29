@@ -29,13 +29,13 @@ namespace ExtractorSharp.View.Dialog {
 
         public void Run(object sender, EventArgs e) {
             var count = (int) count_box.Value;
-            var type = ColorBits.Link;
+            var type = ColorBits.LINK;
             if (_1555_radio.Checked) {
-                type = ColorBits.Argb1555;
+                type = ColorBits.ARGB_1555;
             } else if (_4444_radio.Checked) {
-                type = ColorBits.Argb4444;
+                type = ColorBits.ARGB_4444;
             } else if (_8888_radio.Checked) {
-                type = ColorBits.Argb8888;
+                type = ColorBits.ARGB_8888;
             }
             var index = (int) index_box.Value;
             Connector.Do("newImage", Album, count, type, index);

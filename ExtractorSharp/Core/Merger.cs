@@ -172,19 +172,19 @@ namespace ExtractorSharp.Core {
                 var max_height = 0;
                 var x = 800;
                 var y = 600;
-                var type = ColorBits.Argb1555;
+                var type = ColorBits.ARGB_1555;
                 foreach (var al in Array) {
                     if (i < al.List.Count) {
                         var source = al.List[i];
-                        if (source.Type == ColorBits.Link) source = source.Target;
+                        if (source.Type == ColorBits.LINK) source = source.Target;
                         if (source.CanvasWidth > max_width) max_width = source.CanvasHeight;
                         if (source.CanvasHeight > max_height) max_height = source.CanvasHeight;
-                        if (source.CompressMode == CompressMode.None && source.Width * source.Height == 1) continue;
+                        if (source.CompressMode == CompressMode.NONE && source.Width * source.Height == 1) continue;
                         if (source.Width + source.X > width) width = source.Width + source.X;
                         if (source.Height + source.Y > height) height = source.Height + source.Y;
                         if (source.X < x) x = source.X;
                         if (source.Y < y) y = source.Y;
-                        if (source.Type > type && source.Type < ColorBits.Link) type = source.Type;
+                        if (source.Type > type && source.Type < ColorBits.LINK) type = source.Type;
                     }
                 }
 
@@ -192,7 +192,7 @@ namespace ExtractorSharp.Core {
                 height -= y;
                 width = width > 1 ? width : 1; //防止宽高小于1
                 height = height > 1 ? height : 1;
-                if (width * height > 1) entity.CompressMode = CompressMode.Zlib;
+                if (width * height > 1) entity.CompressMode = CompressMode.ZLIB;
                 entity.Type = type;
                 entity.Index = entitys.Count;
                 entity.Location = new Point(x, y);
@@ -202,7 +202,7 @@ namespace ExtractorSharp.Core {
                     foreach (var al in Array) {
                         if (i < al.List.Count) {
                             var source = al.List[i];
-                            if (source.Type == ColorBits.Link) source = source.Target;
+                            if (source.Type == ColorBits.LINK) source = source.Target;
                             g.DrawImage(source.Picture, source.X - x, source.Y - y); //绘制贴图
                         }
                     }

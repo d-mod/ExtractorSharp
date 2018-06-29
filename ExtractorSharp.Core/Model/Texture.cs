@@ -15,13 +15,13 @@ namespace ExtractorSharp.Core.Model {
         public int FullLength { set; get; }
         public byte[] Data { set; get; }
         public TextureVersion Version { set; get; } = TextureVersion.Dxt1;
-        public ColorBits Type { set; get; } = ColorBits.Dxt1;
+        public ColorBits Type { set; get; } = ColorBits.DXT_1;
 
         public Bitmap Pictrue {
             get {
                 if (_image != null) return _image;
                 var data = Zlib.Decompress(Data, FullLength);
-                if (Type < ColorBits.Link) return Bitmaps.FromArray(data, new Size(Width, Height), Type);
+                if (Type < ColorBits.LINK) return Bitmaps.FromArray(data, new Size(Width, Height), Type);
                 var dds = DdsDecoder.Decode(data);
                 data = dds.DdsMipmaps[0].Data;
                 var bmp = Bitmaps.FromArray(data, new Size(Width, Height));
@@ -33,7 +33,7 @@ namespace ExtractorSharp.Core.Model {
         public static Texture CreateFromBitmap(Sprite sprite) {
             var bmp = sprite.Picture;
             var type = sprite.Type;
-            if (type > ColorBits.Link) type -= 4;
+            if (type > ColorBits.LINK) type -= 4;
             var data = bmp.ToArray(type);
             var fullLength = data.Length;
             var width = bmp.Width;
