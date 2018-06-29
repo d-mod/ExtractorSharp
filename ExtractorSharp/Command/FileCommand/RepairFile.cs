@@ -65,9 +65,9 @@ namespace ExtractorSharp.Command.FileCommand {
 
 
         public void Undo() {
-            for (var i = 0; i < _array.Length; i++) {
-                if (_counts[i] > 0 && _counts[i] < _array[i].List.Count) {
-                    _array[i].List.RemoveRange(_array[i].List.Count - _counts[i], _counts[i]);
+            for (var i = 0; i < Array.Length; i++) {
+                if (Counts[i] > 0 && Counts[i] < Array[i].List.Count) {
+                    Array[i].List.RemoveRange(Array[i].List.Count - Counts[i], Counts[i]);
                 }
             }
         }
