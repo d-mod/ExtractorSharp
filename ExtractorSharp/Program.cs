@@ -274,7 +274,6 @@ namespace ExtractorSharp {
                             RegistryRights.ReadKey).GetValue("InstallPath").ToString();
                     Config["GamePath"] = new ConfigValue(path);
                 }
-
                 Config["ResourcePath"] = new ConfigValue($"{Config["GamePath"]}/ImagePacks2");
                 Config.Save();
             } catch (Exception e) {

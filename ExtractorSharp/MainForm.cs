@@ -1267,9 +1267,7 @@ namespace ExtractorSharp {
         /// <param name="e"></param>
         private void OnMouseMove(object sender, MouseEventArgs e) {
             if (e.Button == MouseButtons.Left && move_mode != -1) {
-                var newPoint = e.Location;
-                Drawer.Brush.Draw(Drawer.LayerList[move_mode], newPoint, Drawer.ImageScale);
-                Drawer.CusorLocation = e.Location;
+                Drawer.Move(move_mode, e.Location);
                 CanvasFlush();
             }
         }

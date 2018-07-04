@@ -32,7 +32,6 @@ namespace ExtractorSharp.Core {
                 new Canvas {Name = "CurrentLayer"}
             };
             CurrentLayer.Visible = true;
-            FlashList = new List<List<IPaint>> {LayerList};
         }
 
         /// <summary>
@@ -40,10 +39,10 @@ namespace ExtractorSharp.Core {
         /// </summary>
         public Dictionary<string, IBrush> Brushes { get; }
 
-        public List<List<IPaint>> FlashList { get; }
         public List<IPaint> LayerList { get; private set; }
-        public int Count => FlashList.Count;
+
         public int CustomLayerCount { set; get; }
+
         public decimal ImageScale { set; get; }
 
 
@@ -177,19 +176,58 @@ namespace ExtractorSharp.Core {
 
         public void DrawLayer(Graphics g) {
             OnLayerDrawing(new LayerEventArgs());
-            for (var i = LayerList.Count - 1; i > 0; i--) {
-                if (LayerList[i].Visible) {
-                    LayerList[i].Draw(g);
+            LayerList.ForEach(e => {
+                if (e.Visible) {
+                    e.Draw(g);
                 }
-            }
+            });
         }
 
-        public void TabLayer(int index) {
-            while (index >= Count) {
-                FlashList.Add(new List<IPaint>());
-            }
-            LayerList = FlashList[index];
+        public void Move(int index, Point point) {
+            var layer = LayerList[index];
+            point = GetPoint(layer, point);
+            Brush.Draw(layer, point, ImageScale);
+            CusorLocation = point;
         }
+
+        public Point GetPoint(IPaint layer,Point point) {
+            if (layer is IAttractable att) {
+                var range = att.Range;
+                var rx = layer.Location.X;
+                var ry = layer.Location.Y;
+                if (layer is Canvas can) {
+                    rx = can.RealLocation.X;
+                    ry = can.RealLocation.Y;
+                }
+                var x = point.X;
+                var y = point.Y;
+                var x0 = point.X;
+                var y0 = point.Y;
+
+                foreach (var paint in LayerList) {
+                    if (paint.Equals(layer) || !paint.Visible) {
+                        continue;
+                    }
+                    var x1 = paint.Location.X;
+                    var y1 = paint.Location.Y;
+                    var width = (int)(paint.Size.Width);
+                    var heihgt = (int)(paint.Size.Height);
+                    if (paint is Canvas canvas) {
+                        x1 = canvas.RealLocation.X;
+                        y1 = canvas.RealLocation.Y;
+                    }
+                    if (x0 > x1 - range && x0 < x1 + range) {
+                        x = x1;
+                    }
+                    if (x0 > y1 - range && x0 < y1 + range) {
+                        y = y1 ;
+                    }
+                }
+                point = new Point(x, y);
+            }
+            return point;
+        }
+
 
         public bool IsSelect(string name) {
             if (Brushes.ContainsKey(name)) {

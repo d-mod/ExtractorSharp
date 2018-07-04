@@ -30,6 +30,9 @@ namespace ExtractorSharp.Draw.Paint {
         public bool Locked { set; get; }
 
         public bool Contains(Point point) {
+            if (!DrawCrosshair) {
+                return false;
+            }
             var rp = Location.Minus(point);
             return rp.X * rp.X + rp.Y * rp.Y < rule_radius * rule_radius;
         }

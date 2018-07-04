@@ -3,10 +3,10 @@ using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.Core.Draw.Paint {
-    public class Canvas : IPaint {
+    public class Canvas : IPaint,IAttractable{
         private bool _realPosition;
 
-        private Point RealLocation {
+        public Point RealLocation {
             get {
                 var location = Location;
                 if (RealPosition) {
@@ -38,7 +38,9 @@ namespace ExtractorSharp.Core.Draw.Paint {
         }
 
         public void Draw(Graphics g) {
-            if (Tag != null && Image != null) g.DrawImage(Image, Rectangle);
+            if (Tag != null && Image != null) {
+                g.DrawImage(Image, Rectangle);
+            }
         }
 
         public Point Location { set; get; } = Point.Empty;
@@ -46,6 +48,8 @@ namespace ExtractorSharp.Core.Draw.Paint {
         public object Tag { set; get; }
         public bool Visible { set; get; }
         public bool Locked { set; get; }
+
+        public int Range => 20;
 
         public override string ToString() {
             return

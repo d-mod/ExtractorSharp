@@ -139,9 +139,11 @@ namespace ExtractorSharp.Component {
             if (move_mode > 0) {
                 var i = IndexFromPoint(e.Location);
                 if (i > -1) {
-                    if (ModifierKeys.HasFlag(Keys.Shift)) {
+                    if (ModifierKeys.HasFlag(Keys.Control) && ModifierKeys.HasFlag(Keys.Shift)) {
+                        SetItemChecked(i, false);
+                    } else if (ModifierKeys.HasFlag(Keys.Shift)) {
                         SetItemChecked(i, true);
-                    } else if (ModifierKeys.HasFlag(Keys.Control)) SetItemChecked(i, false);
+                    }
                 }
             }
         }

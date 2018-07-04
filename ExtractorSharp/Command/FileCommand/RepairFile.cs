@@ -7,9 +7,9 @@ namespace ExtractorSharp.Command.FileCommand {
     ///     修复文件，将文件缺少的贴图恢复为原始文件
     /// </summary>
     class RepairFile : IMutipleAciton, ICommandMessage {
-        private Album[] _array;
+        private Album[] array;
 
-        private int[] _counts;
+        private int[] counts;
 
         public bool CanUndo => true;
 
@@ -21,16 +21,16 @@ namespace ExtractorSharp.Command.FileCommand {
         private string GamePath => Program.Config["GamePath"].Value;
 
         public void Do(params object[] args) {
-            _array = args as Album[];
-            if (_array == null) {
+            array = args as Album[];
+            if (array == null) {
                 return;
             }
-            _counts = new int[_array.Length];
+            counts = new int[array.Length];
             var i = 0;
             NpkCoder.Compare(GamePath, (a1, a2) => {
-                _counts[i] = a1.List.Count - a2.List.Count;
-                if (_counts[i] > 0) {
-                    var source = a1.List.GetRange(a2.List.Count, _counts[i]); //获得源文件比当前文件多的贴图集合
+                counts[i] = a1.List.Count - a2.List.Count;
+                if (counts[i] > 0) {
+                    var source = a1.List.GetRange(a2.List.Count, counts[i]); //获得源文件比当前文件多的贴图集合
                     source.ForEach(e => {
                         e.Load();
                         e.Parent = a2;
@@ -39,12 +39,12 @@ namespace ExtractorSharp.Command.FileCommand {
                 }
 
                 i++;
-            }, _array);
+            }, array);
         }
 
 
         public void Redo() {
-            Do(_array);
+            Do(array);
         }
 
 
@@ -65,9 +65,9 @@ namespace ExtractorSharp.Command.FileCommand {
 
 
         public void Undo() {
-            for (var i = 0; i < Array.Length; i++) {
-                if (Counts[i] > 0 && Counts[i] < Array[i].List.Count) {
-                    Array[i].List.RemoveRange(Array[i].List.Count - Counts[i], Counts[i]);
+            for (var i = 0; i < array.Length; i++) {
+                if (counts[i] > 0 && counts[i] <= array[i].List.Count) {
+                    array[i].List.RemoveRange(array[i].List.Count - counts[i], counts[i]);
                 }
             }
         }
