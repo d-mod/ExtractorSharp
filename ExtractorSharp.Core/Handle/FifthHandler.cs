@@ -11,7 +11,8 @@ namespace ExtractorSharp.Handle {
     /// Ver5处理器
     /// </summary>
     public class FifthHandler : SecondHandler{
-        private readonly Dictionary<int, DDS_Info> Map = new Dictionary<int, DDS_Info>();
+        //sprite和dds多对一关联
+        private readonly Dictionary<Sprite, DDS_Info> Map = new Dictionary<Sprite, DDS_Info>();
         public readonly List<DDS> List = new List<DDS>();
         public FifthHandler(Album Album) : base(Album) {}
 
@@ -21,10 +22,10 @@ namespace ExtractorSharp.Handle {
                 return base.ConvertToBitmap(entity);
             }
 
-            if (!Map.ContainsKey(entity.Index)) {
+            if (!Map.ContainsKey(entity)) {
                 return new Bitmap(1, 1);
             }
-            var index = Map[entity.Index];
+            var index = Map[entity];
             var dds = index.DDS;
             var bmp = dds.Pictrue.Clone(index.Rectangle, PixelFormat.DontCare);
             if (index.Top != 0) {
@@ -48,7 +49,7 @@ namespace ExtractorSharp.Handle {
                 entity.Compress = Compress.DDS_ZLIB;
             }
             var dds = DDS.CreateFromBitmap(entity);
-            Map[entity.Index] = new DDS_Info{
+            Map[entity] = new DDS_Info {
                 DDS = dds,
                 RightDown = new Point(dds.Width, dds.Height)
             };
@@ -105,7 +106,7 @@ namespace ExtractorSharp.Handle {
                     ver2List.Add(entity);
                     continue;
                 }
-                var info = Map[entity.Index];
+                var info = Map[entity];
                 ms.WriteInt(info.Unknown);
                 ms.WriteInt(info.DDS.Index);
                 ms.WriteInt(info.LeftUp.X);
@@ -188,7 +189,7 @@ namespace ExtractorSharp.Handle {
                     RightDown = rightdown,
                     Top = top
                 };
-                Map.Add(entity.Index, info);
+                Map.Add(entity, info);
             }
 
             foreach (var entity in dic.Keys) {
