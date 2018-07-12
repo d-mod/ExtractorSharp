@@ -146,7 +146,9 @@ namespace ExtractorSharp {
         }
 
         private static void ShowDebug(object sender, ThreadExceptionEventArgs e) {
-            if (Config["Profile"].Value.Equals("debug")) return;
+            if (Config["Profile"].Value.Equals("debug")) {
+                return;
+            }
             try {
                 var log = $"{e.Exception.Message};\r\n{e.Exception.StackTrace}";
                 var data = Encoding.Default.GetBytes(log);
@@ -164,8 +166,9 @@ namespace ExtractorSharp {
                         Connector.SendError(e.Exception.Message);
                         break;
                     default:
-                        if (Config["Profile"].Value.Equals("release")) Viewer.Show("debug", "debug", log);
-
+                        if (Config["Profile"].Value.Equals("release")) {
+                            Viewer.Show("debug", "debug", log);
+                        }
                         break;
                 }
             } catch (Exception ex) { }

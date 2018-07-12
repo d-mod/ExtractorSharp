@@ -248,8 +248,12 @@ namespace ExtractorSharp.Core {
                 if (type != null && typeof(ICommand).IsAssignableFrom(type)) {
                     var cmd = type.CreateInstance() as ICommand;
                     cmd.Do(args);
-                    if (cmd.CanUndo) undoStack.Push(cmd);
-                    if (IsRecord) AddMacro(cmd);
+                    if (cmd.CanUndo) {
+                        undoStack.Push(cmd);
+                    }
+                    if (IsRecord) {
+                        AddMacro(cmd);
+                    }
                     redoStack.Clear();
                     OnComandDid(new CommandEventArgs {
                         Name = key,

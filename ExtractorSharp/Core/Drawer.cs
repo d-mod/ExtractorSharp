@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using ExtractorSharp.Core.Config;
 using ExtractorSharp.Core.Draw;
@@ -276,6 +277,10 @@ namespace ExtractorSharp.Core {
 
         public void OnLayerDrawing(LayerEventArgs e) {
             LayerDrawing?.Invoke(this, e);
+        }
+
+        public void Dispose() {
+            LayerList.RemoveAll(e => e is ILayer);
         }
 
         #endregion

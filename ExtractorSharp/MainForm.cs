@@ -521,14 +521,14 @@ namespace ExtractorSharp {
         }
 
         private void CommandDid(object sender, CommandEventArgs e) {
-            if (e.Command.IsChanged) {
-                Connector.OnSaveChanged();
-            }
-            if (e.Command is IFileFlushable) {
+            if (e.Command is IFileFlushable) {//先刷新文件列表。防止Connector.SelectFile未刷新
                 Connector.FileListFlush();
             }
             if (e.Command is ICommandMessage) {
                 Connector.SendSuccess(e.Command.Name);
+            }
+            if (e.Command.IsChanged) {
+                Connector.OnSaveChanged();
             }
         }
 
@@ -876,10 +876,12 @@ namespace ExtractorSharp {
             imageList.Items.Clear();
             Controller.Dispose();
             Viewer.Dispose();
+            Drawer.Dispose();
             Clipboarder.Clear();
             Connector.List.Clear();
             Connector.IsSave = true;
             ImageChanged(this, e);
+            LayerFlush();
             pathBox.Text = string.Empty;
         }
 

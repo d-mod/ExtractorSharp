@@ -7,7 +7,7 @@ namespace ExtractorSharp.Draw.Paint {
     /// <summary>
     ///     图层
     /// </summary>
-    public class Layer : IPaint {
+    public class Layer : ILayer {
         public int Index {
             get => Sprite.Index;
             set { }

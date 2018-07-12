@@ -32,7 +32,7 @@ namespace ExtractorSharp.Command.LayerCommand {
             Layers = new CompareLayer[Array.Length];
             for (var i = 0; i < Layers.Length; i++) {
                 Layers[i] = new CompareLayer();
-                Layers[i].Name = $"{Language.Default["CompareLayer"]}[{Array[i].Name}]";
+                Layers[i].Name = Array[i].Name;
                 Layers[i].Tag = Array[i];
                 Layers[i].ImageScale = Drawer.ImageScale;
                 Layers[i].Visible = true;

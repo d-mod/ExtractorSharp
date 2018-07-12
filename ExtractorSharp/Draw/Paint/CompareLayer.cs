@@ -80,6 +80,8 @@ namespace ExtractorSharp.Draw.Paint {
             g.DrawImage(Image, Rectangle);
         }
 
-        public override string ToString() => Name;
+        public override string ToString() {
+            return $"{Name},{Language.Default["Position"]}{Location.GetString()},{Language.Default["Size"]}{Size.GetString()}";
+        }
     }
 }

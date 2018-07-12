@@ -112,7 +112,9 @@ namespace ExtractorSharp {
             public void OnSaveChanged() {
                 ImageListFlush();
                 IsSave = false;
-                if (Config["AutoSave"].Boolean) Save();
+                if (Config["AutoSave"].Boolean) {
+                    Save();
+                }
             }
 
             public void CanvasFlush() {

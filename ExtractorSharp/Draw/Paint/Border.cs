@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using ExtractorSharp.Core.Draw;
+using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.Draw.Paint {
@@ -37,7 +38,7 @@ namespace ExtractorSharp.Draw.Paint {
 
         public override string ToString() {
             return
-                $"{Language.Default[Name]},{Language.Default["Position"]}({Location.X},{Location.Y}),{Language.Default["Size"]}:({Size.Width},{Size.Height})";
+                $"{Language.Default[Name]},{Language.Default["Position"]}{Location.GetString()},{Language.Default["Size"]}{Size.GetString()}";
         }
     }
 }
