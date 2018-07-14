@@ -31,7 +31,6 @@ namespace ExtractorSharp.Command.LayerCommand {
                 Layers[i].ImageScale = Drawer.ImageScale;
                 Layers[i].Visible = true;
             }
-
             Drawer.AddLayer(Layers);
         }
 

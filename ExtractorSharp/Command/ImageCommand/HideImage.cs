@@ -19,7 +19,9 @@ namespace ExtractorSharp.Command.ImageCommand {
             _array = new Sprite[Indices.Length];
             for (var i = 0; i < Indices.Length; i++) {
                 //确保文件索引正确
-                if (Indices[i] > _album.List.Count || Indices[i] < 0) continue;
+                if (Indices[i] > _album.List.Count || Indices[i] < 0) {
+                    continue;
+                }
                 var entity = _album.List[Indices[i]];
                 _array[i] = entity; //存下原文件对象
                 _album.List.Remove(entity);
@@ -57,9 +59,5 @@ namespace ExtractorSharp.Command.ImageCommand {
         public bool IsChanged => true;
 
         public bool IsFlush => false;
-
-        public override string ToString() {
-            return Language.Default["HideImage"];
-        }
     }
 }

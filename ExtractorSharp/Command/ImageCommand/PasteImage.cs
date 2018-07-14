@@ -41,16 +41,19 @@ namespace ExtractorSharp.Command.ImageCommand {
                     //如果是剪切，清空剪切板
                     Clipboarder.Default = null;
                     Clipboard.Clear();
-                    for (var i = 0; i < array.Length; i++) Source.List.Remove(array[i]);
+                    for (var i = 0; i < array.Length; i++) {
+                        Source.List.Remove(array[i]);
+                    }
                 }
-
                 Source.Adjust();
             } else if (Clipboard.ContainsFileDropList()) {
                 var collection = Clipboard.GetFileDropList();
                 array = new Sprite[collection.Count];
                 var builder = new LSBuilder();
                 for (var i = 0; i < collection.Count; i++) {
-                    if (!File.Exists(collection[i])) continue;
+                    if (!File.Exists(collection[i])) {
+                        continue;
+                    }
                     var image = Image.FromFile(collection[i]) as Bitmap;
                     var json = collection[i].Replace(".png", ".json");
                     if (File.Exists(json)) {
@@ -61,7 +64,6 @@ namespace ExtractorSharp.Command.ImageCommand {
                     }
                 }
             }
-
             Target.List.InsertRange(Index, array);
             Target.Adjust();
         }

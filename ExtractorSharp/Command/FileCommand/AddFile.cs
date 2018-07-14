@@ -15,7 +15,9 @@ namespace ExtractorSharp.Command.FileCommand {
         public void Do(params object[] args) {
             _array = args[0] as Album[];
             _clear = (bool) args[1];
-            if (_clear) List = Connector.List.ToArray();
+            if (_clear) {
+                List = Connector.List.ToArray();
+            }
             Connector.AddFile(_clear, _array);
         }
 

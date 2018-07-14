@@ -128,7 +128,9 @@ namespace ExtractorSharp.Core {
         public IBrush this[string key] {
             get => Select(key);
             set {
-                if (Brushes.ContainsKey(key)) Brushes.Remove(key);
+                if (Brushes.ContainsKey(key)) {
+                    Brushes.Remove(key);
+                }
                 Brushes.Add(key, value);
             }
         }

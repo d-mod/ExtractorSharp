@@ -18,7 +18,9 @@ namespace ExtractorSharp.View.SettingPane {
         public void Refresh(object sender, EventArgs e) {
             Hoster.Refresh();
             list.Clear();
-            foreach (var data in Hoster.NetList) list.Items.Add(new MetadataListItem(data));
+            foreach (var data in Hoster.NetList) {
+                list.Items.Add(new MetadataListItem(data));
+            }
         }
 
 

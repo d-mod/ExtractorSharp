@@ -36,12 +36,18 @@ namespace ExtractorSharp.Core.Model {
 
         public string this[string group, string key] {
             get {
-                if (group == null || key == null) return "";
-                if (Group.ContainsKey(group) && Group[group].ContainsKey(key)) return Group[group][key];
+                if (group == null || key == null) {
+                    return "";
+                }
+                if (Group.ContainsKey(group) && Group[group].ContainsKey(key)) {
+                    return Group[group][key];
+                }
                 return key;
             }
             set {
-                if (!Group.ContainsKey(group)) Group.Add(group, new Dictionary<string, string>());
+                if (!Group.ContainsKey(group)) {
+                    Group.Add(group, new Dictionary<string, string>());
+                }
                 Group[group][key] = value;
             }
         }
@@ -52,9 +58,13 @@ namespace ExtractorSharp.Core.Model {
         public static Language Default {
             set => _default = value;
             get {
-                if (_default != null) return _default;
+                if (_default != null) {
+                    return _default;
+                }
                 _default = List.Find(e => e.Lcid == LocalLcid);
-                if (_default != null) return _default;
+                if (_default != null) {
+                    return _default;
+                }
                 return new Language();
             }
         }
@@ -90,7 +100,9 @@ namespace ExtractorSharp.Core.Model {
         public void CopyFrom(Language lan) {
             foreach (var group in lan.Group.Keys) {
                 Group[group] = Group.ContainsKey(group) ? Group[group] : new Dictionary<string, string>();
-                foreach (var key in lan.Group[group].Keys) Group[group][key] = lan.Group[group][key];
+                foreach (var key in lan.Group[group].Keys) {
+                    Group[group][key] = lan.Group[group][key];
+                }
             }
         }
 

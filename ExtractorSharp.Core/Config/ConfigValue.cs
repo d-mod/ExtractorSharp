@@ -32,7 +32,9 @@ namespace ExtractorSharp.Core.Config {
         /// </summary>
         public int Integer {
             get {
-                if (Object is int i) return i;
+                if (Object is int i) {
+                    return i;
+                }
                 int.TryParse(Value, out var rs);
                 return rs;
             }
@@ -43,7 +45,9 @@ namespace ExtractorSharp.Core.Config {
         /// </summary>
         public decimal Decimal {
             get {
-                if (Object is decimal d) return d;
+                if (Object is decimal d) {
+                    return d;
+                }
                 decimal.TryParse(Value, out var rs);
                 return rs;
             }
@@ -54,7 +58,9 @@ namespace ExtractorSharp.Core.Config {
         /// </summary>
         public bool Boolean {
             get {
-                if (Object is bool bl) return bl;
+                if (Object is bool bl) {
+                    return bl;
+                }
                 if (Value != null) {
                     bool.TryParse(Value, out var rs);
                     return rs;
@@ -68,7 +74,9 @@ namespace ExtractorSharp.Core.Config {
         /// </summary>
         public DateTime DateTime {
             get {
-                if (Object is DateTime time) return time;
+                if (Object is DateTime time) {
+                    return time;
+                }
                 DateTime.TryParse(Value, out var rs);
                 return rs;
             }
@@ -103,7 +111,9 @@ namespace ExtractorSharp.Core.Config {
 
         public Point Location {
             get {
-                if (Object is Point point) return point;
+                if (Object is Point point) {
+                    return point;
+                }
                 if (Value.Contains(",")) {
                     var arr = Value.Split(",");
                     var x = int.Parse(arr[0]);
@@ -116,7 +126,9 @@ namespace ExtractorSharp.Core.Config {
 
         public Size Size {
             get {
-                if (Object is Size size) return size;
+                if (Object is Size size) {
+                    return size;
+                }
                 if (Value.Contains(",")) {
                     var arr = Value.Split(",");
                     var width = int.Parse(arr[0]);
@@ -130,9 +142,15 @@ namespace ExtractorSharp.Core.Config {
 
         public Image Image {
             get {
-                if (Object is Image image) return image;
-                if (string.IsNullOrEmpty(Value)) return null;
-                if (File.Exists(Value)) return Image.FromFile(Value);
+                if (Object is Image image) {
+                    return image;
+                }
+                if (string.IsNullOrEmpty(Value)) {
+                    return null;
+                }
+                if (File.Exists(Value)) {
+                    return Image.FromFile(Value);
+                }
                 var request = WebRequest.CreateHttp(Value);
                 using (var response = request.GetResponse())
                 using (var os = response.GetResponseStream()) {
@@ -143,8 +161,12 @@ namespace ExtractorSharp.Core.Config {
 
         public Guid Guid {
             get {
-                if (Object is Guid guid) return guid;
-                if (Value != null && Guid.TryParse(Value, out guid)) return guid;
+                if (Object is Guid guid) {
+                    return guid;
+                }
+                if (Value != null && Guid.TryParse(Value, out guid)) {
+                    return guid;
+                }
                 return Guid.Empty;
             }
         }

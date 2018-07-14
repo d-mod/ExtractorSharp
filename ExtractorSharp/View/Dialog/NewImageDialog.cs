@@ -22,7 +22,6 @@ namespace ExtractorSharp.View.Dialog {
                 index_box.Value = album.List.Count;
                 return ShowDialog();
             }
-
             Connector.SendWarning("NotSelectImgTips");
             return DialogResult.None;
         }

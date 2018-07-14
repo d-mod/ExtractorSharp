@@ -21,7 +21,9 @@ namespace ExtractorSharp.Core.Model {
             get {
                 if (_image != null) return _image;
                 var data = Zlib.Decompress(Data, FullLength);
-                if (Type < ColorBits.LINK) return Bitmaps.FromArray(data, new Size(Width, Height), Type);
+                if (Type < ColorBits.LINK) {
+                    return Bitmaps.FromArray(data, new Size(Width, Height), Type);
+                }
                 var dds = DdsDecoder.Decode(data);
                 data = dds.DdsMipmaps[0].Data;
                 var bmp = Bitmaps.FromArray(data, new Size(Width, Height));

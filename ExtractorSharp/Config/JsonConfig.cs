@@ -42,14 +42,20 @@ namespace ExtractorSharp.Config {
         /// <returns></returns>
         public ConfigValue this[string key] {
             get {
-                if (UserConfig.ContainsKey(key) && UserConfig[key].NotEmpty) return UserConfig[key];
-                if (OriginalConfig.ContainsKey(key)) return OriginalConfig[key];
+                if (UserConfig.ContainsKey(key) && UserConfig[key].NotEmpty) {
+                    return UserConfig[key];
+                }
+                if (OriginalConfig.ContainsKey(key)) {
+                    return OriginalConfig[key];
+                }
                 return ConfigValue.NullValue;
             }
             set {
                 if (OriginalConfig.ContainsKey(key) && OriginalConfig[key].Equals(value)) {
                     //如果和默认设置相同则不操作
-                    if (UserConfig.ContainsKey(key)) UserConfig.Remove(key);
+                    if (UserConfig.ContainsKey(key)) {
+                        UserConfig.Remove(key);
+                    }
                     return;
                 }
 
@@ -134,9 +140,13 @@ namespace ExtractorSharp.Config {
 
         private void Init(LSObject obj) {
             ConfigDir = Application.StartupPath + "/conf/";
-            if (!Directory.Exists(ConfigDir)) Directory.CreateDirectory(ConfigDir);
+            if (!Directory.Exists(ConfigDir)) {
+                Directory.CreateDirectory(ConfigDir);
+            }
             var config = Read(obj);
-            foreach (var entry in config) OriginalConfig.Add(entry.Key, entry.Value);
+            foreach (var entry in config) {
+                OriginalConfig.Add(entry.Key, entry.Value);
+            }
             Reload();
         }
 
@@ -147,7 +157,9 @@ namespace ExtractorSharp.Config {
                     config.Add(node.Name, new ConfigValue(node.Value));
                 }
             }
-            if (config.ContainsKey("UserConfig")) UserPath = ConfigDir + config["UserConfig"].Value;
+            if (config.ContainsKey("UserConfig")) {
+                UserPath = ConfigDir + config["UserConfig"].Value;
+            }
             return config;
         }
 
@@ -162,7 +174,6 @@ namespace ExtractorSharp.Config {
                 item.Value = entry.Value.Object;
                 root.Add(item);
             }
-
             reader.Write(root, Path);
         }
     }

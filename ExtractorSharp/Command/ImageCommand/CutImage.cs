@@ -15,6 +15,7 @@ namespace ExtractorSharp.Command.ImageCommand {
         private int[] _indexes;
 
         private ClipMode _mode;
+
         public bool CanUndo => true;
 
         public bool IsChanged => true;
@@ -27,7 +28,6 @@ namespace ExtractorSharp.Command.ImageCommand {
             _mode = (ClipMode) args[2];
             _clipboarder = Clipboarder.Default;
             Clipboarder.Default = Clipboarder.CreateClipboarder(_album, _indexes, _mode);
-
             var arr = new string[_indexes.Length];
             var dir = $"{Program.Config["RootPath"]}/temp/clipbord_image";
             if (Directory.Exists(dir)) Directory.Delete(dir, true);
@@ -40,7 +40,6 @@ namespace ExtractorSharp.Command.ImageCommand {
                 arr[i] = path + ".png";
                 entity.Picture.Save(arr[i]);
             }
-
             var collection = new StringCollection();
             collection.AddRange(arr);
             Clipboard.SetFileDropList(collection);

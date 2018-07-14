@@ -248,6 +248,12 @@
     <Compile Include="View\Dialog\SettingDialog.Designer.cs">
       <DependentUpon>SettingDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\Pane\TexturePanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\Pane\TexturePanel.Designer.cs">
+      <DependentUpon>TexturePanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\SettingPane\FlashPane.cs">
       <SubType>Component</SubType>
     </Compile>

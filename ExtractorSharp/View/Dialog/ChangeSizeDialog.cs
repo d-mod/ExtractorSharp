@@ -32,12 +32,16 @@ namespace ExtractorSharp.View.Dialog {
 
         private void UseDefaultScale(object sender, EventArgs e) {
             scaleBox.Enabled = !useDefaultBox.Checked;
-            if (useDefaultBox.Checked) scaleBox.Value = Config["CanvasScale"].Integer;
+            if (useDefaultBox.Checked) {
+                scaleBox.Value = Config["CanvasScale"].Integer;
+            }
         }
 
         public override DialogResult Show(params object[] args) {
             useDefaultBox.Checked = Config["UseDefaultScale"].Boolean;
-            if (useDefaultBox.Checked) scaleBox.Value = Config["CanvasScale"].Integer;
+            if (useDefaultBox.Checked) {
+                scaleBox.Value = Config["CanvasScale"].Integer;
+            }
             var size = Config["CanvasImageSize"].Size;
             widthBox.Value = size.Width;
             heightBox.Value = size.Height;

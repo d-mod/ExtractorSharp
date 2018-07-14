@@ -47,7 +47,9 @@ namespace ExtractorSharp.Core.Coder {
             var i = 0;
             while (i < 256) {
                 data[i] = (byte)(stream.ReadByte() ^ Key[i]);
-                if (data[i] == 0) break;
+                if (data[i] == 0) {
+                    break;
+                }
                 i++;
             }
             stream.Seek(255 - i); //防止因加密导致的文件名读取错误
@@ -64,7 +66,9 @@ namespace ExtractorSharp.Core.Coder {
             var data = new byte[256];
             var temp = Encoding.Default.GetBytes(str);
             temp.CopyTo(data, 0);
-            for (var i = 0; i < data.Length; i++) data[i] = (byte)(data[i] ^ Key[i]);
+            for (var i = 0; i < data.Length; i++) {
+                data[i] = (byte)(data[i] ^ Key[i]);
+            }
             stream.Write(data);
         }
 
@@ -78,7 +82,9 @@ namespace ExtractorSharp.Core.Coder {
             var data = new byte[entity.Width * entity.Height * 4];
             for (var i = 0; i < data.Length; i += 4) {
                 var bits = entity.Type;
-                if (entity.Version == ImgVersion.Ver4 && bits == ColorBits.ARGB_1555) bits = ColorBits.ARGB_8888;
+                if (entity.Version == ImgVersion.Ver4 && bits == ColorBits.ARGB_1555) {
+                    bits = ColorBits.ARGB_8888;
+                }
                 var temp = Colors.ReadColor(stream, bits);
                 temp.CopyTo(data, i);
             }
@@ -107,7 +113,9 @@ namespace ExtractorSharp.Core.Coder {
         private static List<Album> ReadInfo(Stream stream) {
             var flag = stream.ReadString();
             var List = new List<Album>();
-            if (flag != NPK_FlAG) return List;
+            if (flag != NPK_FlAG) {
+                return List;
+            }
             var count = stream.ReadInt();
             for (var i = 0; i < count; i++) {
                 List.Add(new Album {
@@ -132,7 +140,9 @@ namespace ExtractorSharp.Core.Coder {
                 //当文件是NPK时
                 stream.Seek(0, SeekOrigin.Begin);
                 List.AddRange(ReadInfo(stream));
-                if (List.Count > 0) stream.Seek(32);
+                if (List.Count > 0) {
+                    stream.Seek(32);
+                }
             } else {
                 var album = new Album();
                 album.Path = file.GetSuffix();
@@ -177,7 +187,9 @@ namespace ExtractorSharp.Core.Coder {
             var position = 52 + List.Count * 264;
             for (var i = 0; i < List.Count; i++) {
                 List[i].Adjust();
-                if (i > 0) position += List[i - 1].Length;
+                if (i > 0) {
+                    position += List[i - 1].Length;
+                }
                 List[i].Offset = position;
             }
             var ms = new MemoryStream();
@@ -192,7 +204,9 @@ namespace ExtractorSharp.Core.Coder {
             var data = ms.ToArray();
             stream.Write(data);
             stream.Write(CompileHash(data));
-            foreach (var album in List) stream.Write(album.Data);
+            foreach (var album in List) {
+                stream.Write(album.Data);
+            }
         }
 
 
@@ -204,7 +218,6 @@ namespace ExtractorSharp.Core.Coder {
         /// <returns></returns>
         public static List<Album> FindAll(string file, params string[] args) {
             var list = Load(file);
-            var rs = new List<Album>();
             list = new List<Album>(list.Where(item => args.Any(arg => item.Path.Contains(arg))));
             return list;
         }
@@ -216,11 +229,17 @@ namespace ExtractorSharp.Core.Coder {
 
         public static List<Album> Find(IEnumerable<Album> Items, bool allCheck, params string[] args) {
             var list = new List<Album>(Items.Where(item => {
-                if (!allCheck && args.Length == 0) return true;
-                if (allCheck && !args[0].Equals(item.Name)) return false;
+                if (!allCheck && args.Length == 0) {
+                    return true;
+                }
+                if (allCheck && !args[0].Equals(item.Name)) {
+                    return false;
+                }
                 return args.All(arg => item.Path.Contains(arg));
             }));
-            if (list.Count == 0) list.AddRange(Items.Where(item => MatchCode(item.Name, args[0])));
+            if (list.Count == 0) {
+                list.AddRange(Items.Where(item => MatchCode(item.Name, args[0])));
+            }
             return list;
         }
 
@@ -231,8 +250,12 @@ namespace ExtractorSharp.Core.Coder {
 
         public static List<Album> FindByCode(IEnumerable<Album> array, string code, bool mask, bool ban) {
             var list = new List<Album>(array.Where(item => {
-                if (!mask && item.Name.Contains("mask")) return false;
-                if (!ban && Regex.IsMatch(item.Name, @"\(.*\)+")) return false;
+                if (!mask && item.Name.Contains("mask")) {
+                    return false;
+                }
+                if (!ban && Regex.IsMatch(item.Name, @"\(.*\)+")) {
+                    return false;
+                }
                 var regex = new Regex("\\d+");
                 var match = regex.Match(item.Name);
                 return match.Success && match.Value.Equals(code);
@@ -261,14 +284,18 @@ namespace ExtractorSharp.Core.Coder {
             if (match0.Success && match1.Success) {
                 var code0 = int.Parse(match0.Value);
                 var code1 = int.Parse(match1.Value);
-                if (code0 == code1 || code0 == code1 / 100 * 100) return true;
+                if (code0 == code1 || code0 == code1 / 100 * 100) {
+                    return true;
+                }
             }
             return false;
         }
 
         public static string CompleteCode(int code) {
             var str = code.ToString();
-            while (str.Length < 4) str = string.Concat(0, str);
+            while (str.Length < 4) {
+                str = string.Concat(0, str);
+            }
             return str;
         }
 
@@ -280,7 +307,9 @@ namespace ExtractorSharp.Core.Coder {
         public static string GetFilePath(Album file) {
             var path = file.Path;
             var index = path.LastIndexOf("/");
-            if (index > -1) path = path.Substring(0, index);
+            if (index > -1) {
+                path = path.Substring(0, index);
+            }
             path = path.Replace("/", "_");
             path += ".NPK";
             return path;
@@ -291,7 +320,9 @@ namespace ExtractorSharp.Core.Coder {
             var regex = new Regex("\\d+");
             var path = file.Name;
             var match = regex.Match(path);
-            if (!match.Success) return arr;
+            if (!match.Success) {
+                return arr;
+            }
             var prefix = path.Substring(0, match.Index);
             var suffix = path.Substring(match.Index + match.Length);
             var code = int.Parse(match.Value);
@@ -303,7 +334,9 @@ namespace ExtractorSharp.Core.Coder {
                 arr[i] = ReadNPK(ms, file.Name)[0];
                 arr[i].Path = file.Path.Replace(file.Name, name);
                 arr[i].Tables.Clear();
-                if (file.Tables.Count > 0) arr[i].Tables.Add(file.Tables[i]);
+                if (file.Tables.Count > 0) {
+                    arr[i].Tables.Add(file.Tables[i]);
+                }
                 ms.Seek(0, SeekOrigin.Begin);
             }
             ms.Close();
@@ -316,18 +349,34 @@ namespace ExtractorSharp.Core.Coder {
             var x = 800;
             var y = 600;
             foreach (var al in array) {
-                if (index >= al.List.Count) continue;
+                if (index >= al.List.Count) {
+                    continue;
+                }
                 var source = al.List[index];
-                if (source.Type == ColorBits.LINK) source = source.Target;
-                if (source.CompressMode == CompressMode.NONE && source.Width * source.Height == 1) continue;
-                if (source.X < x) x = source.X;
-                if (source.Y < y) y = source.Y;
+                if (source.Type == ColorBits.LINK) {
+                    source = source.Target;
+                }
+                if (source.CompressMode == CompressMode.NONE && source.Width * source.Height == 1) {
+                    continue;
+                }
+                if (source.X < x) {
+                    x = source.X;
+                }
+                if (source.Y < y) {
+                    y = source.Y;
+                }
             }
             foreach (var img in array) {
-                if (index > img.List.Count - 1) continue;
+                if (index > img.List.Count - 1) {
+                    continue;
+                }
                 var source = img[index];
-                if (source.Type == ColorBits.LINK) source = source.Target;
-                if (source.CompressMode == CompressMode.NONE && source.Width * source.Height == 1) continue;
+                if (source.Type == ColorBits.LINK) {
+                    source = source.Target;
+                }
+                if (source.CompressMode == CompressMode.NONE && source.Width * source.Height == 1) {
+                    continue;
+                }
                 g.DrawImage(source.Picture, source.X - x, source.Y - y);
             }
             g.Dispose();

@@ -18,7 +18,9 @@ namespace ExtractorSharp.Draw.Brush {
 
         public void Draw(IPaint paint, Point point, decimal scale) {
             point = point.Minus(paint.Location).Divide(scale);
-            if (paint.Tag != null) Program.Connector.Do("eraser", paint.Tag, point, Program.Drawer.Color, Radius);
+            if (paint.Tag != null) {
+                Program.Connector.Do("eraser", paint.Tag, point, Program.Drawer.Color, Radius);
+            }
         }
 
         public void RefreshCursor() {
@@ -26,7 +28,6 @@ namespace ExtractorSharp.Draw.Brush {
             using (var g = Graphics.FromImage(image)) {
                 g.DrawEllipse(new Pen(Color.Black, 2), new Rectangle(0, 0, Radius * 2, Radius * 2));
             }
-
             Cursor = new Cursor(image.GetHicon());
         }
     }

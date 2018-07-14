@@ -39,7 +39,9 @@ namespace ExtractorSharp.Command.ImageCommand {
         }
 
         public void Undo() {
-            for (var i = 0; i < Array.Length; i++) Array[i].Picture = Image[i];
+            for (var i = 0; i < Array.Length; i++) {
+                Array[i].Picture = Image[i];
+            }
         }
     }
 }

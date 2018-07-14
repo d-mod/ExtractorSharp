@@ -25,10 +25,11 @@ namespace ExtractorSharp.View.SettingPane {
                 Color = Color.FromArgb(0, 0, 0, 0);
                 return;
             }
-
             var dialog = new ColorDialog();
             dialog.Color = backgroundPanel.Color;
-            if (dialog.ShowDialog() == DialogResult.OK) Color = Color.FromArgb(0, dialog.Color);
+            if (dialog.ShowDialog() == DialogResult.OK) {
+                Color = Color.FromArgb(0, dialog.Color);
+            }
         }
 
         public override void Initialize() {

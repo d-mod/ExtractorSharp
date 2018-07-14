@@ -12,13 +12,19 @@ namespace ExtractorSharp.Core.Handle {
             var data = entity.Data;
             var type = entity.Type;
             var size = entity.Width * entity.Height * (type == ColorBits.ARGB_8888 ? 4 : 2);
-            if (entity.CompressMode == CompressMode.ZLIB) data = Zlib.Decompress(data, size);
+            if (entity.CompressMode == CompressMode.ZLIB) {
+                data = Zlib.Decompress(data, size);
+            }
             return Bitmaps.FromArray(data, entity.Size, type);
         }
 
         public override byte[] ConvertToByte(Sprite entity) {
-            if (entity.Type > ColorBits.LINK) entity.Type -= 4;
-            if (entity.CompressMode > CompressMode.ZLIB) entity.CompressMode = CompressMode.ZLIB;
+            if (entity.Type > ColorBits.LINK) {
+                entity.Type -= 4;
+            }
+            if (entity.CompressMode > CompressMode.ZLIB) {
+                entity.CompressMode = CompressMode.ZLIB;
+            }
             return entity.Picture.ToArray(entity.Type);
         }
 
@@ -33,7 +39,9 @@ namespace ExtractorSharp.Core.Handle {
                 array[i] = new Sprite(Album) {
                     Type = type
                 };
-                if (type == ColorBits.LINK) array[i].Target = array[0];
+                if (type == ColorBits.LINK) {
+                    array[i].Target = array[0];
+                }
                 array[i].Index = index + i;
             }
             Album.List.InsertAt(index, array);
@@ -58,7 +66,9 @@ namespace ExtractorSharp.Core.Handle {
                 }
                 Album.IndexLength = ms.Length;
                 foreach (var entity in Album.List) {
-                    if (entity.Type == ColorBits.LINK) continue;
+                    if (entity.Type == ColorBits.LINK) {
+                        continue;
+                    }
                     ms.Write(entity.Data);
                 }
                 return ms.ToArray();

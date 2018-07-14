@@ -27,7 +27,9 @@ namespace ExtractorSharp.Command.ImageCommand {
         }
 
         public void Action(params Album[] array) {
-            foreach (var al in array) al.NewImage(Count, Type, Index);
+            foreach (var al in array) {
+                al.NewImage(Count, Type, Index);
+            }
         }
 
         /// <summary>

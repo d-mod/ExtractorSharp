@@ -16,24 +16,32 @@ namespace ExtractorSharp.Core.Handle {
 
 
         public override Bitmap ConvertToBitmap(Sprite entity) {
-            if (entity.Type < ColorBits.LINK && entity.Length > 0) return base.ConvertToBitmap(entity);
-
-            if (!_map.ContainsKey(entity.Index)) return new Bitmap(1, 1);
+            if (entity.Type < ColorBits.LINK && entity.Length > 0) {
+                return base.ConvertToBitmap(entity);
+            }
+            if (!_map.ContainsKey(entity.Index)) {
+                return new Bitmap(1, 1);
+            }
             var index = _map[entity.Index];
             var dds = index.Texture;
             var bmp = dds.Pictrue.Clone(index.Rectangle, PixelFormat.DontCare);
-            if (index.Top != 0) bmp.RotateFlip(RotateFlipType.Rotate90FlipXY);
+            if (index.Top != 0) {
+                bmp.RotateFlip(RotateFlipType.Rotate90FlipXY);
+            }
             return bmp;
         }
 
         public override byte[] ConvertToByte(Sprite entity) {
-            if (entity.Type < ColorBits.LINK && entity.Length > 0) return base.ConvertToByte(entity);
-
+            if (entity.Type < ColorBits.LINK && entity.Length > 0) {
+                return base.ConvertToByte(entity);
+            }
             if (entity.Width * entity.Height == 1) {
                 entity.CompressMode = CompressMode.NONE;
                 return base.ConvertToByte(entity);
             }
-            if (entity.CompressMode == CompressMode.ZLIB) entity.CompressMode = CompressMode.DDS_ZLIB;
+            if (entity.CompressMode == CompressMode.ZLIB) {
+                entity.CompressMode = CompressMode.DDS_ZLIB;
+            }
             var dds = Texture.CreateFromBitmap(entity);
             _map[entity.Index] = new TextureInfo {
                 Texture = dds,
@@ -100,9 +108,12 @@ namespace ExtractorSharp.Core.Handle {
                 ms.WriteInt(info.Top);
             }
             Album.IndexLength = ms.Length - start;
-            foreach (var dds in List) ms.Write(dds.Data);
-
-            foreach (var sprite in ver2List) ms.Write(sprite.Data);
+            foreach (var dds in List) {
+                ms.Write(dds.Data);
+            }
+            foreach (var sprite in ver2List) {
+                ms.Write(sprite.Data);
+            }
             ms.Close();
             var data = ms.ToArray();
             Album.Length = data.Length + 40;
@@ -189,12 +200,18 @@ namespace ExtractorSharp.Core.Handle {
             foreach (var entity in Album.List) {
                 entity.Load();
                 if (version <= ImgVersion.Ver2) {
-                    if (entity.Type == ColorBits.DXT_1) entity.Type = ColorBits.ARGB_1555;
-                    if (entity.Type == ColorBits.DXT_5) entity.Type = ColorBits.ARGB_8888;
+                    if (entity.Type == ColorBits.DXT_1) {
+                        entity.Type = ColorBits.ARGB_1555;
+                    }
+                    if (entity.Type == ColorBits.DXT_5) {
+                        entity.Type = ColorBits.ARGB_8888;
+                    }
                 } else if (version == ImgVersion.Ver4) {
                     entity.Type = ColorBits.ARGB_1555;
                 }
-                if (entity.CompressMode > CompressMode.ZLIB) entity.CompressMode = CompressMode.ZLIB;
+                if (entity.CompressMode > CompressMode.ZLIB) {
+                    entity.CompressMode = CompressMode.ZLIB;
+                }
             }
         }
     }

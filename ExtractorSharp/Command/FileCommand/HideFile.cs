@@ -39,7 +39,9 @@ namespace ExtractorSharp.Command.FileCommand {
         /// </summary>
         /// <param name="array"></param>
         public void Action(params Album[] array) {
-            foreach (var album in array) album.Hide();
+            foreach (var album in array) {
+                album.Hide();
+            }
         }
 
         public void Redo() {

@@ -36,7 +36,7 @@ namespace ExtractorSharp.View.Pane {
             this.actionList = new Component.ESListBox<ActionItem>();
             this.actionList.Location = new System.Drawing.Point(0, 0);
             this.actionList.Name = "list";
-            this.actionList.Size = new System.Drawing.Size(190, 240);
+            this.actionList.Size = new System.Drawing.Size(290, 240);
             this.actionList.TabIndex = 0;
 
             recordButton.Location = new System.Drawing.Point(0, 240);

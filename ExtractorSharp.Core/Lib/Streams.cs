@@ -118,7 +118,9 @@ namespace ExtractorSharp.Core.Lib {
         public static string ReadString(this Stream stream, Encoding encoding) {
             var ms = new MemoryStream();
             var j = 0;
-            while ((j = stream.ReadByte()) != 0 && j != -1) ms.WriteByte((byte) j);
+            while ((j = stream.ReadByte()) != 0 && j != -1) {
+                ms.WriteByte((byte)j);
+            }
             ms.Close();
             return encoding.GetString(ms.ToArray());
         }
@@ -134,7 +136,9 @@ namespace ExtractorSharp.Core.Lib {
         /// <param name="str"></param>
         public static void WriteString(this Stream stream, string str, Encoding encoding, bool split) {
             stream.Write(encoding.GetBytes(str));
-            if (split) stream.WriteByte(0);
+            if (split) {
+                stream.WriteByte(0);
+            }
         }
 
         public static byte[] ReadToEnd(this Stream stream) {

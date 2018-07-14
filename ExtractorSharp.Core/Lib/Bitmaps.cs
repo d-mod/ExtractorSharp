@@ -207,7 +207,9 @@ namespace ExtractorSharp.Core.Lib {
             decoder.Read(stream);
             var count = decoder.GetFrameCount();
             var array = new Bitmap[count];
-            for (var i = 0; i < count; i++) array[i] = new Bitmap(decoder.GetFrame(i));
+            for (var i = 0; i < count; i++) {
+                array[i] = new Bitmap(decoder.GetFrame(i));
+            }
             return array;
         }
 

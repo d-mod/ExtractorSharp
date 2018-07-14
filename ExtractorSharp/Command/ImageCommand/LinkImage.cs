@@ -24,7 +24,9 @@ namespace ExtractorSharp.Command.ImageCommand {
             Indices = args[2] as int[];
             Types = new ColorBits[Indices.Length];
             for (var i = 0; i < Indices.Length; i++) {
-                if (Index > Album.List.Count - 1 || Index < 0 || Index == Indices[i]) continue;
+                if (Index > Album.List.Count - 1 || Index < 0 || Index == Indices[i]) {
+                    continue;
+                }
                 var entity = Album.List[Indices[i]];
                 Types[i] = entity.Type;
                 entity.Type = ColorBits.LINK;

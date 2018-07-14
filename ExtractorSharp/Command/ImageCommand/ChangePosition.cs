@@ -25,7 +25,7 @@ namespace ExtractorSharp.Command.ImageCommand {
                 return;
             }
             if (_ins == null) {
-                return ;
+                return;
             }
             _oldLocations = new Point[Indices.Length];
             _oldMaxSizes = new Size[Indices.Length];
@@ -39,11 +39,11 @@ namespace ExtractorSharp.Command.ImageCommand {
                 }
                 _oldLocations[i] = entity.Location;
                 _oldMaxSizes[i] = entity.CanvasSize;
-                    if (_checkes[0]) {
+                if (_checkes[0]) {
                     if (!_relative) {
                         entity.X = 0;
                     }
-                     entity.X += _ins[0];
+                    entity.X += _ins[0];
                 }
 
                 if (_checkes[1]) {
@@ -76,7 +76,9 @@ namespace ExtractorSharp.Command.ImageCommand {
 
         public void Undo() {
             for (var i = 0; i < Indices.Length; i++) {
-                if (Indices[i] > _album.List.Count - 1 || Indices[i] < 0) continue;
+                if (Indices[i] > _album.List.Count - 1 || Indices[i] < 0) {
+                    continue;
+                }
                 var entity = _album.List[Indices[i]];
                 entity.Location = _oldLocations[i];
                 entity.CanvasSize = _oldMaxSizes[i];
@@ -90,28 +92,36 @@ namespace ExtractorSharp.Command.ImageCommand {
                 }
                 var entity = album.List[i];
                 if (_checkes[0]) {
-                    if (!_relative) entity.X = 0;
+                    if (!_relative) {
+                        entity.X = 0;
+                    }
                     entity.X += _ins[0];
                 }
 
                 if (_checkes[1]) {
-                    if (!_relative) entity.Y = 0;
+                    if (!_relative) {
+                        entity.Y = 0;
+                    }
                     entity.Y += _ins[1];
                 }
 
                 if (_checkes[2]) {
-                    if (!_relative) entity.CanvasWidth = 0;
+                    if (!_relative) {
+                        entity.CanvasWidth = 0;
+                    }
                     entity.CanvasWidth += _ins[2];
                 }
 
                 if (_checkes[3]) {
-                    if (!_relative) entity.CanvasHeight = 0;
+                    if (!_relative) {
+                        entity.CanvasHeight = 0;
+                    }
                     entity.CanvasHeight += _ins[3];
                 }
             }
         }
 
-        public bool CanUndo => true;      
+        public bool CanUndo => true;
 
         public bool IsChanged => true;
 

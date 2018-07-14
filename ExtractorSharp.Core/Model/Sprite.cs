@@ -20,7 +20,8 @@ namespace ExtractorSharp.Core.Model {
         /// <summary>
         ///     贴图在V2,V4时的数据
         /// </summary>
-        [LSIgnore] public byte[] Data = new byte[2];
+        [LSIgnore]
+        public byte[] Data = new byte[2];
 
         /// <summary>
         ///     贴图在img中的下标
@@ -31,28 +32,33 @@ namespace ExtractorSharp.Core.Model {
         /// <summary>
         ///     数据长度
         /// </summary>
-        [LSIgnore] public int Length = 2;
+        [LSIgnore]
+        public int Length = 2;
 
 
         /// <summary>
         ///     贴图坐标
         /// </summary>
-        [LSIgnore] public Point Location;
+        [LSIgnore]
+        public Point Location;
 
         /// <summary>
         ///     存储该贴图的img
         /// </summary>
-        [LSIgnore] public Album Parent;
+        [LSIgnore]
+        public Album Parent;
 
         /// <summary>
         ///     贴图宽高
         /// </summary>
-        [LSIgnore] public Size Size = new Size(1, 1);
+        [LSIgnore]
+        public Size Size = new Size(1, 1);
 
         /// <summary>
         ///     当贴图为链接贴图时所指向的贴图
         /// </summary>
-        [LSIgnore] public Sprite Target;
+        [LSIgnore]
+        public Sprite Target;
 
         public Sprite() { }
 
@@ -71,13 +77,19 @@ namespace ExtractorSharp.Core.Model {
         [LSIgnore]
         public Bitmap Picture {
             get {
-                if (Type == ColorBits.LINK) return Target.Picture;
-                if (IsOpen) return _image;
+                if (Type == ColorBits.LINK) {
+                    return Target.Picture;
+                }
+                if (IsOpen) {
+                    return _image;
+                }
                 return _image = Parent.ConvertToBitmap(this); //使用父容器解析
             }
             set {
                 _image = value;
-                if (value != null) Size = value.Size;
+                if (value != null) {
+                    Size = value.Size;
+                }
             }
         }
 
@@ -135,7 +147,9 @@ namespace ExtractorSharp.Core.Model {
         /// <param name="isAdjust"></param>
         /// <param name="bmp"></param>
         public void ReplaceImage(ColorBits type, bool isAdjust, Bitmap bmp) {
-            if (bmp == null) return;
+            if (bmp == null) {
+                return;
+            }
             Picture = bmp;
             Target = null;
             Type = type == ColorBits.UNKNOWN ? Type : type;
@@ -154,9 +168,15 @@ namespace ExtractorSharp.Core.Model {
                 Y += bmp.Height - Size.Height;
             }
             Size = bmp.Size;
-            if (CanvasHeight < bmp.Height) CanvasHeight = bmp.Height;
-            if (CanvasWidth < bmp.Width) CanvasWidth = bmp.Width;
-            if (Width * Height > 1) CompressMode = CompressMode.ZLIB;
+            if (CanvasHeight < bmp.Height) {
+                CanvasHeight = bmp.Height;
+            }
+            if (CanvasWidth < bmp.Width) {
+                CanvasWidth = bmp.Width;
+            }
+            if (Width * Height > 1) {
+                CompressMode = CompressMode.ZLIB;
+            }
         }
 
 
@@ -164,8 +184,12 @@ namespace ExtractorSharp.Core.Model {
         ///     去画布化
         /// </summary>
         public void UnCanvasImage() {
-            if (Type == ColorBits.LINK || CompressMode == CompressMode.NONE) return;
-            if (Picture == null) return;
+            if (Type == ColorBits.LINK || CompressMode == CompressMode.NONE) {
+                return;
+            }
+            if (Picture == null) {
+                return;
+            }
             var rct = Picture.Scan();
             var image = new Bitmap(rct.Width, rct.Height);
             var g = Graphics.FromImage(image);

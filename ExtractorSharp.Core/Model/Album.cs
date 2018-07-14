@@ -88,7 +88,9 @@ namespace ExtractorSharp.Core.Model {
 
         public List<Color> CurrentTable {
             get {
-                if (TableIndex > -1 && TableIndex < Tables.Count) return Tables[TableIndex];
+                if (TableIndex > -1 && TableIndex < Tables.Count) {
+                    return Tables[TableIndex];
+                }
                 return new List<Color>();
             }
         }

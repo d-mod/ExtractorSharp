@@ -33,7 +33,9 @@ namespace ExtractorSharp.Command.FileCommand {
 
 
         public void Action(params Album[] array) {
-            foreach (var al in array) al.Replace(_source);
+            foreach (var al in array) {
+                al.Replace(_source);
+            }
         }
 
         public bool CanUndo => true;

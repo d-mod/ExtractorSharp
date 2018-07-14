@@ -28,8 +28,12 @@ namespace ExtractorSharp.Draw.Paint {
             var gap = (int) Tag;
             gap = Math.Max(1, gap);
             for (var i = 0; i < Size.Width || i < Size.Height; i += gap) {
-                if (i < Size.Width) g.DrawLine(Pens.White, new Point(i, 0), new Point(i, Size.Height));
-                if (i < Size.Height) g.DrawLine(Pens.White, new Point(0, i), new Point(Size.Width, i));
+                if (i < Size.Width) {
+                    g.DrawLine(Pens.White, new Point(i, 0), new Point(i, Size.Height));
+                }
+                if (i < Size.Height) {
+                    g.DrawLine(Pens.White, new Point(0, i), new Point(Size.Width, i));
+                }
             }
         }
 

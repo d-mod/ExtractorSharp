@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using ExtractorSharp.Component;
 using ExtractorSharp.Core.Composition;
+using ExtractorSharp.Core.Handle;
 using ExtractorSharp.Core.Lib;
 
 namespace ExtractorSharp.View.Dialog {
@@ -12,6 +13,13 @@ namespace ExtractorSharp.View.Dialog {
             indexBox.KeyDown += EnterDownRun;
             countBox.KeyDown += EnterDownRun;
             yesButton.Click += NewImg;
+            var list = Handler.Versions;
+            var array = new object[list.Count];
+            for (var i = 0; i < list.Count; i++) {
+                array[i] = list[i];
+            }
+            versionBox.Items.AddRange(array);
+            versionBox.SelectedItem = ImgVersion.Ver2;
         }
 
         /// <summary>
@@ -20,13 +28,19 @@ namespace ExtractorSharp.View.Dialog {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void EnterDownRun(object sender, KeyEventArgs e) {
-            if (e.KeyCode == Keys.Enter) NewImg(sender, e);
+            if (e.KeyCode == Keys.Enter) {
+                NewImg(sender, e);
+            }
         }
 
         public override DialogResult Show(params object[] args) {
             var count = (int) args[0];
-            indexBox.Maximum = count;
-            indexBox.Value = count;
+            var index = (int)args[1];
+            indexBox.Items.Clear();
+            indexBox.Items.AddRange(Connector.FileArray);
+            index = Math.Max(-1, index);
+            index = Math.Min(index, indexBox.Items.Count);
+            indexBox.SelectedIndex = index;
             return ShowDialog();
         }
 
@@ -41,10 +55,10 @@ namespace ExtractorSharp.View.Dialog {
                 Connector.SendError("FileNameCannotEmpty");
                 return;
             }
-
-            var count = (int) countBox.Value;
-            var index = (int) indexBox.Value;
-            Connector.Do("newImg", null, path, count, index);
+            var count = (int)countBox.Value;
+            var index = indexBox.SelectedIndex;
+            var version = versionBox.SelectedItem;
+            Connector.Do("newImg", null, path, count, index,version);
             pathBox.Text = pathBox.Text.Replace(path.GetSuffix(), "");
             DialogResult = DialogResult.OK;
         }

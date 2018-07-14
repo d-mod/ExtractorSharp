@@ -17,7 +17,9 @@ namespace ExtractorSharp.View.SettingPane {
 
         public void Flush() {
             list.Items.Clear();
-            foreach (var plugin in Hoster.List.Values) list.Items.Add(new PluginListItem(plugin));
+            foreach (var plugin in Hoster.List.Values) {
+                list.Items.Add(new PluginListItem(plugin));
+            }
         }
 
         private void BrowsePlugin(object sender, EventArgs e) {
@@ -43,7 +45,6 @@ namespace ExtractorSharp.View.SettingPane {
                 this.Plugin = Plugin;
                 Text = Plugin.Name;
             }
-
             public Plugin Plugin { get; }
         }
     }

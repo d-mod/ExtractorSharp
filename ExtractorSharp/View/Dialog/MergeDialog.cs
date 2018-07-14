@@ -68,7 +68,9 @@ namespace ExtractorSharp.View.Dialog {
 
         private void LastFrame(object sender, EventArgs e) {
             var i = frameBox.SelectedIndex - 1;
-            if (i > 0) frameBox.SelectedIndex = i;
+            if (i > 0) {
+                frameBox.SelectedIndex = i;
+            }
         }
 
         private void Priview(object sender, PaintEventArgs e) {
@@ -80,7 +82,9 @@ namespace ExtractorSharp.View.Dialog {
             mergerButton.Enabled = true;
             sortButton.Enabled = true;
             prograss.Visible = false;
-            if (completedHideCheck.Checked) DialogResult = DialogResult.OK;
+            if (completedHideCheck.Checked) {
+                DialogResult = DialogResult.OK;
+            }
         }
 
         private void MergeProcessing(object sender, MergeEventArgs e) {
@@ -139,7 +143,6 @@ namespace ExtractorSharp.View.Dialog {
                 Merger.Sort();
                 return;
             }
-
             list.Items.Clear();
             list.Items.AddRange(Merger.Queues.ToArray());
             var count = Merger.GetFrameCount();
@@ -199,7 +202,6 @@ namespace ExtractorSharp.View.Dialog {
                 Connector.SendWarning("EmptyMergeTips");
                 return;
             }
-
             if (albumList.SelectedItem == null) {
                 //没有选择Img时
                 var name = albumList.Text;
@@ -207,7 +209,6 @@ namespace ExtractorSharp.View.Dialog {
                     Connector.SendWarning("NotSelectImgTips");
                     return;
                 }
-
                 var rs = Connector.FileArray.Find(al => al.Name.Equals(name));
                 if (rs != null) {
                     Album = rs;
@@ -218,7 +219,6 @@ namespace ExtractorSharp.View.Dialog {
             } else {
                 Album = albumList.SelectedItem as Album;
             }
-
             Connector.Do("runMerge");
         }
     }

@@ -21,7 +21,9 @@ namespace ExtractorSharp.Core {
         ///     释放资源
         /// </summary>
         public void Dispose() {
-            foreach (var name in List.Keys) List[name].Dispose();
+            foreach (var name in List.Keys) {
+                List[name].Dispose();
+            }
             List.Clear();
         }
 
@@ -59,7 +61,9 @@ namespace ExtractorSharp.Core {
         /// <param name="name"></param>
         /// <param name="type"></param>
         public void Regisity(string name, Type type) {
-            if (Dic.ContainsKey(name)) Dic.Remove(name);
+            if (Dic.ContainsKey(name)) {
+                Dic.Remove(name);
+            }
             Dic.Add(name, type);
         }
 

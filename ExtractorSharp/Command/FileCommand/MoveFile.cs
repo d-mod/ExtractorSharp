@@ -20,7 +20,9 @@ namespace ExtractorSharp.Command.FileCommand {
         
 
         public void Action(params Album[] array) {
-            for (var i = 0; i < array.Length; i++) _list.Remove(array[i]);
+            for (var i = 0; i < array.Length; i++) {
+                _list.Remove(array[i]);
+            }
             _list.InsertRange(_target, array);
         }
 

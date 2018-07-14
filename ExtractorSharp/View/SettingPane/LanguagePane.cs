@@ -13,7 +13,9 @@ namespace ExtractorSharp.View.SettingPane {
             languageBox.Items.Clear();
             foreach (var item in Connector.LanguageList) {
                 languageBox.Items.Add(item);
-                if (item.Lcid == Config["LCID"].Integer) languageBox.SelectedItem = item;
+                if (item.Lcid == Config["LCID"].Integer) {
+                    languageBox.SelectedItem = item;
+                }
             }
         }
 

@@ -32,8 +32,9 @@ namespace ExtractorSharp.Command.FileCommand {
                     Clipboard.Clear();
                     Connector.RemoveFile(array);
                 }
-
-                for (var i = 0; i < array.Length; i++) array[i] = array[i].Clone();
+                for (var i = 0; i < array.Length; i++) {
+                    array[i] = array[i].Clone();
+                }
             } else if (Clipboard.ContainsFileDropList()) {
                 var collection = Clipboard.GetFileDropList();
                 var fileArr = new string[collection.Count];
@@ -54,10 +55,14 @@ namespace ExtractorSharp.Command.FileCommand {
 
             _indexes = new int[array.Length];
             if (array.Length > 0) {
-                if (Connector.FileCount > 0) Connector.SelectedFileIndex = Connector.FileCount - 1;
+                if (Connector.FileCount > 0) {
+                    Connector.SelectedFileIndex = Connector.FileCount - 1;
+                }
                 _index = _index > Connector.List.Count ? Connector.List.Count : _index;
                 _index = _index < 0 ? 0 : _index;
-                for (var i = 0; i < array.Length; i++) _indexes[i] = _index + i;
+                for (var i = 0; i < array.Length; i++) {
+                    _indexes[i] = _index + i;
+                }
                 Connector.List.InsertRange(_index, array);
             }
         }

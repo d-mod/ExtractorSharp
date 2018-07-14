@@ -19,7 +19,9 @@ namespace ExtractorSharp.View.SettingPane {
 
         private void Browse(object sender, EventArgs e) {
             var dialog = new FolderBrowserDialog();
-            if (dialog.ShowDialog() == DialogResult.OK) savePathBox.Text = dialog.SelectedPath;
+            if (dialog.ShowDialog() == DialogResult.OK) {
+                savePathBox.Text = dialog.SelectedPath;
+            }
         }
 
         public override void Initialize() {

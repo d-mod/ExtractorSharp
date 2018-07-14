@@ -6,7 +6,7 @@ using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.Support {
     internal class GifSupport : IFileSupport {
-        public string Pattern => "\\.gif$";
+        public string Extension => ".gif";
 
         public void Encode(string file, List<Album> album) { }
 

@@ -26,7 +26,9 @@ namespace ExtractorSharp.Core.Lib {
 
         public static string RemoveSuffix(this string s) {
             var i = s.IndexOf(".", StringComparison.Ordinal);
-            if (i < 0) i = s.Length;
+            if (i < 0) {
+                i = s.Length;
+            }
             return s.Substring(0, i);
         }
 
@@ -75,7 +77,6 @@ namespace ExtractorSharp.Core.Lib {
             var index = split.Select(c => str.LastIndexOf(c)).Aggregate(-1,
                 (current, index2) => (current > index2 || index2 == -1 ? current : index2));
             return str.Substring(index + 1);
-            ;
         }
 
         #endregion

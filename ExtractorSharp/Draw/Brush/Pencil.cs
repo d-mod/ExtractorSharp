@@ -14,7 +14,9 @@ namespace ExtractorSharp.Draw.Brush {
         public void Draw(IPaint paint, Point point, decimal scale) {
             point = point.Minus(paint.Location).Divide(scale);
             var image = paint.Image;
-            if (paint.Tag != null) Program.Connector.Do("pencil", paint.Tag, point, Program.Drawer.Color);
+            if (paint.Tag != null) {
+                Program.Connector.Do("pencil", paint.Tag, point, Program.Drawer.Color);
+            }
         }
     }
 }

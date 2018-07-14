@@ -22,7 +22,9 @@ namespace ExtractorSharp.Command.ImageCommand {
             Images = new Bitmap[Indices.Length];
             Locations = new Point[Indices.Length];
             for (var i = 0; i < Indices.Length; i++) {
-                if (Indices[i] > Album.List.Count - 1 || Indices[i] < 0) continue;
+                if (Indices[i] > Album.List.Count - 1 || Indices[i] < 0) {
+                    continue;
+                }
                 var entity = Album.List[Indices[i]];
                 Images[i] = entity.Picture;
                 Locations[i] = entity.Location;

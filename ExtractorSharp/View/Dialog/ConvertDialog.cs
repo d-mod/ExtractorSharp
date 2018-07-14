@@ -9,11 +9,13 @@ namespace ExtractorSharp.View.Dialog {
     public partial class ConvertDialog : ESDialog {
         private Album[] Array;
 
-        public ConvertDialog(IConnector Data) : base(Data) {
+        public ConvertDialog(IConnector Connector) : base(Connector) {
             InitializeComponent();
             var list = Handler.Versions;
             var array = new object[list.Count];
-            for (var i = 0; i < list.Count; i++) array[i] = list[i];
+            for (var i = 0; i < list.Count; i++) {
+                array[i] = list[i];
+            }
             combo.Items.AddRange(array);
             yesButton.Click += Convert;
         }
@@ -24,14 +26,15 @@ namespace ExtractorSharp.View.Dialog {
                 combo.SelectedItem = Array[0].Version;
                 return ShowDialog();
             }
-
             return DialogResult.None;
         }
 
         public void Convert(object sender, EventArgs e) {
             var Version = (ImgVersion) combo.SelectedItem;
             var count = 0;
-            foreach (var al in Array) count += al.List.Count;
+            foreach (var al in Array) {
+                count += al.List.Count;
+            }
             progress.Maximum = count;
             progress.Value = 0;
             progress.Visible = true;
@@ -45,7 +48,6 @@ namespace ExtractorSharp.View.Dialog {
                     al.ConvertTo(Version);
                 }
             }
-
             Connector.IsSave = false;
             progress.Visible = false;
             DialogResult = DialogResult.OK;

@@ -11,8 +11,12 @@ namespace ExtractorSharp.Core.Sorter {
         public int Comparer(Album a1, Album a2) {
             var index1 = IndexOf(a1.Name);
             var index2 = IndexOf(a2.Name);
-            if (index1 == index2) return 0;
-            if (index1 < index2) return 1;
+            if (index1 == index2) {
+                return 0;
+            }
+            if (index1 < index2) {
+                return 1;
+            }
             return -1;
         }
 
@@ -34,10 +38,13 @@ namespace ExtractorSharp.Core.Sorter {
             for (var i = 0; i < matches.Count; i++) {
                 //移除数字序号
                 name = name.Replace(matches[i].Value, "");
-                if (i != 0) suf = int.Parse(matches[i].Value);
+                if (i != 0) {
+                    suf = int.Parse(matches[i].Value);
+                }
             }
-
-            if (Dictionary.ContainsKey(name)) return Dictionary[name] + suf;
+            if (Dictionary.ContainsKey(name)) {
+                return Dictionary[name] + suf;
+            }
             return -1;
         }
     }

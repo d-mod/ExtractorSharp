@@ -40,11 +40,15 @@ namespace ExtractorSharp.View.Pane {
 
 
         private void RefreshList(object sender, EventArgs e) {
-            if (Parent.Visible) historyList.SelectedIndex = Controller.Index;
+            if (Parent.Visible) {
+                historyList.SelectedIndex = Controller.Index;
+            }
         }
 
         public void Refresh(object sender, CommandEventArgs e) {
-            if (e.Type == CommandEventType.Clear || e.Command.CanUndo) Refresh();
+            if (e.Type == CommandEventType.Clear || e.Command.CanUndo) {
+                Refresh();
+            }
         }
 
         public override void Refresh() {
@@ -55,7 +59,9 @@ namespace ExtractorSharp.View.Pane {
                 for (var i = 0; i < history.Length; i++) {
                     historyList.Items.Add($"{(i == Controller.Index - 1 ? "-> " : "")}{Language[history[i].Name]}");
                 }
-                if (Controller.Index < historyList.Items.Count) historyList.SelectedIndex = Controller.Index;
+                if (Controller.Index < historyList.Items.Count) {
+                    historyList.SelectedIndex = Controller.Index;
+                }
                 base.Refresh();
             }
         }
@@ -68,7 +74,9 @@ namespace ExtractorSharp.View.Pane {
         }
 
         private void Goto(object sender, MouseEventArgs e) {
-            if (e.Button == MouseButtons.Left && e.Clicks == 2) Move(sender, e);
+            if (e.Button == MouseButtons.Left && e.Clicks == 2) {
+                Move(sender, e);
+            }
         }
     }
 }

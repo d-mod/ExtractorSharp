@@ -45,7 +45,6 @@ namespace ExtractorSharp.View.Pane {
                     list.SetColor(items[i], color);
                     indexes[i] = items[i].Index;
                 }
-
                 Connector.Do("changeColor", Album, Album.TableIndex, indexes, color);
                 Album.Refresh();
                 Connector.CanvasFlush();
@@ -86,7 +85,6 @@ namespace ExtractorSharp.View.Pane {
                     index_arr[i] = arr[i].Index;
                     list.SetColor(arr[i], color);
                 }
-
                 Connector.Do("changeColor", Album, Album.TableIndex, index_arr, color);
             }
         }

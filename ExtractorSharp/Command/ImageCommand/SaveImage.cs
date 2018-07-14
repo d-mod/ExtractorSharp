@@ -66,28 +66,32 @@ namespace ExtractorSharp.Command.ImageCommand {
                 var index = dir.LastIndexOf("/");
                 dir = dir.Substring(0, index + 1);
                 var prefix = dir.Substring(index);
-
-                if (File.Exists(dir)) dir += "_";
-                if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+                if (File.Exists(dir)) {
+                    dir += "_";
+                }
+                if (!Directory.Exists(dir)) {
+                    Directory.CreateDirectory(dir);
+                }
                 var max = Math.Min(indexes.Length, album.List.Count);
                 for (var i = 0; i < max; i++) {
                     if (indexes[i] < 0 || i > Indices.Length - 1 || i > album.List.Count - 1) continue;
                     var entity = album.List[indexes[i]];
                     var name = (Increment == -1 ? Indices[i] : Increment + i).ToString();
-                    while (name.Length < Digit) name = "0" + name;
+                    while (name.Length < Digit) {
+                        name = string.Concat("0", name);
+                    }
                     var path = $"{dir}{prefix}{name}.png"; //文件名格式:文件路径/贴图索引.png
-                    var image = entity.Picture;
-                    ;
+                    var image = entity.Picture;                   
                     if (OnSaving != null) {
                         foreach (SpriteEffect action in OnSaving.GetInvocationList()) {
                             action.Invoke(entity, ref image);
                             image = image ?? entity.Picture;
                         }
                     }
-
                     var parent = System.IO.Path.GetDirectoryName(path);
-                    if (Directory.Exists(parent)) { }
+                    if (Directory.Exists(parent)) {
 
+                    }
                     image.Save(path); //保存贴图
                 }
             }

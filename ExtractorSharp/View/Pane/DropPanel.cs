@@ -12,6 +12,7 @@ namespace ExtractorSharp.View.Pane {
             TabPages.Add(historyPanel);
             TabPages.Add(actionPanel);
             TabPages.Add(new PalattePanel());
+            TabPages.Add(new TexturePanel());
         }
 
         private IConnector Connector { get; }

@@ -1,7 +1,7 @@
-﻿using System.Windows.Forms;
+﻿using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.View.Pane {
-    partial class DropPanel {
+    partial class TexturePanel {
         /// <summary> 
         /// 必需的设计器变量。
         /// </summary>
@@ -25,24 +25,12 @@ namespace ExtractorSharp.View.Pane {
         /// 使用代码编辑器修改此方法的内容。
         /// </summary>
         private void InitializeComponent() {
-
-            // 
-            // HistoryPanel
-            //
-            historyPanel = new HistoryPage();
-            actionPanel = new ActionPage(Connector);
-            
-            this.Name = "DropPanel";
-            this.Size = new System.Drawing.Size(300, 300);
-            this.ResumeLayout(false);
-            this.Visible = false;
-            this.Location = new System.Drawing.Point(730,80);
-
+            components = new System.ComponentModel.Container();
+            Text = Language["Texture"];
         }
 
-        private TabPage historyPanel, actionPanel;
+        private Language Language => Language.Default;
 
         #endregion
-
     }
 }

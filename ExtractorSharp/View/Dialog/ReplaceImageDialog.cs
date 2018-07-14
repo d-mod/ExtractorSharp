@@ -15,7 +15,9 @@ namespace ExtractorSharp.View.Dialog {
         public void Replace(object sender, EventArgs e) {
             var array = seletImageRadio.Checked ? Connector.CheckedImages : Connector.ImageArray;
             var indexes = new int[array.Length];
-            for (var i = 0; i < array.Length; i++) indexes[i] = array[i].Index;
+            for (var i = 0; i < array.Length; i++) {
+                indexes[i] = array[i].Index;
+            }
             var type = ColorBits.UNKNOWN;
             if (_1555_Radio.Checked) {
                 type = ColorBits.ARGB_1555;
@@ -38,10 +40,8 @@ namespace ExtractorSharp.View.Dialog {
                 if (dialog.ShowDialog() == DialogResult.OK) path = dialog.SelectedPath;
                 mode = 2;
             }
-
             if (!string.IsNullOrEmpty(path)) {
-                Connector.Do("replaceImage", type, adjustPositionBox.Checked, mode, path, Connector.SelectedFile,
-                    indexes);
+                Connector.Do("replaceImage", type, adjustPositionBox.Checked, mode, path, Connector.SelectedFile, indexes);
                 DialogResult = DialogResult.OK;
             }
         }

@@ -28,6 +28,16 @@ namespace ExtractorSharp {
     public partial class MainForm : ESForm {
         private int move_mode = -1;
 
+        private string Extensions {
+            get {
+                var ex = "*.img;*.npk;";
+                foreach (var support in Connector.FileSupports) {
+                    ex = string.Concat(ex,$"*{support.Extension};");
+                }
+                return ex;
+            }
+        }
+
 
         public MainForm() : base(new MainConnector()) {
             ((MainConnector) Connector).MainForm = this;
@@ -352,12 +362,18 @@ namespace ExtractorSharp {
                 Connector.SendError("SelectPathIsInvalid");
                 return;
             }
+            if (Connector.CheckedFiles.Length == 0) {
+                return;
+            }
             Connector.Do("recoverFile", Connector.CheckedFiles);
         }
 
         private void RepairFile(object sender, EventArgs e) {
             if (!Directory.Exists(Config["ResourcePath"].Value)) {
                 Connector.SendError("SelectPathIsInvalid");
+                return;
+            }
+            if (Connector.CheckedFiles.Length == 0) {
                 return;
             }
             Connector.Do("repairFile", Connector.CheckedFiles);
@@ -856,7 +872,7 @@ namespace ExtractorSharp {
         private void AddOutMerge(object sender, EventArgs e) {
             var dialog = new OpenFileDialog();
             dialog.Multiselect = true;
-            dialog.Filter = $"{Language["ImageResources"]}|*.img;*.gif;*.spk;*.npk";
+            dialog.Filter = $"{Language["ImageResources"]}| {Extensions}";
             if (dialog.ShowDialog() == DialogResult.OK) {
                 var array = Connector.LoadFile(dialog.FileNames).ToArray();
                 Connector.Do("addMerge", array);
@@ -989,7 +1005,7 @@ namespace ExtractorSharp {
         /// <param name="e"></param>
         /// F
         private void ShowNewImgDialog(object sender, EventArgs e) {
-            Viewer.Show("newImg", Connector.List.Count);
+            Viewer.Show("newImg", Connector.List.Count,Connector.SelectedFileIndex);
         }
 
 
@@ -1162,7 +1178,7 @@ namespace ExtractorSharp {
         private void AddFile(object sender, EventArgs e) {
             var dialog = new OpenFileDialog();
             dialog.Filter =
-                $"{Language["ImageResources"]}|*.npk;*.spk;*.img;*.gif;|{Language["SoundResources"]}|*.mp3;*.wav;*.ogg";
+                $"{Language["ImageResources"]}|{Extensions}|{Language["SoundResources"]}|*.mp3;*.wav;*.ogg";
             dialog.Multiselect = true;
             if (dialog.ShowDialog() == DialogResult.OK) {
                 Connector.AddFile(!sender.Equals(addFileItem), dialog.FileNames);

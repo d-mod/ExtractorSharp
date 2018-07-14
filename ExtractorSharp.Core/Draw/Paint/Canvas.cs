@@ -24,7 +24,9 @@ namespace ExtractorSharp.Core.Draw.Paint {
         public bool RealPosition {
             set {
                 _realPosition = value;
-                if (!value) Location = Point.Empty;
+                if (!value) {
+                    Location = Point.Empty;
+                }
             }
             get => _realPosition;
         }

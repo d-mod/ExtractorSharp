@@ -72,7 +72,9 @@ namespace ExtractorSharp.View.Dialog {
 
         private void SelectNode(object sender, TreeViewEventArgs e) {
             panel.Controls.Clear();
-            if (!Dictionary.ContainsKey(e.Node)) return;
+            if (!Dictionary.ContainsKey(e.Node)) {
+                return;
+            }
             var control = Dictionary[e.Node];
             control.Size = panel.Size;
             panel.Controls.Add(control);
@@ -82,11 +84,15 @@ namespace ExtractorSharp.View.Dialog {
 
         private void Initialize() {
             Config.Save();
-            foreach (var control in Dictionary.Values) control.Initialize();
+            foreach (var control in Dictionary.Values) {
+                control.Initialize();
+            }
         }
 
         private void Save() {
-            foreach (var control in Dictionary.Values) control.Save();
+            foreach (var control in Dictionary.Values) {
+                control.Save();
+            }
             Config.Save();
         }
 

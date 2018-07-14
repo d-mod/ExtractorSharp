@@ -29,7 +29,9 @@ namespace ExtractorSharp.Command.FileCommand {
             Clipboarder.Default = Clipboarder.CreateClipboarder(_array, null, _mode);
             var builder = new LSBuilder();
             var dir = $"{Program.Config["RootPath"]}/temp/clipbord_img";
-            if (Directory.Exists(dir)) Directory.Delete(dir, true);
+            if (Directory.Exists(dir)) {
+                Directory.Delete(dir, true);
+            }
             Directory.CreateDirectory(dir);
             if (_array != null) {
                 var pathArr = new string[_array.Length];

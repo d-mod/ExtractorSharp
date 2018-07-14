@@ -44,7 +44,9 @@ namespace ExtractorSharp.Command.ImageCommand {
                     OldImages = new Bitmap[Indices.Length];
                     Types = new ColorBits[Indices.Length];
                     for (var i = 0; i < Indices.Length && i < gifentry.Length; i++) {
-                        if (Indices[i] > Album.List.Count - 1 && Indices[i] < 0) continue;
+                        if (Indices[i] > Album.List.Count - 1 && Indices[i] < 0) {
+                            continue;
+                        }
                         var image = Album[Indices[i]];
                         OldImages[i] = image.Picture;
                         Types[i] = image.Type;
@@ -57,7 +59,9 @@ namespace ExtractorSharp.Command.ImageCommand {
                     OldImages = new Bitmap[Indices.Length];
                     Types = new ColorBits[Indices.Length];
                     for (var i = 0; i < Indices.Length && i < images.Length; i++) {
-                        if (Indices[i] > Album.List.Count - 1 || Indices[i] < 0) continue;
+                        if (Indices[i] > Album.List.Count - 1 || Indices[i] < 0) {
+                            continue;
+                        }
                         var image = Album[Indices[i]];
                         OldImages[i] = image.Picture;
                         Types[i] = image.Type;
@@ -97,7 +101,9 @@ namespace ExtractorSharp.Command.ImageCommand {
                 case 1:
                     var gifentry = Bitmaps.ReadGif(path);
                     for (var i = 0; i < indexes.Length && i < gifentry.Length; i++) {
-                        if (indexes[i] > album.List.Count - 1 && indexes[i] < 0) continue;
+                        if (indexes[i] > album.List.Count - 1 && indexes[i] < 0) {
+                            continue;
+                        }
                         album[indexes[i]].ReplaceImage(Type, IsAdjust, gifentry[i]);
                     }
 
@@ -105,7 +111,9 @@ namespace ExtractorSharp.Command.ImageCommand {
                 case 2:
                     var images = GetImages(album, indexes.Length);
                     for (var i = 0; i < indexes.Length && i < images.Length; i++) {
-                        if (indexes[i] > album.List.Count - 1 || indexes[i] < 0) continue;
+                        if (indexes[i] > album.List.Count - 1 || indexes[i] < 0) {
+                            continue;
+                        }
                         album[indexes[i]].ReplaceImage(Type, IsAdjust, images[i]);
                     }
 
@@ -125,8 +133,12 @@ namespace ExtractorSharp.Command.ImageCommand {
             var dir = Path;
             dir = dir.Replace(@"\", "/");
             dir = dir.Complete("/" + Album.Path); //补全img路径
-            if (!Directory.Exists(dir)) dir = Path + "/" + Album.Name;
-            if (!Directory.Exists(dir)) dir = Path;
+            if (!Directory.Exists(dir)) {
+                dir = Path + "/" + Album.Name;
+            }
+            if (!Directory.Exists(dir)) {
+                dir = Path;
+            }
             var bmps = new Bitmap[count]; //空贴图数组
             if (!Directory.Exists(dir)) {
                 if (Directory.Exists(dir + "_")) {
@@ -153,8 +165,9 @@ namespace ExtractorSharp.Command.ImageCommand {
                     exist = true;
                     path = bmp;
                 }
-
-                if (exist) bmps[i] = Image.FromFile(path) as Bitmap;
+                if (exist) {
+                    bmps[i] = Image.FromFile(path) as Bitmap;
+                }
             }
 
             return bmps;

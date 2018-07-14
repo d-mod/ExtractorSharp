@@ -34,7 +34,6 @@ namespace ExtractorSharp.Command.PaletteCommand {
                 OldColor[i] = table[index];
                 table[index] = NewColor;
             }
-
             Album.Refresh();
         }
 
@@ -44,7 +43,9 @@ namespace ExtractorSharp.Command.PaletteCommand {
         }
 
         public void Undo() {
-            for (var i = 0; i < Indexes.Length; i++) Album.Tables[TableIndex][Indexes[i]] = OldColor[i];
+            for (var i = 0; i < Indexes.Length; i++) {
+                Album.Tables[TableIndex][Indexes[i]] = OldColor[i];
+            }
             Album.Refresh();
         }
     }

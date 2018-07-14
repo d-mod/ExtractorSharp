@@ -105,7 +105,9 @@ namespace ExtractorSharp.Core {
         /// </summary>
         /// <param name="array"></param>
         public void Add(params Album[] array) {
-            for (var i = 0; i < array.Length; i++) array[i] = array[i].Clone();
+            for (var i = 0; i < array.Length; i++) {
+                array[i] = array[i].Clone();
+            }
             Queues.AddRange(array);
             OnMergeQueueChanged(new MergeQueueEventArgs {
                 Mode = QueueChangeMode.Add,

@@ -149,7 +149,7 @@ namespace ExtractorSharp {
             public List<Album> LoadFile(params string[] args) {
                 var list = new List<Album>();
                 for (var i = 0; i < args.Length; i++) {
-                    var support = FileSupports.Find(e => new Regex(e.Pattern).IsMatch(args[i].ToLower()));
+                    var support = FileSupports.Find(e => args[i].ToLower().EndsWith(e.Extension));
                     var arr = new List<Album>();
                     if (support != null) {
                         arr = support.Decode(args[i]);

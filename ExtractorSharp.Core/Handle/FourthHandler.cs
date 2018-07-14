@@ -44,7 +44,9 @@ namespace ExtractorSharp.Core.Handle {
                     ms.WriteByte((byte) table.IndexOf(color));
                 }
                 data = ms.ToArray();
-                if (data.Length < 2) data = new byte[2];
+                if (data.Length < 2) {
+                    data = new byte[2];
+                }
                 return data;
             }
         }

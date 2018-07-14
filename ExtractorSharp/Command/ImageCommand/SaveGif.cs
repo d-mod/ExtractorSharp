@@ -24,10 +24,18 @@ namespace ExtractorSharp.Command.ImageCommand {
             var y = 600;
             for (var i = 0; i < Indices.Length; i++) {
                 var entity = album[Indices[i]];
-                if (entity.Width + entity.X > w) w = entity.Width + entity.X;
-                if (entity.Height + entity.Y > h) h = entity.Height + entity.Y;
-                if (entity.X < x) x = entity.X;
-                if (entity.Y < y) y = entity.Y;
+                if (entity.Width + entity.X > w) {
+                    w = entity.Width + entity.X;
+                }
+                if (entity.Height + entity.Y > h) {
+                    h = entity.Height + entity.Y;
+                }
+                if (entity.X < x) {
+                    x = entity.X;
+                }
+                if (entity.Y < y) {
+                    y = entity.Y;
+                }
             }
 
             w -= x;

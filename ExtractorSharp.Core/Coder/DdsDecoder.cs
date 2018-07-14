@@ -31,7 +31,9 @@ namespace ExtractorSharp.Core.Coder {
             ddsTexture.Reverse = stream.Read(11);
             stream.Seek(37);
             var pfFlags = stream.ReadInt();
-            if ((pfFlags & DdsMipmapCount) != 0) ddsTexture.Count = Math.Max(1, count);
+            if ((pfFlags & DdsMipmapCount) != 0) {
+                ddsTexture.Count = Math.Max(1, count);
+            }
             var format = stream.ReadInt();
             var blockBytes = 0;
             switch (format) {

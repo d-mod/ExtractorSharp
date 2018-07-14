@@ -59,7 +59,6 @@ namespace ExtractorSharp.View.Dialog {
             } catch (Exception e) {
                 Console.Write(e.StackTrace);
             }
-
             return result;
         }
     }

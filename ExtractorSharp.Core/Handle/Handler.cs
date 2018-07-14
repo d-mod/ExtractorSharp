@@ -63,8 +63,9 @@ namespace ExtractorSharp.Core.Handle {
         ///     校正数据
         /// </summary>
         public void Adjust() {
-            foreach (var entity in Album.List) entity.Adjust();
-
+            foreach (var entity in Album.List) {
+                entity.Adjust();
+            }
             Album.Count = Album.List.Count;
             var ms = new MemoryStream();
             var data = AdjustData();
@@ -86,7 +87,9 @@ namespace ExtractorSharp.Core.Handle {
         /// <param name="version"></param>
         /// <param name="type"></param>
         public static void Regisity(ImgVersion version, Type type) {
-            if (Dic.ContainsKey(version)) Dic.Remove(version);
+            if (Dic.ContainsKey(version)) {
+                Dic.Remove(version);
+            }
             Dic.Add(version, type);
         }
 

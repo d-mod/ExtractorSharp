@@ -25,7 +25,9 @@ namespace ExtractorSharp.Component {
                 textBox.Text = value;
                 var name = value.GetSuffix();
                 var i = value.LastIndexOf(name);
-                if (i > -1) textBox.Select(i, name.Length);
+                if (i > -1) {
+                    textBox.Select(i, name.Length);
+                }
             }
         }
 

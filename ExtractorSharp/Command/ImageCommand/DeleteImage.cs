@@ -19,18 +19,20 @@ namespace ExtractorSharp.Command.ImageCommand {
             Indices = args[1] as int[];
             _array = new Sprite[Indices.Length];
             for (var i = 0; i < Indices.Length; i++) {
-                if (Indices[i] > _album.List.Count - 1 || Indices[i] < 0) continue;
+                if (Indices[i] > _album.List.Count - 1 || Indices[i] < 0) {
+                    continue;
+                }
                 _array[i] = _album.List[Indices[i]];
             }
-
             foreach (var entity in _array) {
                 if (entity != null) {
                     var frist = _album.List.Find(item => item?.Target == entity);
-                    if (frist != null) _album.List[frist.Index] = entity;
+                    if (frist != null) {
+                        _album.List[frist.Index] = entity;
+                    }
                     _album.List[entity.Index] = null;
                 }
             }
-
             _album.List.RemoveAll(e => e == null);
             _album.AdjustIndex();
         }
@@ -50,8 +52,9 @@ namespace ExtractorSharp.Command.ImageCommand {
                     _album.List.Add(entity);
                 }
             }
-
-            if (_array.Length > 0) _album.AdjustIndex();
+            if (_array.Length > 0) {
+                _album.AdjustIndex();
+            }
         }
 
         public void Action(Album album, int[] indexes) {
@@ -61,7 +64,9 @@ namespace ExtractorSharp.Command.ImageCommand {
                     array[i] = album.List[indexes[i]];
                 }
             }
-            foreach (var entity in array) album.List.Remove(entity);
+            foreach (var entity in array) {
+                album.List.Remove(entity);
+            }
             album.AdjustIndex(); //校正索引
         }
 

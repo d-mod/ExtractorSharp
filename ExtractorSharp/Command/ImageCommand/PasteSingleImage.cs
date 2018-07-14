@@ -32,10 +32,14 @@ namespace ExtractorSharp.Command.ImageCommand {
             if (clipboard != null) {
                 var source = clipboard.Album;
                 var indexes = clipboard.Indexes;
-                if (indexes.Length > 0 && indexes[0] < source.List.Count) image = source[indexes[0]].Picture;
+                if (indexes.Length > 0 && indexes[0] < source.List.Count) {
+                    image = source[indexes[0]].Picture;
+                }
             } else if (Clipboard.ContainsFileDropList()) {
                 var collection = Clipboard.GetFileDropList();
-                if (collection.Count > 0 && File.Exists(collection[0])) image = Image.FromFile(collection[0]) as Bitmap;
+                if (collection.Count > 0 && File.Exists(collection[0])) {
+                    image = Image.FromFile(collection[0]) as Bitmap;
+                }
             }
 
             OldLocation = Entity.Location;
