@@ -1,7 +1,7 @@
-﻿using ExtractorSharp.Core.Model;
+﻿using System.Windows.Forms;
 
-namespace ExtractorSharp.View.Pane {
-    partial class TexturePanel {
+namespace ExtractorSharp.View.SettingPane.Theme {
+    partial class BackgroundPane {
         /// <summary> 
         /// 必需的设计器变量。
         /// </summary>
@@ -25,11 +25,17 @@ namespace ExtractorSharp.View.Pane {
         /// 使用代码编辑器修改此方法的内容。
         /// </summary>
         private void InitializeComponent() {
-            components = new System.ComponentModel.Container();
-            Text = Language["Texture"];
+            this.Parent = "Theme";
+            this.Name = "Background";
+            
         }
 
-        private Language Language => Language.Default;
+
+        private Label mainColorLabel;
+
+        private Label dialogColorLabel;
+
+
 
         #endregion
     }

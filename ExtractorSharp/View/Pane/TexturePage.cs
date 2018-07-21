@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ExtractorSharp.View.Pane {
-    public partial class TexturePanel : TabPage {
-        public TexturePanel() {
+    public partial class TexturePage : TabPage {
+        public TexturePage() {
             InitializeComponent();
         }
     }

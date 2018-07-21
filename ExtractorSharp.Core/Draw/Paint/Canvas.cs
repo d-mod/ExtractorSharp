@@ -9,12 +9,17 @@ namespace ExtractorSharp.Core.Draw.Paint {
         public Point RealLocation {
             get {
                 var location = Location;
-                if (RealPosition) {
-                    if (Tag is Sprite sprite) {
-                        location = location.Add(sprite.Location);
-                    }
+                if (RealPosition && Tag is Sprite sprite) {
+                    location = location.Add(sprite.Location);
                 }
                 return location;
+            }
+            set {
+                var location = value;
+                if (RealPosition && Tag is Sprite sprite) {
+                    location = location.Minus(sprite.Location);
+                }
+                Location = location;
             }
         }
 

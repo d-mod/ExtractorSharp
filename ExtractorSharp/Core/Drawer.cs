@@ -188,7 +188,7 @@ namespace ExtractorSharp.Core {
 
         public void Move(int index, Point point) {
             var layer = LayerList[index];
-            point = GetPoint(layer, point);
+            //point = GetPoint(layer, point);
             Brush.Draw(layer, point, ImageScale);
             CusorLocation = point;
         }

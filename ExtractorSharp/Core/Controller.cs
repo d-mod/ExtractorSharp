@@ -25,6 +25,8 @@ namespace ExtractorSharp.Core {
 
         private readonly Stack<ICommand> undoStack;
 
+        private readonly Dictionary<string, IExecutable> ExecuteMap;
+
 
         public Controller() {
             actArgs = new ActionEventArgs();
@@ -33,6 +35,7 @@ namespace ExtractorSharp.Core {
             redoStack = new Stack<ICommand>();
             Dic = new Dictionary<string, Type>();
             ReserveDic = new Dictionary<Type, string>();
+            ExecuteMap = new Dictionary<string, IExecutable>();
         }
 
         private IConnector Connector => Program.Connector;
@@ -131,9 +134,18 @@ namespace ExtractorSharp.Core {
         /// <param name="cmd"></param>
         /// <param name="type"></param>
         public void Registry(string cmd, Type type) {
-            if (Dic.ContainsKey(cmd)) Dic.Remove(cmd);
+            if (Dic.ContainsKey(cmd)) {
+                Dic.Remove(cmd);
+            }
             Dic.Add(cmd, type);
             ReserveDic.Add(type, cmd);
+        }
+
+        public void Registry(string cmd, IExecutable exe) {
+            if (ExecuteMap.ContainsKey(cmd)) {
+                ExecuteMap.Remove(cmd);
+            }
+            ExecuteMap.Add(cmd, exe);
         }
 
 
@@ -235,6 +247,16 @@ namespace ExtractorSharp.Core {
                 }
             }
             Connector.ImageListFlush();
+        }
+
+
+        public object Dispatch(string name,params object[] args) {
+            if (ExecuteMap.ContainsKey(name)) {
+                var exe = ExecuteMap[name];
+                return exe.Execute(args);
+            } else {
+                throw new CommandException("NotExistCommand");
+            }
         }
 
         /// <summary>

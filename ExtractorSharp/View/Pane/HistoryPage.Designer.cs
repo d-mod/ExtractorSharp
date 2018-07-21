@@ -13,6 +13,7 @@ namespace ExtractorSharp.View.Pane {
 
             this.historyList = new System.Windows.Forms.ListBox();
             this.menu = new System.Windows.Forms.ContextMenuStrip();
+            this.clearItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gotoItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SuspendLayout();
@@ -28,7 +29,9 @@ namespace ExtractorSharp.View.Pane {
 
             gotoItem.Text = Language["Goto"];
             addItem.Text = Language["AddAction"];
+            clearItem.Text = Language["ClearList"];
 
+            menu.Items.Add(clearItem);
             menu.Items.Add(gotoItem);
             menu.Items.Add(addItem);
             Controls.Add(historyList);
@@ -37,6 +40,7 @@ namespace ExtractorSharp.View.Pane {
         private System.Windows.Forms.ListBox historyList;
 
         private System.Windows.Forms.ContextMenuStrip menu;
+        private System.Windows.Forms.ToolStripMenuItem clearItem;
         private System.Windows.Forms.ToolStripMenuItem gotoItem;
         private System.Windows.Forms.ToolStripMenuItem addItem;
 

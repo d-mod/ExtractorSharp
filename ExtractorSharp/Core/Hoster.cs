@@ -58,7 +58,7 @@ namespace ExtractorSharp.Core {
             return true;
         }
 
-        public bool Install(string dir) {
+        public void Install(string dir) {
             var plugin = new Plugin {Directory = dir};
             //加载主程序模块和插件模块
             var catalog = new AggregateCatalog();
@@ -76,15 +76,9 @@ namespace ExtractorSharp.Core {
                 Language.CreateFromDir(lanDir);
             }
             //初始化
-            try {
-                plugin.Initialize();
-            } catch (Exception) {
-                return false;
-            }
-
+            plugin.Initialize();
             //记录插件
             List.Add(plugin.Guid, plugin);
-            return true;
         }
 
         public void Refresh() {

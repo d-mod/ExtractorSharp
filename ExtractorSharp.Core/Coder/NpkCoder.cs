@@ -99,7 +99,9 @@ namespace ExtractorSharp.Core.Coder {
         /// <param name="source"></param>
         /// <returns></returns>
         private static byte[] CompileHash(byte[] source) {
-            if (source.Length < 1) return new byte[0];
+            if (source.Length < 1) {
+                return new byte[0];
+            }
             var count = source.Length / 17 * 17;
             var data = new byte[count];
             Array.Copy(source, 0, data, 0, count);
@@ -391,10 +393,16 @@ namespace ExtractorSharp.Core.Coder {
 
         public static List<Album> Load(bool onlyPath, string file) {
             var list = new List<Album>();
-            if (Directory.Exists(file)) return Load(onlyPath, Directory.GetFiles(file));
-            if (!File.Exists(file)) return list;
+            if (Directory.Exists(file)) {
+                return Load(onlyPath, Directory.GetFiles(file));
+            }
+            if (!File.Exists(file)) {
+                return list;
+            }
             using (var stream = File.OpenRead(file)) {
-                if (onlyPath) return ReadInfo(stream);
+                if (onlyPath) {
+                    return ReadInfo(stream);
+                }
                 var enums = stream.ReadNPK(file);
                 return enums;
             }
@@ -402,7 +410,9 @@ namespace ExtractorSharp.Core.Coder {
 
         public static List<Album> Load(bool onlyPath, params string[] files) {
             var List = new List<Album>();
-            foreach (var file in files) List.AddRange(Load(onlyPath, file));
+            foreach (var file in files) {
+                List.AddRange(Load(onlyPath, file));
+            }
             return List;
         }
 
@@ -430,7 +440,9 @@ namespace ExtractorSharp.Core.Coder {
         }
 
         public static void SaveToDirectory(string dir, IEnumerable<Album> array) {
-            foreach (var img in array) img.Save($"{dir}/{img.Name}");
+            foreach (var img in array) {
+                img.Save($"{dir}/{img.Name}");
+            }
         }
 
         #endregion

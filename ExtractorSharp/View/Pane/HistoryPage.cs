@@ -18,9 +18,14 @@ namespace ExtractorSharp.View.Pane {
             Controller.CommandCleared += Refresh;
             gotoItem.Click += Move;
             addItem.Click += Add;
+            clearItem.Click += Clear;
             historyList.Items.Add("...");
             historyList.Items.AddRange(Controller.History);
             historyList.SelectedIndex = 0;
+        }
+
+        private void Clear(object sender, EventArgs e) {
+            Controller.ClearCommand();
         }
 
         private Language Language => Language.Default;

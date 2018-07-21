@@ -19,6 +19,8 @@ namespace ExtractorSharp {
         private class MainConnector : IConnector {
             private List<string> _recent = new List<string>();
 
+           
+
             public MainConnector() {
                 SaveChanged += (o, e) => OnSaveChanged();
                 FileSupports.Add(new GifSupport());
@@ -134,9 +136,13 @@ namespace ExtractorSharp {
                     SavePath = string.Empty;
                     IsSave = true;
                 }
+                if (SavePath.Length == 0) {
+                    SavePath = args.Find(item => item.ToLower().EndsWith(".npk")) ?? string.Empty;
 
-                if (SavePath.Length == 0) SavePath = args.Find(item => item.ToLower().EndsWith(".npk")) ?? string.Empty;
-                if (args.Length < 1) return;
+                }
+                if (args.Length < 1) {
+                    return;
+                }
                 AddRecent(args);
                 var list = LoadFile(args);
                 if (list.Count > 0) {
@@ -163,9 +169,13 @@ namespace ExtractorSharp {
             }
 
             public void AddFile(bool clear, params Album[] array) {
-                if (clear) List.Clear();
+                if (clear) {
+                    List.Clear();
+                }
                 if (array.Length > 0) {
-                    if (FileCount > 0) SelectedFileIndex = FileCount - 1;
+                    if (FileCount > 0) {
+                        SelectedFileIndex = FileCount - 1;
+                    }
                     List.AddRange(array);
                 }
             }
@@ -180,8 +190,12 @@ namespace ExtractorSharp {
             }
 
             public void Save() {
-                if (SavePath.Trim().Length == 0) SelectSavePath();
-                if (SavePath.Trim().Length == 0) return;
+                if (SavePath.Trim().Length == 0) {
+                    SelectSavePath();
+                }
+                if (SavePath.Trim().Length == 0) {
+                    return;
+                }
                 Save(SavePath);
             }
 
@@ -243,7 +257,9 @@ namespace ExtractorSharp {
             public void SelectSavePath() {
                 var dir = SavePath;
                 var path = SavePath.GetSuffix();
-                if (path != string.Empty) dir = dir.Replace(path, "");
+                if (path != string.Empty) {
+                    dir = dir.Replace(path, "");
+                }
                 var dialog = new SaveFileDialog();
                 dialog.InitialDirectory = dir;
                 dialog.FileName = path;
@@ -257,6 +273,10 @@ namespace ExtractorSharp {
 
             public string GetPath(string path) {
                 return $"{Config["RootPath"]}/{path}";
+            }
+
+            public object Dispatch(string name, params object[] args) {
+               return MainForm.Controller.Dispatch(name, args);
             }
         }
     }

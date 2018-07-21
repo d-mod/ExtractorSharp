@@ -26,12 +26,8 @@ namespace ExtractorSharp.View.SettingPane {
             var dialog = new FolderBrowserDialog();
             if (dialog.ShowDialog() == DialogResult.OK) {
                 var dir = dialog.SelectedPath;
-                if (Hoster.Install(dir)) {
-                    Connector.SendSuccess("PluginInstalled");
-                    Flush();
-                } else {
-                    Connector.SendError("PluginInstallError");
-                }
+                Connector.SendSuccess("PluginInstalled");
+                Flush();
             }
         }
 

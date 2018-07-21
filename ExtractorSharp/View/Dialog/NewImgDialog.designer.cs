@@ -41,7 +41,7 @@ namespace ExtractorSharp.View.Dialog {
             // pathLabel
             // 
             this.pathLabel.AutoSize = true;
-            this.pathLabel.Location = new System.Drawing.Point(98, 47);
+            this.pathLabel.Location = new System.Drawing.Point(38, 47);
             this.pathLabel.Name = "pathLabel";
             this.pathLabel.Size = new System.Drawing.Size(65, 12);
             this.pathLabel.TabIndex = 0;
@@ -49,7 +49,7 @@ namespace ExtractorSharp.View.Dialog {
             // 
             // pathBox
             // 
-            this.pathBox.Location = new System.Drawing.Point(100, 81);
+            this.pathBox.Location = new System.Drawing.Point(40, 81);
             this.pathBox.Name = "pathBox";
             this.pathBox.Size = new System.Drawing.Size(400, 21);
             this.pathBox.TabIndex = 1;
@@ -57,7 +57,7 @@ namespace ExtractorSharp.View.Dialog {
             // countLabel
             // 
             this.countLabel.AutoSize = true;
-            this.countLabel.Location = new System.Drawing.Point(98, 128);
+            this.countLabel.Location = new System.Drawing.Point(38, 128);
             this.countLabel.Name = "countLabel";
             this.countLabel.Size = new System.Drawing.Size(77, 12);
             this.countLabel.TabIndex = 2;
@@ -66,7 +66,7 @@ namespace ExtractorSharp.View.Dialog {
             // indexLabel
             // 
             this.indexLabel.AutoSize = true;
-            this.indexLabel.Location = new System.Drawing.Point(98, 202);
+            this.indexLabel.Location = new System.Drawing.Point(38, 202);
             this.indexLabel.Name = "indexLabel";
             this.indexLabel.Size = new System.Drawing.Size(77, 12);
             this.indexLabel.TabIndex = 3;
@@ -74,7 +74,7 @@ namespace ExtractorSharp.View.Dialog {
 
 
             this.versionLabel.AutoSize = true;
-            this.versionLabel.Location = new System.Drawing.Point(98, 288);
+            this.versionLabel.Location = new System.Drawing.Point(38, 288);
             this.versionLabel.Name = "versionLabel";
             this.versionLabel.Size = new System.Drawing.Size(77, 12);
             this.versionLabel.TabIndex = 3;
@@ -85,7 +85,7 @@ namespace ExtractorSharp.View.Dialog {
             // 
             // countBox
             // 
-            this.countBox.Location = new System.Drawing.Point(100, 157);
+            this.countBox.Location = new System.Drawing.Point(40, 157);
             this.countBox.Maximum = 1000;
             this.countBox.Name = "countBox";
             this.countBox.Size = new System.Drawing.Size(400, 21);
@@ -93,19 +93,19 @@ namespace ExtractorSharp.View.Dialog {
             // 
             // indexBox
             // 
-            this.indexBox.Location = new System.Drawing.Point(100, 232);
+            this.indexBox.Location = new System.Drawing.Point(40, 232);
             this.indexBox.Name = "indexBox";
             this.indexBox.Size = new System.Drawing.Size(400, 21);
             this.indexBox.TabIndex = 7;
 
-            this.versionBox.Location = new System.Drawing.Point(100, 317);
+            this.versionBox.Location = new System.Drawing.Point(40, 317);
             this.versionBox.Name = "versionBox";
             this.versionBox.Size = new System.Drawing.Size(400, 21);
             this.versionBox.TabIndex = 7;
             // 
             // yesButton
             // 
-            this.yesButton.Location = new System.Drawing.Point(320, 400);
+            this.yesButton.Location = new System.Drawing.Point(250, 385);
             this.yesButton.Name = "yesButton";
             this.yesButton.Size = new System.Drawing.Size(75, 23);
             this.yesButton.TabIndex = 8;
@@ -114,7 +114,7 @@ namespace ExtractorSharp.View.Dialog {
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(440, 400);
+            this.cancelButton.Location = new System.Drawing.Point(370, 385);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 9;
@@ -126,7 +126,7 @@ namespace ExtractorSharp.View.Dialog {
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(600, 500);
+            this.ClientSize = new System.Drawing.Size(500, 440);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.yesButton);
             this.Controls.Add(this.indexBox);

@@ -5,6 +5,7 @@ using ExtractorSharp.Component;
 using ExtractorSharp.Core;
 using ExtractorSharp.Core.Composition;
 using ExtractorSharp.View.SettingPane;
+using ExtractorSharp.View.SettingPane.Theme;
 
 namespace ExtractorSharp.View.Dialog {
     public partial class SettingDialog : ESDialog {
@@ -32,18 +33,22 @@ namespace ExtractorSharp.View.Dialog {
 
         private void AddConfig() {
             AddConfig(typeof(GerneralPane));
+            //AddConfig(typeof(BackgroundPane));
             AddConfig(typeof(GifPane));
             AddConfig(typeof(SaveImagePane));
             AddConfig(typeof(RulerPane));
             AddConfig(typeof(GridPane));
-            AddConfig(typeof(FlashPane));
+            AddConfig(typeof(AnimationPane));
             AddConfig(typeof(LanguagePane));
             AddConfig(typeof(InstalledPluginPane));
             AddConfig(typeof(MarketplacePane));
+            AddConfig(typeof(MovePane));
         }
 
         private void AddConfig(Type type) {
-            if (!typeof(AbstractSettingPane).IsAssignableFrom(type)) return;
+            if (!typeof(AbstractSettingPane).IsAssignableFrom(type)) {
+                return;
+            }
             var control = type.CreateInstance(Connector) as AbstractSettingPane;
             var parentArray = tree.Nodes.Find(control.Parent, false);
             TreeNode parentNode = null;

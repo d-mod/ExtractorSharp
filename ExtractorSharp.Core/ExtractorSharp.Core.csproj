@@ -48,12 +48,14 @@
     <Compile Include="Command\IAciton.cs" />
     <Compile Include="Command\ICommand.cs" />
     <Compile Include="Command\ICommandMessage.cs" />
+    <Compile Include="Command\IExecutable.cs" />
     <Compile Include="Command\IFileFlushable.cs" />
     <Compile Include="Composition\ClickType.cs" />
     <Compile Include="Composition\IConnector.cs" />
     <Compile Include="Composition\IFileSupport.cs" />
     <Compile Include="Composition\IEffect.cs" />
     <Compile Include="Composition\IMenuItem.cs" />
+    <Compile Include="Composition\ISorter.cs" />
     <Compile Include="Composition\MenuItemType.cs" />
     <Compile Include="Composition\MessageType.cs" />
     <Compile Include="Config\ConfigValue.cs" />

@@ -57,7 +57,7 @@ namespace ExtractorSharp.View.Dialog {
             DialogResult = Save();
         }
 
-        prvate void LoadPath(object sender, EventArgs e) {
+        private void LoadPath(object sender, EventArgs e) {
             var dialog = new FolderBrowserDialog();
             if (dialog.ShowDialog() == DialogResult.OK) {
                 pathBox.Text = dialog.SelectedPath;

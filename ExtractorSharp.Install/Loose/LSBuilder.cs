@@ -29,7 +29,9 @@ namespace ExtractorSharp.Install.Loose {
             var builder = new StringBuilder();
             builder.Append(url);
             builder.Append("?");
-            foreach (var entry in dataMap) builder.Append($"{entry.Key}={entry.Value}&");
+            foreach (var entry in dataMap) {
+                builder.Append($"{entry.Key}={entry.Value}&");
+            }
             url = builder.ToString();
             return Get(url);
         }

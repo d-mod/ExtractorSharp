@@ -4,7 +4,7 @@ using ExtractorSharp.Command;
 using ExtractorSharp.Component;
 
 namespace ExtractorSharp.View.Pane {
-    partial class PalattePanel {
+    partial class PalettePage {
         /// <summary> 
         /// 必需的设计器变量。
         /// </summary>
@@ -50,8 +50,16 @@ namespace ExtractorSharp.View.Pane {
             changeColorItem.Text = Language["Change"];
             changeToCurrentItem = new MenuItem();
             changeToCurrentItem.Text = Language["ChangeToCurrentColor"];
+
+
+            deleteButton = new Button();
+            deleteButton.Location = new System.Drawing.Point(108, 240);
+            deleteButton.UseVisualStyleBackColor = true;
+            deleteButton.Image = Properties.Resources.delete;
+            deleteButton.Size = new System.Drawing.Size(24, 24);
             menu.MenuItems.Add(changeColorItem);
             menu.MenuItems.Add(changeToCurrentItem);
+            this.Controls.Add(deleteButton);
         }
 
         #endregion
@@ -61,6 +69,7 @@ namespace ExtractorSharp.View.Pane {
         private MenuItem changeColorItem;
         private MenuItem changeToCurrentItem;
         private ContextMenu menu;
+        private Button deleteButton;
         #endregion
     }
 }

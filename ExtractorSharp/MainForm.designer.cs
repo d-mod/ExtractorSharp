@@ -114,6 +114,12 @@ namespace ExtractorSharp {
             redoItem = new ToolStripMenuItem();
             classifyItem = new ToolStripMenuItem();
 
+            moveItem = new ToolStripMenuItem();
+            moveUpItem = new ToolStripMenuItem();
+            moveDownItem = new ToolStripMenuItem();
+            moveLeftItem = new ToolStripMenuItem();
+            moveRightItem = new ToolStripMenuItem();
+
             viewMenu = new ToolStripMenuItem();
 
             ruleItem = new ToolStripMenuItem();
@@ -154,6 +160,7 @@ namespace ExtractorSharp {
             feedbackItem = new ToolStripMenuItem();
             versionItem = new ToolStripMenuItem();
             settingItem = new ToolStripMenuItem();
+            helpItem = new ToolStripMenuItem();
 
             layerList = new ESListBox<IPaint>();
             layerMenu = layerList.ContextMenuStrip;
@@ -165,6 +172,11 @@ namespace ExtractorSharp {
             canvasCutItem = new ToolStripMenuItem();
             canvasCopyItem = new ToolStripMenuItem();
             canvasPasteItem = new ToolStripMenuItem();
+            canvasMoveUpItem = new ToolStripMenuItem();
+            canvasMoveDownItem = new ToolStripMenuItem();
+            canvasMoveLeftItem = new ToolStripMenuItem();
+            canvasMoveRightItem = new ToolStripMenuItem();
+            canvasMoveHereItem = new ToolStripMenuItem();
 
 
             selectItem = new ToolStripMenuItem();
@@ -188,7 +200,7 @@ namespace ExtractorSharp {
             albumList.HorizontalScrollbar = true;
             albumList.Location = new Point(20, 90);
             albumList.Name = "albumList";
-            albumList.Size = new Size(200, 579);
+            albumList.Size = new Size(210, 579);
             albumList.TabIndex = 3;
             albumList.CanClear = false;
             // 
@@ -251,6 +263,7 @@ namespace ExtractorSharp {
 
             hideImgItem.Text = Language["HideFile"];
             hideImgItem.ShortcutKeys = Keys.Control | Keys.H;
+
             convertItem.Text = Language["ConvertVersion"];
             convertItem.Image = Resources.change;
 
@@ -281,9 +294,9 @@ namespace ExtractorSharp {
             // imageList
             // 
             imageList.HorizontalScrollbar = true;
-            imageList.Location = new Point(1050, 90);
+            imageList.Location = new Point(1070, 90);
             imageList.Name = "imageList";
-            imageList.Size = new Size(240, 280);
+            imageList.Size = new Size(270, 310);
             imageList.TabIndex = 4;
             imageList.CanClear = false;
             // 
@@ -387,6 +400,7 @@ namespace ExtractorSharp {
 
             aboutMenu.Text = Language["About"];
             aboutMenu.DropDownItems.Add(aboutItem);
+            aboutMenu.DropDownItems.Add(helpItem);
             aboutMenu.DropDownItems.Add(versionItem);
             aboutMenu.DropDownItems.Add(feedbackItem);
             aboutMenu.DropDownItems.Add(settingItem);
@@ -397,6 +411,9 @@ namespace ExtractorSharp {
 
             feedbackItem.Text = Language["FeedBack"];
             feedbackItem.Image = Resources.feedback;
+
+            helpItem.Text = Language["Help"];
+            helpItem.Image = Resources.help;
             
             settingItem.Text = Language["Setting"];
             settingItem.Image = Resources.setting;
@@ -476,6 +493,7 @@ namespace ExtractorSharp {
             editMenu.DropDownItems.Add(undoItem);
             editMenu.DropDownItems.Add(redoItem);
             editMenu.DropDownItems.AddSeparator();
+            editMenu.DropDownItems.Add(moveItem);
             editMenu.DropDownItems.Add(adjustPositionItem);
             editMenu.DropDownItems.AddSeparator();
             editMenu.DropDownItems.Add(classifyItem);
@@ -494,6 +512,21 @@ namespace ExtractorSharp {
 
             sortItem.Text = Language["Sort"];
             sortItem.Image = Resources.sort;
+
+            moveItem.Text = Language["Move"];
+            moveItem.DropDownItems.Add(moveUpItem);
+            moveItem.DropDownItems.Add(moveDownItem);
+            moveItem.DropDownItems.Add(moveLeftItem);
+            moveItem.DropDownItems.Add(moveRightItem);
+
+            moveUpItem.Text = Language["MoveUp"];
+            moveUpItem.ShortcutKeys = Keys.Control | Keys.Up;
+            moveDownItem.Text = Language["MoveDown"];
+            moveDownItem.ShortcutKeys = Keys.Control | Keys.Down;
+            moveLeftItem.Text = Language["MoveLeft"];
+            moveLeftItem.ShortcutKeys = Keys.Control | Keys.Left;
+            moveRightItem.Text = Language["MoveRight"];
+            moveRightItem.ShortcutKeys = Keys.Control | Keys.Right;
 
             adjustPositionItem.Text = Language["AdjustPosition"];
             adjustPositionItem.ShortcutKeys = Keys.Control | Keys.B;
@@ -533,7 +566,7 @@ namespace ExtractorSharp {
             // 
             // Message
             // 
-            messager.Location = new Point(1050, 25);
+            messager.Location = new Point(1072, 25);
 
             openButton.Location = new Point(20, 63);
             openButton.Text = Language["Open"];
@@ -586,7 +619,7 @@ namespace ExtractorSharp {
             // 
             // realPositionBox
             // 
-            realPositionBox.Location = new Point(1050, 70);
+            realPositionBox.Location = new Point(1085, 70);
             realPositionBox.Name = "realPositionBox";
             realPositionBox.AutoSize = true;
             realPositionBox.TabIndex = 11;
@@ -594,19 +627,19 @@ namespace ExtractorSharp {
             //
             //
             //
-            displayBox.Location = new Point(1170, 70);
+            displayBox.Location = new Point(1210, 70);
             displayBox.AutoSize = true;
             displayBox.Text = Language["Animation"];
             //
             //
             //
-            linearDodgeBox.Location = new Point(1050, 50);
+            linearDodgeBox.Location = new Point(1085, 50);
             linearDodgeBox.AutoSize = true;
             linearDodgeBox.Text = Language["LinearDodge"];
             ///
             //
             //
-            dyeBox.Location = new Point(1170, 50);
+            dyeBox.Location = new Point(1210, 50);
             dyeBox.AutoSize = true;
             dyeBox.Text = Language["Dye"];
             //
@@ -624,16 +657,16 @@ namespace ExtractorSharp {
             // 
             // searchBox
             // 
-            searchBox.Location = new Point(20, 670);
+            searchBox.Location = new Point(20, 668);
             searchBox.Name = "searchBox";
             searchBox.Size = new Size(180, 20);
             searchBox.TabIndex = 6;
 
 
             layerList.HorizontalScrollbar = true;
-            layerList.Location = new Point(1050, 405);
+            layerList.Location = new Point(1070, 397);
             layerList.Name = "layerList";
-            layerList.Size = new Size(240, 280);
+            layerList.Size = new Size(270, 305);
             layerList.TabIndex = 4;
             layerList.CanClear = false;
             layerList.CanDelete = true;
@@ -654,6 +687,12 @@ namespace ExtractorSharp {
             canvasMenu.Items.Add(canvasCutItem);
             canvasMenu.Items.Add(canvasCopyItem);
             canvasMenu.Items.Add(canvasPasteItem);
+            canvasMenu.Items.AddSeparator();
+            canvasMenu.Items.Add(canvasMoveUpItem);
+            canvasMenu.Items.Add(canvasMoveDownItem);
+            canvasMenu.Items.Add(canvasMoveLeftItem);
+            canvasMenu.Items.Add(canvasMoveRightItem);
+            canvasMenu.Items.Add(canvasMoveHereItem);
 
             canvasCutItem.Text = Language["Cut"];
             canvasCutItem.ShortcutKeys = Keys.Control | Keys.X;
@@ -667,9 +706,24 @@ namespace ExtractorSharp {
             canvasPasteItem.ShortcutKeys = Keys.Control | Keys.V;
             canvasPasteItem.Image = Resources.paste;
 
+            canvasMoveUpItem.Text = Language["MoveUp"];
+            canvasMoveUpItem.ShortcutKeys = Keys.Control | Keys.Up;
+
+            canvasMoveDownItem.Text = Language["MoveDown"];
+            canvasMoveDownItem.ShortcutKeys = Keys.Control | Keys.Down;
+
+            canvasMoveLeftItem.Text = Language["MoveLeft"];
+            canvasMoveLeftItem.ShortcutKeys = Keys.Control | Keys.Left;
+
+            canvasMoveRightItem.Text = Language["MoveRight"];
+            canvasMoveRightItem.ShortcutKeys = Keys.Control | Keys.Right;
+
+            canvasMoveHereItem.Text = Language["MoveHere"];
+            
+           
 
             AutoScaleDimensions = new SizeF(6F, 12F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleMode = AutoScaleMode.Inherit;
             Controls.Add(imageList);
             Controls.Add(mainMenu);
             Controls.Add(searchIcon);
@@ -746,11 +800,18 @@ namespace ExtractorSharp {
         private ToolStripMenuItem classifyItem;     //分类
         private ToolStripMenuItem sortItem;         //
 
+        private ToolStripMenuItem moveItem;
+        private ToolStripMenuItem moveUpItem;
+        private ToolStripMenuItem moveDownItem;
+        private ToolStripMenuItem moveLeftItem;   
+        private ToolStripMenuItem moveRightItem;
+
         private ToolStripMenuItem aboutMenu;        //关于
         private ToolStripMenuItem aboutItem;        //关于
         private ToolStripMenuItem feedbackItem;        //问题反馈
         private ToolStripMenuItem versionItem;      //版本特性
         private ToolStripMenuItem settingItem;     //设置
+        private ToolStripMenuItem helpItem;        //帮助
 
         private ToolStripMenuItem viewMenu;         //视图
         private ToolStripMenuItem ruleItem;         //标尺
@@ -844,6 +905,11 @@ namespace ExtractorSharp {
         private ToolStripMenuItem canvasCutItem;
         private ToolStripMenuItem canvasCopyItem;
         private ToolStripMenuItem canvasPasteItem;
+        private ToolStripMenuItem canvasMoveUpItem;
+        private ToolStripMenuItem canvasMoveDownItem;
+        private ToolStripMenuItem canvasMoveLeftItem;
+        private ToolStripMenuItem canvasMoveRightItem;
+        private ToolStripMenuItem canvasMoveHereItem;
 
         private ToolStripMenuItem selectItem;
         private ToolStripMenuItem selectAllLinkItem;

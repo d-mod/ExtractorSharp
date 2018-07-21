@@ -6,10 +6,10 @@ using ExtractorSharp.Core.Model;
 using ExtractorSharp.EventArguments;
 
 namespace ExtractorSharp.View.Pane {
-    public partial class PalattePanel : TabPage {
+    public partial class PalettePage : TabPage {
         private Album Album;
 
-        public PalattePanel() {
+        public PalettePage() {
             InitializeComponent();
             Program.Drawer.PalatteChanged += SelectImageChanged;
             combo.SelectedIndexChanged += ColorChanged;
@@ -17,6 +17,11 @@ namespace ExtractorSharp.View.Pane {
             changeToCurrentItem.Click += ChangeToCurrentColor;
             Program.Controller.CommandUndid += UndoFresh;
             Program.Controller.CommandRedid += UndoFresh;
+            deleteButton.Click += DeletePalette;
+        }
+
+        private void DeletePalette(object sender, EventArgs e) {
+            Connector.Do("deletePalette", Album);
         }
 
         private Language Language => Language.Default;
@@ -34,9 +39,10 @@ namespace ExtractorSharp.View.Pane {
             var dialog = new ColorDialog();
             var items = list.SelectedItems;
             var color = Color.Empty;
-            if (items.Count > 0) {
-                color = (Color) items[0].Tag;
+            if (items.Count == 0) {
+                return;
             }
+            color = (Color)items[0].Tag;
             dialog.Color = color;
             if (dialog.ShowDialog() == DialogResult.OK) {
                 color = dialog.Color;
@@ -52,7 +58,6 @@ namespace ExtractorSharp.View.Pane {
         }
 
         private void SelectImageChanged(object sender, FileEventArgs e) {
-
             Album = e.Album;
             combo.Items.Clear();
             if (Album != null) {
@@ -79,6 +84,9 @@ namespace ExtractorSharp.View.Pane {
         private void ChangeToCurrentColor(object sender, EventArgs e) {
             if (Album != null) {
                 var arr = list.SelectedItems;
+                if (arr.Count == 0) {
+                    return;
+                }
                 var color = Program.Drawer.Color;
                 var index_arr = new int[arr.Count];
                 for (var i = 0; i < arr.Count; i++) {

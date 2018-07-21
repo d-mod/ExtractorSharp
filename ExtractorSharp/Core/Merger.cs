@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using ExtractorSharp.Core.Coder;
 using ExtractorSharp.Core.Handle;
 using ExtractorSharp.Core.Lib;
@@ -23,6 +24,21 @@ namespace ExtractorSharp.Core {
         public delegate void MergeQueueHandler(object sender, MergeQueueEventArgs e);
 
         private readonly List<ISorter> Sorters;
+
+        public ISorter Sorter => Sorters[0];
+
+        public int Version { set; get; }
+
+        public int GlowLayerMode { set; get; }
+
+        public const int IGNORE = 0;
+
+        public const int LINEARDODGE = 1;
+
+
+        public const int NONE = 2;
+
+        private Regex GlowLayerRegex = new Regex("^(.*)f[\\d+]?.img$");
 
         public Merger() {
             Queues = new List<Album>();
@@ -152,10 +168,14 @@ namespace ExtractorSharp.Core {
             var e = new MergeEventArgs();
             var Array = Queues.ToArray().Reverse(); //序列反转
             var count = 0;
-            var version = ImgVersion.Ver2;
+            var version = Version > 0 ? (ImgVersion)Version : ImgVersion.Ver2;
             foreach (var al in Array) {
-                if (al.List.Count > count) count = al.List.Count;
-                if (al.Version > version) version = al.Version;
+                if (al.List.Count > count) {
+                    count = al.List.Count;
+                }
+                if (Version == 0 && al.Version > version) {
+                    version = al.Version;
+                }
             }
 
             var Album = new Album {
@@ -166,6 +186,7 @@ namespace ExtractorSharp.Core {
             e.Album = Album;
             OnMergeStarted(e); //启动拼合事件
             var entitys = new List<Sprite>();
+            var lineardodge = false;
             for (var i = 0; i < count; i++) {
                 var entity = new Sprite(Album);
                 var width = 1;
@@ -178,15 +199,33 @@ namespace ExtractorSharp.Core {
                 foreach (var al in Array) {
                     if (i < al.List.Count) {
                         var source = al.List[i];
-                        if (source.Type == ColorBits.LINK) source = source.Target;
-                        if (source.CanvasWidth > max_width) max_width = source.CanvasHeight;
-                        if (source.CanvasHeight > max_height) max_height = source.CanvasHeight;
-                        if (source.CompressMode == CompressMode.NONE && source.Width * source.Height == 1) continue;
-                        if (source.Width + source.X > width) width = source.Width + source.X;
-                        if (source.Height + source.Y > height) height = source.Height + source.Y;
-                        if (source.X < x) x = source.X;
-                        if (source.Y < y) y = source.Y;
-                        if (source.Type > type && source.Type < ColorBits.LINK) type = source.Type;
+                        if (source.Type == ColorBits.LINK) {
+                            source = source.Target;
+                        }
+                        if (source.CanvasWidth > max_width) {
+                            max_width = source.CanvasHeight;
+                        }
+                        if (source.CanvasHeight > max_height) {
+                            max_height = source.CanvasHeight;
+                        }
+                        if (source.CompressMode == CompressMode.NONE && source.Width * source.Height == 1) {
+                            continue;
+                        }
+                        if (source.Width + source.X > width) {
+                            width = source.Width + source.X;
+                        }
+                        if (source.Height + source.Y > height) {
+                            height = source.Height + source.Y;
+                        }
+                        if (source.X < x) {
+                            x = source.X;
+                        }
+                        if (source.Y < y) {
+                            y = source.Y;
+                        }
+                        if (source.Type > type && source.Type < ColorBits.LINK) {
+                            type = source.Type;
+                        }
                     }
                 }
 
@@ -194,7 +233,9 @@ namespace ExtractorSharp.Core {
                 height -= y;
                 width = width > 1 ? width : 1; //防止宽高小于1
                 height = height > 1 ? height : 1;
-                if (width * height > 1) entity.CompressMode = CompressMode.ZLIB;
+                if (width * height > 1) {
+                    entity.CompressMode = CompressMode.ZLIB;
+                }
                 entity.Type = type;
                 entity.Index = entitys.Count;
                 entity.Location = new Point(x, y);
@@ -204,19 +245,36 @@ namespace ExtractorSharp.Core {
                     foreach (var al in Array) {
                         if (i < al.List.Count) {
                             var source = al.List[i];
-                            if (source.Type == ColorBits.LINK) source = source.Target;
-                            g.DrawImage(source.Picture, source.X - x, source.Y - y); //绘制贴图
+                            if (source.Type == ColorBits.LINK) {
+                                source = source.Target;
+                            }
+
+                            var bitmap = source.Picture;
+                            if (GlowLayerRegex.IsMatch(al.Name)) {
+                                switch (GlowLayerMode) {
+                                    case IGNORE:
+                                        continue;
+                                    case LINEARDODGE:
+                                        lineardodge = true;
+                                        bitmap = bitmap.LinearDodge();
+                                        break;
+                                    case NONE:
+                                        break;
+                                }
+                            }
+                            g.DrawImage(bitmap, source.X - x, source.Y - y); //绘制贴图
                         }
                     }
                 }
-
                 entity.ReplaceImage(type, false, image); //替换贴图
                 e.Progress++; //拼合进度自增
                 OnMergeProcessing(e);
                 entitys.Add(entity);
             }
-
             Album.List.AddRange(entitys);
+            if (lineardodge) {//如果进行了线性减淡,Ver4/6可能会导致色表溢出,所以进行转换
+                Album.ConvertTo(ImgVersion.Ver2);
+            }
             OnMergeCompleted(e); //拼合完成
         }
 

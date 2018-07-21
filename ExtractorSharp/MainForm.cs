@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
@@ -32,7 +33,7 @@ namespace ExtractorSharp {
             get {
                 var ex = "*.img;*.npk;";
                 foreach (var support in Connector.FileSupports) {
-                    ex = string.Concat(ex,$"*{support.Extension};");
+                    ex = string.Concat(ex, $"*{support.Extension};");
                 }
                 return ex;
             }
@@ -40,7 +41,7 @@ namespace ExtractorSharp {
 
 
         public MainForm() : base(new MainConnector()) {
-            ((MainConnector) Connector).MainForm = this;
+            ((MainConnector)Connector).MainForm = this;
             InitializeComponent();
             Controller = Program.Controller;
             Viewer = Program.Viewer;
@@ -108,10 +109,14 @@ namespace ExtractorSharp {
             foreach (var entry in Drawer.Brushes) {
                 var item = new ToolStripMenuItem(Language[entry.Key]);
                 item.CheckOnClick = true;
-                if (Drawer.IsSelect(entry.Key)) item.Checked = true;
+                if (Drawer.IsSelect(entry.Key)) {
+                    item.Checked = true;
+                }
                 item.Click += (o, e) => {
                     Drawer.Select(entry.Key);
-                    foreach (ToolStripMenuItem i in toolsMenu.DropDownItems) i.Checked = false;
+                    foreach (ToolStripMenuItem i in toolsMenu.DropDownItems) {
+                        i.Checked = false;
+                    }
                     item.Checked = true;
                 };
                 toolsMenu.DropDownItems.Add(item);
@@ -143,7 +148,6 @@ namespace ExtractorSharp {
             AddShow(aboutItem, "about");
             AddShow(feedbackItem, "debug", "feedback");
             AddShow(settingItem, "setting");
-            AddShow(versionItem, "version");
         }
 
         public void AddShow(ToolStripMenuItem item, string name, params object[] args) {
@@ -237,6 +241,8 @@ namespace ExtractorSharp {
         ///     添加监听
         /// </summary>
         private void AddListenter() {
+            versionItem.Click += ShowFeature;
+            helpItem.Click += ShowHelp;
             addFileItem.Click += AddFile;
             openDirItem.Click += OpenDirectory;
             addDirItem.Click += OpenDirectory;
@@ -334,6 +340,17 @@ namespace ExtractorSharp {
             canvasCutItem.Click += CutImage;
             canvasCopyItem.Click += CopyImage;
             canvasPasteItem.Click += CanvasPasteImage;
+            canvasMoveUpItem.Click += CanvasMoveUp;
+            canvasMoveDownItem.Click += CanvasMoveDown;
+            canvasMoveLeftItem.Click += CanvasMoveLeft;
+            canvasMoveRightItem.Click += CanvasMoveRight;
+            canvasMoveHereItem.Click += CanvasMoveHere;
+
+
+            moveUpItem.Click += CanvasMoveUp;
+            moveDownItem.Click += CanvasMoveDown;
+            moveLeftItem.Click += CanvasMoveLeft;
+            moveRightItem.Click += CanvasMoveRight;
 
             selectAllHideItem.Click += (o, e) => imageList.Filter(sprite => sprite.Hidden);
             selectAllLinkItem.Click += (o, e) => imageList.Filter(sprite => sprite.Type == ColorBits.LINK);
@@ -351,6 +368,34 @@ namespace ExtractorSharp {
             downLayerItem.Click += DownLayer;
             renameLayerItem.Click += RenameLayer;
             RecentChanged(null, null);
+        }
+
+        private void CanvasMoveLeft(object sender, EventArgs e) => Move(-Config["MoveStep"].Integer, 0);
+
+        private void CanvasMoveRight(object sender, EventArgs e) => Move(Config["MoveStep"].Integer, 0);
+
+        private void CanvasMoveUp(object sender, EventArgs e) => Move(0, -Config["MoveStep"].Integer);
+
+        private void CanvasMoveDown(object sender, EventArgs e) => Move(0, Config["MoveStep"].Integer);
+
+        private void CanvasMoveHere(object sender, EventArgs e) {
+            Drawer.Brushes["MoveTool"].Location = Drawer.CurrentLayer.RealLocation;
+            Drawer.Move(1, Hotpot);
+            LayerFlush();
+        }
+
+        private void Move(int x, int y) {
+            Drawer.Brushes["MoveTool"].Location =Drawer.CurrentLayer.RealLocation;
+            Drawer.Move(1, Drawer.CurrentLayer.RealLocation.Add(new Point(x, y)));
+            LayerFlush();
+        }
+
+        private void ShowHelp(object sender, EventArgs e) {
+            Process.Start($"{Config["WebHost"]}/es/guide/");
+        }
+
+        private void ShowFeature(object sender, EventArgs e) {
+            Process.Start($"{Config["WebHost"]}/es/feature/{Config["Version"]}.html");
         }
 
         private void AddCompareLayer(object sender, EventArgs e) {
@@ -410,7 +455,9 @@ namespace ExtractorSharp {
 
         private void DownLayer(object sender, EventArgs e) {
             var index = layerList.SelectedIndex;
-            if (index > 1 && index < layerList.Items.Count - 1) Connector.Do("moveLayer", index, index + 1);
+            if (index > 1 && index < layerList.Items.Count - 1) {
+                Connector.Do("moveLayer", index, index + 1);
+            }
         }
 
         private void RenameLayer(object sender, EventArgs e) {
@@ -528,6 +575,9 @@ namespace ExtractorSharp {
         }
 
         private void LayerFlush() {
+            if (move_mode > -1) {
+                return;
+            }
             var arr = Drawer.LayerList.ToArray();
             layerList.Items.Clear();
             foreach (var t in arr) {
@@ -630,7 +680,7 @@ namespace ExtractorSharp {
             if (al != null) {
                 var image = Connector.SelectedImage;
                 Connector.Do("pasteSingleImage", image, Hotpot);
-                Drawer.CurrentLayer.Location = Hotpot;
+                Drawer.CurrentLayer.RealLocation = Hotpot;
             }
         }
 
@@ -680,7 +730,9 @@ namespace ExtractorSharp {
                 return;
             }
 
-            if (colorDialog.ShowDialog() == DialogResult.OK) Drawer.Color = colorDialog.Color;
+            if (colorDialog.ShowDialog() == DialogResult.OK) {
+                Drawer.Color = colorDialog.Color;
+            }
         }
 
         private void ImageChanged(object sender, EventArgs e) {
@@ -710,7 +762,9 @@ namespace ExtractorSharp {
             var item = Connector.SelectedFile;
             if (index > -1 && item != null) {
                 var location = Drawer.CurrentLayer.Rectangle.Location;
-                if (realPositionBox.Checked) location = location.Minus(item[index].Location);
+                if (realPositionBox.Checked) {
+                    location = location.Minus(item[index].Location);
+                }
                 Drawer.CurrentLayer.Location = Point.Empty;
                 Connector.Do("changePosition", item, new[] {index}, new[] {location.X, location.Y, 0, 0},
                     new[] {true, true, false, false, true});
@@ -1138,6 +1192,9 @@ namespace ExtractorSharp {
         ///     贴图列表刷新
         /// </summary>
         public void ImageFlush() {
+            if (move_mode > -1) {
+                return;
+            }
             var al = albumList.SelectedItem; //记录当前所选img
             var index = imageList.SelectedIndex; //记录当前选择贴图
             var items = imageList.CheckedItems;
@@ -1226,7 +1283,7 @@ namespace ExtractorSharp {
         }
 
         private void DisplayMerge(object sender, EventArgs e) {
-            Viewer.Show("Merge", Connector.SelectedFile);
+            Viewer.Show("merge", Connector.SelectedFile);
         }
 
         public void CanvasFlush() {
@@ -1259,8 +1316,11 @@ namespace ExtractorSharp {
         private void OnMouseClick(object sender, MouseEventArgs e) {
             Hotpot = e.Location;
             if (e.Button == MouseButtons.Left) {
-                if (!Drawer.IsSelect("MoveTool")) Drawer.Brush.Draw(Drawer.CurrentLayer, Hotpot, Drawer.ImageScale);
+                if (!Drawer.IsSelect("MoveTool")) {
+                    Drawer.Brush.Draw(Drawer.CurrentLayer, Hotpot, Drawer.ImageScale);
+                }
             } else if (e.Button == MouseButtons.Right) {
+                canvasMoveHereItem.Text = $"{Language["MoveHere"]}{Hotpot.GetString()}";
                 canvasMenu.Show(box, Hotpot);
             }
         }
@@ -1274,6 +1334,8 @@ namespace ExtractorSharp {
         private void OnMouseUp(object sender, MouseEventArgs e) {
             if (e.Button == MouseButtons.Left) {
                 move_mode = -1;
+                ImageFlush();
+                LayerFlush();
                 layerList.Invalidate();
             }
         }
@@ -1298,7 +1360,9 @@ namespace ExtractorSharp {
         /// <param name="e"></param>
         private void SaveImage(object sender, EventArgs e) {
             var album = Connector.SelectedFile;
-            if (album == null || album.List.Count < 1) return;
+            if (album == null || album.List.Count < 1) {
+                return;
+            }
             Viewer.Show("saveImage", new {allImage = false});
         }
 

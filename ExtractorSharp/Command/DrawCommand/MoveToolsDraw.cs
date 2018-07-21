@@ -2,6 +2,7 @@
 using ExtractorSharp.Core.Command;
 using ExtractorSharp.Core.Composition;
 using ExtractorSharp.Core.Draw;
+using ExtractorSharp.Core.Draw.Paint;
 using ExtractorSharp.Core.Lib;
 
 namespace ExtractorSharp.Command.DrawCommand {
@@ -19,14 +20,16 @@ namespace ExtractorSharp.Command.DrawCommand {
         public bool CanUndo => false;
 
         public bool IsChanged => false;
-
-        public bool IsFlush => false;
-
+        
         public void Do(params object[] args) {
             Entity = args[0] as IPaint;
             Source = (Point) args[1];
             Dest = (Point) args[2];
-            Entity.Location = Entity.Location.Add(Dest.Minus(Source));
+            if(Entity is Canvas canvas) {
+                canvas.RealLocation = canvas.RealLocation.Add(Dest.Minus(Source));
+            } else {
+                Entity.Location = Entity.Location.Add(Dest.Minus(Source));
+            }
             Connector.CanvasFlush();
         }
 

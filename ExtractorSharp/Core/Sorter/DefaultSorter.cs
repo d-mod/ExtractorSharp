@@ -9,8 +9,8 @@ namespace ExtractorSharp.Core.Sorter {
         public string Name { set; get; } = "DefaultSorter";
 
         public int Comparer(Album a1, Album a2) {
-            var index1 = IndexOf(a1.Name);
-            var index2 = IndexOf(a2.Name);
+            var index1 = IndexOf(a1);
+            var index2 = IndexOf(a2);
             if (index1 == index2) {
                 return 0;
             }
@@ -29,7 +29,8 @@ namespace ExtractorSharp.Core.Sorter {
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public int IndexOf(string name) {
+        public int IndexOf(Album album) {
+            var name = album.Name;
             name = name.Substring(name.IndexOf("_") + 1);
             name = name.Replace(".img", ""); //去除.img后缀
             var regex = new Regex("\\d+");

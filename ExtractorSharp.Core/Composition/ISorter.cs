@@ -7,5 +7,6 @@ namespace ExtractorSharp.Core.Sorter {
         Type Type { get; }
         object Data { set; get; }
         int Comparer(Album a1, Album a2);
+        int IndexOf(Album a1);
     }
 }

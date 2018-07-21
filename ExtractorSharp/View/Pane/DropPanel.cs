@@ -7,15 +7,12 @@ namespace ExtractorSharp.View.Pane {
     /// </summary>
     public partial class DropPanel : TabControl {
         public DropPanel(IConnector Connector) {
-            this.Connector = Connector;
             InitializeComponent();
-            TabPages.Add(historyPanel);
-            TabPages.Add(actionPanel);
-            TabPages.Add(new PalattePanel());
-            TabPages.Add(new TexturePanel());
+            TabPages.Add(new HistoryPage());
+            TabPages.Add(new ActionPage(Connector));
+            TabPages.Add(new PalettePage());
+            //TabPages.Add(new TexturePage());
         }
-
-        private IConnector Connector { get; }
 
         public override void Refresh() {
             SelectedTab.Refresh();
