@@ -1,28 +1,23 @@
-﻿using ExtractorSharp.Composition;
-using ExtractorSharp.Config;
+﻿using System.Drawing;
+using ExtractorSharp.Core.Composition;
+using ExtractorSharp.Core.Config;
 using ExtractorSharp.Core.Lib;
-using ExtractorSharp.Data;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp {
     partial class MainForm {
         private class RealPositionEffect : IEffect {
-            private IConfig Config;
-
-            public string Name => "RealPosition";
-
-            public bool Enable { set; get; }
-            public int Index { set; get; }
+            private readonly IConfig Config;
 
             internal RealPositionEffect(IConfig Config) {
                 this.Config = Config;
                 Enable = Config["LinearDodgeSpriteConverter"].Boolean;
             }
+
+            public string Name => "RealPosition";
+
+            public bool Enable { set; get; }
+            public int Index { set; get; }
 
             public void Handle(Sprite sprite, ref Bitmap bmp) {
                 if (Config["RealPosition"].Boolean) {

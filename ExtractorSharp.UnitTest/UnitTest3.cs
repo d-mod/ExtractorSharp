@@ -1,46 +1,74 @@
-﻿using ExtractorSharp.Core.Lib;
-using ExtractorSharp.Data;
-using ExtractorSharp.Handle;
-using ExtractorSharp.Json;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using ExtractorSharp.Core.Coder;
+using ExtractorSharp.Core.Handle;
+using ExtractorSharp.Core.Model;
+using ExtractorSharp.Json;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ExtractorSharp.UnitTest {
     [TestClass]
     public class UnitTest3 {
-
-        static UnitTest3() {
-            Handler.Regisity(Img_Version.Other, typeof(OtherHandler));
-            Handler.Regisity(Img_Version.Ver1, typeof(FirstHandler));
-            Handler.Regisity(Img_Version.Ver2, typeof(SecondHandler));
-            Handler.Regisity(Img_Version.Ver4, typeof(FourthHandler));
-            Handler.Regisity(Img_Version.Ver5, typeof(FifthHandler));
-            Handler.Regisity(Img_Version.Ver6, typeof(SixthHandler));
-
-        }
-
-        public string[] part_array = {"cap","coat","belt","neck","hair","face","skin","pants","shoes" };
         public const string API_HOST = "http://localhost:8080/api/dressing";
         public const string GAME_DIR = "D:/地下城与勇士";
         public const string SAVE_DIR = "D:/avatar_new";
 
-        private List<string> GetProfession() {
-            LSBuilder builder = new LSBuilder();
+        public string[] part_array = {"cap", "coat", "belt", "neck", "hair", "face", "skin", "pants", "shoes"};
+
+        public static Dictionary<string, WeaponInfo> Dictionary;
+
+        static UnitTest3() {
+            Handler.Regisity(ImgVersion.Other, typeof(OtherHandler));
+            Handler.Regisity(ImgVersion.Ver1, typeof(FirstHandler));
+            Handler.Regisity(ImgVersion.Ver2, typeof(SecondHandler));
+            Handler.Regisity(ImgVersion.Ver4, typeof(FourthHandler));
+            Handler.Regisity(ImgVersion.Ver5, typeof(FifthHandler));
+            Handler.Regisity(ImgVersion.Ver6, typeof(SixthHandler));
+            Dictionary=new Dictionary<string, WeaponInfo>();
+            var builder=new LSBuilder();;
+        }
+
+        private List<Profession> GetProfession() {
+            var builder = new LSBuilder();
             var obj = builder.Get($"{API_HOST}/profession/list");
-            List<Profession> list = new List<Profession>();
+            var list = new List<Profession>();
             obj.GetValue(ref list);
-            return list.ConvertAll(profesion => profesion.Name);
+            return list;
         }
 
         private List<string> GetAvatar(string profession, string part) {
-            LSBuilder builder = new LSBuilder();
+            var builder = new LSBuilder();
             var obj = builder.Get($"{API_HOST}/avatar/list/{profession}/{part}");
-            List<Avatar> list = new List<Avatar>();
+            var list = new List<Avatar>();
             obj.GetValue(ref list);
             return list.ConvertAll(avatar => avatar.Code);
+        }
+
+
+        [TestMethod]
+        public void GetWeapon() {
+            var prof_list = GetProfession();
+            foreach (var prof in prof_list) {
+                var dir = $"{SAVE_DIR}/image/{prof.Name}/weapon";
+                if (Directory.Exists(dir)) Directory.Delete(dir, true);
+                Directory.CreateDirectory(dir);
+
+                foreach (var part in prof.WeaponNames) {
+                    var file =
+                        $"{GAME_DIR}/ImagePacks2/sprite_character_{prof}{(prof.Name.EndsWith("_at") ? "" : "_")}equipment_weapon_{ part }.NPK";
+                    var list = NpkCoder.Load(file);
+                    list = list.Where(item => {
+                        var name = item.Name;
+                        if (name.Contains("(tn)") || name.Contains("_mask")) return false;
+                        var regex = new Regex("\\d+");
+                        var match = regex.Match(name);
+                        return match.Success;
+                    }).ToList();
+                    NpkCoder.Save($"{dir}/{part}.NPK", list);
+                }
+            }
         }
 
         [TestMethod]
@@ -48,20 +76,17 @@ namespace ExtractorSharp.UnitTest {
             var prof_list = GetProfession();
             foreach (var prof in prof_list) {
                 var dir = $"{SAVE_DIR}/image/{prof}";
-                if (Directory.Exists(dir)) {
-                    Directory.Delete(dir, true);
-                }
+                if (Directory.Exists(dir)) Directory.Delete(dir, true);
                 Directory.CreateDirectory(dir);
                 foreach (var part in part_array) {
-                    var file = $"{GAME_DIR}/ImagePacks2/sprite_character_{prof}{(prof.EndsWith("_at") ? "" : "_")}equipment_avatar_{part}.NPK";
-                    var avatars = GetAvatar(prof, part);
-                    var list = Npks.Load(file);
+                    var file =
+                        $"{GAME_DIR}/ImagePacks2/sprite_character_{prof}{(prof.Name.EndsWith("_at") ? "" : "_")}equipment_avatar_{part}.NPK";
+                    var avatars = GetAvatar(prof.Name, part);
+                    var list = NpkCoder.Load(file);
                     var arr = new List<Album>();
                     list = list.Where(item => {
                         var name = item.Name;
-                        if (name.Contains("(tn)") || name.Contains("_mask")) {
-                            return false;
-                        }
+                        if (name.Contains("(tn)") || name.Contains("_mask")) return false;
                         var regex = new Regex("\\d+");
                         var match = regex.Match(name);
                         if (match.Success) {
@@ -76,19 +101,10 @@ namespace ExtractorSharp.UnitTest {
                         return false;
                     }).ToList();
                     var target = $"{dir}/{part}/";
-                    if (!Directory.Exists(target)) {
-                        Directory.CreateDirectory(target);
-                    }
-                    Npks.SaveToDirectory($"{dir}/{part}/", list);
+                    if (!Directory.Exists(target)) Directory.CreateDirectory(target);
+                    NpkCoder.Save($"{dir}/{part}.NPK", list);
                 }
             }
-
         }
-
-
-
-
-
-
     }
 }

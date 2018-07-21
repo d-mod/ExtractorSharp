@@ -1,14 +1,23 @@
-﻿using System.Windows.Forms;
-using System;
-using ExtractorSharp.Core;
-using ExtractorSharp.Data;
+﻿using System;
+using System.Windows.Forms;
+using ExtractorSharp.Core.Composition;
 using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.Component {
     public partial class ESTextDialog : ESDialog {
+        public ESTextDialog() : this(null) { }
+
+        public ESTextDialog(IConnector Connector) : base(Connector) {
+            InitializeComponent();
+            CancelButton = cancelButton;
+            textBox.KeyPress += EnterKeyPress;
+            yesButton.Click += Submit;
+        }
+
         public bool CanEmpty { set; get; }
 
-        public new Language Language  => Language.Default;
+        public new Language Language => Language.Default;
 
         public string InputText {
             get => textBox.Text;
@@ -22,17 +31,6 @@ namespace ExtractorSharp.Component {
             }
         }
 
-        public ESTextDialog():this(null){
-
-        }
-
-        public ESTextDialog(IConnector Connector) : base(Connector) {
-            InitializeComponent();
-            CancelButton = cancelButton;
-            textBox.KeyPress += EnterKeyPress;
-            yesButton.Click += Submit;
-        }
-
         protected override void OnEscape() {
             base.OnEscape();
             Dispose();
@@ -40,12 +38,13 @@ namespace ExtractorSharp.Component {
 
 
         public void EnterKeyPress(object sender, KeyPressEventArgs e) {
-            if (e.KeyChar == 13)
+            if (e.KeyChar == 13) {
                 Submit(sender, e);
+            }
         }
 
         /// <summary>
-        /// 重命名
+        ///     重命名
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -58,7 +57,5 @@ namespace ExtractorSharp.Component {
             }
             DialogResult = DialogResult.OK;
         }
-
-
     }
 }

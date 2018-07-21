@@ -1,36 +1,44 @@
 ﻿using System.Drawing;
-using System;
-using ExtractorSharp.Data;
+using ExtractorSharp.Core.Draw;
 using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Core.Model;
 
-namespace ExtractorSharp.Draw {
+namespace ExtractorSharp.Draw.Paint {
     /// <summary>
-    /// 图层
+    ///     图层
     /// </summary>
-
-    public class Layer:IPaint{
-        public Point Location { set; get; }
-        public Bitmap Image { get => Sprite.Picture; set { } }
+    public class Layer : ILayer {
         public int Index {
-            get => Sprite.Index; set { }
+            get => Sprite.Index;
+            set { }
         }
+
+        public Sprite Sprite { set; get; }
+        public decimal ImageScale { set; get; }
+        public Point Location { set; get; }
+
+        public Bitmap Image {
+            get => Sprite.Picture;
+            set { }
+        }
+
         public bool Locked { set; get; }
         public bool Visible { set; get; }
 
         public string Name { get; set; }
 
-        public Sprite Sprite { set; get; }
+        public Size Size {
+            get => Sprite.Size.Star(ImageScale);
+            set { }
+        }
 
-        public Size Size { get => Sprite.Size.Star(ImageScale); set { } }
-        public decimal ImageScale { set; get; }
         public Rectangle Rectangle => new Rectangle(Location, Size);
 
         public object Tag { set; get; }
 
 
-
         /// <summary>
-        /// 是否在图层范围之内
+        ///     是否在图层范围之内
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
@@ -39,7 +47,7 @@ namespace ExtractorSharp.Draw {
         }
 
         /// <summary>
-        /// 绘制
+        ///     绘制
         /// </summary>
         /// <param name="Controller"></param>
         /// <param name="g"></param>
@@ -49,8 +57,8 @@ namespace ExtractorSharp.Draw {
 
 
         public override string ToString() {
-            return $"{Name},{Language.Default["Position"]}:({Location.X},{Location.Y}),{Language.Default["Size"]}({Size.Width},{Size.Height})";
+            return
+                $"{Name},{Language.Default["Position"]}:({Location.X},{Location.Y}),{Language.Default["Size"]}({Size.Width},{Size.Height})";
         }
-
     }
 }

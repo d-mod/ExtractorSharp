@@ -65,7 +65,8 @@
     <StartupObject>ExtractorSharp.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>logo.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -119,10 +120,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command\DrawCommand\MoveToolsDraw.cs" />
+    <Compile Include="Command\FileCommand\RecoverFile.cs" />
     <Compile Include="Command\FileCommand\SaveFile.cs" />
     <Compile Include="Command\ImageCommand\DyeImage.cs" />
     <Compile Include="Command\ImageCommand\PasteSingleImage.cs" />
     <Compile Include="Command\ImageCommand\SaveGif.cs" />
+    <Compile Include="Command\LayerCommand\AddCompareLayer.cs" />
     <Compile Include="Command\LayerCommand\AddLayer.cs" />
     <Compile Include="Command\LayerCommand\DeleteLayer.cs" />
     <Compile Include="Command\LayerCommand\MoveLayer.cs" />
@@ -149,10 +152,11 @@
     <Compile Include="Composition\Metadata.cs" />
     <Compile Include="Composition\Plugin.cs" />
     <Compile Include="Config\JsonConfig.cs" />
+    <Compile Include="Draw\Paint\CompareLayer.cs" />
     <Compile Include="Effect\Sprite\UnCanvasSpriteConverter.cs" />
     <Compile Include="Core\Clipboarder.cs" />
     <Compile Include="Core\Sorter\DefaultSorter.cs" />
-    <Compile Include="Core\Sorter\ISorter.cs" />
+    <Compile Include="Execute\SortExecute.cs" />
     <Compile Include="Model\Result.cs" />
     <Compile Include="Model\VersionInfo.cs" />
     <Compile Include="Draw\Brush\Eraser.cs" />
@@ -244,11 +248,23 @@
     <Compile Include="View\Dialog\SettingDialog.Designer.cs">
       <DependentUpon>SettingDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\SettingPane\FlashPane.cs">
+    <Compile Include="View\Pane\TexturePage.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\SettingPane\FlashPane.Designer.cs">
-      <DependentUpon>FlashPane.cs</DependentUpon>
+    <Compile Include="View\Pane\TexturePage.Designer.cs">
+      <DependentUpon>TexturePage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SettingPane\MovePane.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\SettingPane\MovePane.Designer.cs">
+      <DependentUpon>MovePane.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SettingPane\AnimationPane.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\SettingPane\AnimationPane.Designer.cs">
+      <DependentUpon>AnimationPane.cs</DependentUpon>
     </Compile>
     <Compile Include="View\SettingPane\GifPane.cs">
       <SubType>Component</SubType>
@@ -298,11 +314,11 @@
     <Compile Include="View\Pane\ActionPage.Designer.cs">
       <DependentUpon>ActionPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\Pane\PalattePanel.cs">
+    <Compile Include="View\Pane\PalattePage.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\Pane\PalattePanel.Designer.cs">
-      <DependentUpon>PalattePanel.cs</DependentUpon>
+    <Compile Include="View\Pane\PalattePage.Designer.cs">
+      <DependentUpon>PalattePage.cs</DependentUpon>
     </Compile>
     <Compile Include="View\Pane\HistoryPage.Designer.cs" />
     <Compile Include="View\Pane\HistoryPage.cs">
@@ -338,12 +354,6 @@
     <Compile Include="View\Dialog\SaveImageDialog.Designer.cs">
       <DependentUpon>SaveImageDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\Dialog\VersionDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="View\Dialog\VersionDialog.Designer.cs">
-      <DependentUpon>VersionDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="Draw\Paint\Layer.cs" />
     <Compile Include="Core\Hoster.cs" />
     <Compile Include="View\Dialog\ChangePositionDialog.cs">
@@ -378,6 +388,12 @@
     <Compile Include="View\SettingPane\GerneralPane.Designer.cs">
       <DependentUpon>GerneralPane.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\SettingPane\Theme\BackgroundPane.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\SettingPane\Theme\BackgroundPane.Designer.cs">
+      <DependentUpon>BackgroundPane.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -387,10 +403,7 @@
     </Compile>
     <None Include="README.md" />
     <None Include="Resources\chinese.json" />
-    <None Include="Resources\end.ogg" />
-    <None Include="Resources\error.ogg" />
     <None Include="Resources\queues.json" />
-    <None Include="Resources\success.ogg" />
     <None Include="Resources\view.json" />
   </ItemGroup>
   <ItemGroup>
@@ -426,9 +439,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\Dialog\SaveImageDialog.resx">
       <DependentUpon>SaveImageDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="View\Dialog\VersionDialog.resx">
-      <DependentUpon>VersionDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -470,10 +480,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="dictionary.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="logo.ico" />
+    <None Include="Resources\help.png" />
     <None Include="Resources\last.png" />
     <None Include="Resources\next.png" />
     <None Include="Resources\add.png" />
@@ -545,7 +553,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Resources_4version_1json__JSONSchema="" />
+      <UserProperties Resources_4version_1json__JSONSchema="http://json.schemastore.org/appsettings" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

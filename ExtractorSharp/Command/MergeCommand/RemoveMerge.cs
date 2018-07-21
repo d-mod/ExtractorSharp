@@ -1,21 +1,25 @@
 ﻿using ExtractorSharp.Core;
-using ExtractorSharp.Data;
+using ExtractorSharp.Core.Command;
+using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.Command.MergeCommand {
-    class RemoveMerge:ICommand,ICommandMessage{
-        private Merger Merger;
+    internal class RemoveMerge : ICommand, ICommandMessage {
         private Album[] Array;
+        private Merger Merger;
+
         public void Do(params object[] args) {
             Array = args as Album[];
             Merger = Program.Merger;
             Merger.Remove(Array);
         }
-        
-        public void Undo() => Merger.Add(Array);
 
-        public void Redo() => Do(Array);
+        public void Undo() {
+            Merger.Add(Array);
+        }
 
-        public void Action(params Album[] Array) => Merger.Remove(Array);
+        public void Redo() {
+            Do(Array);
+        }
 
         public bool CanUndo => true;
 
@@ -25,6 +29,8 @@ namespace ExtractorSharp.Command.MergeCommand {
 
         public string Name => "RemoveMerge";
 
-
+        public void Action(params Album[] Array) {
+            Merger.Remove(Array);
+        }
     }
 }

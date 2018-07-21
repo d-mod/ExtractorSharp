@@ -1,18 +1,18 @@
-﻿using ExtractorSharp.Core.Lib;
-using ExtractorSharp.Data;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Core.Model;
 
-namespace ExtractorSharp.Handle {
-    public class SixthHandler :SecondHandler{
-        public SixthHandler(Album Album) : base(Album) { }
+namespace ExtractorSharp.Core.Handle {
+    public class SixthHandler : SecondHandler {
+        public SixthHandler(Album album) : base(album) { }
 
         public override Bitmap ConvertToBitmap(Sprite entity) {
             var data = entity.Data;
             var size = entity.Width * entity.Height;
-            if (entity.Type == ColorBits.ARGB_1555 && entity.Compress == Compress.ZLIB) {
+            if (entity.Type == ColorBits.ARGB_1555 && entity.CompressMode == CompressMode.ZLIB) {
                 data = Zlib.Decompress(data, size);
                 var table = Album.CurrentTable;
                 if (table.Count > 0) {
@@ -29,11 +29,8 @@ namespace ExtractorSharp.Handle {
         }
 
 
-
         public override byte[] ConvertToByte(Sprite entity) {
-            if (entity.Compress == Compress.NONE) {
-                return base.ConvertToByte(entity);
-            }
+            if (entity.CompressMode == CompressMode.NONE) return base.ConvertToByte(entity);
             var data = entity.Picture.ToArray();
             var ms = new MemoryStream();
             var table = Album.CurrentTable;
@@ -64,26 +61,24 @@ namespace ExtractorSharp.Handle {
             }
         }
 
-        public override void ConvertToVersion(Img_Version Version) {
-            if (Version <= Img_Version.Ver2 || Version == Img_Version.Ver5) {
-                foreach (var item in Album.List) {
-                    if (item.Type != ColorBits.LINK) {
-                        item.Type = ColorBits.ARGB_8888;
-                    }
+        public override void ConvertToVersion(ImgVersion version) {
+            if (version > ImgVersion.Ver2 && version != ImgVersion.Ver5) return;
+            foreach (var item in Album.List) {
+                if (item.Type != ColorBits.LINK) {
+                    item.Type = ColorBits.ARGB_8888;
                 }
             }
         }
 
         public override void CreateFromStream(Stream stream) {
-            var size= stream.ReadInt();
+            var size = stream.ReadInt();
             Album.Tables = new List<List<Color>>();
-            for (int i = 0; i < size; i++) {
+            for (var i = 0; i < size; i++) {
                 var count = stream.ReadInt();
-                var table = Colors.ReadPalette(stream,count);
+                var table = Colors.ReadPalette(stream, count);
                 Album.Tables.Add(table.ToList());
             }
             base.CreateFromStream(stream);
         }
-        
     }
 }

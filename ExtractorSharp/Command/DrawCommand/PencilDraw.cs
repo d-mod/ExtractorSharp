@@ -1,31 +1,27 @@
-﻿using ExtractorSharp.Core.Lib;
-using ExtractorSharp.Data;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
+using ExtractorSharp.Core.Command;
+using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.Command.DrawCommand {
-    class PencilDraw : ICommand {
-        private Sprite Entity;
-        private Point Location;
+    internal class PencilDraw : ICommand {
         private Color Color;
+        private Sprite Entity;
         private Bitmap Image;
+        private Point Location;
 
         public string Name => "Pencil";
 
         public bool CanUndo => true;
-      
+
         public bool IsChanged => false;
 
         public bool IsFlush => false;
 
         public void Do(params object[] args) {
             Entity = args[0] as Sprite;
-            Location = (Point)args[1];
-            Color = (Color)args[2];
+            Location = (Point) args[1];
+            Color = (Color) args[2];
             Image = Entity.Picture;
             var width = Image.Width;
             var height = Image.Height;
@@ -40,6 +36,7 @@ namespace ExtractorSharp.Command.DrawCommand {
             } else if (Location.X > width - 1) {
                 x = Location.X - width + 1;
             }
+
             if (Location.Y < 0) {
                 y = -Location.Y + 1;
                 Location.Y = 0;
@@ -47,12 +44,14 @@ namespace ExtractorSharp.Command.DrawCommand {
             } else if (Location.Y > height - 1) {
                 y = Location.Y - height + 1;
             }
+
             width += x;
             height += y;
             var image = new Bitmap(width, height);
             using (var g = Graphics.FromImage(image)) {
                 g.DrawImage(Image, _x, _y, Image.Width, Image.Height);
             }
+
             image.SetPixel(Location.X, Location.Y, Color);
             Entity.Picture = image;
             Entity.Location = Entity.Location.Minus(new Point(_x, _y));
@@ -62,10 +61,13 @@ namespace ExtractorSharp.Command.DrawCommand {
         public void Redo() {
             Do(Entity, Location, Color);
         }
+
         public void Undo() {
             Entity.Picture = Image;
         }
 
-        public override string ToString() => Language.Default["Pencil"];
+        public override string ToString() {
+            return Language.Default["Pencil"];
+        }
     }
 }

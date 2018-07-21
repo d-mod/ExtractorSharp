@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using ExtractorSharp.Component;
-using ExtractorSharp.Config;
-using ExtractorSharp.Core;
-using ExtractorSharp.Data;
+using ExtractorSharp.Core.Composition;
 using ExtractorSharp.Json;
+using ExtractorSharp.Model;
 
-namespace ExtractorSharp.View {
+namespace ExtractorSharp.View.Dialog {
     public partial class BugDialog : ESDialog {
-        private string Error { set; get; }
-        private string Mode { set; get; }
         public BugDialog(IConnector Data) : base(Data) {
             InitializeComponent();
             CancelButton = cancelButton;
             yesButton.Click += Submit;
         }
+
+        private string Error { set; get; }
+        private string Mode { set; get; }
 
         public override DialogResult Show(params object[] args) {
             Mode = args[0] as string;
@@ -31,6 +31,7 @@ namespace ExtractorSharp.View {
                 submitCheck.Checked = false;
                 submitCheck.Visible = false;
             }
+
             return ShowDialog();
         }
 
@@ -40,16 +41,16 @@ namespace ExtractorSharp.View {
         }
 
         private Result UploadBug(string message, string log) {
-            var result = new Result() {
+            var result = new Result {
                 Status = "error",
                 Message = "提交失败!"
             };
             try {
-                var data = new Dictionary<string, object>() {
-                    { "projectId" , Config["ProgramId"].Integer },
-                    { "message",message },
-                    { "log", log },
-                    { "version", Config["Version"].Value}
+                var data = new Dictionary<string, object> {
+                    {"projectId", Config["ProgramId"].Integer},
+                    {"message", message},
+                    {"log", log},
+                    {"version", Config["Version"].Value}
                 };
                 var builder = new LSBuilder();
                 var path = $"{Config["ApiHost"].Value}/{Config["FeedbackUrl"].Value}";
@@ -60,6 +61,5 @@ namespace ExtractorSharp.View {
             }
             return result;
         }
-
     }
 }

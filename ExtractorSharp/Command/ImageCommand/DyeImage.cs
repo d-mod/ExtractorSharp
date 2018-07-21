@@ -1,52 +1,50 @@
-﻿using ExtractorSharp.Core.Lib;
-using ExtractorSharp.Data;
-using System.Drawing;
+﻿using System.Drawing;
+using ExtractorSharp.Core.Command;
+using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.Command.ImageCommand {
-    class DyeImage : ISingleAction {
+    internal class DyeImage : ISingleAction {
+        private Sprite[] _array;
 
-        private Bitmap[] Image;
+        private Color _color;
 
-        private Sprite[] Array;
-
-        private Color Color;
+        private Bitmap[] _image;
 
         public string Name => "Dye";
 
         public bool CanUndo => true;
-
-        public bool IsFlush => false;
-
+       
         public bool IsChanged => true;
 
         public int[] Indices { set; get; }
 
-        public void Action(Album al, int[] indices) {
+        public void Action(Album album, int[] indices) {
             foreach (var i in indices) {
-                if (i > -1 && i < al.List.Count) {
-                    al[i].Picture = al[i].Picture.Dye(Color);
+                if (i > -1 && i < album.List.Count) {
+                    album[i].Picture = album[i].Picture.Dye(_color);
                 }
             }
         }
 
         public void Do(params object[] args) {
-            Array = args[0] as Sprite[];
-            Color = (Color)args[1];
-            Image = new Bitmap[Array.Length];
-            for (var i = 0; i < Array.Length; i++) {
-                Image[i] = Array[i].Picture;
-                Array[i].Picture = Image[i].Dye(Color);
+            _array = args[0] as Sprite[];
+            _color = (Color) args[1];
+            _image = new Bitmap[_array.Length];
+            for (var i = 0; i < _array.Length; i++) {
+                _image[i] = _array[i].Picture;
+                _array[i].Picture = _image[i].Dye(_color);
             }
         }
 
         public void Redo() {
-            Do(Array);
-        }
-        public void Undo() {
-            for (var i = 0; i < Array.Length; i++) {
-                Array[i].Picture = Image[i];
-            }
+            Do(_array);
         }
 
+        public void Undo() {
+            for (var i = 0; i < _array.Length; i++) {
+                _array[i].Picture = _image[i];
+            }
+        }
     }
 }

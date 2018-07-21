@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 
-namespace ExtractorSharp.View{
+namespace ExtractorSharp.View.Dialog{
     partial class AboutDialog {
         /// <summary>
         /// Required designer variable.

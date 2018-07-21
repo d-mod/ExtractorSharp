@@ -1,59 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ExtractorSharp.Core;
-using ExtractorSharp.Data;
-using ExtractorSharp.Component;
+﻿using System.Collections.Generic;
+using ExtractorSharp.Core.Command;
+using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.Command.FileCommand {
     /// <summary>
-    /// 移动文件
+    ///     移动文件
     /// </summary>
-    class MoveFile : IMutipleAciton {
+    internal class MoveFile : IMutipleAciton, IFileFlushable {
+        private int _index;
+
+        private List<Album> _list;
+
+        private int _target;
         public string Name => "MoveFile";
 
         public bool CanUndo => true;
 
         public bool IsChanged => true;
-
-        public bool IsFlush => true;
-
-        private int Index;
-
-        private int Target;
-
-        private List<Album> List;
-
+        
 
         public void Action(params Album[] array) {
             for (var i = 0; i < array.Length; i++) {
-                List.Remove(array[i]);
+                _list.Remove(array[i]);
             }
-            List.InsertRange(Target, array);
+            _list.InsertRange(_target, array);
         }
 
 
         public void Do(params object[] args) {
-            Index = (int)args[0];
-            Target = (int)args[1];
-            List = Program.Connector.List;
-            Move(Index, Target);
+            _index = (int) args[0];
+            _target = (int) args[1];
+            _list = Program.Connector.List;
+            Move(_index, _target);
         }
 
         public void Redo() {
-            Do(Index, Target);
-        }
-
-        private void Move(int index, int target) {
-            var item = List[index];
-            List.RemoveAt(index);
-            List.Insert(target, item);
+            Do(_index, _target);
         }
 
         public void Undo() {
-            Move(Target, Index);
+            Move(_target, _index);
+        }
+
+        private void Move(int index, int target) {
+            var item = _list[index];
+            _list.RemoveAt(index);
+            _list.Insert(target, item);
         }
     }
 }

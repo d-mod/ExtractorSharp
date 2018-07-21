@@ -1,7 +1,6 @@
 ﻿using ExtractorSharp.Component;
-using ExtractorSharp.Handle;
 
-namespace ExtractorSharp.View {
+namespace ExtractorSharp.View.Dialog {
     partial class ConvertDialog {
         /// <summary>
         /// Required designer variable.

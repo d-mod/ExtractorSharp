@@ -62,12 +62,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SortTest.cs" />
     <Compile Include="TestHandler.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="UnitTest2.cs" />
     <Compile Include="UnitTest3.cs" />
     <Compile Include="UnitTest4.cs" />
+    <Compile Include="Weapon.cs" />
     <Compile Include="WeaponInfo.cs" />
+    <Compile Include="WeaponTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

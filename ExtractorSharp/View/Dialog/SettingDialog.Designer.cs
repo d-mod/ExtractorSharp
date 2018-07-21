@@ -84,7 +84,6 @@ namespace ExtractorSharp.View.Dialog {
             this.Controls.Add(yesButton);
             this.Controls.Add(cancelButton);
             this.Text = Language["Setting"];
-            this.ControlBox = false;
             this.ResumeLayout(false);
             this.PerformLayout();
         }

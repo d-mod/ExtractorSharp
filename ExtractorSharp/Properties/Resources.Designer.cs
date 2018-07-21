@@ -106,24 +106,21 @@ namespace ExtractorSharp.Properties {
         ///  &quot;LCID&quot;: 2052,
         ///  &quot;Group&quot;: {
         ///    &quot;Dictionary&quot;: {
-        ///      &quot;Apply&quot;: &quot;应用&quot;,
-        ///      &quot;OK&quot;: &quot;确定&quot;,
-        ///      &quot;Cancel&quot;: &quot;取消&quot;,
-        ///      &quot;Exit&quot;: &quot;退出&quot;,
-        ///      &quot;GamePath&quot;: &quot;游戏路径&quot;,
-        ///      &quot;Browse&quot;: &quot;浏览&quot;,
-        ///      &quot;Target&quot;: &quot;目标&quot;,
-        ///      &quot;CheckImg&quot;: &quot;当前所选IMG&quot;,
-        ///      &quot;AllImg&quot;: &quot;所有IMG&quot;,
-        ///      &quot;CheckImage&quot;: &quot;当前所选贴图&quot;,
-        ///      &quot;AllImage&quot;: &quot;所有贴图&quot;,
-        ///      &quot;AllFormat&quot;: &quot;所有格式&quot;,
-        ///      &quot;ImageResources&quot;: &quot;图片资源&quot;,
-        ///      &quot;SoundResources&quot;: &quot;音效资源&quot;,
-        ///      &quot;Width&quot;: &quot;宽&quot;,
-        ///      &quot;Height&quot;: &quot;高&quot;,
-        ///      &quot;Size&quot;: &quot;宽高&quot;,
-        ///       [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///      &quot;About&quot;: &quot;关于&quot;,
+        ///      &quot;AbsolutePosition&quot;: &quot;绝对坐标&quot;,
+        ///      &quot;Action&quot;: &quot;动作&quot;,
+        ///      &quot;ActionPause&quot;: &quot;动作记录已暂停!&quot;,
+        ///      &quot;ActionRecord&quot;: &quot;动作记录已开始!&quot;,
+        ///      &quot;ActionRun&quot;: &quot;动作执行已完成&quot;,
+        ///      &quot;ActionTips&quot;: &quot;是否对所有贴图执行此处理？&quot;,
+        ///      &quot;Add&quot;: &quot;添加&quot;,
+        ///      &quot;AddAction&quot;: &quot;加入动作&quot;,
+        ///      &quot;AddFile&quot;: &quot;添加文件&quot;,
+        ///      &quot;AddLayer&quot;: &quot;加入图层&quot;,
+        ///      &quot;AddList&quot;: &quot;加入列表&quot;,
+        ///      &quot;AddListHideImage&quot;: &quot;隐藏文件贴图&quot;,
+        ///      &quot;AddMerge&quot;: &quot;加入拼合&quot;,
+        ///      &quot;AddOutside&quot;: &quot;加入外部文件 [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Chinese {
             get {
@@ -144,14 +141,14 @@ namespace ExtractorSharp.Properties {
         /// <summary>
         ///   查找类似 {
         ///  &quot;Animation&quot;: false,
-        ///  &quot;ApiHost&quot;: &quot;http://localhost&quot;,
+        ///  &quot;ApiHost&quot;: &quot;http://kritsus.net/api/&quot;,
         ///  &quot;AutoSave&quot;: false,
         ///  &quot;AutoSort&quot;: true,
-        ///  &quot;AutoUpdate&quot;: false,
+        ///  &quot;AutoUpdate&quot;: true,
         ///  &quot;CanvasImageSize&quot;: &quot;800,600&quot;,
         ///  &quot;CanvasScale&quot;: 100,
         ///  &quot;ClassifySeparator&quot;: &quot;�ָ���&quot;,
-        ///  &quot;FeedbackUrl&quot;: &quot;http://kritsu.net/api/app/feedback/post&quot;,
+        ///  &quot;FeedbackUrl&quot;: &quot;http://kritsu.net/api/project/feedback/post&quot;,
         ///  &quot;FlashSpeed&quot;: 20,
         ///  &quot;GamePath&quot;: &quot;&quot;,
         ///  &quot;GifDelay&quot;: 75,
@@ -161,8 +158,7 @@ namespace ExtractorSharp.Properties {
         ///  &quot;LCID&quot;: 2052,
         ///  &quot;LinearDodge&quot;: false,
         ///  &quot;LinearDodgeSpriteConverter&quot;: true,
-        ///  &quot;LineLevel&quot;: 0.5,
-        /// [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///  &quot;LineLeve [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Config {
             get {
@@ -246,6 +242,16 @@ namespace ExtractorSharp.Properties {
         internal static System.Drawing.Bitmap grid {
             get {
                 object obj = ResourceManager.GetObject("grid", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap help {
+            get {
+                object obj = ResourceManager.GetObject("help", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -362,34 +368,31 @@ namespace ExtractorSharp.Properties {
         
         /// <summary>
         ///   查找类似 {
-        ///	Name:&quot;default&quot;,
-        ///	Rules:{
-        ///	  &apos;body&apos;: 0
-        ///	  &apos;bodyh&apos;: 0
-        ///	  &apos;bgloveb&apos;: 650
-        ///	  &apos;bglovea&apos;: 2150
-        ///	  &apos;bglovec&apos;: 2790
-        ///	  &apos;revc&apos;: 2790
-        ///	  &apos;bglovex&apos;: 1350
-        ///	  &apos;revb&apos;: 650
-        ///	  &apos;gauntletx&apos;: 1350
-        ///	  &apos;clawc&apos;: 2790
-        ///	  &apos;clawb&apos;: 650
-        ///	  &apos;clawa&apos;: 2150
-        ///	  &apos;shoesb&apos;: 1200
-        ///	  &apos;shoesc&apos;: 1600
-        ///	  &apos;shoesa&apos;: 1400
-        ///	  &apos;shoesf&apos;: 2880
-        ///	  &apos;shoesg&apos;: 1450
-        ///	  &apos;gauntletb&apos;: 650
-        ///	  &apos;gauntletc&apos;: 2790
-        ///	  &apos;gauntleta&apos;: 2150
-        ///	  &apos;clawx&apos;: 1350
-        ///	  &apos;sswdc&apos;: 4200
-        ///	  &apos;boneclawb&apos;: 650
-        ///	  &apos;boneclawa&apos;: 2150
-        ///	  &apos;sswdb&apos;: 650
-        ///	  &apos;faceg [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///  &quot;Name&quot;: &quot;default&quot;,
+        ///  &quot;Rules&quot;: {
+        ///    &quot;arma&quot;: 2150,
+        ///    &quot;armb&quot;: 650,
+        ///    &quot;armc&quot;: 2790,
+        ///    &quot;armsa&quot;: 2150,
+        ///    &quot;armsb&quot;: 650,
+        ///    &quot;armsc&quot;: 2790,
+        ///    &quot;armsx&quot;: 1350,
+        ///    &quot;armx&quot;: 1350,
+        ///    &quot;autoa&quot;: 2150,
+        ///    &quot;autob&quot;: 650,
+        ///    &quot;autoc&quot;: 2790,
+        ///    &quot;axea&quot;: 2150,
+        ///    &quot;axec&quot;: 2600,
+        ///    &quot;axed&quot;: 200,
+        ///    &quot;axex&quot;: 1350,
+        ///    &quot;beamspeara&quot;: 2150,
+        ///    &quot;beamspearb&quot;: 650, //?
+        ///    &quot;beamspearc&quot;: 2790,
+        ///    &quot;beamspeare&quot;: 2880,
+        ///    &quot;beamspearx&quot;: 1350,
+        ///    &quot;beamswda&quot;: 2150, //?
+        ///    &quot;beamswdb&quot;: 650, //?
+        ///     [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Queue {
             get {
@@ -518,46 +521,7 @@ namespace ExtractorSharp.Properties {
         }
         
         /// <summary>
-        ///   查找类似 [
-        ///  {
-        ///    &quot;Version&quot;: &quot;1.0.0.1&quot;,
-        ///    &quot;Info&quot;: [
-        ///      &quot;优化试衣间,新增魔枪士&quot;
-        ///    ]
-        ///  },
-        ///  {
-        ///    &quot;Version&quot;: &quot;1.0.1.0&quot;,
-        ///    &quot;Info&quot;: [
-        ///      &quot;优化动画播放功能,修复内存溢出bug&quot;,
-        ///      &quot;反Ex加密,防止因为Ex加密导致路径错误&quot;
-        ///    ]
-        ///  },
-        ///  {
-        ///    &quot;Version&quot;: &quot;1.0.2.0&quot;,
-        ///    &quot;Time&quot;: &quot;2017年5月12日13:42:32&quot;,
-        ///    &quot;Info&quot;: [
-        ///      &quot;新增密码保护&quot;,
-        ///      &quot;新增版本转换(不必要时不推荐进行转换)&quot;,
-        ///      &quot;新增替换贴图时对JPG,BMP等格式的支持&quot;
-        ///    ]
-        ///  },
-        ///  {
-        ///    &quot;Version&quot;: &quot;1.1.0.0&quot;,
-        ///    &quot;Time&quot;: &quot;2017年5月16日20:01:00&quot;,
-        ///    &quot;Info&quot;: [
-        ///      &quot;修复载入文件夹卡死的bug&quot;,
-        ///      &quot;新增Ver5提取支持&quot;,
-        ///      &quot;新增 [字符串的其余部分被截断]&quot;; 的本地化字符串。
-        /// </summary>
-        internal static string Version {
-            get {
-                return ResourceManager.GetString("Version", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 {
-        ///
         ///  &quot;MainColor&quot;: &quot;180,214,221&quot;,
         ///
         ///  &quot;MainImage&quot;: &quot;&quot;,

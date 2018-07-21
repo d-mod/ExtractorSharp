@@ -1,28 +1,49 @@
-﻿using ExtractorSharp.Core.Lib;
-using ExtractorSharp.Data;
-using System.Drawing;
+﻿using System.Drawing;
+using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Core.Model;
 
-namespace ExtractorSharp.Draw.Paint {
-    public class Canvas : IPaint {
-        public string Name { set; get; }
-        public Bitmap Image { set; get; }
-        public Rectangle Rectangle => new Rectangle(_Location, Size);
+namespace ExtractorSharp.Core.Draw.Paint {
+    public class Canvas : IPaint,IAttractable{
+        private bool _realPosition;
 
-        private Point _Location {
+        public Point RealLocation {
             get {
                 var location = Location;
-                if (RealPosition) {
-                    if (Tag is Sprite sprite) {
-                        location = location.Add(sprite.Location);
-                    }
-                } 
+                if (RealPosition && Tag is Sprite sprite) {
+                    location = location.Add(sprite.Location);
+                }
                 return location;
+            }
+            set {
+                var location = value;
+                if (RealPosition && Tag is Sprite sprite) {
+                    location = location.Minus(sprite.Location);
+                }
+                Location = location;
             }
         }
 
-        public bool Contains(Point point) => Rectangle.Contains(point);
         public Point Offset { set; get; } = Point.Empty;
         public Size CanvasSize { set; get; }
+
+        public bool RealPosition {
+            set {
+                _realPosition = value;
+                if (!value) {
+                    Location = Point.Empty;
+                }
+            }
+            get => _realPosition;
+        }
+
+        public string Name { set; get; }
+        public Bitmap Image { set; get; }
+        public Rectangle Rectangle => new Rectangle(RealLocation, Size);
+
+        public bool Contains(Point point) {
+            return Rectangle.Contains(point);
+        }
+
         public void Draw(Graphics g) {
             if (Tag != null && Image != null) {
                 g.DrawImage(Image, Rectangle);
@@ -35,22 +56,11 @@ namespace ExtractorSharp.Draw.Paint {
         public bool Visible { set; get; }
         public bool Locked { set; get; }
 
-        public bool RealPosition {
-            set {
-                _realPostion = value;
-                if (!value) {
-                    Location = Point.Empty;
-                }
-            }
-            get {
-                return _realPostion;
-            }
-        }
-
-        private bool _realPostion;
+        public int Range => 20;
 
         public override string ToString() {
-            return $"{Language.Default[Name]},{Language.Default["Position"]}({_Location.GetString()}),{Language.Default["Size"]}({Size.GetString()})";
+            return
+                $"{Language.Default[Name]},{Language.Default["Position"]}{RealLocation.GetString()},{Language.Default["Size"]}{Size.GetString()}";
         }
     }
 }

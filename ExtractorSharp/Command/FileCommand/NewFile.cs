@@ -1,65 +1,61 @@
-﻿using ExtractorSharp.Core;
-using ExtractorSharp.Data;
-using ExtractorSharp.Handle;
+﻿using ExtractorSharp.Core.Command;
+using ExtractorSharp.Core.Composition;
+using ExtractorSharp.Core.Handle;
+using ExtractorSharp.Core.Model;
 
-namespace ExtractorSharp.Command.ImgCommand {
-    class NewFile : IMutipleAciton,ICommandMessage{
-        private Album Album;
+namespace ExtractorSharp.Command.FileCommand {
+    internal class NewFile : IMutipleAciton, ICommandMessage, IFileFlushable {
+        private Album album;
 
-        private string Path;
+        private int count;
 
-        private int Count;
+        private int index;
 
-        private int Index;
+        private string path;
 
-        private IConnector Connector => Program.Connector;
+        private static IConnector Connector => Program.Connector;
 
         public void Do(params object[] args) {
-            Album = (args[0] as Album) ?? new Album();
-            Path = args[1] as string;
-            Index = Album.List.Count;
+            album = args[0] as Album ?? new Album();
+            path = args[1] as string;
+            index = album.List.Count;
             if (args.Length > 2) {
-                Count = (int)args[2];
+                count = (int)args[2];
             }
             if (args.Length > 3) {
-                Index = (int)args[3];
+                index = (int)args[3];
             }
-            if (Path.EndsWith(".ogg")) {
-                Album.Version = Img_Version.Other;
+            if (args.Length > 4) {
+                album.Version = (ImgVersion)(args[4]);
             }
-            Album.Path = Path;
-            Album.NewImage(Count, ColorBits.LINK, -1);
-            Index = Connector.List.Count;
-            Connector.List.Insert(Index, Album);
+            album.Path = path;
+            album.NewImage(count, ColorBits.LINK, -1);
+            Connector.List.Insert(index + 1, album);
         }
 
         public void Undo() {
-            Connector.List.Remove(Album);
+            Connector.List.Remove(album);
         }
-        
+
 
         public bool IsChanged => true;
 
-        public void Redo() => Do(Album, Path, Count, Index);
-        
-
-        public void Action(params Album[] array) {
-            foreach(Album al in array) {
-                if (Path.EndsWith(".ogg")) {
-                    Album.Version = Img_Version.Other;
-                }
-                Album.Path = Path;
-                Album.NewImage(Count, ColorBits.LINK, -1);
-                Connector.List.Insert(Index, Album);
-            }
+        public void Redo() {
+            Do(album, path, count, index);
         }
 
-        public bool IsFlush => true;
+
+        public void Action(params Album[] array) {
+            foreach (var al in array) {
+                if (path.EndsWith(".ogg")) album.Version = ImgVersion.Other;
+                album.Path = path;
+                album.NewImage(count, ColorBits.LINK, -1);
+                Connector.List.Insert(index, album);
+            }
+        }
 
         public bool CanUndo => true;
 
         public string Name => "NewFile";
-        
-
     }
 }

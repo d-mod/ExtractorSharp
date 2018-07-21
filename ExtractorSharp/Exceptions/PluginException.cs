@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace ExtractorSharp.Exceptions {
+    internal class PluginExecption : ProgramException {
+        public PluginExecption() { }
 
-namespace ExtractorSharp.Exceptions {
-    class PluginExecption : ProgramException {
-
-        public PluginExecption() {
-
-        }
-        public PluginExecption(string msg):base(msg){
-
-        }
+        public PluginExecption(string msg) : base(msg) { }
     }
 }

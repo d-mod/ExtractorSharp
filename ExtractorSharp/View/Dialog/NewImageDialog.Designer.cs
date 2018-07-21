@@ -1,8 +1,7 @@
-﻿using ExtractorSharp.Component;
-using System.Drawing;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
+using ExtractorSharp.Component;
 
-namespace ExtractorSharp.View {
+namespace ExtractorSharp.View.Dialog {
     partial class NewImageDialog {
         /// <summary>
         /// Required designer variable.

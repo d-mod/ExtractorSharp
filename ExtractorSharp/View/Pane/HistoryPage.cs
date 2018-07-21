@@ -1,13 +1,13 @@
-﻿using ExtractorSharp.Core;
-using ExtractorSharp.Data;
-using System;
+﻿using System;
 using System.Windows.Forms;
+using ExtractorSharp.Core;
+using ExtractorSharp.Core.Model;
+using ExtractorSharp.EventArguments;
 
 namespace ExtractorSharp.View.Pane {
-    partial class HistoryPage : TabPage {
-        private Controller Controller;
-        private Language Language => Language.Default;
-        
+    internal partial class HistoryPage : TabPage {
+        private readonly Controller Controller;
+
         public HistoryPage() {
             InitializeComponent();
             Controller = Program.Controller;
@@ -18,10 +18,17 @@ namespace ExtractorSharp.View.Pane {
             Controller.CommandCleared += Refresh;
             gotoItem.Click += Move;
             addItem.Click += Add;
+            clearItem.Click += Clear;
             historyList.Items.Add("...");
             historyList.Items.AddRange(Controller.History);
             historyList.SelectedIndex = 0;
         }
+
+        private void Clear(object sender, EventArgs e) {
+            Controller.ClearCommand();
+        }
+
+        private Language Language => Language.Default;
 
         private void Add(object sender, EventArgs e) {
             var index = historyList.SelectedIndex - 1;
@@ -35,8 +42,6 @@ namespace ExtractorSharp.View.Pane {
             Refresh();
             base.OnTabIndexChanged(e);
         }
-
-
 
 
         private void RefreshList(object sender, EventArgs e) {
@@ -66,7 +71,7 @@ namespace ExtractorSharp.View.Pane {
             }
         }
 
-        private void Move(object sender,EventArgs e) {
+        private void Move(object sender, EventArgs e) {
             if (historyList.SelectedIndex > -1) {
                 Controller.Move(historyList.SelectedIndex - Controller.Index);
                 Refresh();
@@ -78,6 +83,5 @@ namespace ExtractorSharp.View.Pane {
                 Move(sender, e);
             }
         }
-
     }
 }

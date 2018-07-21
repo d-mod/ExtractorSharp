@@ -1,8 +1,8 @@
-﻿using ExtractorSharp.Data;
-using System.Drawing;
+﻿using System.Drawing;
+using ExtractorSharp.Core.Model;
 
-namespace ExtractorSharp.Composition {
-    public delegate void SpriteEffect(Sprite sprite,ref Bitmap bmp);
+namespace ExtractorSharp.Core.Composition {
+    public delegate void SpriteEffect(Sprite sprite, ref Bitmap bmp);
 
     public interface IEffect {
         string Name { get; }

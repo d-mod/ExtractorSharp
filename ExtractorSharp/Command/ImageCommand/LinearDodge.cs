@@ -1,28 +1,26 @@
-﻿using ExtractorSharp.Core.Lib;
-using ExtractorSharp.Data;
-using System.Drawing;
+﻿using System.Drawing;
+using ExtractorSharp.Core.Command;
+using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.Command.ImageCommand {
-    class LinearDodge : ISingleAction {
+    internal class LinearDodge : ISingleAction {
+        private Sprite[] Array;
 
         private Bitmap[] Image;
-
-        private Sprite[] Array;
 
         public string Name => "LinearDodge";
 
         public bool CanUndo => true;
 
-        public bool IsFlush => false;
-
         public bool IsChanged => true;
 
         public int[] Indices { set; get; }
 
-        public void Action(Album al, int[] indices) {
+        public void Action(Album album, int[] indices) {
             foreach (var i in indices) {
-                if (i > -1 && i < al.List.Count) {
-                    al[i].Picture = al[i].Picture.LinearDodge();
+                if (i > -1 && i < album.List.Count) {
+                    album[i].Picture = album[i].Picture.LinearDodge();
                 }
             }
         }
@@ -39,11 +37,11 @@ namespace ExtractorSharp.Command.ImageCommand {
         public void Redo() {
             Do(Array);
         }
+
         public void Undo() {
             for (var i = 0; i < Array.Length; i++) {
                 Array[i].Picture = Image[i];
             }
         }
-        
     }
 }

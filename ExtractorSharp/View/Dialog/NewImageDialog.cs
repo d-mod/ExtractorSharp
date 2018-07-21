@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Windows.Forms;
 using ExtractorSharp.Component;
-using ExtractorSharp.Core;
-using ExtractorSharp.Data;
+using ExtractorSharp.Core.Composition;
+using ExtractorSharp.Core.Model;
 
-namespace ExtractorSharp.View {
+namespace ExtractorSharp.View.Dialog {
     public partial class NewImageDialog : ESDialog {
         private Album Album;
+
         public NewImageDialog(IConnector Connector) : base(Connector) {
             InitializeComponent();
             yesButton.Click += Run;
@@ -20,25 +21,24 @@ namespace ExtractorSharp.View {
                 index_box.Maximum = album.List.Count;
                 index_box.Value = album.List.Count;
                 return ShowDialog();
-            } else {
-                Connector.SendWarning("NotSelectImgTips");
             }
+            Connector.SendWarning("NotSelectImgTips");
             return DialogResult.None;
         }
 
         public void Run(object sender, EventArgs e) {
-            var count = (int)count_box.Value;
+            var count = (int) count_box.Value;
             var type = ColorBits.LINK;
-            if (_1555_radio.Checked)
+            if (_1555_radio.Checked) {
                 type = ColorBits.ARGB_1555;
-            else if (_4444_radio.Checked)
+            } else if (_4444_radio.Checked) {
                 type = ColorBits.ARGB_4444;
-            else if (_8888_radio.Checked)
+            } else if (_8888_radio.Checked) {
                 type = ColorBits.ARGB_8888;
-            var index = (int)index_box.Value;
+            }
+            var index = (int) index_box.Value;
             Connector.Do("newImage", Album, count, type, index);
             DialogResult = DialogResult.OK;
         }
-
     }
 }

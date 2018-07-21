@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Windows.Forms;
 using ExtractorSharp.Component;
-using ExtractorSharp.Core;
+using ExtractorSharp.Core.Composition;
+using ExtractorSharp.Core.Handle;
 using ExtractorSharp.Core.Lib;
-using ExtractorSharp.Data;
 
-namespace ExtractorSharp {
+namespace ExtractorSharp.View.Dialog {
     public partial class NewImgDialog : ESDialog {
         public NewImgDialog(IConnector Connector) : base(Connector) {
             InitializeComponent();
@@ -13,11 +13,17 @@ namespace ExtractorSharp {
             indexBox.KeyDown += EnterDownRun;
             countBox.KeyDown += EnterDownRun;
             yesButton.Click += NewImg;
-
+            var list = Handler.Versions;
+            var array = new object[list.Count];
+            for (var i = 0; i < list.Count; i++) {
+                array[i] = list[i];
+            }
+            versionBox.Items.AddRange(array);
+            versionBox.SelectedItem = ImgVersion.Ver2;
         }
 
         /// <summary>
-        /// Enter快捷键执行
+        ///     Enter快捷键执行
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -28,14 +34,18 @@ namespace ExtractorSharp {
         }
 
         public override DialogResult Show(params object[] args) {
-            var count = (int)args[0];
-            indexBox.Maximum = count;
-            indexBox.Value = count;
+            var count = (int) args[0];
+            var index = (int)args[1];
+            indexBox.Items.Clear();
+            indexBox.Items.AddRange(Connector.FileArray);
+            index = Math.Max(-1, index);
+            index = Math.Min(index, indexBox.Items.Count);
+            indexBox.SelectedIndex = index;
             return ShowDialog();
         }
-        
+
         /// <summary>
-        /// 新建一个img
+        ///     新建一个img
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -46,11 +56,11 @@ namespace ExtractorSharp {
                 return;
             }
             var count = (int)countBox.Value;
-            var index = (int)indexBox.Value;
-            Connector.Do("newImg",null, path, count, index);
+            var index = indexBox.SelectedIndex;
+            var version = versionBox.SelectedItem;
+            Connector.Do("newImg", null, path, count, index,version);
             pathBox.Text = pathBox.Text.Replace(path.GetSuffix(), "");
             DialogResult = DialogResult.OK;
         }
-
     }
 }

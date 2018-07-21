@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 
-namespace ExtractorSharp.Core{
+namespace ExtractorSharp.Component {
     partial class ESMessager {
         /// <summary>
         /// Required designer variable.

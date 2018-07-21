@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ExtractorSharp.Core;
+﻿using System.Drawing;
+using ExtractorSharp.Core.Command;
 using ExtractorSharp.Core.Lib;
-using ExtractorSharp.Data;
+using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.Command.ImageCommand {
-    class SaveGif : ISingleAction, ICommandMessage {
+    internal class SaveGif : ISingleAction, ICommandMessage {
+        private Album Album;
+        private int Delay = 75;
+        private string Path;
+        private Color Transparent = Color.Transparent;
         public int[] Indices { set; get; }
 
         public string Name => "SaveGif";
@@ -18,20 +17,13 @@ namespace ExtractorSharp.Command.ImageCommand {
 
         public bool IsChanged => false;
 
-        public bool IsFlush => false;
-
-        private Album Album;
-        private string Path;
-        private Color Transparent = Color.Transparent;
-        private int Delay = 75;
-
-        public void Action(Album Album, int[] indexes) {
+        public void Action(Album album, int[] indexes) {
             var w = 1;
             var h = 1;
             var x = 800;
             var y = 600;
             for (var i = 0; i < Indices.Length; i++) {
-                var entity = Album[Indices[i]];
+                var entity = album[Indices[i]];
                 if (entity.Width + entity.X > w) {
                     w = entity.Width + entity.X;
                 }
@@ -45,16 +37,18 @@ namespace ExtractorSharp.Command.ImageCommand {
                     y = entity.Y;
                 }
             }
+
             w -= x;
             h -= y;
             var array = new Bitmap[Indices.Length];
             for (var i = 0; i < Indices.Length; i++) {
-                var sprite = Album[Indices[i]];
+                var sprite = album[Indices[i]];
                 array[i] = new Bitmap(w, h);
                 using (var g = Graphics.FromImage(array[i])) {
                     g.DrawImage(sprite.Picture, sprite.X - x, sprite.Y - y);
                 }
             }
+
             Bitmaps.WriteGif(Path, array, Transparent, Delay);
         }
 
@@ -63,15 +57,15 @@ namespace ExtractorSharp.Command.ImageCommand {
             Indices = args[1] as int[];
             Path = args[2] as string;
             if (args.Length > 4) {
-                Transparent = (Color)args[3];
-                Delay = (int)args[4];
+                Transparent = (Color) args[3];
+                Delay = (int) args[4];
             }
+
             Action(Album, Indices);
         }
 
-        public void Redo() {
+        public void Redo() { }
 
-        }
         public void Undo() {
             //empty
         }

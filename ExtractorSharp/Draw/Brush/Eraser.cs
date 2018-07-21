@@ -1,9 +1,14 @@
-﻿using ExtractorSharp.Core.Lib;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
+using ExtractorSharp.Core.Draw;
+using ExtractorSharp.Core.Lib;
 
 namespace ExtractorSharp.Draw.Brush {
-    class Eraser : IBrush {
+    internal class Eraser : IBrush {
+        public Eraser() {
+            RefreshCursor();
+        }
+
         public string Name => "Eraser";
 
         public int Radius { set; get; } = 10;
@@ -11,8 +16,11 @@ namespace ExtractorSharp.Draw.Brush {
         public Cursor Cursor { set; get; }
         public Point Location { set; get; }
 
-        public Eraser() {
-            RefreshCursor();
+        public void Draw(IPaint paint, Point point, decimal scale) {
+            point = point.Minus(paint.Location).Divide(scale);
+            if (paint.Tag != null) {
+                Program.Connector.Do("eraser", paint.Tag, point, Program.Drawer.Color, Radius);
+            }
         }
 
         public void RefreshCursor() {
@@ -21,13 +29,6 @@ namespace ExtractorSharp.Draw.Brush {
                 g.DrawEllipse(new Pen(Color.Black, 2), new Rectangle(0, 0, Radius * 2, Radius * 2));
             }
             Cursor = new Cursor(image.GetHicon());
-        }
-
-        public void Draw(IPaint paint, Point point, decimal scale) {
-            point = point.Minus(paint.Location).Divide(scale);
-            if (paint.Tag != null) {
-                Program.Connector.Do("eraser", paint.Tag, point, Program.Drawer.Color, Radius);
-            }
         }
     }
 }

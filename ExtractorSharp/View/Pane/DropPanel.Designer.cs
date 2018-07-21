@@ -1,7 +1,6 @@
-﻿using ExtractorSharp.View.Pane;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
-namespace ExtractorSharp.View {
+namespace ExtractorSharp.View.Pane {
     partial class DropPanel {
         /// <summary> 
         /// 必需的设计器变量。
@@ -30,18 +29,14 @@ namespace ExtractorSharp.View {
             // 
             // HistoryPanel
             //
-            historyPanel = new HistoryPage();
-            actionPanel = new ActionPage(Connector);
             
             this.Name = "DropPanel";
-            this.Size = new System.Drawing.Size(200, 300);
+            this.Size = new System.Drawing.Size(300, 300);
             this.ResumeLayout(false);
             this.Visible = false;
-            this.Location = new System.Drawing.Point(830,80);
+            this.Location = new System.Drawing.Point(770,80);
 
         }
-
-        private TabPage historyPanel, actionPanel;
 
         #endregion
 

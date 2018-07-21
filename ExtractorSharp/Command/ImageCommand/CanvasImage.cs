@@ -1,60 +1,67 @@
-﻿using ExtractorSharp.Core;
-using ExtractorSharp.Data;
-using System.Drawing;
+﻿using System.Drawing;
+using ExtractorSharp.Core.Command;
+using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.Command.ImageCommand {
+    /// <inheritdoc cref="" />
     /// <summary>
-    /// 画布化
-    /// 可撤销
-    /// 可宏命令
+    ///     画布化
+    ///     可撤销
+    ///     可宏命令
     /// </summary>
-    class CanvasImage : ISingleAction,ICommandMessage{
-        private Album Album;
+    internal class CanvasImage : ISingleAction, ICommandMessage {
+        private Album _album;
 
-        private Size Size;
+        private Bitmap[] _images;
 
-        private Bitmap[] Images;
+        private Point[] _locations;
 
-        private Point[] Locations;
+        private Size _size;
 
         public int[] Indices { set; get; }
 
         public void Do(params object[] args) {
-            Album = args[0] as Album;
-            Size = (Size)args[1];
+            _album = args[0] as Album;
+            _size = (Size) args[1];
             Indices = args[2] as int[];
-            Images = new Bitmap[0];
-            Locations = new Point[0];
-            Images = new Bitmap[Indices.Length];
-            Locations = new Point[Indices.Length];
+            _images = new Bitmap[0];
+            _locations = new Point[0];
+            if (Indices == null) {
+                return;
+            }
+            _images = new Bitmap[Indices.Length];
+            _locations = new Point[Indices.Length];
             for (var i = 0; i < Indices.Length; i++) {
-                if (Indices[i] > Album.List.Count - 1 || Indices[i] < 0)
+                if (_album == null || Indices[i] > _album.List.Count - 1 || Indices[i] < 0) {
                     continue;
-                var entity = Album.List[Indices[i]];
-                Images[i] = entity.Picture;
-                Locations[i] = entity.Location;
-                entity.CanvasImage(Size);
+                }
+                var entity = _album.List[Indices[i]];
+                _images[i] = entity.Picture;
+                _locations[i] = entity.Location;
+                entity.CanvasImage(_size);
             }
         }
 
-        public void Redo() => Do(Album, Size, Indices);
+        public void Redo() {
+            Do(_album, _size, Indices);
+        }
 
 
         public void Undo() {
-            for (var i = 0; i < Indices.Length && i < Images.Length; i++) {
-                var entity = Album.List[Indices[i]];
-                entity.ReplaceImage(entity.Type, false, Images[i]);
-                entity.Location = Locations[i];
+            for (var i = 0; i < Indices.Length && i < _images.Length; i++) {
+                var entity = _album.List[Indices[i]];
+                entity.ReplaceImage(entity.Type, false, _images[i]);
+                entity.Location = _locations[i];
             }
         }
 
-        public void Action(Album Album, int[] indexes) {
-            foreach (var i in indexes)
-                if (i < Album.List.Count && i > -1)
-                    Album.List[i].CanvasImage(Size);
-        }
-
-        public bool IsFlush => false;
+        public void Action(Album album, int[] indexes) {
+            foreach (var i in indexes) {
+                if (i < album.List.Count && i > -1) {
+                    album.List[i].CanvasImage(_size);
+                }
+            }
+        }       
 
         public bool CanUndo => true;
 

@@ -1,6 +1,5 @@
-﻿using System.Resources;
-using System.Reflection;
-using System.Runtime.CompilerServices;
+﻿using System.Reflection;
+using System.Resources;
 using System.Runtime.InteropServices;
 
 // 有关程序集的一般信息由以下
@@ -33,7 +32,6 @@ using System.Runtime.InteropServices;
 //可以指定所有这些值，也可以使用“生成号”和“修订号”的默认值，
 // 方法是按如下所示使用“*”: :
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.7.1.5")]
-[assembly: AssemblyFileVersion("1.7.1.5")]
+[assembly: AssemblyVersion("1.7.2.0")]
+[assembly: AssemblyFileVersion("1.7.2.0")]
 [assembly: NeutralResourcesLanguage("zh-CN")]
-

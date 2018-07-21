@@ -1,7 +1,6 @@
 ﻿using ExtractorSharp.Component;
-using System.Drawing;
 
-namespace ExtractorSharp.View {
+namespace ExtractorSharp.View.Dialog {
     partial class ReplaceImageDialog {
         /// <summary>
         /// Required designer variable.

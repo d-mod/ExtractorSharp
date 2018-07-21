@@ -1,4 +1,4 @@
-﻿namespace ExtractorSharp.View {
+﻿namespace ExtractorSharp.View.Pane {
     partial class AudioPlayer {
         /// <summary> 
         /// 必需的设计器变量。

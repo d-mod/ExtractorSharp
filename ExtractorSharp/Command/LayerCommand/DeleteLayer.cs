@@ -1,50 +1,48 @@
-﻿using ExtractorSharp.Core;
-using ExtractorSharp.Draw;
+﻿using System.Collections.Generic;
+using ExtractorSharp.Core;
+using ExtractorSharp.Core.Command;
+using ExtractorSharp.Core.Draw;
+using ExtractorSharp.Draw.Paint;
 using ExtractorSharp.EventArguments;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExtractorSharp.Command.LayerCommand {
-    class DeleteLayer : ICommand, ICommandMessage {
+    internal class DeleteLayer : ICommand, ICommandMessage {
+        private ILayer[] Array { set; get; }
+        private int[] Indices { set; get; }
+        private Drawer Drawer => Program.Drawer;
+        private List<IPaint> List => Drawer.LayerList;
         public string Name => "DeleteLayer";
 
         public bool CanUndo => true;
 
         public bool IsChanged => false;
 
-        public bool IsFlush => true;
-
-        private IPaint[] Array { set; get; }
-        private int[] Indices { set; get; }
-        private Drawer Drawer => Program.Drawer;
-        private List<IPaint> List => Drawer.LayerList;
-
         public void Do(params object[] args) {
             Indices = args[0] as int[];
-            Array = new IPaint[Indices.Length];
+            Array = new ILayer[Indices.Length];
             for (var i = 0; i < Indices.Length; i++) {
                 if (Indices[i] < 2 || Indices[i] > List.Count - 1) {
                     continue;
                 }
-                var layer = List[Indices[i]];
-                if (!(layer is Layer)) {
-                    Indices[i] = -1;
+                var paint = List[Indices[i]];
+                if (paint is ILayer layer) {
+                    Array[i] = layer;
+                    List[Indices[i]] = null;
                     continue;
                 }
-                Array[i] = layer;
-                List[Indices[i]] = null;
+                Indices[i] = -1;
             }
+
             Indices = System.Array.FindAll(Indices, e => e > 0);
             Array = System.Array.FindAll(Array, e => e != null);
             List.RemoveAll(e => e == null);
             Drawer.OnLayerChanged(new LayerEventArgs());
         }
+
         public void Redo() {
             Do(Indices);
         }
+
         public void Undo() {
             for (var i = 0; i < Indices.Length; i++) {
                 var index = Indices[i];

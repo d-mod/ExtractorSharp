@@ -1,51 +1,48 @@
-﻿using ExtractorSharp.Core.Lib;
-using ExtractorSharp.Data;
-using System.Drawing;
+﻿using System.Drawing;
+using ExtractorSharp.Core.Command;
+using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.Command.ImageCommand {
-    class ChangeSize : ICommand {
+    internal class ChangeSize : ICommand {
+        private Album _album;
+
+        private Bitmap[] _array;
+
+        private int[] _indexes;
+
+        private decimal _scale;
         public bool CanUndo => true;
 
         public bool IsChanged => true;
-
-        public bool IsFlush => false;
-
+       
         public string Name => "ChangeImageSize";
 
-        private Album Album;
-
-        private int[] Indexes;
-
-        private decimal Scale;
-
-        private Bitmap[] Array;
-
         public void Do(params object[] args) {
-            Album = args[0] as Album;
-            Indexes = args[1] as int[];
-            Scale = (decimal)args[2];
-            Array = new Bitmap[Indexes.Length];
-            for (var i = 0; i < Array.Length; i++) {
-                var entity = Album[Indexes[i]];
+            _album = args[0] as Album;
+            _indexes = args[1] as int[];
+            _scale = (decimal) args[2];
+            _array = new Bitmap[_indexes.Length];
+            for (var i = 0; i < _array.Length; i++) {
+                var entity = _album[_indexes[i]];
                 var image = entity.Picture;
                 var point = entity.Location;
-                Array[i] = image;
-                entity.Picture = image.Star(Scale);
-                entity.Location = entity.Location.Divide(Scale);
+                _array[i] = image;
+                entity.Picture = image.Star(_scale);
+                entity.Location = entity.Location.Divide(_scale);
             }
         }
 
         public void Redo() {
-            Do(Album,Indexes,Scale);
+            Do(_album, _indexes, _scale);
         }
 
         public void Undo() {
-            for (var i = 0; i < Array.Length; i++) {
-                var entity = Album[Indexes[i]];
-                entity.Picture = Array[i];
-                entity.Location = entity.Location.Star(Scale);
+            for (var i = 0; i < _array.Length; i++) {
+                var entity = _album[_indexes[i]];
+                entity.Picture = _array[i];
+                entity.Location = entity.Location.Star(_scale);
             }
         }
-
     }
 }

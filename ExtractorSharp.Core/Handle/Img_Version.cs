@@ -1,8 +1,8 @@
-﻿namespace ExtractorSharp.Handle {
+﻿namespace ExtractorSharp.Core.Handle {
     /// <summary>
-    /// img版本
+    ///     img版本
     /// </summary>
-    public enum Img_Version {
+    public enum ImgVersion {
         Other = 0x00,
         Ver1 = 0x01,
         Ver2 = 0x02,

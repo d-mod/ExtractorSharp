@@ -1,12 +1,8 @@
-﻿using ExtractorSharp.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.EventArguments {
-    class FileEventArgs :EventArgs{
+    internal class FileEventArgs : EventArgs {
         public Sprite Entity { set; get; }
         public Album Album { set; get; }
     }

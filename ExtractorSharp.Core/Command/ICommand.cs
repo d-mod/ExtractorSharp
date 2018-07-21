@@ -1,40 +1,35 @@
-﻿
-
-namespace ExtractorSharp.Command {
+﻿namespace ExtractorSharp.Core.Command {
     /// <summary>
-    /// 命令
+    ///     命令
     /// </summary>
     public interface ICommand {
         string Name { get; }
-        /// <summary>
-        /// 执行
-        /// </summary>
-        void Do(params object[] args);  
-        /// <summary>
-        /// 撤销
-        /// </summary>        
-        void Undo();
-        /// <summary>
-        /// 重做
-        /// </summary>
-        void Redo();
 
         /// <summary>
-        /// 可否撤销
+        ///     可否撤销
         /// </summary>
         /// <returns></returns>
         bool CanUndo { get; }
+
         /// <summary>
-        /// 是否对文件有实质影响
+        ///     是否对文件有实质影响
         /// </summary>
         /// <returns></returns>
         bool IsChanged { get; }
 
         /// <summary>
-        /// 是否需要刷新文件列表
+        ///     执行
         /// </summary>
-        bool IsFlush { get; }
-        
+        void Do(params object[] args);
+
+        /// <summary>
+        ///     撤销
+        /// </summary>
+        void Undo();
+
+        /// <summary>
+        ///     重做
+        /// </summary>
+        void Redo();
     }
-    
 }

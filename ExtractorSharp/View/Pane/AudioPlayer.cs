@@ -1,14 +1,15 @@
-﻿using ExtractorSharp.Core.Lib;
-using ExtractorSharp.Data;
-using ExtractorSharp.Handle;
-using System;
+﻿using System;
 using System.Windows.Forms;
+using ExtractorSharp.Core.Handle;
+using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Core.Model;
 
-namespace ExtractorSharp.View {
-    partial class AudioPlayer : UserControl {
+namespace ExtractorSharp.View.Pane {
+    internal partial class AudioPlayer : UserControl {
+        private readonly Language Language = Language.Default;
         private int handle;
         private bool isRun;
-        private Language Language = Language.Default;
+
         public AudioPlayer() {
             InitializeComponent();
             playButton.Click += Play;
@@ -16,7 +17,7 @@ namespace ExtractorSharp.View {
         }
 
         /// <summary>
-        /// 显示窗口时播放
+        ///     显示窗口时播放
         /// </summary>
         public void Play(Album ogg) {
             Visible = true;
@@ -24,7 +25,8 @@ namespace ExtractorSharp.View {
                 Bass.Stop(handle);
                 Bass.Close(handle);
             }
-            if (ogg != null && ogg.Version == Img_Version.Other) {
+
+            if (ogg != null && ogg.Version == ImgVersion.Other) {
                 ogg.Adjust();
                 groupBox1.Text = ogg.Name;
                 handle = Bass.Play(ogg.Data);
@@ -34,30 +36,28 @@ namespace ExtractorSharp.View {
         }
 
         /// <summary>
-        /// 继续播放
+        ///     继续播放
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void Play(object sender,EventArgs e) {
+        public void Play(object sender, EventArgs e) {
             Bass.Play(handle, isRun);
             isRun = true;
         }
 
 
-
-
         /// <summary>
-        /// 暂停
+        ///     暂停
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void Pause(object sender,EventArgs e) {
+        public void Pause(object sender, EventArgs e) {
             Bass.Pause(handle);
             isRun = false;
         }
 
         /// <summary>
-        /// 释放资源
+        ///     释放资源
         /// </summary>
         public void Close() {
             Bass.Stop(handle);
@@ -65,6 +65,5 @@ namespace ExtractorSharp.View {
             Bass.Stop();
             Bass.Close();
         }
-        
     }
 }

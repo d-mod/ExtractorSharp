@@ -1,29 +1,25 @@
-﻿using ExtractorSharp.Core;
-using ExtractorSharp.Data;
-using ExtractorSharp.Draw;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ExtractorSharp.Core;
+using ExtractorSharp.Core.Command;
+using ExtractorSharp.Core.Draw;
+using ExtractorSharp.Core.Model;
+using ExtractorSharp.Draw.Paint;
+using ExtractorSharp.EventArguments;
 
 namespace ExtractorSharp.Command.LayerCommand {
-    class AddLayer : ICommand {
-        public string Name => throw new NotImplementedException();
+    internal class AddLayer : ICommand {
+        private Sprite[] Array { set; get; }
+
+        private Layer[] Layers { set; get; }
+
+        private Drawer Drawer => Program.Drawer;
+
+        public string Name => "AddLayer";
 
         public bool CanUndo => true;
 
         public bool IsChanged => false;
-
-        public bool IsFlush => true;
-
-        private Sprite[] Array { set; get; }
-
-        private Layer[] Layers { set; get; }
-        
-        private Drawer Drawer => Program.Drawer;
-
-        private List<IPaint> List => Drawer.LayerList;
 
         public void Do(params object[] args) {
             Array = args as Sprite[];
@@ -37,15 +33,18 @@ namespace ExtractorSharp.Command.LayerCommand {
             }
             Drawer.AddLayer(Layers);
         }
+
         public void Redo() {
             Do(Array);
         }
+
         public void Undo() {
+            var list = Drawer.LayerList;
             foreach (var layer in Layers) {
-                List.Remove(layer);
+                list.Remove(layer);
             }
             Drawer.CustomLayerCount -= Layers.Length;
-            Drawer.OnLayerChanged(new EventArguments.LayerEventArgs());
+            Drawer.OnLayerChanged(new LayerEventArgs());
         }
     }
 }

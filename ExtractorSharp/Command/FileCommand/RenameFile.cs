@@ -1,41 +1,48 @@
-﻿using ExtractorSharp.Core;
-using ExtractorSharp.Data;
+﻿using ExtractorSharp.Core.Command;
+using ExtractorSharp.Core.Model;
 
-namespace ExtractorSharp.Command.ImgCommand {
-    class RenameFile : ICommand,ICommandMessage{
-        Album Album;
+namespace ExtractorSharp.Command.FileCommand {
+    internal class RenameFile : ICommand, ICommandMessage {
+        private Album Album;
+
         /// <summary>
-        /// 原文件名
+        ///     新文件名
         /// </summary>
-        string oldPath;
+        private string _newPath;
+
         /// <summary>
-        /// 新文件名
+        ///     原文件名
         /// </summary>
-        string newPath;
+        private string _oldPath;
 
         public void Do(params object[] args) {
             Album = args[0] as Album;
-            oldPath = Album.Path;
-            Album.Path = newPath = args[1] as string;//修改文件名
+            if (Album == null) {
+                return;
+            }
+            _oldPath = Album.Path;
+            Album.Path = _newPath = args[1] as string; //修改文件名
         }
 
-        public void Undo() => Album.Path = oldPath;//还原文件名
-        
-        public void Redo() => Do(Album, newPath);
+        public void Undo() {
+            Album.Path = _oldPath;
+        }
 
-        public void Action(params Album[] Array) {
-            foreach (var item in Array) 
-                Album.Path = newPath;
+        public void Redo() {
+            Do(Album, _newPath);
         }
 
         public bool CanUndo => true;
-        
+
 
         public bool IsChanged => true;
 
-        public bool IsFlush => false;
-
         public string Name => "Rename";
 
+        public void Action(params Album[] array) {
+            foreach (var item in array) {
+                item.Path = _newPath;
+            }
+        }
     }
 }

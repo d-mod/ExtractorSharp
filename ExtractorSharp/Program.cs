@@ -1,24 +1,4 @@
-﻿using ExtractorSharp.Command;
-using ExtractorSharp.Command.DrawCommand;
-using ExtractorSharp.Command.FileCommand;
-using ExtractorSharp.Command.ImageCommand;
-using ExtractorSharp.Command.ImgCommand;
-using ExtractorSharp.Command.LayerCommand;
-using ExtractorSharp.Command.MergeCommand;
-using ExtractorSharp.Command.PaletteCommand;
-using ExtractorSharp.Component;
-using ExtractorSharp.Config;
-using ExtractorSharp.Core;
-using ExtractorSharp.Core.Lib;
-using ExtractorSharp.Data;
-using ExtractorSharp.Exceptions;
-using ExtractorSharp.Handle;
-using ExtractorSharp.Json;
-using ExtractorSharp.Properties;
-using ExtractorSharp.View;
-using ExtractorSharp.View.Dialog;
-using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
@@ -29,12 +9,36 @@ using System.Security.AccessControl;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using ExtractorSharp.Command.DrawCommand;
+using ExtractorSharp.Command.FileCommand;
+using ExtractorSharp.Command.ImageCommand;
+using ExtractorSharp.Command.LayerCommand;
+using ExtractorSharp.Command.MergeCommand;
+using ExtractorSharp.Command.PaletteCommand;
+using ExtractorSharp.Component;
+using ExtractorSharp.Component.EventArguments;
+using ExtractorSharp.Config;
+using ExtractorSharp.Core;
+using ExtractorSharp.Core.Composition;
+using ExtractorSharp.Core.Config;
+using ExtractorSharp.Core.Handle;
+using ExtractorSharp.Core.Model;
+using ExtractorSharp.Exceptions;
+using ExtractorSharp.Execute;
+using ExtractorSharp.Json;
+using ExtractorSharp.Model;
+using ExtractorSharp.Properties;
+using ExtractorSharp.View.Dialog;
+using Microsoft.Win32;
 
 namespace ExtractorSharp {
     /// <summary>
-    /// 程序全局控制
+    ///     程序全局控制
     /// </summary>
     public static class Program {
+        internal static readonly string Version = Assembly.GetAssembly(typeof(Program)).GetName().Version.ToString();
+
+        private static string[] Arguments;
 
         public static IConfig Config { get; private set; }
 
@@ -48,41 +52,37 @@ namespace ExtractorSharp {
         [Export(typeof(IConnector))]
         internal static IConnector Connector { set; get; }
 
-        internal static readonly string Version = Assembly.GetAssembly(typeof(Program)).GetName().Version.ToString();
-
-        private static string[] Arguments;
-
         /// <summary>
-        /// 应用程序的主入口点。
+        ///     应用程序的主入口点。
         /// </summary>
         [STAThread]
-        static void Main(string[] args) {
+        private static void Main(string[] args) {
             Arguments = args;
             LoadConfig();
             LoadLanguage();
             RegistyHandler();
-            if (Config["AutoUpdate"].Boolean) {
-                CheckUpdate(false);
-            }
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
             Application.ThreadException += ShowDebug;
             AppDomain.CurrentDomain.UnhandledException += CatchException;
             Application.SetCompatibleTextRenderingDefault(true);
             Application.EnableVisualStyles();
+            if (Config["AutoUpdate"].Boolean) {
+                CheckUpdate(false);
+            }
             LoadRegistry();
+            Merger = new Merger();
             Controller = new Controller();
             RegistyCommand();
             Viewer = new Viewer();
             Drawer = new Drawer();
-            Drawer.Select(Config["Brush"].Value);
-            Drawer.Color = Config["BrushColor"].Color;
             Form = new MainForm();
             Form.Shown += OnShown;
+            Drawer.Select(Config["Brush"].Value);
+            Drawer.Color = Config["BrushColor"].Color;
             Connector = Form.Connector;
             Connector.AddFile(true, args);
             RegistyDialog();
             Viewer.DialogShown += ViewerDialogShown;
-            Merger = new Merger();
             Hoster = new Hoster();
             Application.Run(Form);
         }
@@ -99,12 +99,13 @@ namespace ExtractorSharp {
             Controller.Registry("newImg", typeof(NewFile));
             Controller.Registry("hideImg", typeof(HideFile));
             Controller.Registry("sortImg", typeof(SortFile));
-            Controller.Registry("saveImg", typeof(SaveFile));      
+            Controller.Registry("saveImg", typeof(SaveFile));
 
             Controller.Registry("cutImg", typeof(CutFile));
             Controller.Registry("pasteImg", typeof(PasteFile));
 
             Controller.Registry("repairFile", typeof(RepairFile));
+            Controller.Registry("recoverFile", typeof(RecoverFile));
             Controller.Registry("splitFile", typeof(SplitFile));
             Controller.Registry("mixFile", typeof(MixFile));
             Controller.Registry("moveFile", typeof(MoveFile));
@@ -136,6 +137,7 @@ namespace ExtractorSharp {
             Controller.Registry("dyeImage", typeof(DyeImage));
 
             Controller.Registry("addLayer", typeof(AddLayer));
+            Controller.Registry("addCompareLayer", typeof(AddCompareLayer));
             Controller.Registry("moveLayer", typeof(MoveLayer));
             Controller.Registry("deleteLayer", typeof(DeleteLayer));
             Controller.Registry("renameLayer", typeof(RenameLayer));
@@ -144,6 +146,9 @@ namespace ExtractorSharp {
             Controller.Registry("pencil", typeof(PencilDraw));
             Controller.Registry("eraser", typeof(EraserDraw));
             Controller.Registry("moveTools", typeof(MoveToolsDraw));
+            Controller.Registry("Sort", new SortExecute {
+                Sorter = Merger.Sorter
+            });
         }
 
         private static void ShowDebug(object sender, ThreadExceptionEventArgs e) {
@@ -155,15 +160,13 @@ namespace ExtractorSharp {
                 var data = Encoding.Default.GetBytes(log);
                 log = Convert.ToBase64String(data);
                 var dir = $"{Config["RootPath"]}/log";
-                if (!Directory.Exists(dir)) {
-                    Directory.CreateDirectory(dir);
-                }
+                if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
                 var current = $"{dir}/{DateTime.Now.ToString("yyyyMMddHHmmss")}.log";
                 File.WriteAllBytes(current, data);
                 switch (e.Exception) {
                     case IOException _:
                         Connector.SendError("FileHandleError");
-                        break;;
+                        break;
                     case ProgramException _ when Connector != null:
                         Connector.SendError(e.Exception.Message);
                         break;
@@ -171,26 +174,22 @@ namespace ExtractorSharp {
                         if (Config["Profile"].Value.Equals("release")) {
                             Viewer.Show("debug", "debug", log);
                         }
-
                         break;
                 }
-            } catch (Exception ex) {
-
-            }
+            } catch (Exception ex) { }
         }
-
 
 
         private static void OnShown(object sender, EventArgs e) {
             if (!Config["Version"].Value.Equals(Version)) {
                 Config["Version"] = new ConfigValue(Version);
                 Config.Save();
-                Viewer.Show("version", true);
+                Process.Start($"{Config["WebHost"]}/es/feature/{Config["Version"]}.html");
             }
             if (Arguments.Length == 1) {
                 var command = Arguments[0];
                 if (!command.StartsWith("esharp://")) {
-                    Connector.AddFile(true, new string[] { command });
+                    Connector.AddFile(true, command);
                     return;
                 }
                 command = command.Replace("esharp://", "");
@@ -212,11 +211,11 @@ namespace ExtractorSharp {
         }
 
         /// <summary>
-        /// 注册窗口
+        ///     注册窗口
         /// </summary>
         private static void RegistyDialog() {
             Viewer.Regisity("replace", typeof(ReplaceImageDialog));
-            Viewer.Regisity("Merge", typeof(MergeDialog));
+            Viewer.Regisity("merge", typeof(MergeDialog));
             Viewer.Regisity("newImg", typeof(NewImgDialog));
             Viewer.Regisity("convert", typeof(ConvertDialog));
             Viewer.Regisity("changePosition", typeof(ChangePositonDialog));
@@ -225,40 +224,39 @@ namespace ExtractorSharp {
             Viewer.Regisity("newImage", typeof(NewImageDialog));
             Viewer.Regisity("setting", typeof(SettingDialog));
             Viewer.Regisity("saveImage", typeof(SaveImageDialog));
-            Viewer.Regisity("version", typeof(VersionDialog));
             Viewer.Regisity("changeSize", typeof(ChangeSizeDialog));
-         }
+        }
 
 
         public static void RegistyHandler() {
-            Handler.Regisity(Img_Version.Other, typeof(OtherHandler));
-            Handler.Regisity(Img_Version.Ver1, typeof(FirstHandler));
-            Handler.Regisity(Img_Version.Ver2, typeof(SecondHandler));
-            Handler.Regisity(Img_Version.Ver4, typeof(FourthHandler));
-            Handler.Regisity(Img_Version.Ver5, typeof(FifthHandler));
-            Handler.Regisity(Img_Version.Ver6, typeof(SixthHandler));
+            Handler.Regisity(ImgVersion.Other, typeof(OtherHandler));
+            Handler.Regisity(ImgVersion.Ver1, typeof(FirstHandler));
+            Handler.Regisity(ImgVersion.Ver2, typeof(SecondHandler));
+            Handler.Regisity(ImgVersion.Ver4, typeof(FourthHandler));
+            Handler.Regisity(ImgVersion.Ver5, typeof(FifthHandler));
+            Handler.Regisity(ImgVersion.Ver6, typeof(SixthHandler));
         }
 
         private static void ViewerDialogShown(object sender, DialogEventArgs e) {
-            e.Dialog = e.DialogType.CreateInstance(Connector) as ESDialog;
+            e.Dialog = Tools.CreateInstance(e.DialogType, Connector) as ESDialog;
             e.Dialog.Owner = Form;
         }
 
 
         /// <summary>
-        /// 加载语言
+        ///     加载语言
         /// </summary>
         private static void LoadLanguage() {
             var chinese = Language.CreateFromJson(Resources.Chinese);
             Language.List = new List<Language>();
             Language.List.Add(chinese);
-            var path =  $"{Config["RootPath"]}/lan/";
+            var path = $"{Config["RootPath"]}/lan/";
             Language.CreateFromDir(path);
             if (Config["LCID"].Integer == -1) {
                 Config["LCID"] = new ConfigValue(Application.CurrentCulture.LCID);
                 Config.Save();
             }
-            Language.Local_LCID = Config["LCID"].Integer;
+            Language.LocalLcid = Config["LCID"].Integer;
         }
 
         private static void LoadConfig() {
@@ -269,12 +267,14 @@ namespace ExtractorSharp {
         }
 
         /// <summary>
-        /// 加载注册表
+        ///     加载注册表
         /// </summary>
         private static void LoadRegistry() {
             try {
-                if (Config["GamePath"].Value.Equals(string.Empty) || !Directory.Exists(Config["GamePath"].Value)) {
-                    var path = Registry.CurrentUser.OpenSubKey("software\\tencent\\dnf", RegistryKeyPermissionCheck.Default, RegistryRights.ReadKey).GetValue("InstallPath").ToString();
+                if (string.Empty.Equals(Config["GamePath"].Value)|| !Directory.Exists(Config["GamePath"].Value)) {
+                    var path = Registry.CurrentUser
+                        .OpenSubKey("software\\tencent\\dnf", RegistryKeyPermissionCheck.Default,
+                            RegistryRights.ReadKey).GetValue("InstallPath").ToString();
                     Config["GamePath"] = new ConfigValue(path);
                 }
                 Config["ResourcePath"] = new ConfigValue($"{Config["GamePath"]}/ImagePacks2");
@@ -285,12 +285,8 @@ namespace ExtractorSharp {
         }
 
 
-
-
-
-
         /// <summary>
-        /// 判断程序是否需要更新
+        ///     判断程序是否需要更新
         /// </summary>
         /// <returns></returns>
         public static void CheckUpdate(bool Tips) {
@@ -299,22 +295,24 @@ namespace ExtractorSharp {
             if (obj == null) {
                 return;
             }
-            var info = obj.GetValue(typeof(VersionInfo)) as VersionInfo;
-            if (info != null && !info.Name.Equals(Version)) {//若当前版本低于最新版本时，触发更新
-                if (MessageBox.Show(Language.Default["NeedUpdateTips"], Language.Default["Tips"], MessageBoxButtons.OKCancel) != DialogResult.OK) {
-                    return;                 //提示更新
+            var info = obj["tag"].GetValue(typeof(VersionInfo)) as VersionInfo;
+            if (info != null && !info.Name.Equals(Version)) {
+                //若当前版本低于最新版本时，触发更新
+                if (MessageBox.Show(Language.Default["NeedUpdateTips"], Language.Default["Tips"],
+                        MessageBoxButtons.OKCancel) != DialogResult.OK) {
+                    return; //提示更新
                 }
-                StartUpdate();//启动更新
+                StartUpdate(); //启动更新
             } else if (Tips) {
-                MessageBox.Show(Language.Default["NeedNotUpdateTips"]);//提示不需要更新
+                MessageBox.Show(Language.Default["NeedNotUpdateTips"]); //提示不需要更新
             }
+
             Config.Save();
         }
 
 
-
         /// <summary>
-        /// 启动更新
+        ///     启动更新
         /// </summary>
         /// <param name="updateUrl"></param>
         /// <param name="address"></param>
@@ -332,7 +330,7 @@ namespace ExtractorSharp {
         }
 
         /// <summary>
-        /// 选择游戏目录
+        ///     选择游戏目录
         /// </summary>
         internal static bool SelectPath() {
             var dialog = new FolderBrowserDialog();
@@ -343,12 +341,12 @@ namespace ExtractorSharp {
                     Config["ResourcePath"] = new ConfigValue($"{dialog.SelectedPath}/ImagePacks2");
                     Config.Save();
                     return true;
-                } else {
-                    Connector.SendError("SelectPathIsInvalid");
                 }
+
+                Connector.SendError("SelectPathIsInvalid");
             }
+
             return false;
         }
-
     }
 }

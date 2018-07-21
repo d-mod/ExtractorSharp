@@ -1,29 +1,22 @@
 ﻿using System.Windows.Forms;
-using ExtractorSharp.Core;
-using ExtractorSharp.View.Pane;
+using ExtractorSharp.Core.Composition;
 
-namespace ExtractorSharp.View {
+namespace ExtractorSharp.View.Pane {
     /// <summary>
-    /// 历史记录/动作界面
+    ///     历史记录/动作界面
     /// </summary>
     public partial class DropPanel : TabControl {
-        private IConnector Connector { get; }
         public DropPanel(IConnector Connector) {
-            this.Connector = Connector;
             InitializeComponent();
-            TabPages.Add(historyPanel);
-            TabPages.Add(actionPanel);
-            TabPages.Add(new PalattePanel());
+            TabPages.Add(new HistoryPage());
+            TabPages.Add(new ActionPage(Connector));
+            TabPages.Add(new PalettePage());
+            //TabPages.Add(new TexturePage());
         }
 
         public override void Refresh() {
             SelectedTab.Refresh();
             base.Refresh();
         }
-
-
-
-
-
     }
 }

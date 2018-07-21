@@ -1,24 +1,25 @@
 ﻿using System;
 using System.Windows.Forms;
 using ExtractorSharp.Component;
-using ExtractorSharp.Handle;
-using ExtractorSharp.Core;
-using ExtractorSharp.Data;
+using ExtractorSharp.Core.Composition;
+using ExtractorSharp.Core.Handle;
+using ExtractorSharp.Core.Model;
 
-namespace ExtractorSharp.View {
+namespace ExtractorSharp.View.Dialog {
     public partial class ConvertDialog : ESDialog {
         private Album[] Array;
-        public ConvertDialog(IConnector Data) : base(Data) {
+
+        public ConvertDialog(IConnector Connector) : base(Connector) {
             InitializeComponent();
             var list = Handler.Versions;
-            object[] array = new object[list.Count];
-            for(var i = 0; i < list.Count; i++) {
+            var array = new object[list.Count];
+            for (var i = 0; i < list.Count; i++) {
                 array[i] = list[i];
             }
             combo.Items.AddRange(array);
             yesButton.Click += Convert;
         }
-        
+
         public override DialogResult Show(params object[] args) {
             if (args.Length > 0) {
                 Array = args as Album[];
@@ -29,7 +30,7 @@ namespace ExtractorSharp.View {
         }
 
         public void Convert(object sender, EventArgs e) {
-            var Version = (Img_Version)combo.SelectedItem;
+            var Version = (ImgVersion) combo.SelectedItem;
             var count = 0;
             foreach (var al in Array) {
                 count += al.List.Count;
@@ -43,6 +44,7 @@ namespace ExtractorSharp.View {
                         var image = entity.Picture;
                         progress.Value++;
                     }
+
                     al.ConvertTo(Version);
                 }
             }
@@ -50,6 +52,5 @@ namespace ExtractorSharp.View {
             progress.Visible = false;
             DialogResult = DialogResult.OK;
         }
-        
     }
 }

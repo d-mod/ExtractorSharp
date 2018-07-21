@@ -1,65 +1,60 @@
-﻿using ExtractorSharp.Core.Lib;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Net;
-using System.Text.RegularExpressions;
+using ExtractorSharp.Core.Lib;
 
-namespace ExtractorSharp.Config {
+namespace ExtractorSharp.Core.Config {
     /// <summary>
-    /// 设置的值
+    ///     设置的值
     /// </summary>
     public class ConfigValue {
-
         public ConfigValue(object obj) {
-            if (obj is Color c) {
-                obj = $"{c.R},{c.G},{c.B},{c.A}";
-            }
+            if (obj is Color c) obj = $"{c.R},{c.G},{c.B},{c.A}";
             Object = obj;
         }
+
         /// <summary>
-        /// 空值
+        ///     空值
         /// </summary>
         public static ConfigValue NullValue { get; } = new ConfigValue(null);
 
         /// <summary>
-        /// 值
+        ///     值
         /// </summary>
-        public string Value {
-            get {
-                return Object?.ToString();
-            }
-        }
-        public object Object {
-            get;
-        }
+        public string Value => Object?.ToString();
+
+        public object Object { get; }
+
         /// <summary>
-        /// int型
+        ///     int型
         /// </summary>
         public int Integer {
             get {
                 if (Object is int i) {
                     return i;
                 }
-                int.TryParse(Value, out int rs);
+                int.TryParse(Value, out var rs);
                 return rs;
             }
         }
+
         /// <summary>
-        /// double型
+        ///     double型
         /// </summary>
         public decimal Decimal {
             get {
                 if (Object is decimal d) {
                     return d;
                 }
-                decimal.TryParse(Value, out decimal rs);
+                decimal.TryParse(Value, out var rs);
                 return rs;
             }
         }
+
         /// <summary>
-        /// 布尔型
+        ///     布尔型
         /// </summary>
         public bool Boolean {
             get {
@@ -67,29 +62,31 @@ namespace ExtractorSharp.Config {
                     return bl;
                 }
                 if (Value != null) {
-                    bool.TryParse(Value, out bool rs);
+                    bool.TryParse(Value, out var rs);
                     return rs;
                 }
                 return false;
             }
         }
+
         /// <summary>
-        /// 时间
+        ///     时间
         /// </summary>
         public DateTime DateTime {
             get {
                 if (Object is DateTime time) {
                     return time;
                 }
-                DateTime.TryParse(Value, out DateTime rs);
+                DateTime.TryParse(Value, out var rs);
                 return rs;
             }
         }
 
         public Color Color {
             get {
-                if (Object is Color color)
+                if (Object is Color color) {
                     return color;
+                }
                 if (Value != null && Value.Length > 0) {
                     if (Value.StartsWith("#")) {
                         var argb = int.Parse(Value.Substring(1), NumberStyles.AllowHexSpecifier);
@@ -97,16 +94,16 @@ namespace ExtractorSharp.Config {
                     }
                     var arr = Value.Split(",");
                     if (arr.Length >= 3) {
-                        int.TryParse(arr[0], out int r);
-                        int.TryParse(arr[1], out int g);
-                        int.TryParse(arr[2], out int b);
+                        int.TryParse(arr[0], out var r);
+                        int.TryParse(arr[1], out var g);
+                        int.TryParse(arr[2], out var b);
                         if (arr.Length > 3) {
-                            int.TryParse(arr[3], out int a);
+                            int.TryParse(arr[3], out var a);
                             return Color.FromArgb(a, r, g, b);
                         }
                         return Color.FromArgb(r, g, b);
-                    } else
-                        return Color.FromName(Value);
+                    }
+                    return Color.FromName(Value);
                 }
                 return Color.Empty;
             }
@@ -148,15 +145,17 @@ namespace ExtractorSharp.Config {
                 if (Object is Image image) {
                     return image;
                 }
-                if (Value != null && Value.Length > 0) {
-                    if (File.Exists(Value))
-                        return Image.FromFile(Value);
-                    var request = WebRequest.CreateHttp(Value);
-                    using (var response = request.GetResponse())
-                    using (var os = response.GetResponseStream())
-                        return Image.FromStream(os);
+                if (string.IsNullOrEmpty(Value)) {
+                    return null;
                 }
-                return null;
+                if (File.Exists(Value)) {
+                    return Image.FromFile(Value);
+                }
+                var request = WebRequest.CreateHttp(Value);
+                using (var response = request.GetResponse())
+                using (var os = response.GetResponseStream()) {
+                    return Image.FromStream(os ?? throw new InvalidOperationException());
+                }
             }
         }
 
@@ -176,11 +175,16 @@ namespace ExtractorSharp.Config {
 
         public bool NotEmpty => !string.IsNullOrEmpty(Value);
 
-        public override string ToString() => Value;
+        public override string ToString() {
+            return Value;
+        }
 
-        public override bool Equals(object obj) => Value != null && Value.Equals(obj?.ToString());
+        public override bool Equals(object obj) {
+            return Value != null && Value.Equals(obj?.ToString());
+        }
 
-        public override int GetHashCode() => Value == null ? 0 : Value.GetHashCode();
-
+        public override int GetHashCode() {
+            return Value == null ? 0 : Value.GetHashCode();
+        }
     }
 }

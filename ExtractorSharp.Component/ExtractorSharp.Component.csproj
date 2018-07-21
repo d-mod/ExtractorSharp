@@ -130,11 +130,11 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
-    <None Include="Resources\end.ogg" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ExtractorSharp.Core\ExtractorSharp.Core.csproj">

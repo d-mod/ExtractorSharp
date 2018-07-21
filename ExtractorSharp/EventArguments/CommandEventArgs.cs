@@ -1,11 +1,7 @@
-﻿using ExtractorSharp.Command;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using ExtractorSharp.Core.Command;
 
-namespace ExtractorSharp {
+namespace ExtractorSharp.EventArguments {
     public class CommandEventArgs : EventArgs {
         public string Name { set; get; }
         public ICommand Command { set; get; }
@@ -13,6 +9,9 @@ namespace ExtractorSharp {
     }
 
     public enum CommandEventType {
-        Do, Undo, Redo,Clear
+        Do,
+        Undo,
+        Redo,
+        Clear
     }
 }

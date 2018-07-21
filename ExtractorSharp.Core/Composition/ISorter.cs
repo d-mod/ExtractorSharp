@@ -1,9 +1,5 @@
-﻿using ExtractorSharp.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.Core.Sorter {
     public interface ISorter {
@@ -11,5 +7,6 @@ namespace ExtractorSharp.Core.Sorter {
         Type Type { get; }
         object Data { set; get; }
         int Comparer(Album a1, Album a2);
+        int IndexOf(Album a1);
     }
 }

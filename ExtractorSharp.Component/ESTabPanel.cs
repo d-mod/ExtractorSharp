@@ -1,13 +1,14 @@
-﻿using ExtractorSharp.Data;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
+using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.Component {
     public partial class ESTabPanel : TabControl {
-        public Language Language { set; get; } = Language.Default;
         public ESTabPanel() {
             InitializeComponent();
         }
+
+        public Language Language { set; get; } = Language.Default;
 
         public void AddPage(string name, Control control) {
             var page = new TabPage(Language[name]);
@@ -25,6 +26,5 @@ namespace ExtractorSharp.Component {
             var text = TabPages[e.Index].Text;
             e.Graphics.DrawString(text, Font, brush, rect, format);
         }
-
     }
 }

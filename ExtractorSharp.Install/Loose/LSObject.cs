@@ -5,64 +5,15 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace ExtractorSharp.Json {
+namespace ExtractorSharp.Install.Loose {
     /// <summary>
-    /// Json对象
+    ///     Json对象
     /// </summary>
     [Serializable]
     public class LSObject : IEnumerable<LSObject>, ICloneable {
         private const BindingFlags FILED_FLAG = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-        public static string Separator { set; get; } = ",";
-        public static string Mark { set; get; } = "\"";
-        private List<LSObject> List { get; }
-        public LSObject this[string name] {
-            get {
-                return Find(name);
-            }
-            set {
-                var obj = this[name];
-                if (this[name] != null)
-                    List.Remove(obj);
-                value.Name = name;
-                List.Add(value);
-            }
-        }
-
-        public LSObject this[int i] => List[i];
-
-        /// <summary>
-        /// 下标
-        /// </summary>
-        public int Index { get; private set; } = -1;
-        /// <summary>
-        /// 返回元素总数
-        /// </summary>
-        public int Count => List.Count;
-        /// <summary>
-        /// 名字
-        /// </summary>
-        public string Name { set; get; }
-
-        /// <summary>
-        /// 值
-        /// </summary>
-        public object Value {
-            set => SetValue(value);
-            get => _value;
-        }
 
         private object _value;
-
-        public LSType ValueType { set; get; } = LSType.Object;
-
-        /// <summary>
-        /// 父元素
-        /// </summary>
-        public LSObject Parent { set; get; }
-        /// <summary>
-        /// 根元素
-        /// </summary>
-        public LSObject Root { set; get; }
 
         public LSObject() {
             List = new List<LSObject>();
@@ -73,7 +24,74 @@ namespace ExtractorSharp.Json {
         public LSObject(string Name, object Value, LSType Type) : this() {
             this.Name = Name;
             this.Value = Value;
-            this.ValueType = Type;
+            ValueType = Type;
+        }
+
+        public static string Separator { set; get; } = ",";
+        public static string Mark { set; get; } = "\"";
+        private List<LSObject> List { get; }
+
+        public LSObject this[string name] {
+            get => Find(name);
+            set {
+                var obj = this[name];
+                if (this[name] != null) {
+                    List.Remove(obj);
+                }
+                value.Name = name;
+                List.Add(value);
+            }
+        }
+
+        public LSObject this[int i] => List[i];
+
+        /// <summary>
+        ///     下标
+        /// </summary>
+        public int Index { get; private set; } = -1;
+
+        /// <summary>
+        ///     返回元素总数
+        /// </summary>
+        public int Count => List.Count;
+
+        /// <summary>
+        ///     名字
+        /// </summary>
+        public string Name { set; get; }
+
+        /// <summary>
+        ///     值
+        /// </summary>
+        public object Value {
+            set => SetValue(value);
+            get => _value;
+        }
+
+        public LSType ValueType { set; get; } = LSType.Object;
+
+        /// <summary>
+        ///     父元素
+        /// </summary>
+        public LSObject Parent { set; get; }
+
+        /// <summary>
+        ///     根元素
+        /// </summary>
+        public LSObject Root { set; get; }
+
+
+        public object Clone() {
+            var json = "{" + ToString() + "}";
+            return new LSBuilder().ReadJson(json);
+        }
+
+        public IEnumerator<LSObject> GetEnumerator() {
+            return List.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() {
+            return List.GetEnumerator();
         }
 
 
@@ -87,25 +105,27 @@ namespace ExtractorSharp.Json {
             return List.Exists(e => e.Name == name);
         }
 
-        public bool Contains(string name,object value) {
+        public bool Contains(string name, object value) {
             return List.Exists(e => e.Name == name && value.Equals(e.Value));
         }
 
         public LSObject Add(object obj) {
-            return Add(null,obj);
+            return Add(null, obj);
         }
 
-        public LSObject Add(string name,object obj) {
-            if (obj is LSObject e)
+        public LSObject Add(string name, object obj) {
+            if (obj is LSObject e) {
                 return Add(name, e);
+            }
             var eo = new LSObject();
             eo.Value = obj;
             return Add(name, eo);
         }
 
         public LSObject Add(string name, LSObject child) {
-            if (child == null) 
-                child = new LSObject();           
+            if (child == null) {
+                child = new LSObject();
+            }
             child.Name = name;
             return Add(child);
         }
@@ -131,18 +151,13 @@ namespace ExtractorSharp.Json {
             if (obj.ValueType == LSType.Object) {
                 obj.List.Clear();
                 obj.List.AddRange(List);
-            } else
+            } else {
                 obj.Value = Value;
-        }
-
-
-        public object Clone() {
-            var json = "{"+ToString()+"}";
-            return new LSBuilder().ReadJson(json);
+            }
         }
 
         /// <summary>
-        /// 根据路径查询
+        ///     根据路径查询
         /// </summary>
         /// <param name="path">元素全路径</param>
         public LSObject Find(string path) {
@@ -150,22 +165,26 @@ namespace ExtractorSharp.Json {
             var len = arr.Length;
             LSObject obj = null;
             if (arr.Length > 0) {
-                obj = FindByChild(arr);//寻找下级元素
-                if (obj == null)//寻找父元素的下级元素
+                obj = FindByChild(arr); //寻找下级元素
+                if (obj == null) //寻找父元素的下级元素
+                {
                     obj = FindByParent(arr);
+                }
             }
             return obj;
         }
 
 
         public LSObject FindByParent(params string[] paths) {
-            if (Parent != null)//寻找同级元素及其下级元素
+            if (Parent != null) //寻找同级元素及其下级元素
+            {
                 return Parent.FindByChild(paths);
+            }
             return null;
         }
 
         /// <summary>
-        /// 根据多个路径查询子元素
+        ///     根据多个路径查询子元素
         /// </summary>
         /// <param name="paths"></param>
         /// <returns></returns>
@@ -181,14 +200,15 @@ namespace ExtractorSharp.Json {
         }
 
         /// <summary>
-        /// 查询子元素
+        ///     查询子元素
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
         public LSObject FindByChild(string name) {
-            if (name!=null&&name.Equals(Name))
+            if (name != null && name.Equals(Name)) {
                 return this;
-            foreach(var e in List) {
+            }
+            foreach (var e in List) {
                 if (e.Name != null && (e.Name.Equals(name) || Regex.IsMatch(e.Name, name))) {
                     return e;
                 }
@@ -196,11 +216,13 @@ namespace ExtractorSharp.Json {
             return null;
         }
 
-        public override string ToString() => ToString(0);
+        public override string ToString() {
+            return ToString(0);
+        }
 
 
         /// <summary>
-        /// 将数据映射到指定的实例上
+        ///     将数据映射到指定的实例上
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
@@ -210,7 +232,7 @@ namespace ExtractorSharp.Json {
                 return;
             }
             if (ValueType != LSType.Object && !typeof(Enum).IsAssignableFrom(obj.GetType())) {
-                obj = (T)Value;
+                obj = (T) Value;
                 return;
             }
             var type = obj.GetType();
@@ -227,8 +249,9 @@ namespace ExtractorSharp.Json {
                 //数组
                 case Array a:
                     type = type.GetElementType();
-                    for (int i = 0; i < a.Length; i++)
+                    for (var i = 0; i < a.Length; i++) {
                         a.SetValue(List[i].GetValue(type), i);
+                    }
                     break;
                 //列表
                 case IList e:
@@ -238,7 +261,7 @@ namespace ExtractorSharp.Json {
                     }
                     break;
                 case Enum em:
-                    obj = (T)Enum.Parse(obj.GetType(), Value?.ToString());
+                    obj = (T) Enum.Parse(obj.GetType(), Value?.ToString());
                     break;
                 default:
                     //遍历子元素
@@ -253,10 +276,11 @@ namespace ExtractorSharp.Json {
                                 break;
                             }
                         }
-                        
+
                         //判断是否成功映射
-                        if (completed)
+                        if (completed) {
                             continue;
+                        }
                         //给字段赋值
                         var fileds = type.GetFields(FILED_FLAG);
                         foreach (var f in fileds) {
@@ -270,16 +294,14 @@ namespace ExtractorSharp.Json {
             }
         }
 
-       
-
 
         /// <summary>
-        /// 映射到指定的类型的实例上
+        ///     映射到指定的类型的实例上
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
         public object GetValue(Type type) {
-            if (ValueType == LSType.Object||typeof(Enum).IsAssignableFrom(type)) {
+            if (ValueType == LSType.Object || typeof(Enum).IsAssignableFrom(type)) {
                 var obj = type.CreateInstance(List.Count);
                 GetValue(ref obj);
                 return obj;
@@ -354,10 +376,12 @@ namespace ExtractorSharp.Json {
             }
         }
 
-        public Type GetValueType() => Value?.GetType();
+        public Type GetValueType() {
+            return Value?.GetType();
+        }
 
         /// <summary>
-        /// 格式化输出
+        ///     格式化输出
         /// </summary>
         /// <param name="depth"></param>
         /// <returns></returns>
@@ -365,16 +389,18 @@ namespace ExtractorSharp.Json {
             var buf = new StringBuilder();
             buf.AppendTab(++depth);
             //属性名
-            if (Name != null && !string.Empty.Equals(Name.Trim()))
+            if (Name != null && !string.Empty.Equals(Name.Trim())) {
                 buf.Append($"{Mark + Name + Mark} : ");
+            }
             if (ValueType == LSType.Object) {
                 buf.Append("{");
                 buf.AppendLine();
                 for (var i = 0; i < List.Count; i++) {
-                    if (i != List.Count - 1)
+                    if (i != List.Count - 1) {
                         buf.AppendLine(List[i].ToString(depth) + Separator);
-                    else
+                    } else {
                         buf.AppendLine(List[i].ToString(depth));
+                    }
                 }
                 buf.AppendTab(depth);
                 buf.AppendTab(depth--);
@@ -383,16 +409,15 @@ namespace ExtractorSharp.Json {
                 //字符串
                 if (ValueType == LSType.String)
                     //reformat 处理转义字符
+                {
                     buf.Append($"{Mark + Value.ToString().ReFormat() + Mark}");
-                else if (ValueType == LSType.Null)
+                } else if (ValueType == LSType.Null) {
                     buf.Append("null");
-                else
+                } else {
                     buf.Append(Value);
+                }
             }
             return buf.ToString();
         }
-
-        public IEnumerator<LSObject> GetEnumerator() => List.GetEnumerator();
-        IEnumerator IEnumerable.GetEnumerator() => List.GetEnumerator();
     }
 }

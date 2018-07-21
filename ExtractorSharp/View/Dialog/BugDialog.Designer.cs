@@ -1,6 +1,6 @@
 ﻿using ExtractorSharp.Component;
 
-namespace ExtractorSharp.View {
+namespace ExtractorSharp.View.Dialog {
     partial class BugDialog {
         /// <summary>
         /// Required designer variable.

@@ -1,10 +1,10 @@
-﻿using ExtractorSharp.Component;
-using ExtractorSharp.Properties;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
+using ExtractorSharp.Component;
+using ExtractorSharp.Properties;
 
-namespace ExtractorSharp.View{
+namespace ExtractorSharp.View.Dialog{
         partial class MergeDialog {
         /// <summary>
         /// Required designer variable.
@@ -41,13 +41,20 @@ namespace ExtractorSharp.View{
             this.addFileButton = new ESButton();
             this.prograss = new System.Windows.Forms.ProgressBar();
             this.targetLabel = new Label();
-            this.albumList = new ComboBox();
+            this.targetBox = new ComboBox();
             this.priviewPanel = new Panel();
+            this.paletteLabel = new Label();
+            this.palatteBox = new ComboBox();
+            this.frameLabel = new Label();
             this.frameBox = new ComboBox();
             this.lastButton = new ESButton();
             this.nextButton = new ESButton();
             this.completedHideCheck = new CheckBox();
             this.autoSortCheck = new CheckBox();
+            this.versionLabel = new Label();
+            this.versionBox = new ComboBox();
+            this.glowLayerLabel = new Label();
+            this.glowLayerBox = new ComboBox();
             this.menu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -94,7 +101,7 @@ namespace ExtractorSharp.View{
             // 
             // sortButton
             // 
-            this.sortButton.Location = new System.Drawing.Point(410, 338);
+            this.sortButton.Location = new System.Drawing.Point(410, 420);
             this.sortButton.Name = "sortButton";
             this.sortButton.Size = new System.Drawing.Size(75, 23);
             this.sortButton.TabIndex = 1;
@@ -103,7 +110,7 @@ namespace ExtractorSharp.View{
             // 
             // MergeButton
             // 
-            this.mergerButton.Location = new System.Drawing.Point(505, 338);
+            this.mergerButton.Location = new System.Drawing.Point(505, 420);
             this.mergerButton.Name = "MergeButton";
             this.mergerButton.Size = new System.Drawing.Size(75, 23);
             this.mergerButton.TabIndex = 2;
@@ -111,15 +118,15 @@ namespace ExtractorSharp.View{
             this.mergerButton.UseVisualStyleBackColor = true;
 
 
-            this.addFileButton.Location = new Point(315,338);
+            this.addFileButton.Location = new Point(315,420);
             this.addFileButton.Text = Language["AddFile"];
             this.addFileButton.Size = new System.Drawing.Size(75, 23);
             this.addFileButton.UseVisualStyleBackColor = true;
 
-            this.albumList.Location = new System.Drawing.Point(120, 300);
-            this.albumList.Size = new System.Drawing.Size(170,23);
-            this.albumList.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
-            this.albumList.AutoCompleteSource = AutoCompleteSource.ListItems;
+            this.targetBox.Location = new System.Drawing.Point(120, 300);
+            this.targetBox.Size = new System.Drawing.Size(170,23);
+            this.targetBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.targetBox.AutoCompleteSource = AutoCompleteSource.ListItems;
             // 
             // prograss
             // 
@@ -133,7 +140,6 @@ namespace ExtractorSharp.View{
             // 
             this.targetLabel.AutoSize = true;
             this.targetLabel.Location = new System.Drawing.Point(32, 302);
-            this.targetLabel.Size = new System.Drawing.Size(120, 16);
             this.targetLabel.TabIndex = 4;
             this.targetLabel.Text = Language["TargetFile"];
 
@@ -141,45 +147,82 @@ namespace ExtractorSharp.View{
             this.priviewPanel.BackColor = Color.Gray;
             this.priviewPanel.Size = new Size(259, 256);
 
-            this.frameBox.Location = new Point(315, 300);
+            this.palatteBox.Location = new Point(380, 300);
+            this.palatteBox.Width = 200;
+            this.palatteBox.DropDownStyle = ComboBoxStyle.DropDownList;
 
-            this.lastButton.Location = new Point(436, 300);
+            this.frameBox.Location = new Point(380, 340);
+            this.frameBox.Width = 200;
+            this.frameBox.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            this.frameLabel.Location = new Point(315, 340);
+            this.frameLabel.Text = Language["FrameCount"];
+            this.frameLabel.AutoSize = true;
+
+            this.paletteLabel.Location = new Point(315,300);
+            this.paletteLabel.Text = Language["Palette"];
+            this.paletteLabel.AutoSize = true;
+           
+
+            this.lastButton.Location = new Point(580, 340);
             this.lastButton.Size = new Size(20, 20);
             this.lastButton.Image = Resources.last;
 
-            this.nextButton.Location = new Point(455, 300);
+            this.nextButton.Location = new Point(600, 340);
             this.nextButton.Size = new Size(20, 20);
             this.nextButton.Image = Resources.next;
 
-            this.completedHideCheck.Location = new Point(150, 338);
+            this.completedHideCheck.Location = new Point(150, 420);
             this.completedHideCheck.Text = Language["CompletedHide"];
             this.completedHideCheck.AutoSize = true;
             this.completedHideCheck.Checked = Config["MergeCompletedHide"].Boolean;
 
 
-            this.autoSortCheck.Location = new Point(32, 338);
+            this.autoSortCheck.Location = new Point(32, 420);
             this.autoSortCheck.Text = Language["AutoSort"];
             this.autoSortCheck.AutoSize = true;
             this.autoSortCheck.Checked = Config["AutoSort"].Boolean;
 
+            this.versionLabel.AutoSize = true;
+            this.versionLabel.Location = new Point(32, 340);
+            this.versionLabel.Text = Language["TargetVersion"];
+
+            this.versionBox.Location = new System.Drawing.Point(120, 340);
+            this.versionBox.Size = new System.Drawing.Size(170, 23);
+            this.versionBox.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            this.glowLayerLabel.Location = new Point(32,380);
+            this.glowLayerLabel.Text = Language["GlowLayer"];
+            this.glowLayerLabel.AutoSize = true;
+
+            this.glowLayerBox.Location = new Point(120,380);
+            this.glowLayerBox.Size = new System.Drawing.Size(170, 23);
+            this.glowLayerBox.DropDownStyle = ComboBoxStyle.DropDownList;
             // 
             // MergeDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
-            this.ClientSize = new System.Drawing.Size(650, 400);
+            this.ClientSize = new System.Drawing.Size(650, 460);
             this.Controls.Add(this.prograss);
             this.Controls.Add(this.mergerButton);
             this.Controls.Add(this.sortButton);
             this.Controls.Add(this.addFileButton);
             this.Controls.Add(this.list);
-            this.Controls.Add(albumList);
+            this.Controls.Add(targetBox);
             this.Controls.Add(targetLabel);
             this.Controls.Add(priviewPanel);
+            this.Controls.Add(paletteLabel);
+            this.Controls.Add(palatteBox);
+            this.Controls.Add(frameLabel);
             this.Controls.Add(frameBox);
             this.Controls.Add(lastButton);
             this.Controls.Add(nextButton);
             this.Controls.Add(autoSortCheck);
             this.Controls.Add(completedHideCheck);
+            this.Controls.Add(versionLabel);
+            this.Controls.Add(versionBox);
+            this.Controls.Add(glowLayerLabel);
+            this.Controls.Add(glowLayerBox);
             this.Name = "MergeDialog";
             this.Text = Language["Merge"];
             this.AllowDrop = true;
@@ -192,7 +235,7 @@ namespace ExtractorSharp.View{
         #endregion
 
         private ListBox list;
-        private ComboBox albumList;
+        private ComboBox targetBox;
         private Button sortButton;
         private Button mergerButton;
         private ProgressBar prograss;
@@ -204,6 +247,9 @@ namespace ExtractorSharp.View{
         private Panel priviewPanel;
         private Label targetLabel;
         private ComboBox frameBox;
+        private ComboBox palatteBox;
+        private Label glowLayerLabel;
+        private ComboBox glowLayerBox;
         private ESButton lastButton;
         private ESButton nextButton;
         private ESButton addFileButton;
@@ -211,5 +257,9 @@ namespace ExtractorSharp.View{
         private CheckBox autoSortCheck;
         private CheckBox disableRepeatCheck;
         private ComboBox addFileCommbox;
+        private Label versionLabel;
+        private ComboBox versionBox;
+        private Label paletteLabel;
+        private Label frameLabel;
     }
 }
