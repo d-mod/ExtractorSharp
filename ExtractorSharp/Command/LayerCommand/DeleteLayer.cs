@@ -49,7 +49,7 @@ namespace ExtractorSharp.Command.LayerCommand {
         public void Undo() {
             for (var i = 0; i < Indices.Length; i++) {
                 var index = Indices[i];
-                if (index < 0) {
+                if (index < 2) {
                     continue;
                 }
                 List.InsertAt(index, new ILayer[] { Array[index] });
