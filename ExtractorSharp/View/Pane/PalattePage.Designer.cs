@@ -59,7 +59,7 @@ namespace ExtractorSharp.View.Pane {
             deleteButton.Size = new System.Drawing.Size(24, 24);
             menu.MenuItems.Add(changeColorItem);
             menu.MenuItems.Add(changeToCurrentItem);
-            this.Controls.Add(deleteButton);
+            //this.Controls.Add(deleteButton);
         }
 
         #endregion

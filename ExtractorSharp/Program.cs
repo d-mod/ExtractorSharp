@@ -157,10 +157,12 @@ namespace ExtractorSharp {
             }
             try {
                 var log = $"{e.Exception.Message};\r\n{e.Exception.StackTrace}";
-                var data = Encoding.Default.GetBytes(log);
+                var data = Encoding.UTF8.GetBytes(log);
                 log = Convert.ToBase64String(data);
                 var dir = $"{Config["RootPath"]}/log";
-                if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+                if (!Directory.Exists(dir)) {
+                    Directory.CreateDirectory(dir);
+                }
                 var current = $"{dir}/{DateTime.Now.ToString("yyyyMMddHHmmss")}.log";
                 File.WriteAllBytes(current, data);
                 switch (e.Exception) {
@@ -291,7 +293,7 @@ namespace ExtractorSharp {
         /// <returns></returns>
         public static void CheckUpdate(bool Tips) {
             var builder = new LSBuilder();
-            var obj = builder.Get(Config["UpdateUrl"].Value);
+            var obj = builder.Get($"{Config["ApiHost"]}{Config["UpdateUrl"]}");
             if (obj == null) {
                 return;
             }
@@ -306,7 +308,6 @@ namespace ExtractorSharp {
             } else if (Tips) {
                 MessageBox.Show(Language.Default["NeedNotUpdateTips"]); //提示不需要更新
             }
-
             Config.Save();
         }
 

@@ -8,7 +8,7 @@ namespace ExtractorSharp.View.Pane {
     public partial class DropPanel : TabControl {
         public DropPanel(IConnector Connector) {
             InitializeComponent();
-            TabPages.Add(new HistoryPage());
+            TabPages.Add(new HistoryPage(Connector));
             TabPages.Add(new ActionPage(Connector));
             TabPages.Add(new PalettePage());
             //TabPages.Add(new TexturePage());

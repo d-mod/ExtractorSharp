@@ -26,17 +26,17 @@ namespace ExtractorSharp.Draw.Brush {
             Connector.Do("moveTools", paint, Location, newPoint);
             if (Connector.Config["AutoChangePosition"].Boolean && paint.Equals(Drawer.CurrentLayer)) {
                 var sprite = Drawer.CurrentLayer.Tag as Sprite;
-                if (sprite != null && paint is ExtractorSharp.Core.Draw.Paint.Canvas canvas) {
+                if (sprite != null && paint is Core.Draw.Paint.Canvas canvas) {
                     var album = sprite.Parent;
                     var index = sprite.Index;
-                    var location = canvas.Rectangle.Location;
+                    var location = canvas.RealLocation;
                     if (canvas.RealPosition) {
                         location = location.Minus(sprite.Location);
+                        canvas.Location = Point.Empty;
                     }
                     var x = location.X;
                     var y = location.Y;
-                    canvas.Location = Point.Empty;
-                    Connector.Do("changePosition", album, new int[] { index }, new int[] { x, y, 0, 0 }, new bool[] { true, true, false, false, true });
+                    Connector.Do("changePosition", album, new int[] { index }, new int[] { x, y, 0, 0 }, new bool[] { true, true, false, false, canvas.RealPosition });
                 }
             }
         }

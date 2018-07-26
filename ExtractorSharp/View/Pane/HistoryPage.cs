@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Windows.Forms;
 using ExtractorSharp.Core;
+using ExtractorSharp.Core.Command;
+using ExtractorSharp.Core.Composition;
 using ExtractorSharp.Core.Model;
 using ExtractorSharp.EventArguments;
 
 namespace ExtractorSharp.View.Pane {
     internal partial class HistoryPage : TabPage {
         private readonly Controller Controller;
+        private IConnector Connector;
 
-        public HistoryPage() {
+        public HistoryPage(IConnector Connector) {
+            this.Connector = Connector;
             InitializeComponent();
             Controller = Program.Controller;
             historyList.MouseDoubleClick += Goto;
@@ -34,6 +38,10 @@ namespace ExtractorSharp.View.Pane {
             var index = historyList.SelectedIndex - 1;
             if (index > -1) {
                 var command = Controller.History[index];
+                if(!(command is IAction)) {
+                    Connector.SendError("CantAddAction");
+                    return;
+                }
                 Controller.AddMacro(command);
             }
         }

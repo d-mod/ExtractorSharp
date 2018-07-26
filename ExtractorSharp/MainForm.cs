@@ -767,7 +767,7 @@ namespace ExtractorSharp {
                 }
                 Drawer.CurrentLayer.Location = Point.Empty;
                 Connector.Do("changePosition", item, new[] {index}, new[] {location.X, location.Y, 0, 0},
-                    new[] {true, true, false, false, true});
+                    new[] {true, true, false, false, realPositionBox.Checked});
             }
         }
 

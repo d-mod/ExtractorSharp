@@ -22,7 +22,7 @@ namespace ExtractorSharp.View.Pane {
             // 
             this.historyList.Location = new System.Drawing.Point(0, 0);
             this.historyList.Name = "list";
-            this.historyList.Size = new System.Drawing.Size(290, 280);
+            this.historyList.Size = new System.Drawing.Size(290, 270);
             this.historyList.TabIndex = 0;
 
             this.historyList.ContextMenuStrip = menu;

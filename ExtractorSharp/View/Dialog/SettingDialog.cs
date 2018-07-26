@@ -41,7 +41,7 @@ namespace ExtractorSharp.View.Dialog {
             AddConfig(typeof(AnimationPane));
             AddConfig(typeof(LanguagePane));
             AddConfig(typeof(InstalledPluginPane));
-            AddConfig(typeof(MarketplacePane));
+            //AddConfig(typeof(MarketplacePane));
             AddConfig(typeof(MovePane));
         }
 

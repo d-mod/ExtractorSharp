@@ -53,7 +53,7 @@ namespace ExtractorSharp.View.Dialog {
                     {"version", Config["Version"].Value}
                 };
                 var builder = new LSBuilder();
-                var path = $"{Config["ApiHost"].Value}/{Config["FeedbackUrl"].Value}";
+                var path = $"{Config["ApiHost"].Value}{Config["FeedbackUrl"].Value}";
                 var resultObj = builder.Post(path, data);
                 resultObj.GetValue(ref result);
             } catch (Exception e) {
