@@ -109,7 +109,7 @@ namespace ExtractorSharp.Install {
         }
 
         private string Hash(byte[] data) {
-            using (var md5 = MD5.Create()) {
+            using (var md5 = SHA256.Create()) {
                 data = md5.ComputeHash(data);
             }
             return ToHexString(data);

@@ -18,7 +18,7 @@ namespace ExtractorSharp.Command.FileCommand {
         public void Do(params object[] args) {
             album = args[0] as Album ?? new Album();
             path = args[1] as string;
-            index = album.List.Count;
+            index = album.List.Count - 1;
             if (args.Length > 2) {
                 count = (int)args[2];
             }

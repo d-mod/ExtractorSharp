@@ -178,7 +178,7 @@ namespace ExtractorSharp {
                         }
                         break;
                 }
-            } catch (Exception ex) { }
+            } catch (Exception) { }
         }
 
 
@@ -252,7 +252,7 @@ namespace ExtractorSharp {
             var chinese = Language.CreateFromJson(Resources.Chinese);
             Language.List = new List<Language>();
             Language.List.Add(chinese);
-            var path = $"{Config["RootPath"]}/lan/";
+            var path = $"{Config["RootPath"]}\\lan\\";
             Language.CreateFromDir(path);
             if (Config["LCID"].Integer == -1) {
                 Config["LCID"] = new ConfigValue(Application.CurrentCulture.LCID);
@@ -279,7 +279,7 @@ namespace ExtractorSharp {
                             RegistryRights.ReadKey).GetValue("InstallPath").ToString();
                     Config["GamePath"] = new ConfigValue(path);
                 }
-                Config["ResourcePath"] = new ConfigValue($"{Config["GamePath"]}/ImagePacks2");
+                Config["ResourcePath"] = new ConfigValue($"{Config["GamePath"]}\\ImagePacks2");
                 Config.Save();
             } catch (Exception e) {
                 Console.Write(e);
