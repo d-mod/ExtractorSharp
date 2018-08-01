@@ -28,6 +28,7 @@
             this.gamePathGroup = new System.Windows.Forms.GroupBox();
             this.autoSaveCheck = new System.Windows.Forms.CheckBox();
             this.autoUpdateCheck = new System.Windows.Forms.CheckBox();
+            this.updatedShowFeatureCheck = new System.Windows.Forms.CheckBox();
             this.gamePathGroup.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -70,11 +71,20 @@
             this.autoUpdateCheck.TabIndex = 3;
             this.autoUpdateCheck.Text = Language["AutoUpdate"];
             this.autoUpdateCheck.UseVisualStyleBackColor = true;
+
+
+            this.updatedShowFeatureCheck.AutoSize = true;
+            this.updatedShowFeatureCheck.Location = new System.Drawing.Point(13, 199);
+            this.updatedShowFeatureCheck.Size = new System.Drawing.Size(78, 16);
+            this.updatedShowFeatureCheck.TabIndex = 3;
+            this.updatedShowFeatureCheck.Text = Language["UpdatedShowFeature"];
+            this.updatedShowFeatureCheck.UseVisualStyleBackColor = true;
             // 
             // FilePane
             // 
             this.Controls.Add(this.autoSaveCheck);
             this.Controls.Add(this.autoUpdateCheck);
+            this.Controls.Add(this.updatedShowFeatureCheck);
             this.Controls.Add(this.gamePathGroup);
             this.Parent = "Gerneral";
             this.Size = new System.Drawing.Size(329, 244);
@@ -92,5 +102,6 @@
         private System.Windows.Forms.GroupBox gamePathGroup;
         private System.Windows.Forms.CheckBox autoSaveCheck;
         private System.Windows.Forms.CheckBox autoUpdateCheck;
+        private System.Windows.Forms.CheckBox updatedShowFeatureCheck;
     }
 }

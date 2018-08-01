@@ -169,7 +169,7 @@ namespace ExtractorSharp {
                     case IOException _:
                         Connector.SendError("FileHandleError");
                         break;
-                    case ProgramException _ when Connector != null:
+                    case Exceptions.ApplicationException _ when Connector != null:
                         Connector.SendError(e.Exception.Message);
                         break;
                     default:
@@ -186,7 +186,9 @@ namespace ExtractorSharp {
             if (!Config["Version"].Value.Equals(Version)) {
                 Config["Version"] = new ConfigValue(Version);
                 Config.Save();
-                Process.Start($"{Config["WebHost"]}/es/feature/{Config["Version"]}.html");
+                if (Config["ShowFeature"].Boolean) {
+                    Process.Start($"{Config["WebHost"]}/es/feature/{Config["Version"]}.html");
+                }
             }
             if (Arguments.Length == 1) {
                 var command = Arguments[0];

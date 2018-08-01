@@ -30,8 +30,7 @@ namespace ExtractorSharp.View.Dialog {
             var indices = Connector.CheckedImageIndices;
             if (file == null || indices.Length == 0) return DialogResult.Cancel;
             if (allImagesCheck.Checked) {
-                indices = new int[file.List.Count];
-                for (var i = 0; i < indices.Length; i++) indices[i] = i;
+                indices = new int[0];
             }
             var name = nameBox.Text;
             var match = Regex.Match(name, @"\d+$", RegexOptions.Compiled);
@@ -44,7 +43,7 @@ namespace ExtractorSharp.View.Dialog {
                 prefix = prefix.Remove(match.Index, match.Length);
                 digit = value.Length;
             }
-            Connector.Do("saveImage", file, 1, indices, pathBox.Text, prefix, incre, digit, fullPathCheck.Checked, Connector.Effect);
+            Connector.Do("saveImage", file, 1, indices, pathBox.Text, prefix, incre, digit, fullPathCheck.Checked, Connector.Effect, allImagesCheck.Checked);
             return DialogResult.OK;
         }
 

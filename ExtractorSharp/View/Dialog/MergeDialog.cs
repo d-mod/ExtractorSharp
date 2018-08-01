@@ -18,6 +18,16 @@ namespace ExtractorSharp.View.Dialog {
         private int SelectedIndex { set; get; } = -1;
         private Album Album;
 
+        private string Extensions {
+            get {
+                var ex = string.Empty;
+                foreach (var support in Connector.FileSupports) {
+                    ex = string.Concat(ex, $"*{support.Extension};");
+                }
+                return ex;
+            }
+        }
+
         public MergeDialog(IConnector Connector) : base(Connector) {
             InitializeComponent();
             Merger = Program.Merger;
@@ -75,7 +85,7 @@ namespace ExtractorSharp.View.Dialog {
         protected override void OnDragDrop(DragEventArgs e) {
             if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
                 var args = e.Data.GetData(DataFormats.FileDrop, false) as string[];
-                var array = NpkCoder.Load(args).ToArray();
+                var array = Connector.LoadFile(args).ToArray();
                 Connector.Do("addMerge", array);
             }
         }
@@ -181,10 +191,10 @@ namespace ExtractorSharp.View.Dialog {
 
         private void AddOutside(object sender, EventArgs e) {
             var dialog = new OpenFileDialog();
-            dialog.Filter = $"{Language["ImageResources"]}| *.NPK; *.img";
+            dialog.Filter = $"{Language["ImageResources"]}| {Extensions}";
             dialog.Multiselect = true;
             if (dialog.ShowDialog() == DialogResult.OK) {
-                var array = NpkCoder.Load(dialog.FileNames).ToArray();
+                var array = Connector.LoadFile(dialog.FileNames).ToArray();
                 Connector.Do("addMerge", array);
             }
         }

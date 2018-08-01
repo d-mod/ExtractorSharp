@@ -28,7 +28,9 @@ namespace ExtractorSharp.Command.FileCommand {
 
         public void Undo() {
             Connector.RemoveFile(_array);
-            if (_clear) Connector.AddFile(true, List);
+            if (_clear) {
+                Connector.AddFile(true, List);
+            }
         }
 
         public string Name => "AddFile";

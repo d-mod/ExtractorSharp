@@ -1,5 +1,5 @@
 ﻿namespace ExtractorSharp.Exceptions {
-    internal class PluginExecption : ProgramException {
+    internal class PluginExecption : ApplicationException {
         public PluginExecption() { }
 
         public PluginExecption(string msg) : base(msg) { }

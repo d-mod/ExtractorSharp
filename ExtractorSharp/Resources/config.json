@@ -36,6 +36,7 @@
   "SaveImageFullPath": false,
   "SaveImagePath": "",
   "SaveImageTip": true,
+  "ShowFeature": true,
   "UpdateExeName": "install.exe",
   "UpdateExeUrl": "http://down.kritsu.net/install.exe",
   "UpdateUrl": "/project/release/latest/es",

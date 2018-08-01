@@ -15,6 +15,7 @@ namespace ExtractorSharp.Command.ImageCommand {
         private int Digit { set; get; }
         private bool FullPath { set; get; }
         private int Increment { set; get; }
+        private bool AllImage { set; get; }
 
         /// <summary>
         ///     提取模式
@@ -43,7 +44,9 @@ namespace ExtractorSharp.Command.ImageCommand {
                 FullPath = (bool) args[7];
                 OnSaving = args[8] as SpriteEffect;
             }
-
+            if (args.Length > 9) {
+                AllImage = (bool)args[9];
+            }
             Action(Album, Indices);
         }
 
@@ -72,16 +75,24 @@ namespace ExtractorSharp.Command.ImageCommand {
                 if (!Directory.Exists(dir)) {
                     Directory.CreateDirectory(dir);
                 }
+                if (AllImage) {
+                    indexes = new int[album.List.Count];
+                    for(var i = 0; i < indexes.Length; i++) {
+                        indexes[i] = i;
+                    }
+                } 
                 var max = Math.Min(indexes.Length, album.List.Count);
                 for (var i = 0; i < max; i++) {
-                    if (indexes[i] < 0 || i > Indices.Length - 1 || i > album.List.Count - 1) continue;
+                    if (indexes[i] < 0) {
+                        continue;
+                    }
                     var entity = album.List[indexes[i]];
-                    var name = (Increment == -1 ? Indices[i] : Increment + i).ToString();
+                    var name = (Increment == -1 ? indexes[i] : Increment + i).ToString();
                     while (name.Length < Digit) {
                         name = string.Concat("0", name);
                     }
                     var path = $"{dir}{prefix}{name}.png"; //文件名格式:文件路径/贴图索引.png
-                    var image = entity.Picture;                   
+                    var image = entity.Picture;
                     if (OnSaving != null) {
                         foreach (SpriteEffect action in OnSaving.GetInvocationList()) {
                             action.Invoke(entity, ref image);
@@ -89,9 +100,6 @@ namespace ExtractorSharp.Command.ImageCommand {
                         }
                     }
                     var parent = System.IO.Path.GetDirectoryName(path);
-                    if (Directory.Exists(parent)) {
-
-                    }
                     image.Save(path); //保存贴图
                 }
             }

@@ -17,6 +17,7 @@ namespace ExtractorSharp.Command.FileCommand {
         private int[] _indexes;
 
         private static IConnector Connector => Program.Connector;
+
         public bool CanUndo => true;
 
         public bool IsChanged => true;
@@ -39,16 +40,18 @@ namespace ExtractorSharp.Command.FileCommand {
                 var collection = Clipboard.GetFileDropList();
                 var fileArr = new string[collection.Count];
                 collection.CopyTo(fileArr, 0);
-                array = NpkCoder.Load(fileArr).ToArray();
+                array = Connector.LoadFile(fileArr).ToArray();
                 var builder = new LSBuilder();
                 for (var i = 0; i < array.Length; i++) {
-                    var name = fileArr[i].RemoveSuffix(".img");
+                    var name = array[i].Name.RemoveSuffix(".img");
                     name = name.RemoveSuffix(".ogg");
                     name += ".json";
                     if (File.Exists(name)) {
                         var root = builder.Read(name)["path"];
                         var path = root.Value?.ToString();
-                        if (path != null) array[i].Path = path;
+                        if (path != null) {
+                            array[i].Path = path;
+                        }
                     }
                 }
             }
@@ -64,6 +67,9 @@ namespace ExtractorSharp.Command.FileCommand {
                     _indexes[i] = _index + i;
                 }
                 Connector.List.InsertRange(_index, array);
+                if (_clipboarder == null) {
+                    _clipboarder = Clipboarder.CreateClipboarder(array, _indexes, ClipMode.Copy);
+                }
             }
         }
 

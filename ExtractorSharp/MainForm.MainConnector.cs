@@ -11,6 +11,7 @@ using ExtractorSharp.Core.Config;
 using ExtractorSharp.Core.Draw;
 using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Core.Model;
+using ExtractorSharp.Exceptions;
 using ExtractorSharp.Json;
 using ExtractorSharp.Support;
 
@@ -23,9 +24,11 @@ namespace ExtractorSharp {
 
             public MainConnector() {
                 SaveChanged += (o, e) => OnSaveChanged();
-                FileSupports.Add(new GifSupport());
+                FileSupports.Add(new ImgSupport());
+                FileSupports.Add(new NpkSupport());
+                FileSupports.Add(new GifSupport());         
                 var builder = new LSBuilder();
-                var recentConfigPath = $"{Config["RootPath"]}/conf/recent.json";
+                var recentConfigPath = $@"{Config["RootPath"]}\conf\recent.json";
                 if (File.Exists(recentConfigPath)) {
                     Recent = builder.Read(recentConfigPath).GetValue(typeof(List<string>)) as List<string>;
                 }
@@ -35,6 +38,7 @@ namespace ExtractorSharp {
             internal MainForm MainForm { get; set; }
 
             public SpriteEffect OnSpriteSaving { set; get; }
+
             public List<IFileSupport> FileSupports { get; } = new List<IFileSupport>();
 
             public List<string> Recent {
@@ -157,14 +161,15 @@ namespace ExtractorSharp {
                 for (var i = 0; i < args.Length; i++) {
                     var support = FileSupports.Find(e => args[i].ToLower().EndsWith(e.Extension));
                     var arr = new List<Album>();
-                    if (support != null) {
+                    if (Directory.Exists(args[i])) {
+                        arr = LoadFile(Directory.GetFiles(args[i]));
+                    } else if (support != null) {
                         arr = support.Decode(args[i]);
                     } else {
-                        arr = NpkCoder.Load(args[i]);
+                        throw new FileSupportException(Language["FileSupportException"]);
                     }
                     list.AddRange(arr);
                 }
-
                 return list;
             }
 
@@ -263,7 +268,7 @@ namespace ExtractorSharp {
                 var dialog = new SaveFileDialog();
                 dialog.InitialDirectory = dir;
                 dialog.FileName = path;
-                dialog.Filter = "NPK|*.npk";
+                dialog.Filter = "NPK|*.NPK";
                 if (dialog.ShowDialog() == DialogResult.OK) {
                     SavePath = dialog.FileName;
                     OnSaveChanged();
@@ -272,7 +277,7 @@ namespace ExtractorSharp {
 
 
             public string GetPath(string path) {
-                return $"{Config["RootPath"]}/{path}";
+                return $"{Config["RootPath"]}\\{path}";
             }
 
             public object Dispatch(string name, params object[] args) {

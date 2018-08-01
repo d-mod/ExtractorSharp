@@ -31,7 +31,7 @@ namespace ExtractorSharp {
 
         private string Extensions {
             get {
-                var ex = "*.img;*.npk;";
+                var ex = string.Empty;
                 foreach (var support in Connector.FileSupports) {
                     ex = string.Concat(ex, $"*{support.Extension};");
                 }
@@ -1261,9 +1261,11 @@ namespace ExtractorSharp {
         /// <param name="e"></param>
         private void SaveAsFile(object sender, EventArgs e) {
             var dialog = new SaveFileDialog();
-            dialog.Filter = "NPK|*.npk";
+            dialog.Filter = "NPK|*.NPK";
             dialog.FileName = Path.GetSuffix();
-            if (dialog.ShowDialog() == DialogResult.OK) Connector.Save(dialog.FileName);
+            if (dialog.ShowDialog() == DialogResult.OK) {
+                Connector.Save(dialog.FileName);
+            }
         }
 
         /// <summary>
@@ -1405,7 +1407,9 @@ namespace ExtractorSharp {
         /// <param name="e"></param>
         private void ReplaceImage(object sender, EventArgs e) {
             var array = Connector.CheckedImages;
-            if (array.Length > 0) Viewer.Show("replace");
+            if (array.Length > 0) {
+                Viewer.Show("replace");
+            }
             CanvasFlush();
         }
 

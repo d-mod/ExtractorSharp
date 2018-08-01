@@ -1,9 +1,9 @@
 ﻿using System;
 
 namespace ExtractorSharp.Exceptions {
-    internal abstract class ProgramException : Exception {
-        public ProgramException() { }
+    internal abstract class ApplicationException : Exception {
+        public ApplicationException() { }
 
-        public ProgramException(string msg) : base(msg) { }
+        public ApplicationException(string msg) : base(msg) { }
     }
 }
