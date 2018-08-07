@@ -82,26 +82,27 @@ namespace ExtractorSharp.UnitTest {
         public void TestMethod3() {
             var dir = @"D:\avatar_new\image";
             foreach (var prof in pairs.Keys)
-            foreach (var part in part_array) {
-                var file = $@"{dir}\{prof}\{part}";
+                foreach (var part in part_array) {
+                    var file = $@"{dir}\{prof}\{part}";
+                    var path = $@"d:\avatar_ex\image\{prof}\{part}";
+                    if (!Directory.Exists(path)) {
+                        Directory.CreateDirectory(path);
+                    }
+                    var list = NpkCoder.Load(file);
 
-                var path = $"d:/avatar_ex/image/{prof}/{part}";
-                if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-                var list = NpkCoder.Load(file);
-
-                foreach (var img in list) {
-                    var tables = img.Tables;
-                    var match = Regex.Match(img.Name, "\\d+");
-                    if (match.Success) {
-                        var code = int.Parse(match.Value);
-                        for (var i = 0; i < tables.Count; i++) {
-                            img.TableIndex = i;
-                            var image = img[pairs[prof]];
-                            ImageToJson(path, prof, part, img.Name, NpkCoder.CompleteCode(code + i), image);
+                    foreach (var img in list) {
+                        var tables = img.Tables;
+                        var match = Regex.Match(img.Name, "\\d+");
+                        if (match.Success) {
+                            var code = int.Parse(match.Value);
+                            for (var i = 0; i < tables.Count; i++) {
+                                img.TableIndex = i;
+                                var image = img[pairs[prof]];
+                                ImageToJson(path, prof, part, img.Name, NpkCoder.CompleteCode(code + i), image);
+                            }
                         }
                     }
                 }
-            }
         }
 
 
@@ -147,30 +148,33 @@ namespace ExtractorSharp.UnitTest {
         public void TestMethod1() {
             var dir = @"D:\avatar_ex\icon";
             foreach (var prof in pairs.Keys)
-            foreach (var part in part_array) {
-                var file =
-                    $"{GAME_PATH}/sprite_character_{prof}{(prof.EndsWith("_at") ? "" : "_")}equipment_avatar_{part}.NPK";
-                var list = NpkCoder.Load(file);
-                var ps = $"{dir}/{prof}/{part}";
-                if (!Directory.Exists(ps)) continue;
-                var images = Directory.GetFiles(ps);
-
-                var path = $"d:/avatar_ex/image/{prof}/{part}";
-                if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-                for (var i = 0; i < images.Length; i++) {
-                    var regex = new Regex("\\d+");
-                    var match = regex.Match(images[i]);
-                    if (match.Success) {
-                        var code = match.Value;
-                        var arr = NpkCoder.FindByCode(list, code);
-                        var rs = FindImg(arr, int.Parse(code), part.Equals("skin") ? "body" : part);
-                        foreach (var img in rs) {
-                            var image = img[pairs[prof]];
-                            ImageToJson(path, prof, part, img.Name, match.Value, image);
+                foreach (var part in part_array) {
+                    var file =
+                        $"{GAME_PATH}/sprite_character_{prof}{(prof.EndsWith("_at") ? "" : "_")}equipment_avatar_{part}.NPK";
+                    var list = NpkCoder.Load(file);
+                    var ps = $"{dir}/{prof}/{part}";
+                    if (!Directory.Exists(ps)) {
+                        continue;
+                    }
+                    var images = Directory.GetFiles(ps);
+                    var path = $"d:/avatar_ex/image/{prof}/{part}";
+                    if (!Directory.Exists(path)) {
+                        Directory.CreateDirectory(path);
+                    }
+                    for (var i = 0; i < images.Length; i++) {
+                        var regex = new Regex("\\d+");
+                        var match = regex.Match(images[i]);
+                        if (match.Success) {
+                            var code = match.Value;
+                            var arr = NpkCoder.FindByCode(list, code);
+                            var rs = FindImg(arr, int.Parse(code), part.Equals("skin") ? "body" : part);
+                            foreach (var img in rs) {
+                                var image = img[pairs[prof]];
+                                ImageToJson(path, prof, part, img.Name, match.Value, image);
+                            }
                         }
                     }
                 }
-            }
         }
 
 

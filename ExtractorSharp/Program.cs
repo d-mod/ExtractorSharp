@@ -7,6 +7,7 @@ using System.Net;
 using System.Reflection;
 using System.Security.AccessControl;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using ExtractorSharp.Command.DrawCommand;
@@ -183,7 +184,9 @@ namespace ExtractorSharp {
 
 
         private static void OnShown(object sender, EventArgs e) {
-            if (!Config["Version"].Value.Equals(Version)) {
+            var last = SubVersion(Config["Version"].Value);
+            var current = SubVersion(Version);
+            if (!last.Equals(current)) {
                 Config["Version"] = new ConfigValue(Version);
                 Config.Save();
                 if (Config["ShowFeature"].Boolean) {
@@ -212,6 +215,15 @@ namespace ExtractorSharp {
                         break;
                 }
             }
+        }
+
+
+        private static string SubVersion(string version) {
+            var index = version.LastIndexOf(".");
+            if (index > -1) {
+                version = version.Substring(0, index);
+            }
+            return version;
         }
 
         /// <summary>
@@ -275,7 +287,7 @@ namespace ExtractorSharp {
         /// </summary>
         private static void LoadRegistry() {
             try {
-                if (string.Empty.Equals(Config["GamePath"].Value)|| !Directory.Exists(Config["GamePath"].Value)) {
+                if (string.Empty.Equals(Config["GamePath"].Value) || !Directory.Exists(Config["GamePath"].Value)) {
                     var path = Registry.CurrentUser
                         .OpenSubKey("software\\tencent\\dnf", RegistryKeyPermissionCheck.Default,
                             RegistryRights.ReadKey).GetValue("InstallPath").ToString();
@@ -320,7 +332,7 @@ namespace ExtractorSharp {
         /// <param name="updateUrl"></param>
         /// <param name="address"></param>
         /// <param name="productName"></param>
-        internal static void StartUpdate() {
+        private static void StartUpdate() {
             var name = $"{Config["RootPath"]}/{Config["UpdateExeName"]}";
             try {
                 var client = new WebClient();
@@ -330,26 +342,6 @@ namespace ExtractorSharp {
             } finally {
                 Environment.Exit(-1);
             }
-        }
-
-        /// <summary>
-        ///     选择游戏目录
-        /// </summary>
-        internal static bool SelectPath() {
-            var dialog = new FolderBrowserDialog();
-            if (dialog.ShowDialog() == DialogResult.OK) {
-                var rsPath = $"{dialog.SelectedPath}/ImagePacks2";
-                if (Directory.Exists(rsPath)) {
-                    Config["GamePath"] = new ConfigValue(dialog.SelectedPath);
-                    Config["ResourcePath"] = new ConfigValue($"{dialog.SelectedPath}/ImagePacks2");
-                    Config.Save();
-                    return true;
-                }
-
-                Connector.SendError("SelectPathIsInvalid");
-            }
-
-            return false;
         }
     }
 }

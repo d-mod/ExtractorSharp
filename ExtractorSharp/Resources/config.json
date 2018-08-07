@@ -29,7 +29,7 @@
   "RealPosition": false,
   "RealPositionSpriteConverter": false,
   "Ruler": false,
-  "RulerCrosshair": false,
+  "RulerCrosshair": true,
   "RulerLocked": false,
   "RulerSpan": true,
   "SaveAllImage": false,

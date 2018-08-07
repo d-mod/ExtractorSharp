@@ -76,7 +76,9 @@ namespace ExtractorSharp.UnitTest {
             var prof_list = GetProfession();
             foreach (var prof in prof_list) {
                 var dir = $"{SAVE_DIR}/image/{prof}";
-                if (Directory.Exists(dir)) Directory.Delete(dir, true);
+                if (Directory.Exists(dir)) {
+                    Directory.Delete(dir, true);
+                }
                 Directory.CreateDirectory(dir);
                 foreach (var part in part_array) {
                     var file =
@@ -101,8 +103,10 @@ namespace ExtractorSharp.UnitTest {
                         return false;
                     }).ToList();
                     var target = $"{dir}/{part}/";
-                    if (!Directory.Exists(target)) Directory.CreateDirectory(target);
-                    NpkCoder.Save($"{dir}/{part}.NPK", list);
+                    if (!Directory.Exists(target)) {
+                        Directory.CreateDirectory(target);
+                    }
+                    NpkCoder.SaveToDirectory($"{dir}/{part}", list);
                 }
             }
         }
