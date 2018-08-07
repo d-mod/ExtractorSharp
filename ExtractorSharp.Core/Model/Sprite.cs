@@ -5,12 +5,14 @@ using ExtractorSharp.Json.Attr;
 
 namespace ExtractorSharp.Core.Model {
     public class Sprite {
-        [LSIgnore] private Bitmap _image;
+        [LSIgnore]
+        private Bitmap _image;
 
         /// <summary>
         ///     帧域宽高
         /// </summary>
-        [LSIgnore] public Size CanvasSize = Size.Empty;
+        [LSIgnore]
+        public Size CanvasSize = Size.Empty;
 
         /// <summary>
         ///     压缩类型
@@ -78,7 +80,7 @@ namespace ExtractorSharp.Core.Model {
         public Bitmap Picture {
             get {
                 if (Type == ColorBits.LINK) {
-                    return Target.Picture;
+                    return Target?.Picture;
                 }
                 if (IsOpen) {
                     return _image;
