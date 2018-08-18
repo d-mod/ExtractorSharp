@@ -2,7 +2,9 @@
 using System.Windows.Forms;
 using ExtractorSharp.Core;
 using ExtractorSharp.Core.Draw;
+using ExtractorSharp.Core.Draw.Paint;
 using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.Draw.Brush {
     /// <summary>
@@ -20,6 +22,9 @@ namespace ExtractorSharp.Draw.Brush {
         public void Draw(IPaint layer, Point point, decimal scale) {
             var image = layer.Image;
             if (image != null && layer.Contains(point)) {
+                if (layer is Canvas canvas && canvas.RealPosition && canvas.Tag is Sprite sprite) {
+                    point = point.Minus(sprite.Location);
+                }
                 //得到鼠标相对图片的坐标
                 var p = point.Minus(layer.Location).Divide(scale);
                 var color = image.GetPixel(p.X, p.Y);

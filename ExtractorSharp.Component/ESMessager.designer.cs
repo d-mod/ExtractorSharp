@@ -47,7 +47,7 @@ namespace ExtractorSharp.Component {
             // 
             // button
             // 
-            button.Location = new Point(215, 25);
+            button.Location = new Point(215, 70);
             button.Name = "button";
             button.Size = new Size(75, 25);
             button.TabIndex = 2;
@@ -63,7 +63,7 @@ namespace ExtractorSharp.Component {
             BackColor = Color.FromArgb(250,250,250,250);
             Name = "MessageForm";
             ResumeLayout(false);
-            ClientSize = new Size(300, 75);
+            ClientSize = new Size(400, 100);
             BorderStyle = BorderStyle.FixedSingle;
             Visible = false;
         }

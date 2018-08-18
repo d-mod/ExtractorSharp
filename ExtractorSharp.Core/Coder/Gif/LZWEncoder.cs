@@ -149,7 +149,7 @@ namespace ExtractorSharp.Core.Coder.Gif {
         // characters, flush the packet to disk.
         private void Add(byte c, Stream outs) {
             accum[a_count++] = c;
-            if (a_count > 255) {
+            if (a_count > 254) {
                 Flush(outs);
             }
         }

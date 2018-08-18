@@ -47,6 +47,14 @@ namespace ExtractorSharp.Core.Lib {
             return new Point(-point.X, -point.Y);
         }
 
+        public static Rectangle Add(this Rectangle rect1, Rectangle rect2) {
+            var x = rect1.X + rect2.X;
+            var y = rect1.X + rect2.Y;
+            var w = rect1.Width + rect2.Width;
+            var h = rect1.Height + rect2.Height;
+            return new Rectangle(x, y, w, h);
+        }
+
         #endregion
     }
 }

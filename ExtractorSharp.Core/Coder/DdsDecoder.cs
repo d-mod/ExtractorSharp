@@ -20,7 +20,9 @@ namespace ExtractorSharp.Core.Coder {
         public static DdsTexture Decode(Stream stream) {
             var ddsTexture = new DdsTexture();
             var magic = stream.ReadInt();
-            if (magic != DdsMagic) throw new Exception("Invalid magic number in DDS header");
+            if (magic != DdsMagic) {
+                throw new System.Exception("Invalid magic number in DDS header");
+            }
             ddsTexture.Length = stream.ReadInt();
             ddsTexture.Flags = stream.ReadInt();
             ddsTexture.Width = stream.ReadInt();

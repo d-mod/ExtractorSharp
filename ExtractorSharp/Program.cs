@@ -23,6 +23,7 @@ using ExtractorSharp.Core.Composition;
 using ExtractorSharp.Core.Config;
 using ExtractorSharp.Core.Handle;
 using ExtractorSharp.Core.Model;
+using ExtractorSharp.Exceptions;
 using ExtractorSharp.Execute;
 using ExtractorSharp.Json;
 using ExtractorSharp.Model;
@@ -171,6 +172,9 @@ namespace ExtractorSharp {
                     case Exceptions.ApplicationException _ when Connector != null:
                         Connector.SendError(e.Exception.Message);
                         break;
+                    case FipsException _:
+                        Connector.SendError("FipsError");
+                        break;
                     default:
                         if (Config["Profile"].Value.Equals("release")) {
                             Viewer.Show("debug", "debug", log);
@@ -205,10 +209,10 @@ namespace ExtractorSharp {
                 Array.Copy(Arguments, 2, args, 0, args.Length);
                 var name = Arguments[1];
                 switch (Arguments[0]) {
-                    case "s":
+                    case "-s":
                         Viewer.Show(name, args);
                         break;
-                    case "c":
+                    case "-c":
                         Controller.Do(name, args);
                         break;
                 }

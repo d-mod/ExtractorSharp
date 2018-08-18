@@ -49,7 +49,7 @@
             this.customRadio.Size = new System.Drawing.Size(59, 16);
             this.customRadio.TabIndex = 0;
             this.customRadio.TabStop = true;
-            this.customRadio.Text = Language["Custom"];
+            this.customRadio.Text = Language["CustomCanvasSize"];
             this.customRadio.UseVisualStyleBackColor = true;
             // 
             // label1
@@ -190,6 +190,8 @@
         private System.Windows.Forms.Label heightLabel;
         private System.Windows.Forms.NumericUpDown widthBox;
         private System.Windows.Forms.NumericUpDown heightBox;
+        private System.Windows.Forms.NumericUpDown xBox;
+        private System.Windows.Forms.NumericUpDown yBox;
         private System.Windows.Forms.RadioButton unCanvasRadio;
         private System.Windows.Forms.GroupBox group;
         private System.Windows.Forms.RadioButton scaleRadio;

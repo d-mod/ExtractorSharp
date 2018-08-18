@@ -62,6 +62,7 @@
     <Compile Include="Config\IConfig.cs" />
     <Compile Include="Draw\IAttractable.cs" />
     <Compile Include="Draw\ILayer.cs" />
+    <Compile Include="Exceptions\FipsException.cs" />
     <Compile Include="Model\Album.cs" />
     <Compile Include="Model\Texture.cs" />
     <Compile Include="Model\Sprite.cs" />

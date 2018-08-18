@@ -573,13 +573,13 @@ namespace ExtractorSharp {
             openButton.Size = new Size(75, 25);
             openButton.UseVisualStyleBackColor = true;
 
-            closeButton.Location = new Point(145, 63);
+            closeButton.Location = new Point(155, 63);
             closeButton.Text = Language["Close"];
             closeButton.Size = new Size(75, 25);
             closeButton.UseVisualStyleBackColor = true;
 
             pathBox.Location = new Point(20, 40);
-            pathBox.Size = new Size(200, 20);
+            pathBox.Size = new Size(210, 20);
             // 
             // box
             // 
@@ -599,13 +599,13 @@ namespace ExtractorSharp {
             ///
             scaleLabel.AutoSize = true;
             scaleLabel.Text = Language["CanvasScale"];
-            scaleLabel.Location = new Point(230, 53);
+            scaleLabel.Location = new Point(250, 53);
 
             ///
             ///
             ///
             scaleBox.Size = new Size(100, 40);
-            scaleBox.Location = new Point(300, 50);
+            scaleBox.Location = new Point(320, 50);
             scaleBox.Minimum = 20;
             scaleBox.Maximum = 100000;
 
@@ -614,12 +614,12 @@ namespace ExtractorSharp {
             //
             //
             pixelateBox.Text = Language["Pixelate"];
-            pixelateBox.Location = new Point(420, 50);
+            pixelateBox.Location = new Point(430, 50);
 
             // 
             // realPositionBox
             // 
-            realPositionBox.Location = new Point(1085, 70);
+            realPositionBox.Location = new Point(1085, 60);
             realPositionBox.Name = "realPositionBox";
             realPositionBox.AutoSize = true;
             realPositionBox.TabIndex = 11;
@@ -627,19 +627,19 @@ namespace ExtractorSharp {
             //
             //
             //
-            displayBox.Location = new Point(1210, 70);
+            displayBox.Location = new Point(1210, 60);
             displayBox.AutoSize = true;
             displayBox.Text = Language["Animation"];
             //
             //
             //
-            linearDodgeBox.Location = new Point(1085, 50);
+            linearDodgeBox.Location = new Point(1085, 30);
             linearDodgeBox.AutoSize = true;
             linearDodgeBox.Text = Language["LinearDodge"];
             ///
             //
             //
-            dyeBox.Location = new Point(1210, 50);
+            dyeBox.Location = new Point(1210, 30);
             dyeBox.AutoSize = true;
             dyeBox.Text = Language["Dye"];
             //
@@ -758,9 +758,9 @@ namespace ExtractorSharp {
 
             previewPanel.Visible = Config["Preview"].Boolean;
             previewPanel.BorderStyle = BorderStyle.FixedSingle;
-            previewPanel.Size = new Size(100, 100);
+            previewPanel.Size = new Size(150, 150);
             previewPanel.BackgroundImageLayout = ImageLayout.Zoom;
-            previewPanel.Location = new System.Drawing.Point(930, 90);
+            previewPanel.Location = new System.Drawing.Point(920, 90);
             ((ISupportInitialize)(box)).EndInit();
             ResumeLayout(false);
             PerformLayout();

@@ -47,7 +47,7 @@ namespace ExtractorSharp.Properties {
         }
         
         /// <summary>
-        ///   使用此强类型资源类，为所有资源查找
+        ///   重写当前线程的 CurrentUICulture 属性
         ///   重写当前线程的 CurrentUICulture 属性。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -115,12 +115,12 @@ namespace ExtractorSharp.Properties {
         ///      &quot;ActionTips&quot;: &quot;是否对所有贴图执行此处理？&quot;,
         ///      &quot;Add&quot;: &quot;添加&quot;,
         ///      &quot;AddAction&quot;: &quot;加入动作&quot;,
+        ///      &quot;AddCompareLayer&quot;: &quot;加入对比图层&quot;,
         ///      &quot;AddFile&quot;: &quot;添加文件&quot;,
         ///      &quot;AddLayer&quot;: &quot;加入图层&quot;,
         ///      &quot;AddList&quot;: &quot;加入列表&quot;,
         ///      &quot;AddListHideImage&quot;: &quot;隐藏文件贴图&quot;,
-        ///      &quot;AddMerge&quot;: &quot;加入拼合&quot;,
-        ///      &quot;AddOutside&quot;: &quot;加入外部文件 [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///      &quot;AddMerge&quot;:  [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Chinese {
             get {
@@ -141,14 +141,14 @@ namespace ExtractorSharp.Properties {
         /// <summary>
         ///   查找类似 {
         ///  &quot;Animation&quot;: false,
-        ///  &quot;ApiHost&quot;: &quot;http://kritsus.net/api/&quot;,
+        ///  &quot;ApiHost&quot;: &quot;https://kritsu.net/api&quot;,
         ///  &quot;AutoSave&quot;: false,
         ///  &quot;AutoSort&quot;: true,
         ///  &quot;AutoUpdate&quot;: true,
         ///  &quot;CanvasImageSize&quot;: &quot;800,600&quot;,
         ///  &quot;CanvasScale&quot;: 100,
         ///  &quot;ClassifySeparator&quot;: &quot;�ָ���&quot;,
-        ///  &quot;FeedbackUrl&quot;: &quot;http://kritsu.net/api/project/feedback/post&quot;,
+        ///  &quot;FeedbackUrl&quot;: &quot;/project/feedback/post&quot;,
         ///  &quot;FlashSpeed&quot;: 20,
         ///  &quot;GamePath&quot;: &quot;&quot;,
         ///  &quot;GifDelay&quot;: 75,
@@ -158,7 +158,8 @@ namespace ExtractorSharp.Properties {
         ///  &quot;LCID&quot;: 2052,
         ///  &quot;LinearDodge&quot;: false,
         ///  &quot;LinearDodgeSpriteConverter&quot;: true,
-        ///  &quot;LineLeve [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///  &quot;LineLevel&quot;: 0.5,
+        ///  &quot;MarketUrl [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Config {
             get {
@@ -544,7 +545,7 @@ namespace ExtractorSharp.Properties {
         ///
         ///  &quot;CanvasImage&quot;: &quot;&quot;,
         ///
-        ///  &quot;CanvasSize&quot;: &quot;800,600&quot;,
+        ///  &quot;CanvasSize&quot;: &quot;840,600&quot;,
         ///
         ///  &quot;StartPosition&quot;: &quot;center&quot;,
         ///

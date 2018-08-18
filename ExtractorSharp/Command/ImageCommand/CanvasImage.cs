@@ -38,7 +38,7 @@ namespace ExtractorSharp.Command.ImageCommand {
                 var entity = _album.List[Indices[i]];
                 _images[i] = entity.Picture;
                 _locations[i] = entity.Location;
-                entity.CanvasImage(_size);
+                entity.CanvasImage(new Rectangle(Point.Empty,_size));
             }
         }
 
@@ -58,7 +58,7 @@ namespace ExtractorSharp.Command.ImageCommand {
         public void Action(Album album, int[] indexes) {
             foreach (var i in indexes) {
                 if (i < album.List.Count && i > -1) {
-                    album.List[i].CanvasImage(_size);
+                    album.List[i].CanvasImage(new Rectangle(Point.Empty, _size));
                 }
             }
         }       
@@ -67,6 +67,6 @@ namespace ExtractorSharp.Command.ImageCommand {
 
         public bool IsChanged => true;
 
-        public string Name => "CanvasImage";
+        public string Name => "CustomCanvasSize";
     }
 }

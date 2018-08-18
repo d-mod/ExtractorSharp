@@ -207,11 +207,13 @@ namespace ExtractorSharp.Core.Model {
         ///     画布化
         /// </summary>
         /// <param name="target"></param>
-        public void CanvasImage(Size target) {
-            if (Type == ColorBits.LINK) return;
-            Picture = Picture.Canvas(new Rectangle(Location, target));
-            Size = target;
-            Location = Point.Empty;
+        public void CanvasImage(Rectangle target) {
+            if (Type == ColorBits.LINK) {
+                return;
+            }
+            Picture = Picture.Canvas(target.Add(new Rectangle(Location, Size.Empty)));
+            Size = target.Size;
+            Location = target.Location;
         }
 
 

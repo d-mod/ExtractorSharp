@@ -1,7 +1,9 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 using ExtractorSharp.Core.Draw;
+using ExtractorSharp.Core.Draw.Paint;
 using ExtractorSharp.Core.Lib;
+using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.Draw.Brush {
     internal class Eraser : IBrush {
@@ -17,7 +19,13 @@ namespace ExtractorSharp.Draw.Brush {
         public Point Location { set; get; }
 
         public void Draw(IPaint paint, Point point, decimal scale) {
-            point = point.Minus(paint.Location).Divide(scale);
+            point = point.Minus(paint.Location);
+            if(paint is Canvas canvas&& canvas.RealPosition) {
+                if(canvas.Tag is Sprite sprite){
+                    point = point.Minus(sprite.Location);
+                }
+            }
+            point = point.Divide(scale);
             if (paint.Tag != null) {
                 Program.Connector.Do("eraser", paint.Tag, point, Program.Drawer.Color, Radius);
             }

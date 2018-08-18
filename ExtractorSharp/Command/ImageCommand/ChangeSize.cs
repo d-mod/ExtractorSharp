@@ -4,7 +4,7 @@ using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.Command.ImageCommand {
-    internal class ChangeSize : ICommand {
+    internal class ChangeSize : ICommand,ICommandMessage{
         private Album _album;
 
         private Bitmap[] _array;
@@ -16,7 +16,7 @@ namespace ExtractorSharp.Command.ImageCommand {
 
         public bool IsChanged => true;
        
-        public string Name => "ChangeImageSize";
+        public string Name => "CanvasScale";
 
         public void Do(params object[] args) {
             _album = args[0] as Album;

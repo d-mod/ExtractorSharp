@@ -45,7 +45,13 @@ namespace ExtractorSharp.Command.FileCommand {
 
 
         public void Undo() {
+            if (currents == null) {
+                return;
+            }
             for (var i = 0; i < currents.Length; i++) {
+                if (olds[i] == null) {
+                    continue;
+                }
                 currents[i].Replace(olds[i]);
             }
         }

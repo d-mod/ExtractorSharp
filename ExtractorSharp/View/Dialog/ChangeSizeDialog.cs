@@ -7,6 +7,7 @@ using ExtractorSharp.Core.Config;
 
 namespace ExtractorSharp.View.Dialog {
     public partial class ChangeSizeDialog : ESDialog {
+
         public ChangeSizeDialog(IConnector connector) : base(connector) {
             InitializeComponent();
             group.Paint += (o, e) => e.Graphics.Clear(BackColor);
@@ -16,7 +17,7 @@ namespace ExtractorSharp.View.Dialog {
 
         private void Excecute(object sender, EventArgs e) {
             if (customRadio.Checked) {
-                var size = new Size((int) widthBox.Value, (int) heightBox.Value);
+                var size = new Size((int)widthBox.Value, (int)heightBox.Value);
                 Config["CanvasImageSize"] = new ConfigValue(size);
                 Connector.Do("canvasImage", Connector.SelectedFile, size, Connector.CheckedImageIndices);
             } else if (scaleRadio.Checked) {
@@ -28,6 +29,10 @@ namespace ExtractorSharp.View.Dialog {
             }
 
             DialogResult = DialogResult.OK;
+        }
+
+        private void GetPoint() {
+
         }
 
         private void UseDefaultScale(object sender, EventArgs e) {

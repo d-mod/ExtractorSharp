@@ -890,7 +890,6 @@ namespace ExtractorSharp {
         /// </summary>
         public void ListFlush() {
             var items = albumList.CheckedItems;
-            var item = albumList.SelectedItem;
             var itemArray = new Album[items.Count];
             items.CopyTo(itemArray, 0);
             albumList.Items.Clear();
@@ -903,10 +902,9 @@ namespace ExtractorSharp {
                     if (p != path) {
                         path = p;
                         var sp = new Album();
-                        sp.Path = $"---------------{Config["ClassifySeparator"].Value}---------------";
+                        sp.Path = $"---------------{Config["ClassifySeparator"]}---------------";
                         albumList.Items.Add(sp);
                     }
-
                     albumList.Items.Add(al);
                 }
             } else {
@@ -918,8 +916,14 @@ namespace ExtractorSharp {
                     albumList.SetItemChecked(i, true);
                 }
             }
-            if (item != null && albumList.Items.Contains(item)) albumList.SelectedItem = item;
-            if (albumList.SelectedIndex == -1 && albumList.Items.Count > 0) albumList.SelectedIndex = 0;
+
+            var item = albumList.SelectedItem;
+            if (item != null && albumList.Items.Contains(item)) {
+                albumList.SelectedItem = item;
+            }
+            if (albumList.SelectedIndex == -1 && albumList.Items.Count > 0) {
+                albumList.SelectedIndex = 0;
+            }
         }
 
 

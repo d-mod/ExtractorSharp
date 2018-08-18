@@ -419,7 +419,7 @@ namespace ExtractorSharp.Core.Coder.Gif {
                         p[0] -= a * (p[0] - b) / alpharadbias;
                         p[1] -= a * (p[1] - g) / alpharadbias;
                         p[2] -= a * (p[2] - r) / alpharadbias;
-                    } catch (Exception) { } // prevents 1.3 miscompilation
+                    } catch (System.Exception) { } // prevents 1.3 miscompilation
                 }
                 if (k > lo) {
                     p = network[k--];
@@ -427,7 +427,7 @@ namespace ExtractorSharp.Core.Coder.Gif {
                         p[0] -= a * (p[0] - b) / alpharadbias;
                         p[1] -= a * (p[1] - g) / alpharadbias;
                         p[2] -= a * (p[2] - r) / alpharadbias;
-                    } catch (Exception) { }
+                    } catch (System.Exception) { }
                 }
             }
         }

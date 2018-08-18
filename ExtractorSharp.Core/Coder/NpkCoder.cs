@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using ExtractorSharp.Core.Handle;
 using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Core.Model;
+using ExtractorSharp.Exceptions;
 
 namespace ExtractorSharp.Core.Coder {
     public static class NpkCoder {
@@ -105,10 +106,14 @@ namespace ExtractorSharp.Core.Coder {
             var count = source.Length / 17 * 17;
             var data = new byte[count];
             Array.Copy(source, 0, data, 0, count);
-            using (var sha = new SHA256Managed()) {
-                data = sha.ComputeHash(data);
+            try {
+                using (var sha = new SHA256Managed()) {
+                    data = sha.ComputeHash(data);
+                }
+                return data;
+            } finally {
+                throw new FipsException();
             }
-            return data;
         }
 
 
@@ -262,7 +267,9 @@ namespace ExtractorSharp.Core.Coder {
                 var match = regex.Match(item.Name);
                 return match.Success && match.Value.Equals(code);
             }));
-            if (list.Count == 0) list.AddRange(array.Where(item => MatchCode(item.Name, code)));
+            if (list.Count == 0) {
+                list.AddRange(array.Where(item => MatchCode(item.Name, code)));
+            }
             return list;
         }
 
