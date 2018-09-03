@@ -1,6 +1,7 @@
 ﻿using ExtractorSharp.Core.Coder;
 using ExtractorSharp.Core.Command;
 using ExtractorSharp.Core.Model;
+using System.Text.RegularExpressions;
 
 namespace ExtractorSharp.Command.FileCommand {
     /// <summary>
@@ -25,7 +26,14 @@ namespace ExtractorSharp.Command.FileCommand {
             }
             olds = new Album[currents.Length];
             var i = 0;
-            NpkCoder.Compare(GamePath, (a1, a2) => {
+            var dir = NpkCoder.IMAGE_DIR;
+            if (currents.Length > 0) {
+                if (Regex.IsMatch(currents[0].Path, "^sounds/.*\\.ogg$")) {
+                    dir = NpkCoder.SOUND_DIR;
+                }
+            }
+
+            NpkCoder.Compare(GamePath, dir, (a1, a2) => {
                 var old = new Album();
                 old.Replace(a2);//保存旧文件
                 a2.Replace(a1); //替换为源文件
