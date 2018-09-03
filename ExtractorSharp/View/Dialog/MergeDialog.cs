@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -13,10 +14,19 @@ using ExtractorSharp.Core.Model;
 using ExtractorSharp.EventArguments;
 
 namespace ExtractorSharp.View.Dialog {
-    internal partial class MergeDialog : ESDialog {
+    internal partial class MergeDialog : ESDialog{
         private readonly Merger Merger;
         private int SelectedIndex { set; get; } = -1;
         private Album Album;
+
+        private const int IGNORE = 0;
+
+        private const int LINEARDODGE = 1;
+
+
+        private const int NONE = 2;
+
+        private Regex GlowLayerRegex = new Regex("^(.*)f[\\d+]?.img$");
 
         private string Extensions {
             get {
@@ -42,6 +52,7 @@ namespace ExtractorSharp.View.Dialog {
             addFileButton.Click += AddOutside;
             moveDownItem.Click += MoveDown;
             moveUpItem.Click += MoveUp;
+            Merger.PreHandles.Add(GlowLayerHandle);
             Merger.MergeQueueChanged += Flush;
             Merger.MergeStarted += MergeStart;
             Merger.MergeProcessing += MergeProcessing;
@@ -92,6 +103,7 @@ namespace ExtractorSharp.View.Dialog {
 
         protected override void OnVisibleChanged(EventArgs e) {
             base.OnVisibleChanged(e);
+            Config["AutoTrim"] = new ConfigValue(autoTrimCheck.Checked);
             Config["AutoSort"] = new ConfigValue(autoSortCheck.Checked);
             Config["MergeCompletedHide"] = new ConfigValue(completedHideCheck.Checked);
             Config["GlowLayerMode"] = new ConfigValue(glowLayerBox.SelectedIndex);
@@ -144,6 +156,9 @@ namespace ExtractorSharp.View.Dialog {
             mergerButton.Enabled = true;
             sortButton.Enabled = true;
             prograss.Visible = false;
+            if (autoTrimCheck.Checked) {
+                Connector.Do("uncanvasImage", Album, null);
+            }
             if (completedHideCheck.Checked) {
                 DialogResult = DialogResult.OK;
             }
@@ -252,6 +267,32 @@ namespace ExtractorSharp.View.Dialog {
             if (target > -1) {
                 list.SelectedIndex = target;
             }
+        }
+
+
+        public int GlowLayerHandle(List<Album> list, int version) {
+            var glowLayerMode = glowLayerBox.SelectedIndex;
+            if (glowLayerMode != NONE) {
+                for (var i = 0; i < list.Count; i++) {
+                    var f = list[i];
+                    if (GlowLayerRegex.IsMatch(f.Name)) {
+                        switch (glowLayerMode) {
+                            case IGNORE:
+                                list.RemoveAt(i);
+                                i--;
+                                break;
+                            case LINEARDODGE:
+                                list.RemoveAt(i);
+                                var clone = f.Clone();
+                                clone.List.ForEach(e => e.Picture = e.Picture.LinearDodge());
+                                list.Insert(i, clone);
+                                version = (int)ImgVersion.Ver2;
+                                break;
+                        }
+                    }
+                }
+            }
+            return version;
         }
 
         private void Remove(object sender, EventArgs e) {

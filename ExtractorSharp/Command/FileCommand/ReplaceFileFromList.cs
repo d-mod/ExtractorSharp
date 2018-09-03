@@ -1,11 +1,13 @@
 ﻿using ExtractorSharp.Core.Command;
 using ExtractorSharp.Core.Model;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace ExtractorSharp.Command.FileCommand {
-    /// <summary>
-    ///     替换IMG文件
-    /// </summary>
-    internal class ReplaceFile : IMutipleAciton, ICommandMessage {
+    internal class ReplaceFileFromList : IMutipleAciton, ICommandMessage {
         private Album _oldSource, _source, _target;
 
         public void Do(params object[] args) {
@@ -40,8 +42,8 @@ namespace ExtractorSharp.Command.FileCommand {
 
         public bool CanUndo => true;
 
-        public bool IsChanged => true;        
+        public bool IsChanged => true;
 
-        public string Name => "ReplaceFromFile";
+        public string Name => "ReplaceFromList";
     }
 }

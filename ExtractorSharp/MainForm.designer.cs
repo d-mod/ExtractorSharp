@@ -40,14 +40,19 @@ namespace ExtractorSharp {
             albumList = new ESListBox<Album>();
             albumListMenu = albumList.ContextMenuStrip;
 
-            editImgItem = new ToolStripMenuItem();
-            cutImgItem = new ToolStripMenuItem();
-            copyImgItem = new ToolStripMenuItem();
-            pasteImgItem = new ToolStripMenuItem();
+            editFileItem = new ToolStripMenuItem();
+            cutFileItem = new ToolStripMenuItem();
+            copyFileItem = new ToolStripMenuItem();
+            pasteFileItem = new ToolStripMenuItem();
 
-            replaceItem = new ToolStripMenuItem();
+            replaceFromFileItem = new ToolStripMenuItem();
+            addReplaceItem = new ToolStripMenuItem();
+            replaceToThisFileItem = new ToolStripMenuItem();
+
             saveAsItem = new ToolStripMenuItem();
-            newImgItem = new ToolStripMenuItem();
+            newFileItem = new ToolStripMenuItem();
+            exchangeFileItem = new ToolStripMenuItem();
+
             hideImgItem = new ToolStripMenuItem();
             addMergeItem = new ToolStripMenuItem();
             addOutsideMergeItem = new ToolStripMenuItem();
@@ -206,11 +211,14 @@ namespace ExtractorSharp {
             // 
             // albumListMenu
             // 
-            albumListMenu.Items.Add(editImgItem);
-            albumListMenu.Items.Add(newImgItem);
-            albumListMenu.Items.AddSeparator();
-            albumListMenu.Items.Add(replaceItem);
+            albumListMenu.Items.Add(editFileItem);
+            albumListMenu.Items.Add(newFileItem);
+            albumListMenu.Items.Add(exchangeFileItem);
             albumListMenu.Items.Add(saveAsItem);
+            albumListMenu.Items.AddSeparator();
+            albumListMenu.Items.Add(addReplaceItem);
+            albumListMenu.Items.Add(replaceToThisFileItem);
+            albumListMenu.Items.Add(replaceFromFileItem);
             albumListMenu.Items.AddSeparator();
             albumListMenu.Items.Add(repairFileItem);
             albumListMenu.Items.Add(recoverFileItem);
@@ -231,35 +239,48 @@ namespace ExtractorSharp {
             albumListMenu.Items.AddSeparator();
             albumListMenu.Size = new Size(221, 268);
 
-            editImgItem.Text = Language["Edit"];
+            editFileItem.Text = Language["Edit"];
 
-            editImgItem.DropDownItems.Add(cutImgItem);
-            editImgItem.DropDownItems.Add(copyImgItem);
-            editImgItem.DropDownItems.Add(pasteImgItem);
+            editFileItem.DropDownItems.Add(cutFileItem);
+            editFileItem.DropDownItems.Add(copyFileItem);
+            editFileItem.DropDownItems.Add(pasteFileItem);
 
-            replaceItem.Text = Language["ReplaceFile"];
-            replaceItem.ShortcutKeys = Keys.Control | Keys.Q;
-            replaceItem.Image = Resources.replace;
+            replaceFromFileItem.Text = Language["ReplaceFromFile"];
+            replaceFromFileItem.ShortcutKeys = Keys.Control | Keys.Q;
+            replaceFromFileItem.Image = Resources.replace;
 
-            cutImgItem.Text = Language["Cut"];
-            cutImgItem.ShortcutKeys = Keys.Control | Keys.X;
-            cutImgItem.Image = Resources.cut;
 
-            copyImgItem.Text = Language["Copy"];
-            copyImgItem.ShortcutKeys = Keys.Control | Keys.C;
-            copyImgItem.Image = Resources.copy;
+            addReplaceItem.Text = Language["AddReplace"];
+            addReplaceItem.ShortcutKeys = Keys.Control | Keys.W;
 
-            pasteImgItem.Text = Language["Paste"];
-            pasteImgItem.ShortcutKeys = Keys.Control | Keys.V;
-            pasteImgItem.Image = Resources.paste;
+            replaceToThisFileItem.Text = Language["ReplaceToThisFile"];
+            replaceToThisFileItem.ShortcutKeys = Keys.Control | Keys.E;
+
+
+
+            cutFileItem.Text = Language["Cut"];
+            cutFileItem.ShortcutKeys = Keys.Control | Keys.X;
+            cutFileItem.Image = Resources.cut;
+
+            copyFileItem.Text = Language["Copy"];
+            copyFileItem.ShortcutKeys = Keys.Control | Keys.C;
+            copyFileItem.Image = Resources.copy;
+
+            pasteFileItem.Text = Language["Paste"];
+            pasteFileItem.ShortcutKeys = Keys.Control | Keys.V;
+            pasteFileItem.Image = Resources.paste;
 
             saveAsItem.Text = Language["SaveAs"];
             saveAsItem.ShortcutKeys = Keys.Control | Keys.E;
             saveAsItem.Image = Resources.saveAs;
 
-            newImgItem.Text = Language["NewFile"];
-            newImgItem.ShortcutKeys = Keys.Control | Keys.N;
-            newImgItem.Image = Resources.newFile;
+            newFileItem.Text = Language["NewFile"];
+            newFileItem.ShortcutKeys = Keys.Control | Keys.N;
+            newFileItem.Image = Resources.newFile;
+
+
+            exchangeFileItem.Text = Language["ExchangeFile"];
+            exchangeFileItem.ShortcutKeys = Keys.Control | Keys.G;
 
             hideImgItem.Text = Language["HideFile"];
             hideImgItem.ShortcutKeys = Keys.Control | Keys.H;
@@ -827,13 +848,18 @@ namespace ExtractorSharp {
         private ToolStripMenuItem modelMenu;      //模型管理
 
         private ContextMenuStrip albumListMenu;
-        private ToolStripMenuItem newImgItem;       //新建文件
-        private ToolStripMenuItem replaceItem;      //替换
+        private ToolStripMenuItem newFileItem;       //新建文件
+        private ToolStripMenuItem replaceFromFileItem;      //替换到外部文件
+        private ToolStripMenuItem replaceToThisFileItem;   //替换到该文件
+        private ToolStripMenuItem addReplaceItem;    //加入替换
 
-        private ToolStripMenuItem editImgItem;      
-        private ToolStripMenuItem cutImgItem;       //剪切
-        private ToolStripMenuItem copyImgItem;      //复制
-        private ToolStripMenuItem pasteImgItem;     //粘贴
+        private ToolStripMenuItem exchangeFileItem;  //互换文件
+
+
+        private ToolStripMenuItem editFileItem;      
+        private ToolStripMenuItem cutFileItem;       //剪切
+        private ToolStripMenuItem copyFileItem;      //复制
+        private ToolStripMenuItem pasteFileItem;     //粘贴
 
         private ToolStripMenuItem saveAsItem;       //另存为
         private ToolStripMenuItem renameItem;       //重命名

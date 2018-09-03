@@ -1,4 +1,6 @@
-﻿namespace ExtractorSharp.Exceptions {
+﻿using System;
+
+namespace ExtractorSharp.Exceptions {
     internal class ConfigException : ApplicationException {
         public ConfigException() { }
 

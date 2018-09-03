@@ -169,6 +169,9 @@ namespace ExtractorSharp.Config {
         public void SaveAs(string Path, IEnumerable<KeyValuePair<string, ConfigValue>> config) {
             var root = new LSObject();
             foreach (var entry in config) {
+                if (!entry.Value.Saveable) {
+                    continue;
+                }
                 var item = new LSObject();
                 item.Name = entry.Key;
                 item.Value = entry.Value.Object;

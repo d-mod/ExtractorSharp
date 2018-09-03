@@ -18,9 +18,10 @@ namespace ExtractorSharp.Component {
         }
 
         protected override void OnDrawItem(DrawItemEventArgs e) {
-            var format = new StringFormat();
-            format.LineAlignment = StringAlignment.Center;
-            format.Alignment = StringAlignment.Center;
+            var format = new StringFormat {
+                LineAlignment = StringAlignment.Center,
+                Alignment = StringAlignment.Center
+            };
             var rect = GetTabRect(e.Index);
             var brush = Brushes.Black;
             var text = TabPages[e.Index].Text;

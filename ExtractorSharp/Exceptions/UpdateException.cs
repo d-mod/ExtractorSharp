@@ -1,4 +1,6 @@
-﻿namespace ExtractorSharp.Exceptions {
+﻿using System;
+
+namespace ExtractorSharp.Exceptions {
     internal class UpdateException : ApplicationException {
         public UpdateException() { }
 

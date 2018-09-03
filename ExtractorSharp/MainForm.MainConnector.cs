@@ -26,6 +26,7 @@ namespace ExtractorSharp {
                 SaveChanged += (o, e) => OnSaveChanged();
                 FileSupports.Add(new ImgSupport());
                 FileSupports.Add(new NpkSupport());
+                FileSupports.Add(new AudioSupport());
                 FileSupports.Add(new GifSupport());         
                 var builder = new LSBuilder();
                 var recentConfigPath = $@"{Config["RootPath"]}\conf\recent.json";

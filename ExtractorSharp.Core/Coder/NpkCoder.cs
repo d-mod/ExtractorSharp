@@ -111,7 +111,7 @@ namespace ExtractorSharp.Core.Coder {
                     data = sha.ComputeHash(data);
                 }
                 return data;
-            } finally {
+            } catch {
                 throw new FipsException();
             }
         }
@@ -156,33 +156,33 @@ namespace ExtractorSharp.Core.Coder {
                 List.Add(album);
             }
             for (var i = 0; i < List.Count; i++) {
-                var album = List[i];
-                stream.Seek(album.Offset, SeekOrigin.Begin);
-                var albumFlag = stream.ReadString();
-                if (albumFlag == IMG_FLAG) {
-                    album.IndexLength = stream.ReadLong();
-                    album.Version = (ImgVersion)stream.ReadInt();
-                    album.Count = stream.ReadInt();
-                    album.InitHandle(stream);
-                } else {
-                    if (albumFlag != IMAGE_FLAG) {
-                        album.Version = ImgVersion.Other;
-                        stream.Seek(album.Offset, SeekOrigin.Begin);
-                        if (album.Name.ToLower().EndsWith(".ogg")) {
-                            album.Version = ImgVersion.Other;
-                            if (i < List.Count - 1) {
-                                album.IndexLength = List[i + 1].Offset - stream.Position;
-                            } else {
-                                album.IndexLength = stream.Length - stream.Position;
-                            }
-                        }
-                    } else {
-                        album.Version = ImgVersion.Ver1;
-                    }
-                    album.InitHandle(stream);
-                }
+                var length = i < List.Count - 1 ? List[i + 1].Offset : stream.Length;
+                stream.ReadImg(List[i], length);
             }
             return List;
+        }
+
+        public static void ReadImg(this Stream stream, Album album, long length) {
+            stream.Seek(album.Offset, SeekOrigin.Begin);
+            var albumFlag = stream.ReadString();
+            if (albumFlag == IMG_FLAG) {
+                album.IndexLength = stream.ReadLong();
+                album.Version = (ImgVersion)stream.ReadInt();
+                album.Count = stream.ReadInt();
+                album.InitHandle(stream);
+            } else  {
+                if (albumFlag != IMAGE_FLAG) {
+                    album.Version = ImgVersion.Other;
+                    stream.Seek(album.Offset, SeekOrigin.Begin);
+                    if (album.Name.ToLower().EndsWith(".ogg")) {
+                        album.Version = ImgVersion.Other;
+                        album.IndexLength = length - stream.Position;
+                    }
+                } else {
+                    album.Version = ImgVersion.Ver1;
+                }
+                album.InitHandle(stream);
+            }
         }
 
 
@@ -250,12 +250,42 @@ namespace ExtractorSharp.Core.Coder {
             return list;
         }
 
+        public static List<Album> FindByCode(string path, int code) {
+            return FindByCode(path, CompleteCode(code));
+        }
+
+        public static List<Album> FindByCode(string path, string code) {
+            return FindByCode(path, code, false, false);
+        }
+
+        public static List<Album> FindByCode(string path, int code, bool mask, bool ban) {
+            return FindByCode(path, CompleteCode(code), mask, ban);
+        }
+
+        public static List<Album> FindByCode(string path, string code, bool mask, bool ban) {
+            var stream = File.OpenRead(path);
+            var list = ReadInfo(stream);
+            list = FindByCode(list, code, mask, ban);
+            foreach (var al in list) {
+                stream.Seek(al.Offset, SeekOrigin.Begin);
+                stream.ReadImg(al, stream.Length);
+            }
+            stream.Close();
+            var regex = new Regex("\\d+");
+            list.ForEach(e => {
+                e.TableIndex = int.Parse(code) % 100;
+                e.Name = regex.Replace(e.Name, code, 1);
+            });           
+            return list;
+        }
+
         public static List<Album> FindByCode(IEnumerable<Album> array, string code) {
             return FindByCode(array, code, false, false);
         }
 
 
         public static List<Album> FindByCode(IEnumerable<Album> array, string code, bool mask, bool ban) {
+            var regex = new Regex("\\d+");
             var list = new List<Album>(array.Where(item => {
                 if (!mask && item.Name.Contains("mask")) {
                     return false;
@@ -263,12 +293,12 @@ namespace ExtractorSharp.Core.Coder {
                 if (!ban && Regex.IsMatch(item.Name, @"\(.*\)+")) {
                     return false;
                 }
-                var regex = new Regex("\\d+");
+
                 var match = regex.Match(item.Name);
                 return match.Success && match.Value.Equals(code);
             }));
             if (list.Count == 0) {
-                list.AddRange(array.Where(item => MatchCode(item.Name, code)));
+                list.AddRange(array.Where(item =>  MatchCode(item.Name, code)));
             }
             return list;
         }
@@ -302,8 +332,10 @@ namespace ExtractorSharp.Core.Coder {
 
         public static string CompleteCode(int code) {
             var str = code.ToString();
-            while (str.Length < 4) {
-                str = string.Concat(0, str);
+            if (code > 0) {
+                while (str.Length < 4) {
+                    str = string.Concat(0, str);
+                }
             }
             return str;
         }
@@ -352,46 +384,6 @@ namespace ExtractorSharp.Core.Coder {
             return arr;
         }
 
-        public static Bitmap Preview(Album[] array, int index) {
-            var bmp = new Bitmap(130, 180);
-            var g = Graphics.FromImage(bmp);
-            var x = 800;
-            var y = 600;
-            foreach (var al in array) {
-                if (index >= al.List.Count) {
-                    continue;
-                }
-                var source = al.List[index];
-                if (source.Type == ColorBits.LINK) {
-                    source = source.Target;
-                }
-                if (source.CompressMode == CompressMode.NONE && source.Width * source.Height == 1) {
-                    continue;
-                }
-                if (source.X < x) {
-                    x = source.X;
-                }
-                if (source.Y < y) {
-                    y = source.Y;
-                }
-            }
-            foreach (var img in array) {
-                if (index > img.List.Count - 1) {
-                    continue;
-                }
-                var source = img[index];
-                if (source.Type == ColorBits.LINK) {
-                    source = source.Target;
-                }
-                if (source.CompressMode == CompressMode.NONE && source.Width * source.Height == 1) {
-                    continue;
-                }
-                g.DrawImage(source.Picture, source.X - x, source.Y - y);
-            }
-            g.Dispose();
-            return bmp;
-        }
-
         #region 加载保存
 
         public static List<Album> Load(string file) {
@@ -429,16 +421,30 @@ namespace ExtractorSharp.Core.Coder {
 
 
         public static Album LoadWithName(string file, string name) {
-            var list = Load(file);
-            Album al = null;
-            foreach (var img in list) {
-                if (img.Path.Equals(name)) {
-                    al = img;
-                    break;
-                }
+            using (var stream = File.OpenRead(file)) {
+               return LoadWithName(stream, name);
             }
-            return al;
         }
+
+        public static Album LoadWithName(Stream stream, string name) {
+            var list = ReadInfo(stream);
+            list = LoadWithNameArray(stream, name);
+            if (list.Count > 0) {
+                return list[0];
+            }
+            return null;
+        }
+
+        public static List<Album> LoadWithNameArray(Stream stream, params string[] names) {
+            var list = ReadInfo(stream);
+            list = list.FindAll(e => names.Contains(e.Path));
+            foreach (var al in list) {
+                stream.Seek(al.Offset, SeekOrigin.Begin);
+                stream.ReadImg(al, stream.Length);
+            }
+            return list;
+        }
+
 
         public static void Save(string file, List<Album> list) {
             using (var fs = File.Open(file, FileMode.Create)) {

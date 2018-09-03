@@ -95,7 +95,9 @@ namespace ExtractorSharp {
             Controller.Registry("addImg", typeof(AddFile));
             Controller.Registry("deleteImg", typeof(DeleteFile));
             Controller.Registry("renameImg", typeof(RenameFile));
+            Controller.Registry("exchangeFile", typeof(ExchangeFile));
             Controller.Registry("replaceImg", typeof(ReplaceFile));
+            Controller.Registry("replaceFileFromList", typeof(ReplaceFileFromList));
             Controller.Registry("newImg", typeof(NewFile));
             Controller.Registry("hideImg", typeof(HideFile));
             Controller.Registry("sortImg", typeof(SortFile));
@@ -169,7 +171,7 @@ namespace ExtractorSharp {
                     case IOException _:
                         Connector.SendError("FileHandleError");
                         break;
-                    case Exceptions.ApplicationException _ when Connector != null:
+                    case ApplicationException _ when Connector != null:
                         Connector.SendError(e.Exception.Message);
                         break;
                     case FipsException _:
@@ -335,7 +337,7 @@ namespace ExtractorSharp {
         /// <param name="address"></param>
         /// <param name="productName"></param>
         private static void StartUpdate() {
-            var name = $"{Config["RootPath"]}/{Config["UpdateExeName"]}";
+            var name = $"{Config["RootPath"]}\\{Config["UpdateExeName"]}";
             try {
                 var client = new WebClient();
                 client.DownloadFile(Config["UpdateExeUrl"].Value, name);

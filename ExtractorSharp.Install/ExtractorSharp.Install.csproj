@@ -36,6 +36,12 @@
   <PropertyGroup>
     <ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>ExtractorSharp.Install.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <NoWin32Manifest>true</NoWin32Manifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -50,8 +56,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config\ConfigValue.cs" />
     <Compile Include="FileInfo.cs" />
-    <Compile Include="Initializer.cs" />
+    <Compile Include="Language.cs" />
     <Compile Include="Loose\LSBuilder.cs" />
     <Compile Include="Loose\LSIgnoreAttribute.cs" />
     <Compile Include="Loose\LSObject.cs" />
@@ -65,11 +72,53 @@
     <Compile Include="InstallForm.Designer.cs">
       <DependentUpon>InstallForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PagePanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PagePanel.Designer.cs">
+      <DependentUpon>PagePanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Page\EndPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Page\EndPage.Designer.cs">
+      <DependentUpon>EndPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Page\PathPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Page\PathPage.Designer.cs">
+      <DependentUpon>PathPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Page\SettingPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Page\SettingPage.Designer.cs">
+      <DependentUpon>SettingPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Page\InstallPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Page\InstallPage.Designer.cs">
+      <DependentUpon>InstallPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="VersionInfo.cs" />
     <EmbeddedResource Include="InstallForm.resx">
       <DependentUpon>InstallForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PagePanel.resx">
+      <DependentUpon>PagePanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Page\EndPage.resx">
+      <DependentUpon>EndPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Page\PathPage.resx">
+      <DependentUpon>PathPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Page\SettingPage.resx">
+      <DependentUpon>SettingPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -81,6 +130,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Page\InstallPage.resx">
+      <DependentUpon>InstallPage.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

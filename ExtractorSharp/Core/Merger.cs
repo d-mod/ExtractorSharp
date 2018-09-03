@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using ExtractorSharp.Core.Coder;
+using ExtractorSharp.Core.Composition;
 using ExtractorSharp.Core.Handle;
 using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Core.Model;
@@ -17,9 +18,7 @@ namespace ExtractorSharp.Core {
     /// <summary>
     ///     拼合器
     /// </summary>
-    public class Merger {
-        public delegate void MergeHandler(object sender, MergeEventArgs e);
-
+    public class Merger :IMergeProgress{
 
         public delegate void MergeQueueHandler(object sender, MergeQueueEventArgs e);
 
@@ -31,18 +30,13 @@ namespace ExtractorSharp.Core {
 
         public int GlowLayerMode { set; get; }
 
-        public const int IGNORE = 0;
 
-        public const int LINEARDODGE = 1;
-
-
-        public const int NONE = 2;
-
-        private Regex GlowLayerRegex = new Regex("^(.*)f[\\d+]?.img$");
+        public readonly List<Func<List<Album>,int,int>> PreHandles;
 
         public Merger() {
             Queues = new List<Album>();
             Sorters = new List<ISorter>();
+            PreHandles = new List<Func<List<Album>, int, int>>();
             InitDictionary();
         }
 
@@ -54,35 +48,23 @@ namespace ExtractorSharp.Core {
         ///     拼合队列事件
         /// </summary>
         public event MergeQueueHandler MergeQueueChanged;
-
-        /// <summary>
-        ///     启动拼合
-        /// </summary>
-        public event MergeHandler MergeStarted;
-
-        /// <summary>
-        ///     拼合进行
-        /// </summary>
-        public event MergeHandler MergeProcessing;
-
-        /// <summary>
-        ///     拼合完成
-        /// </summary>
-        public event MergeHandler MergeCompleted;
+        public event Avatars.MergeHandler MergeStarted;
+        public event Avatars.MergeHandler MergeProcessing;
+        public event Avatars.MergeHandler MergeCompleted;
 
         public void OnMergeQueueChanged(MergeQueueEventArgs e) {
             MergeQueueChanged?.Invoke(this, e);
         }
 
-        private void OnMergeStarted(MergeEventArgs e) {
+        public void OnMergeStarted(MergeEventArgs e) {
             MergeStarted?.Invoke(this, e);
         }
 
-        private void OnMergeProcessing(MergeEventArgs e) {
+        public void OnMergeProcessing(MergeEventArgs e) {
             MergeProcessing?.Invoke(this, e);
         }
 
-        private void OnMergeCompleted(MergeEventArgs e) {
+        public void OnMergeCompleted(MergeEventArgs e) {         
             MergeCompleted?.Invoke(this, e);
         }
 
@@ -165,123 +147,16 @@ namespace ExtractorSharp.Core {
         ///     执行拼合
         /// </summary>
         public void RunMerge() {
-            var e = new MergeEventArgs();
-            var Array = Queues.ToArray().Reverse(); //序列反转
-            var count = 0;
-            var version = Version > 0 ? (ImgVersion)Version : ImgVersion.Ver2;
-            foreach (var al in Array) {
-                if (al.List.Count > count) {
-                    count = al.List.Count;
-                }
-                if (Version == 0 && al.Version > version) {
-                    version = al.Version;
-                }
-            }
-
-            var Album = new Album {
-                Version = version
-            };
-            Album.InitHandle(null);
-            e.Count = count;
-            e.Album = Album;
-            OnMergeStarted(e); //启动拼合事件
-            var entitys = new List<Sprite>();
-            var lineardodge = false;
-            for (var i = 0; i < count; i++) {
-                var entity = new Sprite(Album);
-                var width = 1;
-                var height = 1;
-                var max_width = 0;
-                var max_height = 0;
-                var x = 800;
-                var y = 600;
-                var type = ColorBits.ARGB_1555;
-                foreach (var al in Array) {
-                    if (i < al.List.Count) {
-                        var source = al.List[i];
-                        if (source.Type == ColorBits.LINK) {
-                            source = source.Target;
-                        }
-                        if (source.CanvasWidth > max_width) {
-                            max_width = source.CanvasHeight;
-                        }
-                        if (source.CanvasHeight > max_height) {
-                            max_height = source.CanvasHeight;
-                        }
-                        if (source.CompressMode == CompressMode.NONE && source.Width * source.Height == 1) {
-                            continue;
-                        }
-                        if (source.Width + source.X > width) {
-                            width = source.Width + source.X;
-                        }
-                        if (source.Height + source.Y > height) {
-                            height = source.Height + source.Y;
-                        }
-                        if (source.X < x) {
-                            x = source.X;
-                        }
-                        if (source.Y < y) {
-                            y = source.Y;
-                        }
-                        if (source.Type > type && source.Type < ColorBits.LINK) {
-                            type = source.Type;
-                        }
-                    }
-                }
-
-                width -= x; //获得上下左右两端的差,即宽高
-                height -= y;
-                width = width > 1 ? width : 1; //防止宽高小于1
-                height = height > 1 ? height : 1;
-                if (width * height > 1) {
-                    entity.CompressMode = CompressMode.ZLIB;
-                }
-                entity.Type = type;
-                entity.Index = entitys.Count;
-                entity.Location = new Point(x, y);
-                entity.CanvasSize = new Size(max_width, max_height);
-                var image = new Bitmap(width, height);
-                using (var g = Graphics.FromImage(image)) {
-                    foreach (var al in Array) {
-                        if (i < al.List.Count) {
-                            var source = al.List[i];
-                            if (source.Type == ColorBits.LINK) {
-                                source = source.Target;
-                            }
-
-                            var bitmap = source.Picture;
-                            if (GlowLayerRegex.IsMatch(al.Name)) {
-                                switch (GlowLayerMode) {
-                                    case IGNORE:
-                                        continue;
-                                    case LINEARDODGE:
-                                        lineardodge = true;
-                                        bitmap = bitmap.LinearDodge();
-                                        break;
-                                    case NONE:
-                                        break;
-                                }
-                            }
-                            g.DrawImage(bitmap, source.X - x, source.Y - y); //绘制贴图
-                        }
-                    }
-                }
-                entity.ReplaceImage(type, false, image); //替换贴图
-                e.Progress++; //拼合进度自增
-                OnMergeProcessing(e);
-                entitys.Add(entity);
-            }
-            Album.List.AddRange(entitys);
-            if (lineardodge) {//如果进行了线性减淡,Ver4/6可能会导致色表溢出,所以进行转换
-                Album.ConvertTo(ImgVersion.Ver2);
-            }
-            OnMergeCompleted(e); //拼合完成
+            var list = Queues.ToList();
+            var version = Version;
+            PreHandles.ForEach(e => version = e.Invoke(list, version));
+            Avatars.Merge(list, version, this);
         }
 
         public void Priview(int index, Graphics g) {
             var array = Queues.ToArray();
             Array.Reverse(array);
-            var bmp = NpkCoder.Preview(array, index);
+            var bmp = Avatars.Preview(array, index);
             g.DrawImage(bmp, new Point(20, 20));
         }
 

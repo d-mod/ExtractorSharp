@@ -51,6 +51,7 @@ namespace ExtractorSharp.View.Dialog{
             this.nextButton = new ESButton();
             this.completedHideCheck = new CheckBox();
             this.autoSortCheck = new CheckBox();
+            this.autoTrimCheck = new CheckBox();
             this.versionLabel = new Label();
             this.versionBox = new ComboBox();
             this.glowLayerLabel = new Label();
@@ -172,16 +173,22 @@ namespace ExtractorSharp.View.Dialog{
             this.nextButton.Size = new Size(20, 20);
             this.nextButton.Image = Resources.next;
 
-            this.completedHideCheck.Location = new Point(150, 420);
+            this.completedHideCheck.Location = new Point(500, 380);
             this.completedHideCheck.Text = Language["CompletedHide"];
             this.completedHideCheck.AutoSize = true;
             this.completedHideCheck.Checked = Config["MergeCompletedHide"].Boolean;
 
 
-            this.autoSortCheck.Location = new Point(32, 420);
+            this.autoSortCheck.Location = new Point(315, 380);
             this.autoSortCheck.Text = Language["AutoSort"];
             this.autoSortCheck.AutoSize = true;
             this.autoSortCheck.Checked = Config["AutoSort"].Boolean;
+
+
+            this.autoTrimCheck.Location = new Point(410, 380);
+            this.autoTrimCheck.Text = Language["AutoTrim"];
+            this.autoTrimCheck.AutoSize = true;
+            this.autoTrimCheck.Checked = Config["AutoTrim"].Boolean;
 
             this.versionLabel.AutoSize = true;
             this.versionLabel.Location = new Point(32, 340);
@@ -202,7 +209,7 @@ namespace ExtractorSharp.View.Dialog{
             // MergeDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
-            this.ClientSize = new System.Drawing.Size(650, 460);
+            this.ClientSize = new System.Drawing.Size(650, 500);
             this.Controls.Add(this.prograss);
             this.Controls.Add(this.mergerButton);
             this.Controls.Add(this.sortButton);
@@ -218,6 +225,7 @@ namespace ExtractorSharp.View.Dialog{
             this.Controls.Add(lastButton);
             this.Controls.Add(nextButton);
             this.Controls.Add(autoSortCheck);
+            this.Controls.Add(autoTrimCheck);
             this.Controls.Add(completedHideCheck);
             this.Controls.Add(versionLabel);
             this.Controls.Add(versionBox);
@@ -254,6 +262,7 @@ namespace ExtractorSharp.View.Dialog{
         private ESButton nextButton;
         private ESButton addFileButton;
         private CheckBox completedHideCheck;
+        private CheckBox autoTrimCheck;
         private CheckBox autoSortCheck;
         private CheckBox disableRepeatCheck;
         private ComboBox addFileCommbox;

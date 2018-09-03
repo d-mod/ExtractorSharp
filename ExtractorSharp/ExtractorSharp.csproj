@@ -119,7 +119,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command\DrawCommand\MoveToolsDraw.cs" />
+    <Compile Include="Command\FileCommand\ExchangeFile.cs" />
     <Compile Include="Command\FileCommand\RecoverFile.cs" />
+    <Compile Include="Command\FileCommand\ReplaceFileFromList.cs" />
     <Compile Include="Command\FileCommand\SaveFile.cs" />
     <Compile Include="Command\ImageCommand\DyeImage.cs" />
     <Compile Include="Command\ImageCommand\PasteSingleImage.cs" />
@@ -179,9 +181,7 @@
     <Compile Include="Draw\Brush\Pencil.cs" />
     <Compile Include="Command\ImageCommand\ChangePosition.cs" />
     <Compile Include="Command\ImageCommand\UnCanvasImage.cs" />
-    <Compile Include="EventArguments\MergeEventArg.cs" />
     <Compile Include="EventArguments\LayerEventArgs.cs" />
-    <Compile Include="Exceptions\ApplicationException.cs" />
     <Compile Include="Exceptions\CommandException.cs" />
     <Compile Include="Exceptions\ConfigException.cs" />
     <Compile Include="Exceptions\PluginException.cs" />
@@ -217,6 +217,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Support\AudioSupport.cs" />
     <Compile Include="Support\GifSupport.cs" />
     <Compile Include="Support\ImgSupport.cs" />
     <Compile Include="Support\NpkSupport.cs" />

@@ -27,7 +27,10 @@ namespace ExtractorSharp.Command.ImageCommand {
             _images = new Bitmap[0];
             _locations = new Point[0];
             if (Indices == null) {
-                return;
+                Indices = new int[_album.List.Count];
+                for(var i = 0; i < Indices.Length; i++) {
+                    Indices[i] = i;
+                }
             }
             _images = new Bitmap[Indices.Length];
             _locations = new Point[Indices.Length];
