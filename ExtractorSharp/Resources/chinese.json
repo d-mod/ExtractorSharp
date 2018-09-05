@@ -224,7 +224,7 @@
       "SelectAllAndNotTips": "选择全部并不再提示",
       "SelectHide": "勾选所有隐藏贴图",
       "SelectLink": "勾选所有索引贴图",
-      "SelectPathIsInvalid": "所选目录无效，请重新选择",
+      "SelectPathIsInvalid": "所选游戏目录无效，请重新选择",
       "SelectPathTips": "请选择路径",
       "SelectThisLink": "勾选引用当前贴图的贴图",
       "SelectThisTarget": "转到当前贴图引用的贴图",

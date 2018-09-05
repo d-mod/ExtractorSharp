@@ -209,8 +209,11 @@ namespace ExtractorSharp.Component {
         }
 
 
-        protected void ListDragDrop(object sender, DragEventArgs e) {
-            var target = IndexFromPoint(PointToClient(new Point(e.X, e.Y)));
+        private void ListDragDrop(object sender, DragEventArgs e) {
+            if (!e.Data.GetDataPresent(DataFormats.Serializable)){
+                return;
+            }
+                var target = IndexFromPoint(PointToClient(new Point(e.X, e.Y)));
             if (target == SelectedIndex || SelectedIndex < 0 || Items.Count < 0) return;
             target = target < Items.Count && target > -1 ? target : Items.Count - 1;
             var args = new ItemEventArgs();
@@ -219,7 +222,7 @@ namespace ExtractorSharp.Component {
             OnItemDraged(args);
         }
 
-        protected void ListDragOver(object sender, DragEventArgs e) {
+        private void ListDragOver(object sender, DragEventArgs e) {
             e.Effect = DragDropEffects.Move;
         }
     }

@@ -332,7 +332,7 @@ namespace ExtractorSharp.Core.Coder {
 
         public static string CompleteCode(int code) {
             var str = code.ToString();
-            if (code > 0) {
+            if (code > -1) {
                 while (str.Length < 4) {
                     str = string.Concat(0, str);
                 }
