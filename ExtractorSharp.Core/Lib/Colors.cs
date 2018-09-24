@@ -15,11 +15,12 @@ namespace ExtractorSharp.Core.Lib {
         /// </summary>
         /// <param name="stream"></param>
         /// <returns></returns>
-        public static byte[] ReadColor(Stream stream, int bits) {
+        public static void ReadColor(Stream stream, int bits, byte[] target, int offset) {
             byte[] bs;
             if (bits == Argb8888) {
                 stream.Read(4, out bs);
-                return bs;
+                bs.CopyTo(target, offset);
+                return;
             }
             byte a = 0;
             byte r = 0;
@@ -28,28 +29,43 @@ namespace ExtractorSharp.Core.Lib {
             stream.Read(2, out bs);
             switch (bits) {
                 case Argb1555:
-                    a = (byte) (bs[1] >> 7);
-                    r = (byte) ((bs[1] >> 2) & 0x1f);
-                    g = (byte) ((bs[0] >> 5) | ((bs[1] & 3) << 3));
-                    b = (byte) (bs[0] & 0x1f);
-                    a = (byte) (a * 0xff);
-                    r = (byte) ((r << 3) | (r >> 2));
-                    g = (byte) ((g << 3) | (g >> 2));
-                    b = (byte) ((b << 3) | (b >> 2));
+                    a = (byte)(bs[1] >> 7);
+                    r = (byte)((bs[1] >> 2) & 0x1f);
+                    g = (byte)((bs[0] >> 5) | ((bs[1] & 3) << 3));
+                    b = (byte)(bs[0] & 0x1f);
+                    a = (byte)(a * 0xff);
+                    r = (byte)((r << 3) | (r >> 2));
+                    g = (byte)((g << 3) | (g >> 2));
+                    b = (byte)((b << 3) | (b >> 2));
                     break;
                 case Argb4444:
-                    a = (byte) (bs[1] & 0xf0);
-                    r = (byte) ((bs[1] & 0xf) << 4);
-                    g = (byte) (bs[0] & 0xf0);
-                    b = (byte) ((bs[0] & 0xf) << 4);
+                    a = (byte)(bs[1] & 0xf0);
+                    r = (byte)((bs[1] & 0xf) << 4);
+                    g = (byte)(bs[0] & 0xf0);
+                    b = (byte)((bs[0] & 0xf) << 4);
                     break;
             }
-            return new[] {b, g, r, a};
+            target[offset + 0] = b;
+            target[offset + 1] = g;
+            target[offset + 2] = r;
+            target[offset + 3] = a;
+        }
+
+        public static void ReadColor(Stream stream, ColorBits bits, byte[] target, int offset) {
+            ReadColor(stream, (int)bits, target, offset);
+        }
+
+        public static byte[] ReadColor(Stream stream, int bits) {
+            var target = new byte[4];
+            ReadColor(stream, bits, target, 0);
+            return target;
         }
 
         public static byte[] ReadColor(Stream stream, ColorBits bits) {
             return ReadColor(stream, (int) bits);
         }
+
+
 
         /// <summary>
         ///     将ARGB1555和ARGB4444转换为ARGB8888

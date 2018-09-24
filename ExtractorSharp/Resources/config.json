@@ -3,7 +3,7 @@
   "ApiHost": "https://kritsu.net/api",
   "AutoSave": false,
   "AutoSort": true,
-  "AutoUpdate": true,
+  "AutoCheckUpdate": true,
   "CanvasImageSize": "800,600",
   "CanvasScale": 100,
   "ClassifySeparator": "·Ö¸îÏß",
@@ -42,5 +42,5 @@
   "UpdateUrl": "/project/release/latest/es",
   "UserConfig": "conf.json",
   "Version": "1.6.0.1",
-  "WebHost": "http://kritsu.net"
+  "WebHost": "https://kritsu.net"
 }

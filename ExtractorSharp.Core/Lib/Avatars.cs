@@ -6,6 +6,7 @@ using ExtractorSharp.EventArguments;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -32,7 +33,16 @@ namespace ExtractorSharp.Core.Lib {
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        public static List<Album> ImportCode(string gamePath, string text, bool mask, bool ban) {
+        public static List<Album> ImportCode(string gamePath, string text, bool mask, bool ban) {        
+            return ImportCode(gamePath,new string[0],text,mask,ban);
+        }
+
+
+        public static List<Album> ImportCode(string gamePath, string[] weapons, string text, bool mask, bool ban) {
+            return ImportCode(gamePath, Parts, weapons, text, mask, ban);
+        }
+
+        public static List<Album> ImportCode(string gamePath, string[] parts, string[] weapons, string text, bool mask, bool ban) {
             var list = new List<Album>();
             var index = text.IndexOf("?");
             if (index == -1) {
@@ -49,14 +59,20 @@ namespace ExtractorSharp.Core.Lib {
                 }
                 var part = pair[0];
                 var codeStr = pair[1];
-                if (!Parts.Contains(part)) {
-                    continue;
+                var filename = string.Empty;
+                if (weapons.Contains(part)) {
+                    filename = GetWeaponFile(prof, part);
+                }
+                if (parts.Contains(part)) {
+                    filename = GetAvatarFile(prof, part);
                 }
                 if (!regex.IsMatch(codeStr)) {
                     throw new ApplicationException("CodeErrorTips");
                 }
-                var filename = GetAvatarFile(prof, part);
-                var albums = NpkCoder.FindByCode($"{gamePath}\\{filename}.NPK", codeStr, mask, ban);
+                if (filename.Length == 0) {
+                    continue;
+                }
+                var albums = FindByCode($"{gamePath}\\{filename}.NPK", codeStr, mask, ban);
                 list.AddRange(albums);
             }
             return list;
@@ -71,6 +87,93 @@ namespace ExtractorSharp.Core.Lib {
 
         public static string GetAvatarFile(string profession, string part) {
             return $"sprite_character_{ profession }{(profession.EndsWith("_at") ? "" : "_")}equipment_avatar_{ part }";
+        }
+
+        public static string GetWeaponFile(string profession, string type) {
+            return $"sprite_character_{ profession }{(profession.EndsWith("_at") ? "" : "_")}equipment_weapon_{ type }";
+        }
+
+
+        public static List<Album> FindByCode(string path, int code) {
+            return FindByCode(path, CompleteCode(code));
+        }
+
+        public static List<Album> FindByCode(string path, string code) {
+            return FindByCode(path, code, false, false);
+        }
+
+        public static List<Album> FindByCode(string path, int code, bool mask, bool ban) {
+            return FindByCode(path, CompleteCode(code), mask, ban);
+        }
+
+        public static List<Album> FindByCode(string path, string code, bool mask, bool ban) {
+            var regex = new Regex("\\d+");
+            var index = int.Parse(code) % 100;
+            var match1 = regex.Match(code);
+            if (!match1.Success) {
+                return new List<Album>();
+            }
+            var code1 = int.Parse(match1.Value);
+
+            var stream = File.OpenRead(path);
+            var list = NpkCoder.ReadInfo(stream);
+            list = FindByCode(list, code, mask, ban);
+            list = new List<Album>(list.Where(al => {
+                stream.Seek(al.Offset, SeekOrigin.Begin);
+                NpkCoder.ReadImg(stream,al, stream.Length);
+                var code0 = int.Parse(regex.Match(al.Name).Value);
+                if (code0 == code1 || ((code0 == code1 / 100 * 100) && (index < al.Tables.Count))) {
+                    al.TableIndex = index;
+                    al.Name = regex.Replace(al.Name, code, 1);
+                    return true;
+                }
+                return false;
+            }));
+            stream.Close();
+            return list;
+        }
+
+        public static List<Album> FindByCode(IEnumerable<Album> array, string code) {
+            return FindByCode(array, code, false, false);
+        }
+
+        public static List<Album> FindByCode(IEnumerable<Album> array, string code, bool mask, bool ban) {
+            var regex = new Regex("\\d+");
+            var list = new List<Album>(array.Where(item => {
+                var match0 = regex.Match(item.Name);
+                var match1 = regex.Match(code);
+                if (match0.Success && match1.Success) {
+                    var code0 = int.Parse(match0.Value);
+                    var code1 = int.Parse(match1.Value);
+                    return code0 / 100 == code1 / 100;
+                }
+                return false;
+            }));
+            list.RemoveAll(item => {
+                if (!mask && item.Name.Contains("mask")) {
+                    return true;
+                }
+                if (!ban && Regex.IsMatch(item.Name, @"^\(tn\)+")) {
+                    return true;
+                }
+                return false;
+            });
+            return list;
+        }
+
+        public static List<Album> FindByCode(IEnumerable<Album> array, int codeNumber) {
+            var code = CompleteCode(codeNumber);
+            return FindByCode(array, code);
+        }
+
+        public static string CompleteCode(int code) {
+            var str = code.ToString();
+            if (code > -1) {
+                while (str.Length < 4) {
+                    str = string.Concat(0, str);
+                }
+            }
+            return str;
         }
 
         public static void Merge(IEnumerable<Album> list, int targetVersion, IMergeProgress progress) {
@@ -170,8 +273,39 @@ namespace ExtractorSharp.Core.Lib {
         }
 
 
+        public static bool MatchAvatar(Album album) {
+            var regex = new Regex(@"^sprite/character/\w+/(at)?equipment/avatar/.*/\w+_\w+\d+\w\d?.img$");
+            return regex.IsMatch(album.Path);
+        }
 
+        public static bool MatchWeapon(Album album) {
+            var regex = new Regex(@"^sprite/character/\w+/(at)?equipment/weapon/.*/(\w+_)?\w+\d+\w\d?.img$");
+            return regex.IsMatch(album.Path);
+        }
 
+        public static Album[] SplitFile(this Album file) {
+            var arr = new Album[Math.Max(1, file.Tables.Count)];
+            var regex = new Regex("\\d+");
+            var name = file.Name;
+            var match = regex.Match(name);
+            if (!match.Success) {
+                arr[0] = file;
+                return arr;
+            }
+            var code = int.Parse(match.Value);
+            file.Adjust();
+            var data = file.Data;
+            for (var i = 0; i < arr.Length; i++) {
+                arr[i] = new Album();
+                arr[i].Path = regex.Replace(file.Path, CompleteCode(code + i), 1);
+                NpkCoder.ReadImg(data, arr[i], data.LongLength);
+                arr[i].Tables.Clear();
+                if (file.Tables.Count > 0) {
+                    arr[i].Tables.Add(file.Tables[i]);
+                }
+            }
+            return arr;
+        }
 
 
 

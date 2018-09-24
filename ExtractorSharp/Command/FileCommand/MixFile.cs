@@ -5,6 +5,7 @@ using ExtractorSharp.Core.Coder;
 using ExtractorSharp.Core.Command;
 using ExtractorSharp.Core.Composition;
 using ExtractorSharp.Core.Handle;
+using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.Command.FileCommand {
@@ -25,7 +26,7 @@ namespace ExtractorSharp.Command.FileCommand {
                 return;
             }
             var code = int.Parse(match.Value);
-            var codeStr = NpkCoder.CompleteCode(code / 100 * 100);
+            var codeStr = Avatars.CompleteCode(code / 100 * 100);
             _album = _array[0].Clone();
             _album.ConvertTo(ImgVersion.Ver6);
             _album.Adjust();

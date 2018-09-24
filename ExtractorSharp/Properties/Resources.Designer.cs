@@ -144,7 +144,7 @@ namespace ExtractorSharp.Properties {
         ///  &quot;ApiHost&quot;: &quot;https://kritsu.net/api&quot;,
         ///  &quot;AutoSave&quot;: false,
         ///  &quot;AutoSort&quot;: true,
-        ///  &quot;AutoUpdate&quot;: true,
+        ///  &quot;AutoCheckUpdate&quot;: true,
         ///  &quot;CanvasImageSize&quot;: &quot;800,600&quot;,
         ///  &quot;CanvasScale&quot;: 100,
         ///  &quot;ClassifySeparator&quot;: &quot;�ָ���&quot;,
@@ -159,7 +159,7 @@ namespace ExtractorSharp.Properties {
         ///  &quot;LinearDodge&quot;: false,
         ///  &quot;LinearDodgeSpriteConverter&quot;: true,
         ///  &quot;LineLevel&quot;: 0.5,
-        ///  &quot;MarketUrl [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///  &quot;Mark [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string Config {
             get {

@@ -53,6 +53,9 @@
   <ItemGroup>
     <Compile Include="Avatar.cs" />
     <Compile Include="Command\UnitTest1.cs" />
+    <Compile Include="DictionaryTest.cs" />
+    <Compile Include="EntryInfo.cs" />
+    <Compile Include="MemoryTest.cs" />
     <Compile Include="Pictrue.cs" />
     <Compile Include="Profession.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -74,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Resources\profession.json" />
     <None Include="Resources\queues.json" />
     <None Include="Resources\weapon.json" />
   </ItemGroup>

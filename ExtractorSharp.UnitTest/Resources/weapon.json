@@ -11,12 +11,9 @@
       "mswd",
       "club",
       "gemswd",
-      "beamswd"
-    ],
-    //
-    "alias": {
-      "bswd": "boneswd"
-    }
+      "beamswd",
+      "boneswd"
+    ]
   },
   "fighter": {
     "hasAt": true,
@@ -27,12 +24,10 @@
       "glove",
       "knuckle",
       "claw",
-      "gauntlet"
-    ],
-    "alias": {
-      "bglove": "boneglove",
-      "bclaw": "boneclaw"
-    }
+      "gauntlet",
+      "boneglove",
+      "boneclaw"
+    ]
   },
   "gunner": {
     "hasAt": true,

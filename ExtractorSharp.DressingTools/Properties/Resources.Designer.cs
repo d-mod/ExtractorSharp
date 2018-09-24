@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ExtractorSharp.Component.Properties {
+namespace ExtractorSharp.DressingTools.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace ExtractorSharp.Component.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ExtractorSharp.Component.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ExtractorSharp.DressingTools.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,42 +61,53 @@ namespace ExtractorSharp.Component.Properties {
         }
         
         /// <summary>
-        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        ///   查找类似 [
+        ///    {
+        ///        &quot;name&quot;: &quot;swordman&quot;,
+        ///        &quot;frame&quot;: 176,
+        ///        &quot;transfer&quot;: {
+        ///            &quot;weaponmaster&quot;: &quot;swordman?hair=12800&amp;cap=13000&amp;face=11900&amp;neck=11700&amp;coat=14300&amp;skin=0000&amp;belt=10400&amp;pants=13400&amp;shoes=12600&quot;,
+        ///            &quot;berserker&quot;: &quot;swordman?hair=13000&amp;cap=13200&amp;face=12100&amp;neck=12000&amp;coat=14500&amp;skin=0000&amp;belt=10700&amp;pants=13600&amp;shoes=12800&quot;,
+        ///            &quot;asura&quot;: &quot;swordman?hair=12600&amp;cap=12800&amp;face=11700&amp;neck=11500&amp;coat=14100&amp;skin=0000&amp;belt=10200&amp;pants=13200&amp;shoes=12400&quot;,
+        ///            &quot;soul [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
-        internal static System.Drawing.Bitmap errorIcon {
+        internal static string profession {
             get {
-                object obj = ResourceManager.GetObject("errorIcon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("profession", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
+        ///   查找类似 {
+        ///  &quot;Name&quot;: &quot;default&quot;,
+        ///  &quot;Rules&quot;: {
+        ///    &quot;arma&quot;: 2150,
+        ///    &quot;armb&quot;: 650,
+        ///    &quot;armc&quot;: 2790,
+        ///    &quot;armsa&quot;: 2150,
+        ///    &quot;armsb&quot;: 650,
+        ///    &quot;armsc&quot;: 2790,
+        ///    &quot;armsx&quot;: 1350,
+        ///    &quot;armx&quot;: 1350,
+        ///    &quot;autoa&quot;: 2150,
+        ///    &quot;autob&quot;: 650,
+        ///    &quot;autoc&quot;: 2790,
+        ///    &quot;axea&quot;: 2150,
+        ///    &quot;axec&quot;: 2600,
+        ///    &quot;axed&quot;: 200,
+        ///    &quot;axex&quot;: 1350,
+        ///    &quot;beamspeara&quot;: 2150,
+        ///    &quot;beamspearb&quot;: 650, //?
+        ///    &quot;beamspearc&quot;: 2790,
+        ///    &quot;beamspeare&quot;: 2880,
+        ///    &quot;beamspearx&quot;: 1350,
+        ///    &quot;beamswda&quot;: 2150, //?
+        ///    &quot;beamswdb&quot;: 650, //?
+        ///     [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
-        internal static System.Drawing.Icon logo {
+        internal static string queues {
             get {
-                object obj = ResourceManager.GetObject("logo", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
-        /// </summary>
-        internal static System.Drawing.Bitmap successIcon {
-            get {
-                object obj = ResourceManager.GetObject("successIcon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
-        /// </summary>
-        internal static System.Drawing.Bitmap warnningIcon {
-            get {
-                object obj = ResourceManager.GetObject("warnningIcon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("queues", resourceCulture);
             }
         }
     }

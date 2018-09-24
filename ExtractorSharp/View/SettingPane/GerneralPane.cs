@@ -30,7 +30,7 @@ namespace ExtractorSharp.View.SettingPane {
         public override void Initialize() {
             gamePathBox.Text = Config["GamePath"].Value;
             autoSaveCheck.Checked = Config["AutoSave"].Boolean;
-            autoUpdateCheck.Checked = Config["AutoUpdate"].Boolean;
+            autoUpdateCheck.Checked = Config["AutoCheckUpdate"].Boolean;
             updatedShowFeatureCheck.Checked = Config["ShowFeature"].Boolean;
         }
 
@@ -38,7 +38,7 @@ namespace ExtractorSharp.View.SettingPane {
             Config["GamePath"] = new ConfigValue(gamePathBox.Text);
             Config["ResourcePath"] = new ConfigValue($"{gamePathBox.Text}\\{NpkCoder.IMAGE_DIR}");
             Config["AutoSave"] = new ConfigValue(autoSaveCheck.Checked);
-            Config["AutoUpdate"] = new ConfigValue(autoUpdateCheck.Checked);
+            Config["AutoCheckUpdate"] = new ConfigValue(autoUpdateCheck.Checked);
             Config["ShowFeature"] = new ConfigValue(updatedShowFeatureCheck.Checked);
         }
     }

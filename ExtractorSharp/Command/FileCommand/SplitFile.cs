@@ -2,6 +2,7 @@
 using ExtractorSharp.Core.Coder;
 using ExtractorSharp.Core.Command;
 using ExtractorSharp.Core.Composition;
+using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.Command.FileCommand {
@@ -25,7 +26,7 @@ namespace ExtractorSharp.Command.FileCommand {
                 return;
             }
             foreach (var al in _array) {
-                var arr = NpkCoder.SplitFile(al);
+                var arr = Avatars.SplitFile(al);
                 Connector.RemoveFile(al);
                 Connector.AddFile(false, arr);
                 _list.AddRange(arr);

@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using ExtractorSharp.Core.Command;
 using ExtractorSharp.Core.Model;
 
@@ -19,6 +20,12 @@ namespace ExtractorSharp.Command.ImageCommand {
         public void Do(params object[] args) {
             Album = args[0] as Album;
             Indices = args[1] as int[];
+            if (Indices == null) {
+                Indices = new int[Album.List.Count];
+                for (var i = 0; i < Indices.Length; i++) {
+                    Indices[i] = i;
+                }
+            }
             Images = new Bitmap[Indices.Length];
             Locations = new Point[Indices.Length];
             for (var i = 0; i < Indices.Length; i++) {

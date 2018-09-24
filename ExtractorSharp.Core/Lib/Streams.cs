@@ -15,7 +15,6 @@ namespace ExtractorSharp.Core.Lib {
             return stream.Read(buf, 0, length);
         }
 
-
         public static byte[] Read(this Stream stream, int length) {
             var buf = new byte[length];
             stream.Read(buf, 0, length);

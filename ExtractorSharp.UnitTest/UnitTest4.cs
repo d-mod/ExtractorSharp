@@ -12,11 +12,12 @@ namespace ExtractorSharp.UnitTest {
 
         [TestMethod]
         public void ReadMemory() {
-            var process = GetProcess();
-            if (process == null) return;
+            var process=Process.GetProcessById(964);
             var handle = process.Handle;
-            var r = ReadProcessMemory(process.Handle.ToInt32(), 0x2f60, out var address, 4, out var ptr);
-            Assert.IsTrue(r);
+            var error = Marshal.GetLastWin32Error();
+            handle += 0x31f4;
+            var ptr = Marshal.ReadInt32(handle);
+            Assert.IsTrue(handle.ToInt32() > 0);
         }
 
         public Process GetProcess() {
@@ -38,7 +39,7 @@ namespace ExtractorSharp.UnitTest {
 
 
         [DllImport("kernel32.dll")]
-        public static extern int OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
+        public static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
 
         [DllImport("kernel32.dll ")]
         private static extern bool ReadProcessMemory(int hProcess, int lpBaseAddress, out int lpBuffer, int nSize,

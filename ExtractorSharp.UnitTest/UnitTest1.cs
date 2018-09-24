@@ -66,17 +66,17 @@ namespace ExtractorSharp.UnitTest {
                 for (var i = 0; i < images.Length; i++) {
                     var regex = new Regex("\\d+");
                     var match = regex.Match(images[i]);
-                    if (match.Success) {
-                        var code = match.Value;
-                        var arr = list.Where(item => NpkCoder.MatchCode(item.Name, code)).ToList();
-                        var rs = FindImg(arr, int.Parse(code), type);
-                        if (rs.Count() > 0) {
-                            var img = rs.ElementAt(0);
-                            var builder = new LSBuilder();
-                            var image = img[pairs[prof]];
-                            ImageToJson(path, prof, type, img.Name, match.Value, image);
-                        }
-                    }
+                  //  if (match.Success) {
+                   //     var code = match.Value;
+                   //     var arr = list.Where(item => MatchCode(item.Name, code)).ToList();
+                   //     var rs = FindImg(arr, int.Parse(code), type);
+                   //     if (rs.Count() > 0) {
+                   //         var img = rs.ElementAt(0);
+                   //         var builder = new LSBuilder();
+                   //         var image = img[pairs[prof]];
+                   //         ImageToJson(path, prof, type, img.Name, match.Value, image);
+                   //     }
+                   // }
                 }
             }
         }
@@ -111,14 +111,14 @@ namespace ExtractorSharp.UnitTest {
                     var match = regex.Match(images[i].GetSuffix());
                     if (match.Success) {
                         var code = match.Value;
-                        var arr = list.Where(item => NpkCoder.MatchCode(item.Name, code)).ToList();
-                        var rs = FindImg(arr, int.Parse(code), part.Equals("skin") ? "body" : part);
-                        foreach (var img in rs) {
-                            var builder = new LSBuilder();
-                            var image = img[pairs[prof]];
-                            ImageToJson(path, prof, part, img.Name, match.Value, image);
-                        }
-                    }
+                    //    var arr = list.Where(item => NpkCoder.MatchCode(item.Name, code)).ToList();
+                  //      var rs = FindImg(arr, int.Parse(code), part.Equals("skin") ? "body" : part);
+                  //      foreach (var img in rs) {
+                  //          var builder = new LSBuilder();
+                  //          var image = img[pairs[prof]];
+                  //          ImageToJson(path, prof, part, img.Name, match.Value, image);
+                       }
+                  //  }
                 }
             }
         }

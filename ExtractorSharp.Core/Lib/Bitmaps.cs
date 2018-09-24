@@ -189,8 +189,7 @@ namespace ExtractorSharp.Core.Lib {
             var ms = new MemoryStream(data);
             data = new byte[size.Width * size.Height * 4];
             for (var i = 0; i < data.Length; i += 4) {
-                var temp = Colors.ReadColor(ms, bits);
-                temp.CopyTo(data, i);
+                Colors.ReadColor(ms, bits, data, i);
             }
             ms.Close();
             return FromArray(data, size);

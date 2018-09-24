@@ -100,6 +100,12 @@ namespace ExtractorSharp.Core.Model {
         /// </summary>
         public List<List<Color>> Tables { set; get; } = new List<List<Color>> {new List<Color>()};
 
+
+        /// <summary>
+        /// 重定向目标
+        /// </summary>
+        public Album Target { set; get; }
+
         /// <summary>
         ///     色表索引
         /// </summary>
@@ -196,15 +202,8 @@ namespace ExtractorSharp.Core.Model {
 
         public Album Clone() {
             Adjust();
-            var ms = new MemoryStream(Data);
-            var list = ms.ReadNPK(Name);
-            ms.Close();
-            Album temp = null;
-            if (list.Count > 0) {
-                temp = list[0];
-                temp.Path = Path;
-                temp.TableIndex = TableIndex;
-            }
+            var temp=NpkCoder.ReadImg(Data, Path);
+            temp.TableIndex = TableIndex;
             return temp;
         }
 
@@ -270,6 +269,9 @@ namespace ExtractorSharp.Core.Model {
         ///     校正贴图
         /// </summary>
         public void Adjust() {
+            if (Target != null) {
+                return;
+            }
             AdjustIndex();
             Handler.Adjust();
         }

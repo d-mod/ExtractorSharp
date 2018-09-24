@@ -60,13 +60,12 @@ namespace ExtractorSharp {
             Arguments = args;
             LoadConfig();
             LoadLanguage();
-            RegistyHandler();
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
             Application.ThreadException += ShowDebug;
             AppDomain.CurrentDomain.UnhandledException += CatchException;
             Application.SetCompatibleTextRenderingDefault(true);
             Application.EnableVisualStyles();
-            if (Config["AutoUpdate"].Boolean) {
+            if (Config["AutoCheckUpdate"].Boolean) {
                 CheckUpdate(false);
             }
             LoadRegistry();
@@ -149,6 +148,9 @@ namespace ExtractorSharp {
             Controller.Registry("eraser", typeof(EraserDraw));
             Controller.Registry("moveTools", typeof(MoveToolsDraw));
             Controller.Registry("Sort", new SortExecute {
+                Sorter = Merger.Sorter
+            });
+            Controller.Registry("SortIndexOf", new SortIndexOfExecute {
                 Sorter = Merger.Sorter
             });
         }
@@ -247,15 +249,6 @@ namespace ExtractorSharp {
             Viewer.Regisity("changeSize", typeof(ChangeSizeDialog));
         }
 
-
-        public static void RegistyHandler() {
-            Handler.Regisity(ImgVersion.Other, typeof(OtherHandler));
-            Handler.Regisity(ImgVersion.Ver1, typeof(FirstHandler));
-            Handler.Regisity(ImgVersion.Ver2, typeof(SecondHandler));
-            Handler.Regisity(ImgVersion.Ver4, typeof(FourthHandler));
-            Handler.Regisity(ImgVersion.Ver5, typeof(FifthHandler));
-            Handler.Regisity(ImgVersion.Ver6, typeof(SixthHandler));
-        }
 
         private static void ViewerDialogShown(object sender, DialogEventArgs e) {
             e.Dialog = Tools.CreateInstance(e.DialogType, Connector) as ESDialog;

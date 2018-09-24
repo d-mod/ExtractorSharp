@@ -21,19 +21,24 @@ namespace ExtractorSharp.Core.Coder {
 
         public const string SOUND_DIR = "SoundPacks";
 
-        private static char[] key;
+        private const string KEY_HEADER="puchikon@neople dungeon and fighter ";
 
-        private static char[] Key {
+        public static Encoding Encoding = Encoding.UTF8;
+
+        private static byte[] key;
+
+        private static byte[] Key {
             get {
                 if (key != null) {
                     return key;
                 }
-                var cs = new char[256];
-                var temp = "puchikon@neople dungeon and fighter ".ToArray();
-                temp.CopyTo(cs, 0);
-                var ds = new[] { 'D', 'N', 'F' };
-                for (var i = temp.Length; i < 255; i++) cs[i] = ds[i % 3];
-                cs[255] = '\0';
+                var cs = new byte[256];
+                int length = Encoding.GetBytes(KEY_HEADER, 0, KEY_HEADER.Length, cs, 0);
+                var ds = Encoding.GetBytes("DNF");
+                for (var i = length; i < 255; i++) {
+                    cs[i] = ds[i % 3];
+                }
+                cs[255] = 0;
                 return key = cs;
             }
         }
@@ -54,7 +59,7 @@ namespace ExtractorSharp.Core.Coder {
                 i++;
             }
             stream.Seek(255 - i); //防止因加密导致的文件名读取错误
-            return Encoding.Default.GetString(data).Replace("\0", "");
+            return Encoding.GetString(data, 0, i);
         }
 
 
@@ -65,8 +70,7 @@ namespace ExtractorSharp.Core.Coder {
         /// <param name="str"></param>
         private static void WritePath(this Stream stream, string str) {
             var data = new byte[256];
-            var temp = Encoding.Default.GetBytes(str);
-            temp.CopyTo(data, 0);
+            Encoding.GetBytes(str, 0, str.Length, data, 0);
             for (var i = 0; i < data.Length; i++) {
                 data[i] = (byte)(data[i] ^ Key[i]);
             }
@@ -86,8 +90,7 @@ namespace ExtractorSharp.Core.Coder {
                 if (entity.Version == ImgVersion.Ver4 && bits == ColorBits.ARGB_1555) {
                     bits = ColorBits.ARGB_8888;
                 }
-                var temp = Colors.ReadColor(stream, bits);
-                temp.CopyTo(data, i);
+                Colors.ReadColor(stream, bits, data, i);
             }
             return Bitmaps.FromArray(data, entity.Size);
         }
@@ -99,25 +102,21 @@ namespace ExtractorSharp.Core.Coder {
         /// <param name="count"></param>
         /// <param name="source"></param>
         /// <returns></returns>
-        private static byte[] CompileHash(byte[] source) {
-            if (source.Length < 1) {
+        private static byte[] CompileHash(byte[] data) {
+            if (data.Length == 0) {
                 return new byte[0];
             }
-            var count = source.Length / 17 * 17;
-            var data = new byte[count];
-            Array.Copy(source, 0, data, 0, count);
             try {
                 using (var sha = new SHA256Managed()) {
-                    data = sha.ComputeHash(data);
+                    return sha.ComputeHash(data, 0, data.Length / 17 * 17);
                 }
-                return data;
             } catch {
                 throw new FipsException();
             }
         }
 
 
-        private static List<Album> ReadInfo(Stream stream) {
+        public static List<Album> ReadInfo(Stream stream) {
             var flag = stream.ReadString();
             var List = new List<Album>();
             if (flag != NPK_FlAG) {
@@ -135,12 +134,12 @@ namespace ExtractorSharp.Core.Coder {
         }
 
         /// <summary>
-        ///     从NPK中获得img列表
+        ///     读取IMG或NPK
         /// </summary>
         /// <param name="stream"></param>
-        /// <param name="file"></param>
+        /// <param name="file">当格式非NPK时，需要得到文件名</param>
         /// <returns></returns>
-        public static List<Album> ReadNPK(this Stream stream, string file) {
+        public static List<Album> ReadNpk(Stream stream, string file) {
             var List = new List<Album>();
             var flag = stream.ReadString();
             if (flag == NPK_FlAG) {
@@ -152,17 +151,23 @@ namespace ExtractorSharp.Core.Coder {
                 }
             } else {
                 var album = new Album();
-                album.Path = file.GetSuffix();
+                if (file != null) {
+                    album.Path = file.GetSuffix();
+                }
                 List.Add(album);
             }
             for (var i = 0; i < List.Count; i++) {
                 var length = i < List.Count - 1 ? List[i + 1].Offset : stream.Length;
-                stream.ReadImg(List[i], length);
+                ReadImg(stream,List[i], length);
             }
             return List;
         }
 
-        public static void ReadImg(this Stream stream, Album album, long length) {
+        public static List<Album> ReadNpk(Stream stream) {
+            return ReadNpk(stream, null);
+        }
+
+        public static void ReadImg(Stream stream, Album album, long length) {
             stream.Seek(album.Offset, SeekOrigin.Begin);
             var albumFlag = stream.ReadString();
             if (albumFlag == IMG_FLAG) {
@@ -171,34 +176,92 @@ namespace ExtractorSharp.Core.Coder {
                 album.Count = stream.ReadInt();
                 album.InitHandle(stream);
             } else  {
-                if (albumFlag != IMAGE_FLAG) {
+                if (albumFlag == IMAGE_FLAG) {
+                    album.Version = ImgVersion.Ver1;
+                } else {
+                    if (length < 0) {
+                        length = stream.Length;
+                    }
                     album.Version = ImgVersion.Other;
                     stream.Seek(album.Offset, SeekOrigin.Begin);
                     if (album.Name.ToLower().EndsWith(".ogg")) {
                         album.Version = ImgVersion.Other;
                         album.IndexLength = length - stream.Position;
                     }
-                } else {
-                    album.Version = ImgVersion.Ver1;
                 }
                 album.InitHandle(stream);
             }
         }
 
 
+
+        #region 读取一个IMG
+        public static void ReadImg(Stream stream,Album album) {
+            ReadImg(stream, album, -1);
+        }
+
+        public static Album ReadImg(Stream stream, string path) {
+            return ReadImg(stream, path, -1);
+        }
+
+
+        public static Album ReadImg(Stream stream, string path, long length) {
+            var album = new Album() {
+                Path=path
+            };
+            ReadImg(stream, album, length);
+            return album;
+        }
+
+
+        public static void ReadImg(byte[] data, Album album) {
+            ReadImg(data, album, -1);
+        }
+
+
+        public static Album ReadImg(byte[] data, string path) {
+            return ReadImg(data, path, -1);
+        }
+
+        public static void ReadImg(byte[] data, Album album, long length) {
+            using (var ms = new MemoryStream(data)) {
+                ReadImg(ms, album, length);
+            }
+        }
+
+        public static Album ReadImg(byte[] data, string path, long length) {
+            using (var ms = new MemoryStream(data)) {
+               return ReadImg(ms, path, length);
+            }
+        }
+
+        #endregion
+
+
         /// <summary>
         ///     保存为NPK
         /// </summary>
         /// <param name="fileName"></param>
-        public static void WriteNpk(this Stream stream, List<Album> List) {
+        public static void WriteNpk(Stream stream, List<Album> List) {
             var position = 52 + List.Count * 264;
+            var length = 0;
             for (var i = 0; i < List.Count; i++) {
                 List[i].Adjust();
                 if (i > 0) {
-                    position += List[i - 1].Length;
+                    if (List[i].Target != null) {
+                        continue;
+                    }
+                    position += length;
                 }
                 List[i].Offset = position;
+                length = List[i].Length;
             }
+            List.ForEach(e => {
+                if (e.Target != null) {
+                    e.Offset = e.Target.Offset;
+                    e.Length = e.Target.Length;
+                }
+            });
             var ms = new MemoryStream();
             ms.WriteString(NPK_FlAG);
             ms.WriteInt(List.Count);
@@ -212,23 +275,11 @@ namespace ExtractorSharp.Core.Coder {
             stream.Write(data);
             stream.Write(CompileHash(data));
             foreach (var album in List) {
-                stream.Write(album.Data);
+                if (album.Target == null) {
+                    stream.Write(album.Data);
+                }
             }
         }
-
-
-        /// <summary>
-        ///     根据已有的文件名获得img集合
-        /// </summary>
-        /// <param name="file"></param>
-        /// <param name="names"></param>
-        /// <returns></returns>
-        public static List<Album> FindAll(string file, params string[] args) {
-            var list = Load(file);
-            list = new List<Album>(list.Where(item => args.Any(arg => item.Path.Contains(arg))));
-            return list;
-        }
-
 
         public static List<Album> Find(IEnumerable<Album> Items, params string[] args) {
             return Find(Items, false, args);
@@ -244,108 +295,16 @@ namespace ExtractorSharp.Core.Coder {
                 }
                 return args.All(arg => item.Path.Contains(arg));
             }));
-            if (list.Count == 0) {
-                list.AddRange(Items.Where(item => MatchCode(item.Name, args[0])));
-            }
             return list;
         }
-
-        public static List<Album> FindByCode(string path, int code) {
-            return FindByCode(path, CompleteCode(code));
-        }
-
-        public static List<Album> FindByCode(string path, string code) {
-            return FindByCode(path, code, false, false);
-        }
-
-        public static List<Album> FindByCode(string path, int code, bool mask, bool ban) {
-            return FindByCode(path, CompleteCode(code), mask, ban);
-        }
-
-        public static List<Album> FindByCode(string path, string code, bool mask, bool ban) {
-            var stream = File.OpenRead(path);
-            var list = ReadInfo(stream);
-            list = FindByCode(list, code, mask, ban);
-            foreach (var al in list) {
-                stream.Seek(al.Offset, SeekOrigin.Begin);
-                stream.ReadImg(al, stream.Length);
-            }
-            stream.Close();
-            var regex = new Regex("\\d+");
-            list.ForEach(e => {
-                e.TableIndex = int.Parse(code) % 100;
-                e.Name = regex.Replace(e.Name, code, 1);
-            });           
-            return list;
-        }
-
-        public static List<Album> FindByCode(IEnumerable<Album> array, string code) {
-            return FindByCode(array, code, false, false);
-        }
-
-
-        public static List<Album> FindByCode(IEnumerable<Album> array, string code, bool mask, bool ban) {
-            var regex = new Regex("\\d+");
-            var list = new List<Album>(array.Where(item => {
-                if (!mask && item.Name.Contains("mask")) {
-                    return false;
-                }
-                if (!ban && Regex.IsMatch(item.Name, @"\(.*\)+")) {
-                    return false;
-                }
-
-                var match = regex.Match(item.Name);
-                return match.Success && match.Value.Equals(code);
-            }));
-            if (list.Count == 0) {
-                list.AddRange(array.Where(item =>  MatchCode(item.Name, code)));
-            }
-            return list;
-        }
-
-
-        public static List<Album> FindByCode(IEnumerable<Album> array, int codeNumber) {
-            var code = CompleteCode(codeNumber);
-            return FindByCode(array, code);
-        }
-
-
-        /// <summary>
-        ///     v6 匹配规则
-        /// </summary>
-        /// <param name="name1"></param>
-        /// <param name="name2"></param>
-        /// <returns></returns>
-        public static bool MatchCode(string name1, string name2) {
-            var regex = new Regex("\\d+");
-            var match0 = regex.Match(name1);
-            var match1 = regex.Match(name2);
-            if (match0.Success && match1.Success) {
-                var code0 = int.Parse(match0.Value);
-                var code1 = int.Parse(match1.Value);
-                if (code0 == code1 || code0 == code1 / 100 * 100) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public static string CompleteCode(int code) {
-            var str = code.ToString();
-            if (code > -1) {
-                while (str.Length < 4) {
-                    str = string.Concat(0, str);
-                }
-            }
-            return str;
-        }
+ 
 
         /// <summary>
         ///     根据文件路径得到NPK名
         /// </summary>
         /// <param name="album"></param>
         /// <returns></returns>
-        public static string GetFilePath(Album file) {
+        public static string GetFilePath(this Album file) {
             var path = file.Path;
             var index = path.LastIndexOf("/");
             if (index > -1) {
@@ -356,33 +315,7 @@ namespace ExtractorSharp.Core.Coder {
             return path;
         }
 
-        public static Album[] SplitFile(Album file) {
-            var arr = new Album[Math.Max(1, file.Tables.Count)];
-            var regex = new Regex("\\d+");
-            var path = file.Name;
-            var match = regex.Match(path);
-            if (!match.Success) {
-                return arr;
-            }
-            var prefix = path.Substring(0, match.Index);
-            var suffix = path.Substring(match.Index + match.Length);
-            var code = int.Parse(match.Value);
-            file.Adjust();
-            var data = file.Data;
-            var ms = new MemoryStream(data);
-            for (var i = 0; i < arr.Length; i++) {
-                var name = prefix + CompleteCode(code + i) + suffix;
-                arr[i] = ReadNPK(ms, file.Name)[0];
-                arr[i].Path = file.Path.Replace(file.Name, name);
-                arr[i].Tables.Clear();
-                if (file.Tables.Count > 0) {
-                    arr[i].Tables.Add(file.Tables[i]);
-                }
-                ms.Seek(0, SeekOrigin.Begin);
-            }
-            ms.Close();
-            return arr;
-        }
+
 
         #region 加载保存
 
@@ -402,7 +335,7 @@ namespace ExtractorSharp.Core.Coder {
                 if (onlyPath) {
                     return ReadInfo(stream);
                 }
-                var enums = stream.ReadNPK(file);
+                var enums = ReadNpk(stream, file);
                 return enums;
             }
         }
@@ -420,27 +353,48 @@ namespace ExtractorSharp.Core.Coder {
         }
 
 
-        public static Album LoadWithName(string file, string name) {
+        public static Album LoadWithPath(string file, string name) {
             using (var stream = File.OpenRead(file)) {
-               return LoadWithName(stream, name);
+               return LoadWithPath(stream, name);
             }
         }
 
-        public static Album LoadWithName(Stream stream, string name) {
-            var list = ReadInfo(stream);
-            list = LoadWithNameArray(stream, name);
+        public static Album LoadWithPath(Stream stream, string name) {
+            var list = LoadWithPathArray(stream, name);
             if (list.Count > 0) {
                 return list[0];
             }
             return null;
         }
 
-        public static List<Album> LoadWithNameArray(Stream stream, params string[] names) {
+        /// <summary>
+        ///     根据已有的文件名获得img集合
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="names"></param>
+        /// <returns></returns>
+        public static List<Album> LoadWithPathArray(string file, params string[] args) {
+            using (var fs = File.OpenRead(file)) {
+                return LoadWithPathArray(fs, args);
+            }
+        }
+
+        public static List<Album> LoadWithPathArray(Stream stream, params string[] paths) {
+            return LoadAll(stream, e => paths.Contains(e.Path));
+        }
+
+        public static List<Album> LoadAll(string file, Predicate<Album> predicate) {
+            using (var fs = File.OpenRead(file)) {
+                return LoadAll(fs, predicate);
+            }
+        }
+
+        public static List<Album> LoadAll(Stream stream, Predicate<Album> predicate) {
             var list = ReadInfo(stream);
-            list = list.FindAll(e => names.Contains(e.Path));
+            list = list.FindAll(predicate);
             foreach (var al in list) {
                 stream.Seek(al.Offset, SeekOrigin.Begin);
-                stream.ReadImg(al, stream.Length);
+                ReadImg(stream, al, stream.Length);
             }
             return list;
         }
@@ -480,11 +434,11 @@ namespace ExtractorSharp.Core.Coder {
                 if (!dic.ContainsKey(path)) {
                     dic.Add(path, new List<string>());
                 }
-                dic[path].Add(item.Name);
+                dic[path].Add(item.Path);
             }
             var list = new List<Album>();
             foreach (var item in dic.Keys) {
-                list.AddRange(FindAll(item, dic[item].ToArray())); //读取游戏原文件
+                list.AddRange(LoadWithPathArray(item, dic[item].ToArray())); //读取游戏原文件
             }
             foreach(var a2 in array) { //模型文件
                 foreach (var a1 in list) { //游戏原文件

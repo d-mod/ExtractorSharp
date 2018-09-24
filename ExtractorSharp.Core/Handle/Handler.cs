@@ -15,6 +15,10 @@ namespace ExtractorSharp.Core.Handle {
     public abstract class Handler {
         private static readonly Dictionary<ImgVersion, Type> Dic = new Dictionary<ImgVersion, Type>();
 
+        static Handler() {
+            Regisity();
+        }
+
         [LSIgnore] public Album Album;
 
 
@@ -91,6 +95,15 @@ namespace ExtractorSharp.Core.Handle {
                 Dic.Remove(version);
             }
             Dic.Add(version, type);
+        }
+
+        public static void Regisity() {
+            Regisity(ImgVersion.Other, typeof(OtherHandler));
+            Regisity(ImgVersion.Ver1, typeof(FirstHandler));
+            Regisity(ImgVersion.Ver2, typeof(SecondHandler));
+            Regisity(ImgVersion.Ver4, typeof(FourthHandler));
+            Regisity(ImgVersion.Ver5, typeof(FifthHandler));
+            Regisity(ImgVersion.Ver6, typeof(SixthHandler));
         }
 
 

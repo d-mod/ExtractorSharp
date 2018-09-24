@@ -69,7 +69,7 @@
             this.autoUpdateCheck.Location = new System.Drawing.Point(13, 169);
             this.autoUpdateCheck.Size = new System.Drawing.Size(78, 16);
             this.autoUpdateCheck.TabIndex = 3;
-            this.autoUpdateCheck.Text = Language["AutoUpdate"];
+            this.autoUpdateCheck.Text = Language["AutoCheckUpdate"];
             this.autoUpdateCheck.UseVisualStyleBackColor = true;
 
 

@@ -98,7 +98,7 @@ namespace ExtractorSharp.UnitTest {
                             for (var i = 0; i < tables.Count; i++) {
                                 img.TableIndex = i;
                                 var image = img[pairs[prof]];
-                                ImageToJson(path, prof, part, img.Name, NpkCoder.CompleteCode(code + i), image);
+                                ImageToJson(path, prof, part, img.Name, Avatars.CompleteCode(code + i), image);
                             }
                         }
                     }
@@ -135,7 +135,7 @@ namespace ExtractorSharp.UnitTest {
                         for (var i = 0; i < tables.Count; i++) {
                             img.TableIndex = i;
                             var image = img[pairs[prof.Name]];
-                            ImageToJson(path, prof.Name, part, img.Name, NpkCoder.CompleteCode(code + i), image);
+                            ImageToJson(path, prof.Name, part, img.Name, Avatars.CompleteCode(code + i), image);
                         }
                     }
                 }
@@ -166,7 +166,7 @@ namespace ExtractorSharp.UnitTest {
                         var match = regex.Match(images[i]);
                         if (match.Success) {
                             var code = match.Value;
-                            var arr = NpkCoder.FindByCode(list, code);
+                            var arr = Avatars.FindByCode(list, code);
                             var rs = FindImg(arr, int.Parse(code), part.Equals("skin") ? "body" : part);
                             foreach (var img in rs) {
                                 var image = img[pairs[prof]];

@@ -1,0 +1,279 @@
+[
+    {
+        "name": "swordman",
+        "frame": 176,
+        "transfer": {
+            "weaponmaster": "swordman?hair=12800&cap=13000&face=11900&neck=11700&coat=14300&skin=0000&belt=10400&pants=13400&shoes=12600",
+            "berserker": "swordman?hair=13000&cap=13200&face=12100&neck=12000&coat=14500&skin=0000&belt=10700&pants=13600&shoes=12800",
+            "asura": "swordman?hair=12600&cap=12800&face=11700&neck=11500&coat=14100&skin=0000&belt=10200&pants=13200&shoes=12400",
+            "soulbringer": "swordman?hair=12500&cap=12700&face=11600&neck=11400&coat=14000&skin=0000&belt=10100&pants=13100&shoes=12300",
+            "untransfer": "swordman?hair=0000&coat=0000&skin=0000&pants=0000&shoes=0000"
+        },
+        "weapon": [
+            "katana",
+            "lkatana",
+            "sswd",
+            "lswd",
+            "lswd_teen",
+            "lgswd",
+            "mswd",
+            "club",
+            "gemswd",
+            "beamswd",
+            "boneswd"
+        ]
+    },
+    {
+        "name": "swordman_at",
+        "frame": 0,
+        "transfer": {
+            "swordmaster": "swordman_at?hair=0800&cap=1300&face=0700&neck=1300&coat=0900&skin=0000&belt=0700&pants=0900&shoes=0800",
+            "demonslayer": "swordman_at?hair=1000&cap=1500&face=0900&neck=1500&coat=1100&skin=0000&belt=0900&pants=1100&shoes=1000",
+            "darktemplar": "swordman_at?hair=3503&cap=4700&face=2800&neck=3500&coat=3700&skin=0000&belt=2600&pants=3400&shoes=3600",
+            "vegabond": "swordman_at?hair=3400&cap=4500&face=2700&neck=3400&coat=3600&skin=0000&belt=2500&pants=3300&shoes=3500",
+            "untransfer": "swordman_at?hair=0000&neck=0000&coat=0000&skin=0000&pants=0000&shoes=0000"
+        },
+        "weapon": [
+            "katana",
+            "lkatana",
+            "sswd",
+            "lswd",
+            "lswd_teen",
+            "lgswd",
+            "mswd",
+            "club",
+            "gemswd",
+            "beamswd",
+            "boneswd"
+        ]
+    },
+    {
+        "name": "fighter_at",
+        "frame": 0,
+        "transfer": {
+            "grappler": "fighter_at?hair=5900&cap=6700&face=4900&neck=5900&coat=6100&skin=0003&belt=4900&pants=6100&shoes=5500",
+            "striker": "fighter_at?hair=4800&cap=6000&face=4200&neck=5300&coat=5000&skin=0000&belt=4100&pants=5000&shoes=4800",
+            "nenmaster": "fighter_at?hair=6200&cap=7000&face=5200&neck=6200&coat=6400&skin=0000&belt=5200&pants=6400&shoes=5800",
+            "streetfighter": "fighter_at?hair=5800&cap=6600&face=4800&neck=5800&coat=6000&skin=0000&belt=4800&pants=6000&shoes=5400",
+            "untransfer": "fighter_at?hair=0000&coat=0000&skin=0000&pants=0000&shoes=0000"
+        },
+        "weapon": [
+            "arm",
+            "tonfa",
+            "lkatana",
+            "glove",
+            "knuckle",
+            "claw",
+            "gauntlet",
+            "boxglove",
+            "boneclaw"
+        ]
+    },
+    {
+        "name": "fighter",
+        "frame": 116,
+        "transfer": {
+            "grappler": "fighter?hair=12200&cap=12600&face=10600&neck=11000&coat=13600&skin=0000&belt=9700&pants=12900&shoes=11900",
+            "striker": "fighter?hair=12400&cap=12800&face=10800&neck=11200&coat=13800&skin=0000&belt=9900&pants=13100&shoes=12100",
+            "nenmaster": "fighter?hair=12100&cap=12500&face=10500&neck=10900&coat=13500&skin=0000&belt=9600&pants=12800&shoes=11800",
+            "streetfighter": "fighter?hair=12500&cap=12900&face=10900&neck=11300&coat=13900&skin=0000&belt=10000&pants=13200&shoes=12200",
+            "untransfer": "fighter?hair=0000&coat=0000&skin=0000&pants=0000&shoes=0000"
+        },
+        "weapon": [
+            "arm",
+            "tonfa",
+            "lkatana",
+            "glove",
+            "knuckle",
+            "claw",
+            "gauntlet",
+            "boxglove",
+            "boneclaw"
+        ],
+    },
+    {
+        "name": "gunner",
+        "frame": 18,
+        "transfer": {
+            "ranger": "gunner?hair=12200&cap=12900&face=11400&neck=11300&coat=13200&skin=0000&belt=9800&pants=12800&shoes=11800",
+            "launcher": "gunner?hair=12400&cap=13100&face=11600&neck=11500&coat=13400&skin=0000&belt=10000&pants=13000&shoes=12000",
+            "mechanic": "gunner?hair=12300&cap=13000&face=11500&neck=11400&coat=13300&skin=0000&belt=9900&pants=12900&shoes=11900",
+            "spitfire": "gunner?hair=12500&cap=13200&face=11700&neck=11600&coat=13500&skin=0000&belt=10100&pants=13100&shoes=12100",
+            "untransfer": "gunner?hair=0000&coat=0000&skin=0000&pants=0000&shoes=0000"
+        },
+        "weapon": [
+            "rev",
+            "auto",
+            "musket",
+            "bowgun",
+            "hcan"
+        ]
+    },
+    {
+        "name": "gunner_at",
+        "frame": 8,
+        "transfer": {
+            "ranger": "gunner_at?hair=8500&cap=10000&face=7800&neck=8700&coat=8900&skin=0000&belt=7300&pants=8700&shoes=8100",
+            "launcher": "gunner_at?hair=8200&cap=9700&face=7500&neck=8400&coat=8600&skin=0000&belt=7000&pants=8400&shoes=7800",
+            "mechanic": "gunner_at?hair=8100&cap=9600&face=7400&neck=8300&coat=8500&skin=0000&belt=6900&pants=8300&shoes=7700",
+            "spitfire": "gunner_at?hair=8400&cap=9900&face=7700&neck=8600&coat=8800&skin=0000&belt=7200&pants=8600&shoes=8000",
+            "untransfer": "gunner_at?hair=0000&cap=0000&coat=0000&skin=0000&pants=0000&shoes=0000"
+        },
+        "weapon": [
+            "rev",
+            "auto",
+            "musket",
+            "bowgun",
+            "hcan"
+        ]
+    },
+    {
+        "name": "mage_at",
+        "frame": 8,
+        "transfer": {
+            "glacialmaster": "mage_at?hair=2600&cap=3400&face=2000&neck=2900&coat=2800&skin=0000&belt=2100&pants=2800&shoes=2600",
+            "elementalbomber": "mage_at?hair=3900&cap=4400&face=2900&neck=3700&coat=4100&skin=0000&belt=3000&pants=4100&shoes=3500",
+            "dimensionwalker": "mage_at?hair=9400&cap=11200&face=7900&neck=9100&coat=10100&skin=0000&belt=8200&pants=9600&shoes=9100",
+            "swiftmaster": "mage_at?hair=9500&cap=11300&face=8000&neck=9200&coat=10200&skin=0000&belt=8300&pants=9700&shoes=9200",
+            "bloodmage": "mage_at?hair=9300&cap=11100&face=7800&neck=9000&coat=10000&skin=0000&belt=8100&pants=9500&shoes=9000",
+            "untransfer": "mage_at?hair=0000&coat=0000&skin=0000&belt=0000&pants=0000&shoes=0000"
+        },
+        "weapon": [
+            "staff",
+            "spear",
+            "rod",
+            "pole",
+            "broom"
+        ]
+    },
+    {
+        "name": "mage",
+        "frame": 10,
+        "transfer": {
+            "magiciant": "mage?hair=11700&cap=13400&face=10800&neck=11200&coat=13300&skin=0000&belt=10100&pants=12200&shoes=11700",
+            "witch": "mage?hair=11800&cap=13500&face=10900&neck=11300&coat=13400&skin=0000&belt=10200&pants=12300&shoes=11800",
+            "battlemage": "mage?hair=11900&cap=13600&face=11000&neck=11400&coat=13500&skin=0000&belt=10300&pants=12400&shoes=11900",
+            "summoner": "mage?hair=12100&cap=13800&face=11200&neck=11600&coat=13700&skin=0000&belt=10500&pants=12600&shoes=12100",
+            "creator": "mage?hair=10400&cap=12100&&coat=12000&skin=0000&pants=10900&shoes=10800",
+            "untransfer": "mage?hair=0000&cap=0000&coat=0000&skin=0000&pants=0000&shoes=0000"
+        },
+        "weapon": [
+            "staff",
+            "spear",
+            "rod",
+            "pole",
+            "broom"
+        ]
+    },
+    {
+        "name": "priest",
+        "frame": 150,
+        "transfer": {
+            "infighter": "priest?hair=11200&face=12200&neck=11400&coat=12500&skin=0000&belt=10000&pants=11500&shoes=11200",
+            "taoisthermit": "priest?hair=11100&cap=12900&face=12100&neck=11100&coat=12400&skin=0000&belt=9900&pants=11400&shoes=11100",
+            "saint": "priest?hair=10800&cap=12600&face=11800&neck=10800&coat=12100&skin=0000&belt=9600&pants=11100&shoes=10800",
+            "justice": "priest?hair=10700&cap=12500&face=11700&neck=10700&coat=12000&skin=0000&belt=9500&pants=11000&shoes=10700",
+            "untransfer": "priest?hair=0000&coat=0000&skin=0000&pants=0000&shoes=0000"
+        },
+        "weapon": [
+            "totem",
+            "scythe",
+            "rosary",
+            "cross",
+            "axe"
+        ]
+    },
+    {
+        "name": "priest_at",
+        "frame": 0,
+        "transfer": {
+            "atcrusader": "priest_at?hair=1300&cap=1100&face=1200&neck=1200&coat=1300&skin=0002&belt=1100&pants=1300&shoes=1200",
+            "inquistor": "priest_at?hair=1200&cap=1200&face=1100&neck=1100&coat=1100&skin=0000&belt=1000&pants=1100&shoes=1100",
+            "temptress": "priest_at?hair=1000&cap=1200&face=0900&neck=0900&coat=0900&skin=0000&belt=0800&pants=0900&shoes=0900",
+            "sorceress": "priest_at?hair=0900&cap=0800&face=0800&neck=0800&coat=0800&skin=0011&belt=0700&pants=0800&shoes=0800",
+            "untransfer": "priest_at?hair=0000&coat=0000&skin=0000&pants=0000&shoes=0000"
+        },
+        "weapon": [
+            "totem",
+            "scythe",
+            "rosary",
+            "cross",
+            "axe"
+        ]
+    },
+    {
+        "name": "thief",
+        "frame": 10,
+        "transfer": {
+            "necromencer": "thief?hair=7400&cap=8600&face=6500&neck=8000&coat=7800&skin=0013&belt=6200&pants=7700&shoes=7000",
+            "kunoichi": "thief?hair=10400&cap=12400&face=9300&neck=11000&coat=10900&skin=0001&belt=9100&pants=10700&shoes=10300",
+            "shadowdancer": "thief?hair=10700&cap=12700&face=9300&neck=11200&coat=11400&skin=0001&belt=9400&pants=11000&shoes=10600",
+            "assassin": "thief?hair=7600&cap=8800&face=6700&neck=8200&coat=8000&skin=0000&belt=6400&pants=7900&shoes=7200",
+            "untransfer": "thief?hair=0000&cap=0000&neck=0000&coat=0000&skin=0000&pants=0000&shoes=0000"
+        },
+        "weapon": [
+            "wand",
+            "twinswd",
+            "dagger",
+            "chakraweapon"
+        ]
+    },
+    {
+        "name": "knight",
+        "frame": 0,
+        "transfer": {
+            "elvenknight": "knight?hair=0600&cap=2100&face=0700&neck=0047&coat=0800&skin=0000&belt=0700&pants=0700&shoes=0700",
+            "paladin": "knight?hair=6100&cap=8700&face=5100&neck=6200&coat=6700&skin=0000&belt=5500&pants=6200&shoes=6400",
+            "chaos": "knight?hair=0700&cap=2200&face=0800&neck=1600&coat=0900&skin=0000&belt=0800&pants=0800&shoes=0800",
+            "dragonknight": "knight?hair=6200&cap=8800&face=5200&neck=6300&coat=6800&skin=0000&belt=5600&pants=6300&shoes=6500",
+            "untransfer": "knight?hair=0000&coat=0000&skin=0000&pants=0000&shoes=0000"
+        },
+        "weapon": [
+            "katana",
+            "lkatana",
+            "sswd",
+            "lswd",
+            "lswd_teen",
+            "lgswd",
+            "mswd",
+            "club",
+            "gemswd",
+            "beamswd",
+            "bswd"
+        ]
+    },
+    {
+        "name": "demoniclancer",
+        "frame": 0,
+        "transfer": {
+            "darklancer": "demoniclancer?hair=3600&cap=5000&face=3100&neck=3800&coat=3800&skin=0000&belt=3400&pants=3600&shoes=3600",
+            "dragonianlancer": "demoniclancer?hair=3700&cap=5100&face=3200&neck=3900&coat=3900&skin=0000&belt=3500&pants=3700&shoes=3700",
+            "duelist": "demoniclancer?hair=0700&cap=0700&face=0700&neck=0700&coat=0700&skin=0000&belt=0700&pants=0700&shoes=0700",
+            "vanguard": "demoniclancer?hair=0600&cap=0600&face=0600&neck=0600&coat=0600&skin=0000&belt=0600&pants=0600&shoes=0600",
+            "untransfer": "demoniclancer?hair=0000&coat=0000&skin=0000&pants=0000&shoes=0000"
+        },
+        "weapon": [
+            "pike",
+            "halberd",
+            "beamspear",
+            "javelin"
+        ]
+    },
+    {
+        "name": "gunblader",
+        "frame": 0,
+        "transfer": {
+            "agent": "gunblader?hair=1300&cap=2400&face=1200&neck=1900&coat=1500&skin=0000&belt=1300&pants=1400&shoes=1300",
+            "hitman": "gunblader?hair=1400&cap=2400&face=1400&neck=2000&coat=1600&skin=0000&belt=1400&pants=1500&shoes=1400",
+            "specialist": "gunblader?hair=1600&cap=2800&face=1600&neck=2200&coat=1800&skin=0000&belt=1600&pants=1700&shoes=1600",
+            "troubleshooter": "gunblader?hair=1500&cap=2700&face=1500&neck=2100&coat=1700&skin=0000&belt=1500&pants=1600&shoes=1500",
+            "untransfer": "gunblader?hair=0000&face=0000&coat=0000&skin=0000&belt=0000&pants=0000&shoes=0000"
+        },
+        "weapon": [
+            "mswd",
+            "sblade",
+            "coreswd",
+            "lblade"
+        ]
+    }
+]
