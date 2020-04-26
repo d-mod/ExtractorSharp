@@ -71,7 +71,7 @@ namespace ExtractorSharp {
             LoadRegistry();
             Merger = new Merger();
             Controller = new Controller();
-            RegistyCommand();
+            RegistryCommand();
             Viewer = new Viewer();
             Drawer = new Drawer();
             Form = new MainForm();
@@ -89,7 +89,7 @@ namespace ExtractorSharp {
             ShowDebug(sender, new ThreadExceptionEventArgs(e.ExceptionObject as Exception));
         }
 
-        private static void RegistyCommand() {
+        private static void RegistryCommand() {
             Controller.Registry("addImg", typeof(AddFile));
             Controller.Registry("deleteImg", typeof(DeleteFile));
             Controller.Registry("renameImg", typeof(RenameFile));
@@ -235,17 +235,17 @@ namespace ExtractorSharp {
         ///     注册窗口
         /// </summary>
         private static void RegistyDialog() {
-            Viewer.Regisity("replace", typeof(ReplaceImageDialog));
-            Viewer.Regisity("merge", typeof(MergeDialog));
-            Viewer.Regisity("newImg", typeof(NewImgDialog));
-            Viewer.Regisity("convert", typeof(ConvertDialog));
-            Viewer.Regisity("changePosition", typeof(ChangePositonDialog));
-            Viewer.Regisity("about", typeof(AboutDialog));
-            Viewer.Regisity("debug", typeof(BugDialog));
-            Viewer.Regisity("newImage", typeof(NewImageDialog));
-            Viewer.Regisity("setting", typeof(SettingDialog));
-            Viewer.Regisity("saveImage", typeof(SaveImageDialog));
-            Viewer.Regisity("changeSize", typeof(ChangeSizeDialog));
+            Viewer.Registry("replace", typeof(ReplaceImageDialog));
+            Viewer.Registry("merge", typeof(MergeDialog));
+            Viewer.Registry("newImg", typeof(NewImgDialog));
+            Viewer.Registry("convert", typeof(ConvertDialog));
+            Viewer.Registry("changePosition", typeof(ChangePositonDialog));
+            Viewer.Registry("about", typeof(AboutDialog));
+            Viewer.Registry("debug", typeof(BugDialog));
+            Viewer.Registry("newImage", typeof(NewImageDialog));
+            Viewer.Registry("setting", typeof(SettingDialog));
+            Viewer.Registry("saveImage", typeof(SaveImageDialog));
+            Viewer.Registry("changeSize", typeof(ChangeSizeDialog));
         }
 
 

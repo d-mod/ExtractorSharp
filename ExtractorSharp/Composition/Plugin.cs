@@ -109,7 +109,7 @@ namespace ExtractorSharp.Composition {
                     continue;
                 }
                 var dialog = lazy.Value;
-                Viewer.Regisity(dialog.Name, dialog);
+                Viewer.Registry(dialog.Name, dialog);
             }
         }
 

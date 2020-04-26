@@ -60,7 +60,7 @@ namespace ExtractorSharp.Core {
         /// </summary>
         /// <param name="name"></param>
         /// <param name="type"></param>
-        public void Regisity(string name, Type type) {
+        public void Registry(string name, Type type) {
             if (Dic.ContainsKey(name)) {
                 Dic.Remove(name);
             }
@@ -72,7 +72,7 @@ namespace ExtractorSharp.Core {
         /// </summary>
         /// <param name="name"></param>
         /// <param name="dialog"></param>
-        public void Regisity(string name, ESDialog dialog) {
+        public void Registry(string name, ESDialog dialog) {
             List.Add(name, dialog);
             Dic.Add(name, dialog.GetType());
         }
