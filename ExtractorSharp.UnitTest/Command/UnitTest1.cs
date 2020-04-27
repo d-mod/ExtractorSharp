@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using ExtractorSharp.Core;
 using ExtractorSharp.Core.Coder;
 using ExtractorSharp.Core.Handle;
@@ -53,8 +56,24 @@ namespace ExtractorSharp.UnitTest.Command {
 
 
         [TestMethod]
-        public void TestDoCommand() {
+        public void TestInvoke()
+        {
             var controller = new Controller();
+            Assert.AreEqual(controller.ParseInvoke("|asNull"), null);
+            Assert.AreEqual(controller.ParseInvoke("12342134sdgwseg|asNull"), null);
+
+            Assert.AreEqual(controller.ParseInvoke("true|toBool"), true);
+            Assert.AreEqual(controller.ParseInvoke("123|toBool"), true);
+            Assert.AreEqual(controller.ParseInvoke("false|toBool"), false);
+
+            Assert.AreEqual(controller.ParseInvoke("1"), "1");
+            Assert.AreEqual(controller.ParseInvoke("1|toInt"), 1);
+            Assert.IsTrue(((controller.ParseInvoke("1|toList") as string[]) ?? Array.Empty<string>()).SequenceEqual(new[] { "1" }));
+            Assert.IsTrue(((controller.ParseInvoke("1|toList|toInt") as int[]) ?? Array.Empty<int>()).SequenceEqual(new[] {1}));
+
+            Assert.IsTrue(((controller.ParseInvoke("1,2,3|toList") as string[]) ?? Array.Empty<string>()).SequenceEqual(new[] { "1", "2", "3" }));
+            Assert.IsTrue(((controller.ParseInvoke("1,2,3|toList|toInt") as int[]) ?? Array.Empty<int>()).SequenceEqual(new[] { 1, 2, 3 }));
+
         }
     }
 }

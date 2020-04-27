@@ -79,7 +79,7 @@ namespace ExtractorSharp {
             Drawer.Select(Config["Brush"].Value);
             Drawer.Color = Config["BrushColor"].Color;
             Connector = Form.Connector;
-            Connector.AddFile(true, args);
+            // Connector.AddFile(true, args);
             RegistyDialog();
             Viewer.DialogShown += ViewerDialogShown;
             Hoster = new Hoster();
