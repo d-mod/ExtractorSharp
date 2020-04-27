@@ -545,7 +545,7 @@ namespace ExtractorSharp {
                     layerList.Refresh();
                 }
             } else {
-                messager.ShowWarnning(Language["RenameLayerTips"]);
+                Connector.SendWarning(Language["RenameLayerTips"]);
             }
         }
 
