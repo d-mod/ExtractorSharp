@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ExtractorSharp.Core.Command;
 using ExtractorSharp.Core.Composition;
 using ExtractorSharp.Core.Model;
@@ -260,6 +261,56 @@ namespace ExtractorSharp.Core {
         }
 
         /// <summary>
+        ///     解析命令行, 目前只包含 toList toInt LoadFile
+        /// 例:
+        /// Assert.AreEqual(controller.ParseInvoke("1"), "1");
+        /// Assert.AreEqual(controller.ParseInvoke("1|toInt"), 1);
+        /// Assert.IsTrue(((controller.ParseInvoke("1|toList") as string[]) ?? Array.Empty&lt;string&gt;()).SequenceEqual(new[] { "1" }));
+        /// Assert.IsTrue(((controller.ParseInvoke("1|toList|toInt") as int[]) ?? Array.Empty&lt;int&gt;()).SequenceEqual(new[] {1}));
+        /// 
+        /// Assert.IsTrue(((controller.ParseInvoke("1,2,3|toList") as string[]) ?? Array.Empty&lt;string&gt;()).SequenceEqual(new[] { "1", "2", "3" }));
+        /// Assert.IsTrue(((controller.ParseInvoke("1,2,3|toList|toInt") as int[]) ?? Array.Empty&lt;int&gt;()).SequenceEqual(new[] { 1, 2, 3 }));
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        public object ParseInvoke(string command)
+        {
+            var args = command.Split('|');
+            object arg = args[0];
+            foreach (var _command in args.Skip(1))
+            {
+                switch (_command)
+                {
+                    case "asNull":
+                        arg = null;
+                        break;
+                    case "toBool":
+                        arg = (arg as string) != "false";
+                        break;
+                    case "toList":
+                        arg = (arg as string)?.Split(',');
+                        break;
+                    case "toInt":
+                        switch (arg)
+                        {
+                            case string iStr:
+                                arg = int.Parse(iStr);
+                                break;
+                            case object[] iObjects:
+                                arg = iObjects.Select(x => int.Parse(x as string ?? string.Empty)).ToArray();
+                                break;
+                        }
+                        break;
+                    case "LoadFile":
+                        arg = Connector.LoadFile((arg as string)?.Replace("|LoadFile", ""))[0];
+                        break;
+                }
+            }
+
+            return arg;
+        }
+
+        /// <summary>
         ///     执行命令
         /// </summary>
         /// <param name="key"></param>
@@ -269,7 +320,15 @@ namespace ExtractorSharp.Core {
                 var type = Dic[key];
                 if (type != null && typeof(ICommand).IsAssignableFrom(type)) {
                     var cmd = type.CreateInstance() as ICommand;
-                    cmd.Do(args);
+
+                    object[] newArgs = args.Select(ar =>
+                    {
+                        if (ar is string s)
+                            return ParseInvoke(s);
+                        return ar;
+                    }).ToArray();
+
+                    cmd.Do(newArgs);
                     if (cmd.CanUndo) {
                         undoStack.Push(cmd);
                     }
