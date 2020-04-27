@@ -19,7 +19,7 @@ namespace ExtractorSharp.UnitTest.Properties {
     // 类通过类似于 ResGen 或 Visual Studio 的工具自动生成的。
     // 若要添加或移除成员，请编辑 .ResX 文件，然后重新运行 ResGen
     // (以 /str 作为命令选项)，或重新生成 VS 项目。
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -47,7 +47,7 @@ namespace ExtractorSharp.UnitTest.Properties {
         }
         
         /// <summary>
-        ///   使用此强类型资源类，为所有资源查找
+        ///   重写当前线程的 CurrentUICulture 属性
         ///   重写当前线程的 CurrentUICulture 属性。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -62,34 +62,31 @@ namespace ExtractorSharp.UnitTest.Properties {
         
         /// <summary>
         ///   查找类似 {
-        ///	Name:&quot;default&quot;,
-        ///	Rules:{
-        ///	  &apos;body&apos;: 0
-        ///	  &apos;bodyh&apos;: 0
-        ///	  &apos;bgloveb&apos;: 650
-        ///	  &apos;bglovea&apos;: 2150
-        ///	  &apos;bglovec&apos;: 2790
-        ///	  &apos;revc&apos;: 2790
-        ///	  &apos;bglovex&apos;: 1350
-        ///	  &apos;revb&apos;: 650
-        ///	  &apos;gauntletx&apos;: 1350
-        ///	  &apos;clawc&apos;: 2790
-        ///	  &apos;clawb&apos;: 650
-        ///	  &apos;clawa&apos;: 2150
-        ///	  &apos;shoesb&apos;: 1200
-        ///	  &apos;shoesc&apos;: 1600
-        ///	  &apos;shoesa&apos;: 1400
-        ///	  &apos;shoesf&apos;: 2880
-        ///	  &apos;shoesg&apos;: 1450
-        ///	  &apos;gauntletb&apos;: 650
-        ///	  &apos;gauntletc&apos;: 2790
-        ///	  &apos;gauntleta&apos;: 2150
-        ///	  &apos;clawx&apos;: 1350
-        ///	  &apos;sswdc&apos;: 4200
-        ///	  &apos;boneclawb&apos;: 650
-        ///	  &apos;boneclawa&apos;: 2150
-        ///	  &apos;sswdb&apos;: 650
-        ///	  &apos;faceg [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///  &quot;Name&quot;: &quot;default&quot;,
+        ///  &quot;Rules&quot;: {
+        ///    &quot;arma&quot;: 2150,
+        ///    &quot;armb&quot;: 650,
+        ///    &quot;armc&quot;: 2790,
+        ///    &quot;armsa&quot;: 2150,
+        ///    &quot;armsb&quot;: 650,
+        ///    &quot;armsc&quot;: 2790,
+        ///    &quot;armsx&quot;: 1350,
+        ///    &quot;armx&quot;: 1350,
+        ///    &quot;autoa&quot;: 2150,
+        ///    &quot;autob&quot;: 650,
+        ///    &quot;autoc&quot;: 2790,
+        ///    &quot;axea&quot;: 2150,
+        ///    &quot;axec&quot;: 2600,
+        ///    &quot;axed&quot;: 200,
+        ///    &quot;axex&quot;: 1350,
+        ///    &quot;beamspeara&quot;: 2150,
+        ///    &quot;beamspearb&quot;: 650, //?
+        ///    &quot;beamspearc&quot;: 2790,
+        ///    &quot;beamspeare&quot;: 2880,
+        ///    &quot;beamspearx&quot;: 1350,
+        ///    &quot;beamswda&quot;: 2150, //?
+        ///    &quot;beamswdb&quot;: 650, //?
+        ///     [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string queues {
             get {
@@ -111,12 +108,9 @@ namespace ExtractorSharp.UnitTest.Properties {
         ///      &quot;mswd&quot;,
         ///      &quot;club&quot;,
         ///      &quot;gemswd&quot;,
-        ///      &quot;beamswd&quot;
-        ///    ],
-        ///    //
-        ///    &quot;alias&quot;: {
-        ///      &quot;bswd&quot;: &quot;boneswd&quot;
-        ///    }
+        ///      &quot;beamswd&quot;,
+        ///      &quot;boneswd&quot;
+        ///    ]
         ///  },
         ///  &quot;fighter&quot;: {
         ///    &quot;hasAt&quot;: true,
@@ -127,12 +121,14 @@ namespace ExtractorSharp.UnitTest.Properties {
         ///      &quot;glove&quot;,
         ///      &quot;knuckle&quot;,
         ///      &quot;claw&quot;,
-        ///      &quot;gauntlet&quot;
-        ///    ],
-        ///    &quot;alias&quot;: {
-        ///      &quot;bglove&quot;: &quot;boneglove&quot;,
-        ///      &quot;bclaw&quot;: &quot;boneclaw&quot;
-        ///    } [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///      &quot;gauntlet&quot;,
+        ///      &quot;boneglove&quot;,
+        ///      &quot;boneclaw&quot;
+        ///    ]
+        ///  },
+        ///  &quot;gunner&quot;: {
+        ///    &quot;hasAt&quot;: true,
+        ///     [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string weapon {
             get {
