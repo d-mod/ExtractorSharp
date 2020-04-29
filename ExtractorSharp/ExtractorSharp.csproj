@@ -153,6 +153,7 @@
     <Compile Include="Composition\Metadata.cs" />
     <Compile Include="Composition\Plugin.cs" />
     <Compile Include="Config\JsonConfig.cs" />
+    <Compile Include="Core\CommandParser.cs" />
     <Compile Include="Draw\Paint\CompareLayer.cs" />
     <Compile Include="Effect\Sprite\UnCanvasSpriteConverter.cs" />
     <Compile Include="Core\Clipboarder.cs" />
