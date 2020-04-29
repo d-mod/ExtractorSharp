@@ -20,10 +20,10 @@ namespace ExtractorSharp.UnitTest.Command {
         }
 
 
-        /// <summary>
-        ///     测试IMG保存
-        /// </summary>
-        [TestMethod]
+    /// <summary>
+    ///     测试IMG保存
+    /// </summary>
+    [TestMethod]
         public void TestSaveImg() {
             var list = NpkCoder.Load(@"D:\地下城与勇士\ImagePacks2\sprite_character_swordman_equipment_avatar_coat.NPK");
             Assert.IsTrue(list.Count > 0);
@@ -58,22 +58,28 @@ namespace ExtractorSharp.UnitTest.Command {
         [TestMethod]
         public void TestInvoke()
         {
-            var controller = new Controller();
-            Assert.AreEqual(controller.ParseInvoke("|asNull"), null);
-            Assert.AreEqual(controller.ParseInvoke("12342134sdgwseg|asNull"), null);
+            var commandParser = new CommandParser();
+            Assert.AreEqual(commandParser.ParseInvoke("|asNull"), null);
+            Assert.AreEqual(commandParser.ParseInvoke("12342134sdgwseg|asNull"), null);
 
-            Assert.AreEqual(controller.ParseInvoke("true|toBool"), true);
-            Assert.AreEqual(controller.ParseInvoke("123|toBool"), true);
-            Assert.AreEqual(controller.ParseInvoke("false|toBool"), false);
+            Assert.AreEqual(commandParser.ParseInvoke("true|toBool"), true);
+            Assert.AreEqual(commandParser.ParseInvoke("123|toBool"), true);
+            Assert.AreEqual(commandParser.ParseInvoke("false|toBool"), false);
 
-            Assert.AreEqual(controller.ParseInvoke("1"), "1");
-            Assert.AreEqual(controller.ParseInvoke("1|toInt"), 1);
-            Assert.IsTrue(((controller.ParseInvoke("1|toList") as string[]) ?? Array.Empty<string>()).SequenceEqual(new[] { "1" }));
-            Assert.IsTrue(((controller.ParseInvoke("1|toList|toInt") as int[]) ?? Array.Empty<int>()).SequenceEqual(new[] {1}));
+            Assert.AreEqual(commandParser.ParseInvoke("1"), "1");
+            Assert.AreEqual(commandParser.ParseInvoke("1|toInt"), 1);
+            Assert.IsTrue(((commandParser.ParseInvoke("1|toList") as string[]) ?? Array.Empty<string>()).SequenceEqual(new[] { "1" }));
+            Assert.IsTrue(((commandParser.ParseInvoke("1|toList|toInt") as int[]) ?? Array.Empty<int>()).SequenceEqual(new[] {1}));
 
-            Assert.IsTrue(((controller.ParseInvoke("1,2,3|toList") as string[]) ?? Array.Empty<string>()).SequenceEqual(new[] { "1", "2", "3" }));
-            Assert.IsTrue(((controller.ParseInvoke("1,2,3|toList|toInt") as int[]) ?? Array.Empty<int>()).SequenceEqual(new[] { 1, 2, 3 }));
+            Assert.IsTrue(((commandParser.ParseInvoke("1,2,3|toList") as string[]) ?? Array.Empty<string>()).SequenceEqual(new[] { "1", "2", "3" }));
+            Assert.IsTrue(((commandParser.ParseInvoke("1,2,3|toList|toInt") as int[]) ?? Array.Empty<int>()).SequenceEqual(new[] { 1, 2, 3 }));
+            commandParser.ParseInvoke("1,2,3|toList|toInt|asVar|a");
+            Assert.IsTrue((commandParser.ParseInvoke("|useVar|a") as int[] ?? Array.Empty<int>()).SequenceEqual(new[] { 1, 2, 3 }));
 
+            commandParser.ParseInvoke("1,2,3|toList|asVar|a");
+            Assert.IsTrue((commandParser.ParseInvoke("|useVar|a|toInt") as int[] ?? Array.Empty<int>()).SequenceEqual(new[] { 1, 2, 3 }));
+
+            commandParser.ParseInvoke("|useVar|a|message");
         }
     }
 }

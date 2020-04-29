@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Security.AccessControl;
@@ -52,6 +53,8 @@ namespace ExtractorSharp {
         [Export(typeof(IConnector))]
         internal static IConnector Connector { set; get; }
 
+        internal static CommandParser CommandParser { set; get; }
+
         /// <summary>
         ///     应用程序的主入口点。
         /// </summary>
@@ -82,6 +85,8 @@ namespace ExtractorSharp {
             RegistyDialog();
             Viewer.DialogShown += ViewerDialogShown;
             Hoster = new Hoster();
+
+            CommandParser = new CommandParser();
             Application.Run(Form);
         }
 
@@ -208,7 +213,7 @@ namespace ExtractorSharp {
                 Arguments = command.Split("/");
             }
             if (Arguments.Length > 1) {
-                var args = new object[Arguments.Length - 2];
+                var args = new string[Arguments.Length - 2];
                 Array.Copy(Arguments, 2, args, 0, args.Length);
                 var name = Arguments[1];
                 switch (Arguments[0]) {
@@ -217,6 +222,20 @@ namespace ExtractorSharp {
                         break;
                     case "-c":
                         Controller.Do(name, args);
+                        break;
+                    case "-m":
+                        // 多行模式
+                        var arg = Arguments[1];
+                        foreach (var cmd in arg
+                            .Replace("\r\n", "\n")
+                            .Split("\n"))
+                        {
+                            var newArgs = cmd.Split(" ") ?? new[] { "" };
+                            var newName = newArgs[0];
+
+                            Controller.Do(newName, newArgs.Skip(1).ToArray());
+                        }
+
                         break;
                 }
             }
