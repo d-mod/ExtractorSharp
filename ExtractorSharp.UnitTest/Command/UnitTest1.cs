@@ -68,18 +68,20 @@ namespace ExtractorSharp.UnitTest.Command {
 
             Assert.AreEqual(commandParser.ParseInvoke("1"), "1");
             Assert.AreEqual(commandParser.ParseInvoke("1|toInt"), 1);
-            Assert.IsTrue(((commandParser.ParseInvoke("1|toList") as string[]) ?? Array.Empty<string>()).SequenceEqual(new[] { "1" }));
-            Assert.IsTrue(((commandParser.ParseInvoke("1|toList|toInt") as int[]) ?? Array.Empty<int>()).SequenceEqual(new[] {1}));
+            Assert.IsTrue(((commandParser.ParseInvoke("1|toArray") as string[]) ?? Array.Empty<string>()).SequenceEqual(new[] { "1" }));
+            Assert.IsTrue(((commandParser.ParseInvoke("1|toArray|toInt") as int[]) ?? Array.Empty<int>()).SequenceEqual(new[] {1}));
 
-            Assert.IsTrue(((commandParser.ParseInvoke("1,2,3|toList") as string[]) ?? Array.Empty<string>()).SequenceEqual(new[] { "1", "2", "3" }));
-            Assert.IsTrue(((commandParser.ParseInvoke("1,2,3|toList|toInt") as int[]) ?? Array.Empty<int>()).SequenceEqual(new[] { 1, 2, 3 }));
-            commandParser.ParseInvoke("1,2,3|toList|toInt|asVar|a");
+            Assert.IsTrue(((commandParser.ParseInvoke("1,2,3|toArray") as string[]) ?? Array.Empty<string>()).SequenceEqual(new[] { "1", "2", "3" }));
+            Assert.IsTrue(((commandParser.ParseInvoke("1,2,3|toArray|toInt") as int[]) ?? Array.Empty<int>()).SequenceEqual(new[] { 1, 2, 3 }));
+            commandParser.ParseInvoke("1,2,3|toArray|toInt|asVar|a");
             Assert.IsTrue((commandParser.ParseInvoke("|useVar|a") as int[] ?? Array.Empty<int>()).SequenceEqual(new[] { 1, 2, 3 }));
 
-            commandParser.ParseInvoke("1,2,3|toList|asVar|a");
+            commandParser.ParseInvoke("1,2,3|toArray|asVar|a");
             Assert.IsTrue((commandParser.ParseInvoke("|useVar|a|toInt") as int[] ?? Array.Empty<int>()).SequenceEqual(new[] { 1, 2, 3 }));
 
             commandParser.ParseInvoke("|useVar|a|message");
+            commandParser.ParseInvoke("|useVar|a|toInt|message");
+
         }
     }
 }
