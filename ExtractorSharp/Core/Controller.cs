@@ -273,14 +273,7 @@ namespace ExtractorSharp.Core {
                 if (type != null && typeof(ICommand).IsAssignableFrom(type)) {
                     var cmd = type.CreateInstance() as ICommand;
 
-                    object[] newArgs = args.Select(ar =>
-                    {
-                        if (ar is string s)
-                            return CommandParser.ParseInvoke(s);
-                        return ar;
-                    }).ToArray();
-
-                    cmd.Do(newArgs);
+                    cmd.Do(args);
                     if (cmd.CanUndo) {
                         undoStack.Push(cmd);
                     }
@@ -295,15 +288,7 @@ namespace ExtractorSharp.Core {
                     });
                     Current = cmd;
                 }
-            } else if (key == "pure")
-            {
-                foreach (var s in args)
-                {
-                    CommandParser.ParseInvoke(s as string);
-                }
-
-            }
-            else {
+            } else {
                 throw new CommandException("NotExistCommand");
             }
         }

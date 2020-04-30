@@ -139,7 +139,8 @@ namespace ExtractorSharp.Core
             return _status.TryGetValue(name, out var value) ? value : defaultValue;
         }
         /// <summary>
-        ///     解析但行命令行, 目前包含:
+        ///     解析运行命令行, 每句应当以 [;] 结尾, 以下演示中部分未使用
+        ///     目前包含命令:
         ///     无副作用命令(不影响上下文):
         ///         toList toInt LoadFile
         ///         toBool asNull exit
@@ -166,9 +167,28 @@ namespace ExtractorSharp.Core
         /// 
         ///         |$list|forEach|i|{
         ///             i|message;
-        ///             i|addOne;
+        ///             i|addOne|asVar|t;
         ///         }
-        ///         
+        ///         为 list.forEach(i => {
+        ///                 message(i);
+        ///                 t = addOne(i);
+        ///            })
+        ///
+        ///     对于 API 的调用, 应当使用 @ 开头, 并采用以下格式:
+        ///         @{
+        ///             saveImage; 
+        ///             sprite_interface_monstercard.NPK|LoadFile;
+        ///             1|toInt;
+        ///             1|toList|toInt;
+        ///             Z:\output;
+        ///             "";
+        ///             0|toInt;
+        ///             0|toInt;
+        ///             false|toBool;
+        ///             |asNull;
+        ///             true|toBool;
+        ///         }
+        ///     第一个是 API 名, 接下来是参数, 参数可以一行写, 也可多行写, 暂不支持命名参数       
         /// </summary>
         /// <param name="command"></param>
         public object ParseInvoke(string command)
@@ -230,17 +250,16 @@ namespace ExtractorSharp.Core
                         leftBraceCount += 1;
                         tokens.Add(new Token(currentToken.ToString()));
                         currentToken.Clear();
-
+                        // todo 嵌套block还有bug, 无法正常处理
                         break;
                     case '}':
                         leftBraceCount -= 1;
-                        if (leftBraceCount == 0)
-                        {
-                            var currentBlock = new BlockToken(currentToken.ToString());
-                            currentBlock.ContentTokens = ParseBlock(currentBlock.Text);
-                            tokens.Add(currentBlock);
-                            currentToken.Clear();
-                        }
+
+                        var currentBlock = new BlockToken(currentToken.ToString());
+                        currentBlock.ContentTokens = ParseBlock(currentBlock.Text);
+                        tokens.Add(currentBlock);
+                        currentToken.Clear();
+                    
                         break;
                     case char s when leftBraceCount > 0:
                         currentToken.Append(s);
@@ -254,7 +273,7 @@ namespace ExtractorSharp.Core
                         currentToken.Clear();
                         tokens.Add(new LineEndToken());
                         break;
-                    case char s when "\r\n\t ".Contains(s): 
+                    case char s when "\r\n\t ".Contains(s):
                         // 目前只允许用\r\n\t<space>作为美观用字符 遇见后自动跳过, 虽然由于命令行格式导致不会有空格出现在这里
                         break;
                     case char s:
