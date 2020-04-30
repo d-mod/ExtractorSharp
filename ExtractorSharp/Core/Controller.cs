@@ -295,7 +295,15 @@ namespace ExtractorSharp.Core {
                     });
                     Current = cmd;
                 }
-            } else {
+            } else if (key == "pure")
+            {
+                foreach (var s in args)
+                {
+                    CommandParser.ParseInvoke(s as string);
+                }
+
+            }
+            else {
                 throw new CommandException("NotExistCommand");
             }
         }
