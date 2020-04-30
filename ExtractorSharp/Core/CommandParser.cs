@@ -21,8 +21,9 @@ namespace ExtractorSharp.Core
             {
                 ["asNull"] = arg => null,
                 ["toBool"] = arg => (arg as string) != "false",
-                ["toList"] = arg => (arg as string)?.Split(','),
-                ["toInt"] = arg => {
+                ["toArray"] = arg => (arg as string)?.Split(','),
+                ["toInt"] = arg =>
+                {
                     switch (arg)
                     {
                         case string iStr:
@@ -50,7 +51,20 @@ namespace ExtractorSharp.Core
                     Environment.Exit(code);
                     return arg;
                 },
-                ["message"] = arg => MessageBox.Show(arg as string),
+                ["message"] = arg =>
+                {
+                    var msg = "";
+                    switch (arg)
+                    {
+                        case object[] argArray:
+                            MessageBox.Show(string.Join(",", argArray.Select(x=>x.ToString())));
+                            break;
+                        default:
+                            MessageBox.Show(arg.ToString());
+                            break;
+                    }
+                    return arg;
+                },
                 ["asVar"] = arg =>
                 {
                     if (CheckSwitch("hasAsVar"))
@@ -98,7 +112,7 @@ namespace ExtractorSharp.Core
         /// <summary>
         ///     用于获取某个开关的值
         /// </summary>
-        public object GetSwitch(string name, object defaultValue=null)
+        public object GetSwitch(string name, object defaultValue = null)
         {
             return _status.TryGetValue(name, out var value) ? value : defaultValue;
         }
@@ -136,7 +150,7 @@ namespace ExtractorSharp.Core
         /// <param name="command"></param>
         public object ParseInvoke(string command)
         {
-            
+
             var args = command.Split('|');
             object arg = args[0];
             foreach (var sigCommand in args.Skip(1))
@@ -156,7 +170,8 @@ namespace ExtractorSharp.Core
 
                     arg = value;
                     SetSwitch("hasUseVar", false);
-                } else
+                }
+                else
                 {
                     if (FuncMap.TryGetValue(sigCommand, out var fun))
                     {
@@ -167,7 +182,7 @@ namespace ExtractorSharp.Core
                         throw new Exception($"Can't find the command {arg} in code {string.Join("", args)}");
                     }
                 }
-                
+
             }
 
             return arg;
