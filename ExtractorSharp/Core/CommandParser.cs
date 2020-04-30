@@ -8,6 +8,26 @@ using ExtractorSharp.Core.Composition;
 
 namespace ExtractorSharp.Core
 {
+
+    public class Token
+    {
+        public string Text; // 本段token对应的文本
+        public Token(string text)
+        {
+            Text = text;
+        }
+    }
+
+    public class BlockToken : Token
+    {
+        public BlockToken(string text) : base(text) { }
+        public List<Token> ContentTokens = new List<Token>();
+    }
+    public class LineEndToken : Token
+    {
+        public LineEndToken() : base(";") { }
+    }
+
     public class CommandParser
     {
         private static IConnector Connector => Program.Connector;
@@ -15,11 +35,13 @@ namespace ExtractorSharp.Core
         public Dictionary<string, object> _status = new Dictionary<string, object>(); // 包含解析时的中间过程, 每个解析实例唯一
         public Dictionary<string, Func<object, object>> FuncMap;
 
+
         public CommandParser()
         {
             FuncMap = new Dictionary<string, Func<object, object>>
             {
                 ["asNull"] = arg => null,
+                ["addOne"] = arg => (int)arg + 1 as object,
                 ["toBool"] = arg => (arg as string) != "false",
                 ["toArray"] = arg => (arg as string)?.Split(','),
                 ["toInt"] = arg =>
@@ -57,7 +79,7 @@ namespace ExtractorSharp.Core
                     switch (arg)
                     {
                         case object[] argArray:
-                            MessageBox.Show(string.Join(",", argArray.Select(x=>x.ToString())));
+                            MessageBox.Show(string.Join(",", argArray.Select(x => x.ToString())));
                             break;
                         default:
                             MessageBox.Show(arg.ToString());
@@ -117,7 +139,7 @@ namespace ExtractorSharp.Core
             return _status.TryGetValue(name, out var value) ? value : defaultValue;
         }
         /// <summary>
-        ///     解析命令行, 目前包含:
+        ///     解析但行命令行, 目前包含:
         ///     无副作用命令(不影响上下文):
         ///         toList toInt LoadFile
         ///         toBool asNull exit
@@ -142,15 +164,15 @@ namespace ExtractorSharp.Core
         ///         |$list|message => MessageBox.Show(list)
         ///         |useVar|list|message => MessageBox.Show(list)
         /// 
-        ///         |$list|forEach|i|@
-        ///             i|message
-        ///         @
+        ///         |$list|forEach|i|{
+        ///             i|message;
+        ///             i|addOne;
+        ///         }
         ///         
         /// </summary>
         /// <param name="command"></param>
         public object ParseInvoke(string command)
         {
-
             var args = command.Split('|');
             object arg = args[0];
             foreach (var sigCommand in args.Skip(1))
@@ -186,6 +208,92 @@ namespace ExtractorSharp.Core
             }
 
             return arg;
+        }
+
+        /// <summary>
+        /// 解析多行命令
+        /// </summary>
+        /// <param name="codes"></param>
+        /// <returns />
+        public List<Token> ParseBlock(string codes)
+        {
+            var tokens = new List<Token>(codes.Length / 10); // 假若平均每 10 个字符是一个 token
+
+            var leftBraceCount = 0;
+            var currentToken = new StringBuilder(10); // 假若平均每 10 个字符是一个 token
+            foreach (var theChar in codes)
+            {
+                switch (theChar)
+                {
+
+                    case '{':
+                        leftBraceCount += 1;
+                        tokens.Add(new Token(currentToken.ToString()));
+                        currentToken.Clear();
+
+                        break;
+                    case '}':
+                        leftBraceCount -= 1;
+                        if (leftBraceCount == 0)
+                        {
+                            var currentBlock = new BlockToken(currentToken.ToString());
+                            currentBlock.ContentTokens = ParseBlock(currentBlock.Text);
+                            tokens.Add(currentBlock);
+                            currentToken.Clear();
+                        }
+                        break;
+                    case char s when leftBraceCount > 0:
+                        currentToken.Append(s);
+                        break;
+                    case '|':
+                        tokens.Add(new Token(currentToken.ToString()));
+                        currentToken.Clear();
+                        break;
+                    case ';':
+                        tokens.Add(new Token(currentToken.ToString()));
+                        currentToken.Clear();
+                        tokens.Add(new LineEndToken());
+                        break;
+                    case char s when "\r\n\t ".Contains(s): 
+                        // 目前只允许用\r\n\t<space>作为美观用字符 遇见后自动跳过, 虽然由于命令行格式导致不会有空格出现在这里
+                        break;
+                    case char s:
+                        currentToken.Append(s);
+                        break;
+                }
+            }
+
+            return tokens;
+
+        }
+
+        public string GetAST(List<Token> tokens, int spaceCount = 0)
+        {
+            var ret = new StringBuilder(tokens.Count * 10);
+            foreach (var t in tokens)
+            {
+                foreach (var i in Enumerable.Range(0, spaceCount))
+                {
+                    ret.Append(" ");
+                }
+
+                switch (t)
+                {
+                    case LineEndToken _t:
+                        ret.Append(_t.Text);
+                        break;
+                    case BlockToken _t:
+                        ret.Append(GetAST(_t.ContentTokens, spaceCount + 4));
+                        break;
+                    case Token _t:
+                        ret.Append(_t.Text);
+                        break;
+
+                }
+                ret.Append("\n");
+            }
+
+            return ret.ToString();
         }
     }
 }

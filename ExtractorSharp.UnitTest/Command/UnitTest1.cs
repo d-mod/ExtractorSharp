@@ -7,10 +7,13 @@ using ExtractorSharp.Core.Coder;
 using ExtractorSharp.Core.Handle;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace ExtractorSharp.UnitTest.Command {
+namespace ExtractorSharp.UnitTest.Command
+{
     [TestClass]
-    public class UnitTest1 {
-        static UnitTest1() {
+    public class UnitTest1
+    {
+        static UnitTest1()
+        {
             Handler.Regisity(ImgVersion.Other, typeof(OtherHandler));
             Handler.Regisity(ImgVersion.Ver1, typeof(FirstHandler));
             Handler.Regisity(ImgVersion.Ver2, typeof(SecondHandler));
@@ -20,11 +23,12 @@ namespace ExtractorSharp.UnitTest.Command {
         }
 
 
-    /// <summary>
-    ///     测试IMG保存
-    /// </summary>
-    [TestMethod]
-        public void TestSaveImg() {
+        /// <summary>
+        ///     测试IMG保存
+        /// </summary>
+        [TestMethod]
+        public void TestSaveImg()
+        {
             var list = NpkCoder.Load(@"D:\地下城与勇士\ImagePacks2\sprite_character_swordman_equipment_avatar_coat.NPK");
             Assert.IsTrue(list.Count > 0);
             var img = list[0];
@@ -40,13 +44,15 @@ namespace ExtractorSharp.UnitTest.Command {
 
 
         [TestMethod]
-        public void TestSaveImage() {
+        public void TestSaveImage()
+        {
             var list = NpkCoder.Load(@"D:\test\v6\01.img");
             Assert.IsTrue(list.Count > 0);
             var img = list[0];
             Assert.IsNotNull(img);
             var dir = @"D:\test\v6\image\";
-            if (Directory.Exists(dir)) {
+            if (Directory.Exists(dir))
+            {
                 Directory.Delete(dir, true);
                 Directory.CreateDirectory(dir);
             }
@@ -69,7 +75,7 @@ namespace ExtractorSharp.UnitTest.Command {
             Assert.AreEqual(commandParser.ParseInvoke("1"), "1");
             Assert.AreEqual(commandParser.ParseInvoke("1|toInt"), 1);
             Assert.IsTrue(((commandParser.ParseInvoke("1|toArray") as string[]) ?? Array.Empty<string>()).SequenceEqual(new[] { "1" }));
-            Assert.IsTrue(((commandParser.ParseInvoke("1|toArray|toInt") as int[]) ?? Array.Empty<int>()).SequenceEqual(new[] {1}));
+            Assert.IsTrue(((commandParser.ParseInvoke("1|toArray|toInt") as int[]) ?? Array.Empty<int>()).SequenceEqual(new[] { 1 }));
 
             Assert.IsTrue(((commandParser.ParseInvoke("1,2,3|toArray") as string[]) ?? Array.Empty<string>()).SequenceEqual(new[] { "1", "2", "3" }));
             Assert.IsTrue(((commandParser.ParseInvoke("1,2,3|toArray|toInt") as int[]) ?? Array.Empty<int>()).SequenceEqual(new[] { 1, 2, 3 }));
@@ -79,9 +85,51 @@ namespace ExtractorSharp.UnitTest.Command {
             commandParser.ParseInvoke("1,2,3|toArray|asVar|a");
             Assert.IsTrue((commandParser.ParseInvoke("|useVar|a|toInt") as int[] ?? Array.Empty<int>()).SequenceEqual(new[] { 1, 2, 3 }));
 
-            commandParser.ParseInvoke("|useVar|a|message");
-            commandParser.ParseInvoke("|useVar|a|toInt|message");
+            Assert.AreEqual(commandParser.ParseInvoke("1|toInt|addOne|addOne|addOne"), 4);
+            // commandParser.ParseInvoke(
+            //     "|useVar|a|forEach|i|@" +
+            //               "i|addOne|addOne|addOne|asVar|b"+
+            //            "@"
+            // );
 
+            // Assert.AreEqual(commandParser.ParseInvoke("1|exit"), 1);
+            // commandParser.ParseInvoke("|useVar|a|message");
+
+
+        }
+
+        [TestMethod]
+        public void TestParseBlock()
+        {
+            var commandParser = new CommandParser();
+
+            var ast = commandParser.GetAST(commandParser.ParseBlock("1|toInt;\t"));
+            Assert.AreEqual("1\ntoInt\n;\n", ast);
+
+            ast = commandParser.GetAST(commandParser.ParseBlock(@"
+                1|toInt|toList;
+                1,2,3|toList;
+            "
+            ));
+            Console.WriteLine(ast);
+            Assert.AreEqual("1\ntoInt\ntoList\n;\n1,2,3\ntoList\n;\n", ast);
+
+            ast = commandParser.GetAST(commandParser.ParseBlock(@"
+                1|toList|forEach|i {
+                    2|toInt;
+                    message|i;
+                }
+                
+            "
+            ));
+            Assert.AreEqual(
+                string.Join(
+                "\n", 
+                "1", "toList", "forEach", "i", "    2", "    toInt", "    ;",
+                "    message", "    i", "    ;", "", ""
+                ), 
+                ast
+            );
         }
     }
 }
