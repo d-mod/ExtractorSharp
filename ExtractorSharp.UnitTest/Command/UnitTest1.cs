@@ -111,7 +111,6 @@ namespace ExtractorSharp.UnitTest.Command
                 1,2,3|toList;
             "
             ));
-            Console.WriteLine(ast);
             Assert.AreEqual("1\ntoInt\ntoList\n;\n1,2,3\ntoList\n;\n", ast);
 
             ast = commandParser.GetAST(commandParser.ParseBlock(@"
@@ -130,6 +129,21 @@ namespace ExtractorSharp.UnitTest.Command
                 ), 
                 ast
             );
+
+
+            ast = commandParser.GetAST(commandParser.ParseBlock(@"
+                1|toList|forEach|i {
+                    2|toInt;
+                    @{
+                        调用外部函数;
+                        参数1;
+                        参数2;
+                    }
+                }
+                
+            "
+            ));
+            Console.WriteLine(ast);
         }
     }
 }
