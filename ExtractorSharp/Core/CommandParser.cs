@@ -248,18 +248,29 @@ namespace ExtractorSharp.Core
 
                     case '{':
                         leftBraceCount += 1;
-                        tokens.Add(new Token(currentToken.ToString()));
-                        currentToken.Clear();
-                        // todo 嵌套block还有bug, 无法正常处理
+                        if (leftBraceCount == 1)
+                        {
+                            tokens.Add(new Token(currentToken.ToString()));
+                            currentToken.Clear();
+                        }
+                        else
+                        {
+                            currentToken.Append(theChar);
+                        }
                         break;
                     case '}':
                         leftBraceCount -= 1;
-
-                        var currentBlock = new BlockToken(currentToken.ToString());
-                        currentBlock.ContentTokens = ParseBlock(currentBlock.Text);
-                        tokens.Add(currentBlock);
-                        currentToken.Clear();
-                    
+                        if (leftBraceCount == 0)
+                        {
+                            var currentBlock = new BlockToken(currentToken.ToString());
+                            currentBlock.ContentTokens = ParseBlock(currentBlock.Text);
+                            tokens.Add(currentBlock);
+                            currentToken.Clear();
+                        }
+                        else
+                        {
+                            currentToken.Append(theChar);
+                        }
                         break;
                     case char s when leftBraceCount > 0:
                         currentToken.Append(s);
@@ -291,25 +302,29 @@ namespace ExtractorSharp.Core
             var ret = new StringBuilder(tokens.Count * 10);
             foreach (var t in tokens)
             {
-                foreach (var i in Enumerable.Range(0, spaceCount))
-                {
-                    ret.Append(" ");
-                }
+                var currentLine = new StringBuilder(10);
 
                 switch (t)
                 {
                     case LineEndToken _t:
-                        ret.Append(_t.Text);
-                        break;
+                        currentLine.Append(_t.Text);
+                        goto default;
                     case BlockToken _t:
-                        ret.Append(GetAST(_t.ContentTokens, spaceCount + 4));
+                        currentLine.Append(GetAST(_t.ContentTokens, spaceCount + 4));
                         break;
                     case Token _t:
-                        ret.Append(_t.Text);
+                        currentLine.Append(_t.Text);
+                        goto default;
+                    default:
+                        foreach (var _ in Enumerable.Range(0, spaceCount))
+                        {
+                            currentLine.Insert(0, " ");
+                        }
                         break;
 
                 }
-                ret.Append("\n");
+                currentLine.Append("\n");
+                ret.Append(currentLine);
             }
 
             return ret.ToString();
