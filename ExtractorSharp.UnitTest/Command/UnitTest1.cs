@@ -130,19 +130,65 @@ namespace ExtractorSharp.UnitTest.Command
                 ast
             );
 
-
-            ast = commandParser.GetAST(commandParser.ParseBlock(@"
-                1|toList|forEach|i {
+            var tokens = commandParser.ParseBlock(@"
+                1|toList|forEach|i| {
                     2|toInt;
                     @{
                         调用外部函数;
                         参数1;
                         参数2;
                     }
+                    1,2,3|toList|forEach|j|{
+                        1,2|toList|forEach|k|{
+                            k|message;
+                        }
+                    }
+                    3|toInt;
                 }
+                4|toInt;
                 
             "
-            ));
+            );
+            ast = commandParser.GetAST(tokens);
+            Assert.AreEqual(@"1
+toList
+forEach
+i
+
+    2
+    toInt
+    ;
+    @
+        调用外部函数
+        ;
+        参数1
+        ;
+        参数2
+        ;
+
+    1,2,3
+    toList
+    forEach
+    j
+    
+        1,2
+        toList
+        forEach
+        k
+        
+            k
+            message
+            ;
+
+
+    3
+    toInt
+    ;
+
+4
+toInt
+;
+".Replace("\r", ""), ast);
             Console.WriteLine(ast);
         }
     }
