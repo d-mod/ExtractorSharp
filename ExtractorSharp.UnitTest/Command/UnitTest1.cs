@@ -88,13 +88,13 @@ namespace ExtractorSharp.UnitTest.Command
             Assert.AreEqual(commandParser.InvokeToken("1|toInt|addOne|addOne|addOne|asVar|b;"), 4);
             Assert.AreEqual(commandParser.InvokeToken("|useVar|b|addOne;"), 5);
 
-            // commandParser.ParseInvoke(
-            //     "|useVar|a|forEach|i|@" +
-            //               "i|addOne|addOne|addOne|asVar|b"+
-            //            "@"
-            // );
+            commandParser.InvokeToken(
+                @"|useVar|a|toInt|forEach|i|{
+                            |useVar|i|addOne|addOne|addOne|asVar|b;
+                       }"
+            );
 
-            // Assert.AreEqual(commandParser.ParseInvoke("1|exit"), 1);
+            Assert.AreEqual(commandParser.InvokeToken("|useVar|b;"), 6);
             // commandParser.ParseInvoke("|useVar|a|message");
 
 
@@ -156,7 +156,6 @@ namespace ExtractorSharp.UnitTest.Command
 toList
 forEach
 i
-
     2
     toInt
     ;
@@ -172,12 +171,10 @@ i
     toList
     forEach
     j
-    
         1,2
         toList
         forEach
         k
-        
             k
             message
             ;
