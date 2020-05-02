@@ -23,34 +23,50 @@ namespace ExtractorSharp.Core {
         public LineEndToken() : base(";") { }
     }
 
+    public struct TokenInvokeParameter {
+        public List<Token> Tokens;
+        public int Cursor;
+        public object CurrentArg;
+
+        public Token LastToken => Tokens[Cursor - 1];
+        public Token CurrentToken => Tokens[Cursor];
+        public Token NextToken => Tokens[Cursor + 1];
+    }
+    public struct TokenInvokeResult {
+        public object Ret;
+        public int ?NewCursor;
+    }
     public class CommandParser {
         private static IConnector Connector => Program.Connector;
         public static Dictionary<string, object> _context = new Dictionary<string, object>(); // 包含中间变量之类的, 全局唯一
         public Dictionary<string, object> _status = new Dictionary<string, object>(); // 包含解析时的中间过程, 每个解析实例唯一
-        public Dictionary<string, Func<object, object>> FuncMap;
+        public Dictionary<string, Func<TokenInvokeParameter, TokenInvokeResult>> FuncMap;
 
 
         public CommandParser() {
-            FuncMap = new Dictionary<string, Func<object, object>> {
-                ["asNull"] = arg => null,
-                ["addOne"] = arg => (int)arg + 1 as object,
-                ["toBool"] = arg => (arg as string) != "false",
-                ["toArray"] = arg => (arg as string)?.Split(','),
+            FuncMap = new Dictionary<string, Func<TokenInvokeParameter, TokenInvokeResult>> {
+
+                ["asNull"] = arg => new TokenInvokeResult { Ret = null },
+                ["addOne"] = arg => new TokenInvokeResult { Ret = (int)arg.CurrentArg + 1 },
+                ["toBool"] = arg => new TokenInvokeResult { Ret = arg.CurrentArg as string != "false" },
+                ["toArray"] = arg => new TokenInvokeResult { Ret = (arg.CurrentArg as string)?.Split(',') },
+
                 ["toInt"] = arg => {
-                    switch (arg) {
+                    var res = new TokenInvokeResult();
+                    switch (arg.CurrentArg) {
                         case string iStr:
-                            arg = int.Parse(iStr);
+                            res.Ret = int.Parse(iStr);
                             break;
                         case object[] iObjects:
-                            arg = iObjects.Select(x => int.Parse(x as string ?? string.Empty)).ToArray();
+                            res.Ret = iObjects.Select(x => int.Parse(x as string ?? string.Empty)).ToArray();
                             break;
                     }
-                    return arg;
+                    return res;
                 },
-                ["LoadFile"] = arg => Connector.LoadFile((arg as string)?.Replace("|LoadFile", "")),
+                ["LoadFile"] = arg => new TokenInvokeResult { Ret = Connector.LoadFile((arg.CurrentArg as string)?.Replace("|LoadFile", "")) },
                 ["exit"] = arg => {
                     var code = 0;
-                    switch (arg) {
+                    switch (arg.CurrentArg) {
                         case string iStr:
                             code = int.Parse(iStr);
                             break;
@@ -59,11 +75,11 @@ namespace ExtractorSharp.Core {
                             break;
                     }
                     Environment.Exit(code);
-                    return arg;
+                    return new TokenInvokeResult { Ret = null };
                 },
                 ["message"] = arg => {
                     var msg = "";
-                    switch (arg) {
+                    switch (arg.CurrentArg) {
                         case object[] argArray:
                             MessageBox.Show(string.Join(",", argArray.Select(x => x.ToString())));
                             break;
@@ -71,22 +87,18 @@ namespace ExtractorSharp.Core {
                             MessageBox.Show(arg.ToString());
                             break;
                     }
-                    return arg;
+                    return new TokenInvokeResult { Ret = arg.CurrentArg };
                 },
                 ["asVar"] = arg => {
-                    if (CheckSwitch("hasAsVar")) {
-                        throw new Exception("Can't use the command multiple times");
-                    }
-                    SetSwitch("lastVarValue", arg);
-                    SetSwitch("hasAsVar", true);
-                    return arg;
+                    _context[arg.NextToken.Text] = arg.CurrentArg;
+                    return new TokenInvokeResult { Ret = arg.CurrentArg, NewCursor = arg.Cursor + 1 };
                 },
                 ["useVar"] = arg => {
-                    if (CheckSwitch("hasUseVar"))
-                        throw new Exception("Can't use the command multiple times");
+                    if (!_context.TryGetValue(arg.NextToken.Text, out var value)) {
+                        throw new Exception($"Missing the name of UseVar");
+                    }
 
-                    SetSwitch("hasUseVar", true);
-                    return arg;
+                    return new TokenInvokeResult { Ret = value, NewCursor = arg.Cursor + 1 };
                 }
             };
         }
@@ -171,55 +183,31 @@ namespace ExtractorSharp.Core {
         /// </summary>
         /// <param name="command"></param>
         public object InvokeToken(List<Token> tokens) {
-            object ret = "";
-            for (int i = 0; i < tokens.Count; i++) {
-                var currentToken = tokens[i];
+            var Result = new TokenInvokeResult { NewCursor = 0, Ret = "" };
+            var Parameter = new TokenInvokeParameter { CurrentArg = Result.Ret, Cursor = 0, Tokens = tokens };
 
-                switch (currentToken) {
-                    case var _ when CheckSwitch("hasAsVar"):
-                        _context[currentToken.Text] = GetSwitch("lastVarValue") ?? throw new Exception($"Missing the name ({currentToken.Text} of asVar");
-                        SetSwitch("hasAsVar", false);
-                        SetSwitch("lastVarValue", false);
-                        break;
-                    case var _ when CheckSwitch("hasUseVar"):
-                        if (!_context.TryGetValue(currentToken.Text, out var value)) {
-                            throw new Exception($"Missing the name of UseVar");
-                        }
-                        ret = value;
-                        SetSwitch("hasUseVar", false);
-                        break;
+            for (var i = 0; i < tokens.Count; i++) {
+                Parameter.Cursor = i;
 
-                    default:
-                        if (FuncMap.TryGetValue(currentToken.Text, out var fun)) {
-                            ret = fun(ret);
-                        } else {
-                            throw new Exception($"Can't find the command {ret} in code {GetAST(tokens)}");
-                        }
-                        break;
+                if (Parameter.CurrentToken is LineEndToken) {
+                    continue;
                 }
 
-                if (CheckSwitch("hasAsVar")) {
-                    _context[currentToken.Text] = GetSwitch("lastVarValue") ?? throw new Exception($"Missing the name ({currentToken.Text} of asVar");
-                    SetSwitch("hasAsVar", false);
-                    SetSwitch("lastVarValue", false);
-                } else if (CheckSwitch("hasUseVar")) {
-                    if (!_context.TryGetValue(currentToken.Text, out var value)) {
-                        throw new Exception($"Missing the name of UseVar");
-                    }
-
-                    ret = value;
-                    SetSwitch("hasUseVar", false);
+                if (FuncMap.TryGetValue(Parameter.CurrentToken.Text, out var fun)) {
+                    Result = fun(Parameter);
+                    i = Result.NewCursor ?? i;
                 } else {
-                    if (FuncMap.TryGetValue(currentToken.Text, out var fun)) {
-                        ret = fun(ret);
-                    } else {
-                        throw new Exception($"Can't find the command {ret} in code {GetAST(tokens)}");
-                    }
+                    // throw new Exception($"Can't find the command {Parameter.CurrentToken.Text} in code {GetAST(tokens)}");
+                    Result.Ret = Parameter.CurrentToken.Text;
                 }
-
+                Parameter.CurrentArg = Result.Ret;
             }
 
-            return ret;
+            return Result.Ret;
+        }
+
+        public object InvokeToken(string tokens) {
+            return InvokeToken(ParseBlock(tokens));
         }
 
         /// <summary>
@@ -259,8 +247,12 @@ namespace ExtractorSharp.Core {
                         currentToken.Append(s);
                         break;
                     case '|':
-                        tokens.Add(new Token(currentToken.ToString()));
-                        currentToken.Clear();
+                        var tokenText = currentToken.ToString();
+                        if (tokenText.Length > 0) {
+                            tokens.Add(new Token(currentToken.ToString()));
+                            currentToken.Clear();
+                        }
+
                         break;
                     case ';':
                         tokens.Add(new Token(currentToken.ToString()));
