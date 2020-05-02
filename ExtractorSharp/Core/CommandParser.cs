@@ -34,7 +34,7 @@ namespace ExtractorSharp.Core {
     }
     public struct TokenInvokeResult {
         public object Ret;
-        public int ?NewCursor;
+        public int? NewCursor;
     }
     public class CommandParser {
         private static IConnector Connector => Program.Connector;
@@ -99,6 +99,33 @@ namespace ExtractorSharp.Core {
                     }
 
                     return new TokenInvokeResult { Ret = value, NewCursor = arg.Cursor + 1 };
+                },
+                ["forEach"] = arg => {
+                    var _iterationVariable = arg.CurrentArg;
+                    var iterationVariableName = arg.NextToken.Text;
+                    var _block = arg.Tokens[arg.Cursor + 2];
+                    if (!(_block is BlockToken block)) {
+                        throw new Exception(
+                            $"Can't find a block in next next token, the token is {_block.Text} in fact"
+                        );
+                    }
+
+                    
+
+                    if (!(_iterationVariable is Array iterationVariable)) {
+                        throw new Exception(
+                            $"The variable({_iterationVariable}) in front of forEach is not an array"
+                        );
+                    } 
+
+
+                    foreach (var i in iterationVariable) {
+                        _context[iterationVariableName] = i;
+                        Console.WriteLine(i);
+                        InvokeToken(block.ContentTokens);
+                    }
+
+                    return new TokenInvokeResult { Ret = iterationVariable, NewCursor = arg.Cursor + 2 };
                 }
             };
         }
@@ -133,14 +160,14 @@ namespace ExtractorSharp.Core {
         ///     解析运行命令行, 每句应当以 [;] 结尾, 以下演示中部分未使用
         ///     目前包含命令:
         ///     无副作用命令(不影响上下文):
-        ///         toList toInt LoadFile
+        ///         toArray toInt LoadFile
         ///         toBool asNull exit
         ///         message
         ///     用法如:
         ///         1|toBool => true
         ///         |asNull => null
-        ///         1,2,3|toList => {"1", "2", "3"}
-        ///         1,2,3|toList|toInt => {1, 2, 3}
+        ///         1,2,3|toArray => {"1", "2", "3"}
+        ///         1,2,3|toArray|toInt => {1, 2, 3}
         ///         D:\WeGameApps\地下城与勇士\ImagePacks2\sprite_interface_monstercard.NPK|LoadFile => Album
         ///         asd|message => MessageBox.Show("asd")
         ///         0|exit => 以错误代码 0 退出
@@ -149,9 +176,9 @@ namespace ExtractorSharp.Core {
         ///         asVar| useVar| $
         ///         forEach| 
         ///     用法如:
-        ///         1,2,3|toList|toInt|asVar|list 定义一个变量名作 list, 值为 {1, 2, 3}
+        ///         1,2,3|toArray|toInt|asVar|list 定义一个变量名作 list, 值为 {1, 2, 3}
         ///         |useVar|list 使用名为 list 的变量
-        ///         定义和使用变量有简写形式, 1,2,3|toList|toInt|$list 为赋值 list 为 {1, 2, 3}
+        ///         定义和使用变量有简写形式, 1,2,3|toArray|toInt|$list 为赋值 list 为 {1, 2, 3}
         ///         单书写 |$list 为使用变量 list, 即 |useVar|list
         ///         |$list|message => MessageBox.Show(list)
         ///         |useVar|list|message => MessageBox.Show(list)
@@ -170,7 +197,7 @@ namespace ExtractorSharp.Core {
         ///             saveImage; 
         ///             sprite_interface_monstercard.NPK|LoadFile;
         ///             1|toInt;
-        ///             1|toList|toInt;
+        ///             1|toArray|toInt;
         ///             Z:\output;
         ///             "";
         ///             0|toInt;
@@ -183,27 +210,27 @@ namespace ExtractorSharp.Core {
         /// </summary>
         /// <param name="command"></param>
         public object InvokeToken(List<Token> tokens) {
-            var Result = new TokenInvokeResult { NewCursor = 0, Ret = "" };
-            var Parameter = new TokenInvokeParameter { CurrentArg = Result.Ret, Cursor = 0, Tokens = tokens };
+            var result = new TokenInvokeResult { NewCursor = 0, Ret = "" };
+            var parameter = new TokenInvokeParameter { CurrentArg = result.Ret, Cursor = 0, Tokens = tokens };
 
             for (var i = 0; i < tokens.Count; i++) {
-                Parameter.Cursor = i;
+                parameter.Cursor = i;
 
-                if (Parameter.CurrentToken is LineEndToken) {
+                if (parameter.CurrentToken is LineEndToken) {
                     continue;
                 }
 
-                if (FuncMap.TryGetValue(Parameter.CurrentToken.Text, out var fun)) {
-                    Result = fun(Parameter);
-                    i = Result.NewCursor ?? i;
+                if (FuncMap.TryGetValue(parameter.CurrentToken.Text, out var fun)) {
+                    result = fun(parameter);
+                    i = result.NewCursor ?? i;
                 } else {
                     // throw new Exception($"Can't find the command {Parameter.CurrentToken.Text} in code {GetAST(tokens)}");
-                    Result.Ret = Parameter.CurrentToken.Text;
+                    result.Ret = parameter.CurrentToken.Text;
                 }
-                Parameter.CurrentArg = Result.Ret;
+                parameter.CurrentArg = result.Ret;
             }
 
-            return Result.Ret;
+            return result.Ret;
         }
 
         public object InvokeToken(string tokens) {
@@ -226,8 +253,11 @@ namespace ExtractorSharp.Core {
                     case '{':
                         leftBraceCount += 1;
                         if (leftBraceCount == 1) {
-                            tokens.Add(new Token(currentToken.ToString()));
-                            currentToken.Clear();
+                            var currentTokenText = currentToken.ToString();
+                            if (currentTokenText.Length > 0) {
+                                tokens.Add(new Token(currentTokenText));
+                                currentToken.Clear();
+                            }
                         } else {
                             currentToken.Append(theChar);
                         }
