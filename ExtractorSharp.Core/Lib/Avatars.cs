@@ -212,11 +212,11 @@ namespace ExtractorSharp.Core.Lib {
                         if (source.Type == ColorBits.LINK) {
                             source = source.Target;
                         }
-                        if (source.CanvasWidth > max_width) {
-                            max_width = source.CanvasHeight;
+                        if (source.FrameWidth > max_width) {
+                            max_width = source.FrameHeight;
                         }
-                        if (source.CanvasHeight > max_height) {
-                            max_height = source.CanvasHeight;
+                        if (source.FrameHeight > max_height) {
+                            max_height = source.FrameHeight;
                         }
                         if (source.Hidden) {
                             continue;
@@ -249,7 +249,7 @@ namespace ExtractorSharp.Core.Lib {
                 entity.Type = type;
                 entity.Index = entitys.Count;
                 entity.Location = new Point(x, y);
-                entity.CanvasSize = new Size(max_width, max_height);
+                entity.FrameSize = new Size(max_width, max_height);
                 var image = new Bitmap(width, height);
                 using (var g = Graphics.FromImage(image)) {
                     foreach (var al in list) {

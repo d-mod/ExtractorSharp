@@ -7,7 +7,7 @@ namespace ExtractorSharp.Command.ImageCommand {
     /// <summary>
     ///     去画布化
     /// </summary>
-    internal class UnCanvasImage : ISingleAction, ICommandMessage {
+    internal class TrimImage : ISingleAction, ICommandMessage {
         private Album Album { set; get; }
 
         private Bitmap[] Images { set; get; }
@@ -15,7 +15,7 @@ namespace ExtractorSharp.Command.ImageCommand {
         private Point[] Locations { set; get; }
         public int[] Indices { set; get; }
 
-        public string Name => "UnCanvasImage";
+        public string Name => "TrimImage";
 
         public void Do(params object[] args) {
             Album = args[0] as Album;
@@ -35,7 +35,7 @@ namespace ExtractorSharp.Command.ImageCommand {
                 var entity = Album.List[Indices[i]];
                 Images[i] = entity.Picture;
                 Locations[i] = entity.Location;
-                entity.UnCanvasImage();
+                entity.TrimImage();
             }
         }
 
@@ -55,7 +55,7 @@ namespace ExtractorSharp.Command.ImageCommand {
         public void Action(Album album, int[] indexes) {
             foreach (var i in indexes) {
                 if (i < album.List.Count && i > -1) {
-                    album.List[i].UnCanvasImage();
+                    album.List[i].TrimImage();
                 }
             }
         }

@@ -70,6 +70,6 @@ namespace ExtractorSharp.Command.ImageCommand {
 
         public bool IsChanged => true;
 
-        public string Name => "CustomCanvasSize";
+        public string Name => "CustomFrameSize";
     }
 }

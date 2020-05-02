@@ -157,7 +157,7 @@ namespace ExtractorSharp.View.Dialog {
             sortButton.Enabled = true;
             prograss.Visible = false;
             if (autoTrimCheck.Checked) {
-                Connector.Do("uncanvasImage", Album, null);
+                Connector.Do("trimImage", Album, null);
             }
             if (completedHideCheck.Checked) {
                 DialogResult = DialogResult.OK;

@@ -12,7 +12,7 @@ namespace ExtractorSharp.Core.Model {
         ///     帧域宽高
         /// </summary>
         [LSIgnore]
-        public Size CanvasSize = Size.Empty;
+        public Size FrameSize = Size.Empty;
 
         /// <summary>
         ///     压缩类型
@@ -118,14 +118,14 @@ namespace ExtractorSharp.Core.Model {
             get => Size.Height;
         }
 
-        public int CanvasWidth {
-            set => CanvasSize = new Size(value, CanvasHeight);
-            get => CanvasSize.Width;
+        public int FrameWidth {
+            set => FrameSize = new Size(value, FrameHeight);
+            get => FrameSize.Width;
         }
 
-        public int CanvasHeight {
-            set => CanvasSize = new Size(CanvasWidth, value);
-            get => CanvasSize.Height;
+        public int FrameHeight {
+            set => FrameSize = new Size(FrameWidth, value);
+            get => FrameSize.Height;
         }
 
         /// <summary>
@@ -170,11 +170,11 @@ namespace ExtractorSharp.Core.Model {
                 Y += bmp.Height - Size.Height;
             }
             Size = bmp.Size;
-            if (CanvasHeight < bmp.Height) {
-                CanvasHeight = bmp.Height;
+            if (FrameHeight < bmp.Height) {
+                FrameHeight = bmp.Height;
             }
-            if (CanvasWidth < bmp.Width) {
-                CanvasWidth = bmp.Width;
+            if (FrameWidth < bmp.Width) {
+                FrameWidth = bmp.Width;
             }
             if (Width * Height > 1) {
                 CompressMode = CompressMode.ZLIB;
@@ -183,9 +183,9 @@ namespace ExtractorSharp.Core.Model {
 
 
         /// <summary>
-        ///     去画布化
+        ///     裁剪画布透明部分
         /// </summary>
-        public void UnCanvasImage() {
+        public void TrimImage() {
             if (Type == ColorBits.LINK || CompressMode == CompressMode.NONE) {
                 return;
             }
@@ -243,8 +243,8 @@ namespace ExtractorSharp.Core.Model {
                 return Index + "," + Language.Default["TargetIndex"] + Target.Index;
             }
             return Index + "," + Type + "," + Language.Default["Position"] + Location.GetString() + "," +
-                   Language.Default["Size"] + Size.GetString() + "," + Language.Default["CanvasSize"]  +
-                   CanvasSize.GetString();
+                   Language.Default["Size"] + Size.GetString() + "," + Language.Default["FrameSize"]  +
+                   FrameSize.GetString();
         }
 
         public Sprite Clone(Album album) {
@@ -253,7 +253,7 @@ namespace ExtractorSharp.Core.Model {
                 CompressMode = CompressMode,
                 Type = Type,
                 Location = Location,
-                CanvasSize = CanvasSize,
+                FrameSize = FrameSize,
                 Target = Target
             };
         }

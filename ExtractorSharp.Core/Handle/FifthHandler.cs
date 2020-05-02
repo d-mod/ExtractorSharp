@@ -92,8 +92,8 @@ namespace ExtractorSharp.Core.Handle {
                 ms.WriteInt(entity.Length);
                 ms.WriteInt(entity.Location.X);
                 ms.WriteInt(entity.Location.Y);
-                ms.WriteInt(entity.CanvasSize.Width);
-                ms.WriteInt(entity.CanvasSize.Height);
+                ms.WriteInt(entity.FrameSize.Width);
+                ms.WriteInt(entity.FrameSize.Height);
                 if (entity.Type < ColorBits.LINK && entity.Length != 0) {
                     ver2List.Add(entity);
                     continue;
@@ -161,8 +161,8 @@ namespace ExtractorSharp.Core.Handle {
                 entity.Length = stream.ReadInt(); //保留，固定为0
                 entity.X = stream.ReadInt();
                 entity.Y = stream.ReadInt();
-                entity.CanvasWidth = stream.ReadInt();
-                entity.CanvasHeight = stream.ReadInt();
+                entity.FrameWidth = stream.ReadInt();
+                entity.FrameHeight = stream.ReadInt();
                 if (entity.Type < ColorBits.LINK && entity.Length != 0) {
                     ver2List.Add(entity);
                     continue;

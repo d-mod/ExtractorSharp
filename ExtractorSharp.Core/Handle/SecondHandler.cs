@@ -61,8 +61,8 @@ namespace ExtractorSharp.Core.Handle {
                     ms.WriteInt(entity.Length);
                     ms.WriteInt(entity.X);
                     ms.WriteInt(entity.Y);
-                    ms.WriteInt(entity.CanvasWidth);
-                    ms.WriteInt(entity.CanvasHeight);
+                    ms.WriteInt(entity.FrameWidth);
+                    ms.WriteInt(entity.FrameHeight);
                 }
                 Album.IndexLength = ms.Length;
                 foreach (var entity in Album.List) {
@@ -93,8 +93,8 @@ namespace ExtractorSharp.Core.Handle {
                 image.Length = stream.ReadInt();
                 image.X = stream.ReadInt();
                 image.Y = stream.ReadInt();
-                image.CanvasWidth = stream.ReadInt();
-                image.CanvasHeight = stream.ReadInt();
+                image.FrameWidth = stream.ReadInt();
+                image.FrameHeight = stream.ReadInt();
             }
             if (stream.Position < pos) {
                 Album.List.Clear();
@@ -106,7 +106,7 @@ namespace ExtractorSharp.Core.Handle {
                         dic[image] != image.Index) {
                         image.Target = Album.List[dic[image]];
                         image.Size = image.Target.Size;
-                        image.CanvasSize = image.Target.CanvasSize;
+                        image.FrameSize = image.Target.FrameSize;
                         image.Location = image.Target.Location;
                     } else {
                         Album.List.Clear();

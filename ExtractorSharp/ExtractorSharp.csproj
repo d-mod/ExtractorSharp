@@ -154,7 +154,10 @@
     <Compile Include="Composition\Plugin.cs" />
     <Compile Include="Config\JsonConfig.cs" />
     <Compile Include="Draw\Paint\CompareLayer.cs" />
-    <Compile Include="Effect\Sprite\UnCanvasSpriteConverter.cs" />
+    <Compile Include="Effect\DyeImageEffect.cs" />
+    <Compile Include="Effect\LinearDodgeEffect.cs" />
+    <Compile Include="Effect\RealPosistionEffect.cs" />
+    <Compile Include="Effect\TrimImageEffect.cs" />
     <Compile Include="Core\Clipboarder.cs" />
     <Compile Include="Core\Sorter\DefaultSorter.cs" />
     <Compile Include="Exceptions\FileSupportException.cs" />
@@ -187,13 +190,7 @@
     <Compile Include="Exceptions\ConfigException.cs" />
     <Compile Include="Exceptions\PluginException.cs" />
     <Compile Include="Exceptions\UpdateException.cs" />
-    <Compile Include="MainForm.LinearDodgeConverter.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="MainForm.MainConnector.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MainForm.RealPosition.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Command\ImageCommand\CanvasImage.cs" />
@@ -402,9 +399,6 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Kritsu.snk" />
-    <Compile Include="MainForm.DyeEffect.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <None Include="README.md" />
     <None Include="Resources\chinese.json" />
     <None Include="Resources\queues.json" />

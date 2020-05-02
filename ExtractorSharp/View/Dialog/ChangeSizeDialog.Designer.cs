@@ -28,7 +28,7 @@
             this.heightLabel = new System.Windows.Forms.Label();
             this.widthBox = new System.Windows.Forms.NumericUpDown();
             this.heightBox = new System.Windows.Forms.NumericUpDown();
-            this.unCanvasRadio = new System.Windows.Forms.RadioButton();
+            this.trimRadio = new System.Windows.Forms.RadioButton();
             this.group = new System.Windows.Forms.GroupBox();
             this.scaleRadio = new System.Windows.Forms.RadioButton();
             this.scaleBox = new System.Windows.Forms.NumericUpDown();
@@ -49,7 +49,7 @@
             this.customRadio.Size = new System.Drawing.Size(59, 16);
             this.customRadio.TabIndex = 0;
             this.customRadio.TabStop = true;
-            this.customRadio.Text = Language["CustomCanvasSize"];
+            this.customRadio.Text = Language["CustomFrameSize"];
             this.customRadio.UseVisualStyleBackColor = true;
             // 
             // label1
@@ -90,21 +90,21 @@
             // 
             // radioButton2
             // 
-            this.unCanvasRadio.AutoSize = true;
-            this.unCanvasRadio.Location = new System.Drawing.Point(36, 171);
-            this.unCanvasRadio.Name = "radioButton2";
-            this.unCanvasRadio.Size = new System.Drawing.Size(71, 16);
-            this.unCanvasRadio.TabIndex = 7;
-            this.unCanvasRadio.TabStop = true;
-            this.unCanvasRadio.Text = Language["UnCanvasImage"];
-            this.unCanvasRadio.UseVisualStyleBackColor = true;
+            this.trimRadio.AutoSize = true;
+            this.trimRadio.Location = new System.Drawing.Point(36, 171);
+            this.trimRadio.Name = "radioButton2";
+            this.trimRadio.Size = new System.Drawing.Size(71, 16);
+            this.trimRadio.TabIndex = 7;
+            this.trimRadio.TabStop = true;
+            this.trimRadio.Text = Language["TrimImage"];
+            this.trimRadio.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
             this.group.Controls.Add(this.useDefaultBox);
             this.group.Controls.Add(this.scaleBox);
             this.group.Controls.Add(this.scaleRadio);
-            this.group.Controls.Add(this.unCanvasRadio);
+            this.group.Controls.Add(this.trimRadio);
             this.group.Controls.Add(this.heightBox);
             this.group.Controls.Add(this.widthBox);
             this.group.Controls.Add(this.heightLabel);
@@ -125,7 +125,7 @@
             this.scaleRadio.Size = new System.Drawing.Size(83, 16);
             this.scaleRadio.TabIndex = 8;
             this.scaleRadio.TabStop = true;
-            this.scaleRadio.Text = Language["CanvasScale"];
+            this.scaleRadio.Text = $"{Language["CanvasScale"]}(%)";
             this.scaleRadio.UseVisualStyleBackColor = true;
             // 
             // numericUpDown3
@@ -192,7 +192,7 @@
         private System.Windows.Forms.NumericUpDown heightBox;
         private System.Windows.Forms.NumericUpDown xBox;
         private System.Windows.Forms.NumericUpDown yBox;
-        private System.Windows.Forms.RadioButton unCanvasRadio;
+        private System.Windows.Forms.RadioButton trimRadio;
         private System.Windows.Forms.GroupBox group;
         private System.Windows.Forms.RadioButton scaleRadio;
         private System.Windows.Forms.NumericUpDown scaleBox;

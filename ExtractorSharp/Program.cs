@@ -132,7 +132,7 @@ namespace ExtractorSharp {
             Controller.Registry("moveMerge", typeof(MoveMerge));
 
             Controller.Registry("canvasImage", typeof(CanvasImage));
-            Controller.Registry("uncanvasImage", typeof(UnCanvasImage));
+            Controller.Registry("trimImage", typeof(TrimImage));
             Controller.Registry("linearDodge", typeof(LinearDodge));
             Controller.Registry("dyeImage", typeof(DyeImage));
 

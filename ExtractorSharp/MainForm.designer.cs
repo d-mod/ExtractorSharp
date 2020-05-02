@@ -619,7 +619,7 @@ namespace ExtractorSharp {
             ///
             ///
             scaleLabel.AutoSize = true;
-            scaleLabel.Text = Language["CanvasScale"];
+            scaleLabel.Text = $"{Language["CanvasScale"]}(%)";
             scaleLabel.Location = new Point(250, 53);
 
             ///

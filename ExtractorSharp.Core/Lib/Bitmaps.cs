@@ -45,7 +45,7 @@ namespace ExtractorSharp.Core.Lib {
             return image;
         }
 
-        public static Bitmap UnCanvas(this Bitmap bmp) {
+        public static Bitmap Trim(this Bitmap bmp) {
             var rct = bmp.Scan();
             var image = new Bitmap(rct.Width, rct.Height);
             var g = Graphics.FromImage(image);

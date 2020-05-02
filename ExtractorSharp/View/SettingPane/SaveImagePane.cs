@@ -35,7 +35,7 @@ namespace ExtractorSharp.View.SettingPane {
                 var checkbox = new CheckBox();
                 checkbox.Text = Language[converter.Name];
                 checkbox.Tag = converter;
-                checkbox.Checked = Config[$"{converter.Name}SpriteConverter"].Boolean;
+                checkbox.Checked = Config[$"{converter.Name}Effect"].Boolean;
                 checkbox.Location = new Point(100 * (i / 4) + 10, i * 30 + 15);
                 converterList.Add(checkbox);
                 i++;
@@ -50,7 +50,7 @@ namespace ExtractorSharp.View.SettingPane {
             Config["SaveImagePath"] = new ConfigValue(savePathBox.Text);
             foreach (var box in converterList) {
                 var converter = box.Tag as IEffect;
-                Config[$"{converter.Name}SpriteConverter"] = new ConfigValue(box.Checked);
+                Config[$"{converter.Name}Effect"] = new ConfigValue(box.Checked);
                 converter.Enable = box.Checked;
             }
         }

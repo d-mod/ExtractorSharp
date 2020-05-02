@@ -21,7 +21,7 @@ using ExtractorSharp.Core.Handle;
 using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Core.Model;
 using ExtractorSharp.Draw.Paint;
-using ExtractorSharp.Effect.Sprite;
+using ExtractorSharp.Effect;
 using ExtractorSharp.EventArguments;
 using ExtractorSharp.View.Pane;
 
@@ -87,16 +87,16 @@ namespace ExtractorSharp {
 
 
         private void AddEffect() {
-            AddEffect(new UnCanvasEffect());
+            AddEffect(new TrimImageEffect());
             AddEffect(new LinearDodgeEffect(Config));
-            AddEffect(new DyeEffect(Config));
+            AddEffect(new DyeImageEffect(Config));
             AddEffect(new RealPositionEffect(Config));
         }
 
         private void AddEffect(IEffect effect) {
             Connector.Effects.Add(effect);
-            effect.Enable = Config[$"{effect.Name}SpriteEffect"].Boolean;
-            effect.Index = Config[$"{effect.Name}SpriteEffectIndex"].Integer;
+            effect.Enable = Config[$"{effect.Name}Effect"].Boolean;
+            effect.Index = Config[$"{effect.Name}EffectIndex"].Integer;
         }
 
         private void AddConfig() {

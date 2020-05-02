@@ -25,7 +25,7 @@ namespace ExtractorSharp.View.Dialog {
                 Config["UseDefaultScale"] = new ConfigValue(useDefaultBox.Checked);
                 Connector.Do("changeSize", Connector.SelectedFile, Connector.CheckedImageIndices, scale);
             } else {
-                Connector.Do("uncanvasImage", Connector.SelectedFile, Connector.CheckedImageIndices);
+                Connector.Do("trimImage", Connector.SelectedFile, Connector.CheckedImageIndices);
             }
 
             DialogResult = DialogResult.OK;

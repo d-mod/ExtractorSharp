@@ -2,9 +2,9 @@
 using ExtractorSharp.Core.Composition;
 using ExtractorSharp.Core.Lib;
 
-namespace ExtractorSharp.Effect.Sprite {
-    internal class UnCanvasEffect : IEffect {
-        public string Name => "UnCanvasImage";
+namespace ExtractorSharp.Effect {
+    internal class TrimImageEffect : IEffect {
+        public string Name => "TrimImage";
 
         public bool Enable { set; get; }
         public int Index { set; get; } = -1;

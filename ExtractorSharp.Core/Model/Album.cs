@@ -37,7 +37,7 @@ namespace ExtractorSharp.Core.Model {
                     Picture = array[i],
                     CompressMode = CompressMode.ZLIB,
                     Size = array[i].Size,
-                    CanvasSize = array[i].Size
+                    FrameSize = array[i].Size
                 };
             }
             List.AddRange(sprites);
