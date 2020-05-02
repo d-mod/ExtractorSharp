@@ -226,17 +226,12 @@ namespace ExtractorSharp {
                     case "-m":
                         // 多行模式
                         var arg = Arguments[1];
-                        
-                        foreach (var cmd in arg
-                            .Replace("\n", ";")
-                            .Replace("\r", ";")
-                            .Split(";")
-                        )
+                        var tokens = CommandParser.ParseBlock(arg);
+
+                        foreach (var token in tokens)
                         {
-                            var newArgs = cmd.Split(" ");
-                            if (newArgs.Length == 0) continue;
-                            var newName = newArgs[0];
-                            Controller.Do(newName, newArgs.Skip(1).ToArray());
+                            // CommandParser.ParseBlock(token.Text);
+                            // Controller.Do(newName, newArgs.Skip(1).ToArray());
                         }
 
                         break;

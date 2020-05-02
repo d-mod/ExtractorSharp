@@ -65,27 +65,29 @@ namespace ExtractorSharp.UnitTest.Command
         public void TestInvoke()
         {
             var commandParser = new CommandParser();
-            Assert.AreEqual(commandParser.ParseInvoke("|asNull"), null);
-            Assert.AreEqual(commandParser.ParseInvoke("12342134sdgwseg|asNull"), null);
+            Assert.AreEqual(commandParser.InvokeToken("|asNull;"), null);
+            Assert.AreEqual(commandParser.InvokeToken("12342134sdgwseg|asNull;"), null);
 
-            Assert.AreEqual(commandParser.ParseInvoke("true|toBool"), true);
-            Assert.AreEqual(commandParser.ParseInvoke("123|toBool"), true);
-            Assert.AreEqual(commandParser.ParseInvoke("false|toBool"), false);
+            Assert.AreEqual(commandParser.InvokeToken("true|toBool;"), true);
+            Assert.AreEqual(commandParser.InvokeToken("123|toBool;"), true);
+            Assert.AreEqual(commandParser.InvokeToken("false|toBool;"), false);
 
-            Assert.AreEqual(commandParser.ParseInvoke("1"), "1");
-            Assert.AreEqual(commandParser.ParseInvoke("1|toInt"), 1);
-            Assert.IsTrue(((commandParser.ParseInvoke("1|toArray") as string[]) ?? Array.Empty<string>()).SequenceEqual(new[] { "1" }));
-            Assert.IsTrue(((commandParser.ParseInvoke("1|toArray|toInt") as int[]) ?? Array.Empty<int>()).SequenceEqual(new[] { 1 }));
+            Assert.AreEqual(commandParser.InvokeToken("1;"), "1");
+            Assert.AreEqual(commandParser.InvokeToken("1|toInt;"), 1);
+            Assert.IsTrue(((commandParser.InvokeToken("1|toArray;") as string[]) ?? Array.Empty<string>()).SequenceEqual(new[] { "1" }));
+            Assert.IsTrue(((commandParser.InvokeToken("1|toArray|toInt;") as int[]) ?? Array.Empty<int>()).SequenceEqual(new[] { 1 }));
 
-            Assert.IsTrue(((commandParser.ParseInvoke("1,2,3|toArray") as string[]) ?? Array.Empty<string>()).SequenceEqual(new[] { "1", "2", "3" }));
-            Assert.IsTrue(((commandParser.ParseInvoke("1,2,3|toArray|toInt") as int[]) ?? Array.Empty<int>()).SequenceEqual(new[] { 1, 2, 3 }));
-            commandParser.ParseInvoke("1,2,3|toArray|toInt|asVar|a");
-            Assert.IsTrue((commandParser.ParseInvoke("|useVar|a") as int[] ?? Array.Empty<int>()).SequenceEqual(new[] { 1, 2, 3 }));
+            Assert.IsTrue(((commandParser.InvokeToken("1,2,3|toArray;") as string[]) ?? Array.Empty<string>()).SequenceEqual(new[] { "1", "2", "3" }));
+            Assert.IsTrue(((commandParser.InvokeToken("1,2,3|toArray|toInt;") as int[]) ?? Array.Empty<int>()).SequenceEqual(new[] { 1, 2, 3 }));
+            commandParser.InvokeToken("1,2,3|toArray|toInt|asVar|a;");
+            Assert.IsTrue((commandParser.InvokeToken("|useVar|a;") as int[] ?? Array.Empty<int>()).SequenceEqual(new[] { 1, 2, 3 }));
 
-            commandParser.ParseInvoke("1,2,3|toArray|asVar|a");
-            Assert.IsTrue((commandParser.ParseInvoke("|useVar|a|toInt") as int[] ?? Array.Empty<int>()).SequenceEqual(new[] { 1, 2, 3 }));
+            commandParser.InvokeToken("1,2,3|toArray|asVar|a;");
+            Assert.IsTrue((commandParser.InvokeToken("|useVar|a|toInt;") as int[] ?? Array.Empty<int>()).SequenceEqual(new[] { 1, 2, 3 }));
 
-            Assert.AreEqual(commandParser.ParseInvoke("1|toInt|addOne|addOne|addOne"), 4);
+            Assert.AreEqual(commandParser.InvokeToken("1|toInt|addOne|addOne|addOne|asVar|b;"), 4);
+            Assert.AreEqual(commandParser.InvokeToken("|useVar|b|addOne;"), 5);
+
             // commandParser.ParseInvoke(
             //     "|useVar|a|forEach|i|@" +
             //               "i|addOne|addOne|addOne|asVar|b"+
