@@ -188,7 +188,6 @@ i
 toInt
 ;
 ".Replace("\r", ""), ast);
-            Console.WriteLine(ast);
         }
     }
 }
