@@ -95,6 +95,10 @@ namespace ExtractorSharp.UnitTest.Command
             );
 
             Assert.AreEqual(commandParser.InvokeToken("|useVar|b;"), 6);
+            Assert.AreEqual(commandParser.InvokeToken("|useVar|b.ToString();"), "6");
+            Assert.AreEqual(commandParser.InvokeToken("|useVar|a.Length;"), 3);
+            // Assert.AreEqual(commandParser.InvokeToken("|useVar|b.CompareTo(3);"), 1); // 目前不支持传参
+
             // commandParser.ParseInvoke("|useVar|a|message");
 
 
