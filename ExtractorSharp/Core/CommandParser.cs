@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using ExtractorSharp.Core.Composition;
+using ExtractorSharp.Core.Lib;
 
 namespace ExtractorSharp.Core {
 
@@ -48,7 +50,7 @@ namespace ExtractorSharp.Core {
 
                 ["asNull"] = arg => new TokenInvokeResult { Ret = null },
                 ["addOne"] = arg => new TokenInvokeResult { Ret = (int)arg.CurrentArg + 1 },
-                ["toBool"] = arg => new TokenInvokeResult { Ret = arg.CurrentArg as string != "false" },
+                ["toBool"] = arg => new TokenInvokeResult {Ret = arg.CurrentArg as string != "false"},
                 ["toArray"] = arg => new TokenInvokeResult { Ret = (arg.CurrentArg as string)?.Split(',') },
 
                 ["toInt"] = arg => {
@@ -63,7 +65,7 @@ namespace ExtractorSharp.Core {
                     }
                     return res;
                 },
-                ["LoadFile"] = arg => new TokenInvokeResult {Ret = Connector.LoadFile(arg.CurrentArg as string).ToArray()},
+                ["LoadFile"] = arg => new TokenInvokeResult { Ret = Connector.LoadFile(arg.CurrentArg as string).ToArray() },
                 ["exit"] = arg => {
                     var code = 0;
                     switch (arg.CurrentArg) {
@@ -93,10 +95,9 @@ namespace ExtractorSharp.Core {
                     _context[arg.NextToken.Text] = arg.CurrentArg;
                     return new TokenInvokeResult { Ret = arg.CurrentArg, NewCursor = arg.Cursor + 1 };
                 },
-                ["useVar"] = arg => {
-                    if (!_context.TryGetValue(arg.NextToken.Text, out var value)) {
-                        throw new Exception($"Missing the name of UseVar");
-                    }
+                ["useVar"] = arg =>
+                {
+                    var value = CalculatePropertyValue(arg.NextToken.Text);
 
                     return new TokenInvokeResult { Ret = value, NewCursor = arg.Cursor + 1 };
                 },
@@ -110,13 +111,13 @@ namespace ExtractorSharp.Core {
                         );
                     }
 
-                    
+
 
                     if (!(_iterationVariable is Array iterationVariable)) {
                         throw new Exception(
                             $"The variable({_iterationVariable}) in front of forEach is not an array"
                         );
-                    } 
+                    }
 
 
                     foreach (var i in iterationVariable) {
@@ -127,8 +128,7 @@ namespace ExtractorSharp.Core {
 
                     return new TokenInvokeResult { Ret = iterationVariable, NewCursor = arg.Cursor + 2 };
                 },
-                ["@"] = arg =>
-                {
+                ["@"] = arg => {
                     var _block = arg.Tokens[arg.Cursor + 1];
                     if (!(_block is BlockToken block)) {
                         throw new Exception(
@@ -141,10 +141,9 @@ namespace ExtractorSharp.Core {
                     var tokens = new List<Token>();
                     foreach (var t in block.ContentTokens.Skip(2)) // 越过API名及其分号
                     {
-                        switch (t)
-                        {
+                        switch (t) {
                             case LineEndToken token:
-                                
+
                                 APIPars.Add(InvokeToken(tokens));
                                 tokens.Clear();
                                 break;
@@ -153,7 +152,7 @@ namespace ExtractorSharp.Core {
                                 break;
                         }
                     }
-                    
+
 
                     InvokeToken(block.ContentTokens);
                     Connector.Do(APIName, APIPars.ToArray());
@@ -269,6 +268,59 @@ namespace ExtractorSharp.Core {
             return InvokeToken(ParseBlock(tokens));
         }
 
+        /// <summary>
+        ///   计算属性, 类似 a.b 或者 a.c()
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public object CalculatePropertyValue(string text) {
+            object ret;
+            var strings = text.Split('.');
+            var name = strings[0];
+
+            if (_context.ContainsKey(name)) {
+                ret = _context[name];
+            } else {
+                throw new Exception($"Can't find the instance named '{name}'");
+            }
+
+            if (strings.Length > 1) { // 大于 1 表明[.]后存在字符
+
+                foreach (var s in strings.Skip(1)) {
+                    if (ret == null) {
+                        throw new Exception($"Can't read property '{s}' of {name}");
+                    }
+
+                    var theType = ret.GetType();
+
+                    switch (s) {
+                        case string property when property.EndsWith(")"):
+                            // TODO: 支持方法传参
+                            var funcParsMatch = Regex.Match(property, @"(?<=[(]).+(?=[)])");
+                            var methodName = property.Split('(')[0]; // TODO: 此处改成regex的命名参数;
+
+                            var funcPars = funcParsMatch.Groups[0].Success
+                                ? funcParsMatch.Groups[0].Value.Split(',')
+                                : new object[] { };
+
+                            var funcParTypes = funcPars.Select(x => x.GetType()).ToArray();
+
+                            ret = theType.GetMethod(methodName, funcParTypes)?.Invoke(ret, funcPars);
+                            break;
+                        case string property when theType.GetFields().Select(x=>x.Name == property).Count() != 0:
+                            ret = theType.GetField(property).GetValue(ret);
+                            break;
+                        case string property when theType.GetProperties().Select(x => x.Name == property).Count() != 0:
+                            ret = theType.GetProperty(property).GetValue(ret);
+                            break;
+                    }
+
+                }
+
+            }
+
+            return ret;
+        }
         /// <summary>
         /// 解析多行命令
         /// </summary>
