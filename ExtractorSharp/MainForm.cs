@@ -465,11 +465,11 @@ namespace ExtractorSharp {
         }
 
         private void ShowHelp(object sender, EventArgs e) {
-            Process.Start($"{Config["WebHost"]}/es/guide/");
+            Process.Start($"http://es.kritsu.net/guide/");
         }
 
         private void ShowFeature(object sender, EventArgs e) {
-            Process.Start($"{Config["WebHost"]}/es/feature/{Config["Version"]}.html");
+            Process.Start($"http://es.kritsu.net/feature/{Config["Version"]}.html");
         }
 
         private void AddCompareLayer(object sender, EventArgs e) {
