@@ -6,48 +6,38 @@ using System.Threading.Tasks;
 using System.Windows;
 using ExtractorSharp.Core.Composition;
 
-namespace ExtractorSharp.Core
-{
+namespace ExtractorSharp.Core {
 
-    public class Token
-    {
+    public class Token {
         public string Text; // 本段token对应的文本
-        public Token(string text)
-        {
+        public Token(string text) {
             Text = text;
         }
     }
 
-    public class BlockToken : Token
-    {
+    public class BlockToken : Token {
         public BlockToken(string text) : base(text) { }
         public List<Token> ContentTokens = new List<Token>();
     }
-    public class LineEndToken : Token
-    {
+    public class LineEndToken : Token {
         public LineEndToken() : base(";") { }
     }
 
-    public class CommandParser
-    {
+    public class CommandParser {
         private static IConnector Connector => Program.Connector;
         public static Dictionary<string, object> _context = new Dictionary<string, object>(); // 包含中间变量之类的, 全局唯一
         public Dictionary<string, object> _status = new Dictionary<string, object>(); // 包含解析时的中间过程, 每个解析实例唯一
         public Dictionary<string, Func<object, object>> FuncMap;
 
 
-        public CommandParser()
-        {
-            FuncMap = new Dictionary<string, Func<object, object>>
-            {
+        public CommandParser() {
+            FuncMap = new Dictionary<string, Func<object, object>> {
                 ["asNull"] = arg => null,
                 ["addOne"] = arg => (int)arg + 1 as object,
                 ["toBool"] = arg => (arg as string) != "false",
                 ["toArray"] = arg => (arg as string)?.Split(','),
-                ["toInt"] = arg =>
-                {
-                    switch (arg)
-                    {
+                ["toInt"] = arg => {
+                    switch (arg) {
                         case string iStr:
                             arg = int.Parse(iStr);
                             break;
@@ -58,11 +48,9 @@ namespace ExtractorSharp.Core
                     return arg;
                 },
                 ["LoadFile"] = arg => Connector.LoadFile((arg as string)?.Replace("|LoadFile", "")),
-                ["exit"] = arg =>
-                {
+                ["exit"] = arg => {
                     var code = 0;
-                    switch (arg)
-                    {
+                    switch (arg) {
                         case string iStr:
                             code = int.Parse(iStr);
                             break;
@@ -73,11 +61,9 @@ namespace ExtractorSharp.Core
                     Environment.Exit(code);
                     return arg;
                 },
-                ["message"] = arg =>
-                {
+                ["message"] = arg => {
                     var msg = "";
-                    switch (arg)
-                    {
+                    switch (arg) {
                         case object[] argArray:
                             MessageBox.Show(string.Join(",", argArray.Select(x => x.ToString())));
                             break;
@@ -87,18 +73,15 @@ namespace ExtractorSharp.Core
                     }
                     return arg;
                 },
-                ["asVar"] = arg =>
-                {
-                    if (CheckSwitch("hasAsVar"))
-                    {
+                ["asVar"] = arg => {
+                    if (CheckSwitch("hasAsVar")) {
                         throw new Exception("Can't use the command multiple times");
                     }
                     SetSwitch("lastVarValue", arg);
                     SetSwitch("hasAsVar", true);
                     return arg;
                 },
-                ["useVar"] = arg =>
-                {
+                ["useVar"] = arg => {
                     if (CheckSwitch("hasUseVar"))
                         throw new Exception("Can't use the command multiple times");
 
@@ -111,31 +94,27 @@ namespace ExtractorSharp.Core
         /// <summary>
         ///     用于检查某个开关是否打开
         /// </summary>
-        public bool CheckSwitch(string name)
-        {
+        public bool CheckSwitch(string name) {
             return _status.ContainsKey(name) && _status[name] as string == "on";
         }
         /// <summary>
         ///     用于设置某个开关状态
         /// </summary>
-        public bool SetSwitch(string name, bool status)
-        {
+        public bool SetSwitch(string name, bool status) {
             _status[name] = status ? "on" : "off";
             return status;
         }
         /// <summary>
         ///     用于设置某个开关的值
         /// </summary>
-        public object SetSwitch(string name, object status)
-        {
+        public object SetSwitch(string name, object status) {
             _status[name] = status;
             return status;
         }
         /// <summary>
         ///     用于获取某个开关的值
         /// </summary>
-        public object GetSwitch(string name, object defaultValue = null)
-        {
+        public object GetSwitch(string name, object defaultValue = null) {
             return _status.TryGetValue(name, out var value) ? value : defaultValue;
         }
         /// <summary>
@@ -191,43 +170,56 @@ namespace ExtractorSharp.Core
         ///     第一个是 API 名, 接下来是参数, 参数可以一行写, 也可多行写, 暂不支持命名参数       
         /// </summary>
         /// <param name="command"></param>
-        public object ParseInvoke(string command)
-        {
-            var args = command.Split('|');
-            object arg = args[0];
-            foreach (var sigCommand in args.Skip(1))
-            {
-                if (CheckSwitch("hasAsVar"))
-                {
-                    _context[sigCommand] = GetSwitch("lastVarValue") ?? throw new Exception($"Missing the name of asVar");
+        public object InvokeToken(List<Token> tokens) {
+            object ret = "";
+            for (int i = 0; i < tokens.Count; i++) {
+                var currentToken = tokens[i];
+
+                switch (currentToken) {
+                    case var _ when CheckSwitch("hasAsVar"):
+                        _context[currentToken.Text] = GetSwitch("lastVarValue") ?? throw new Exception($"Missing the name ({currentToken.Text} of asVar");
+                        SetSwitch("hasAsVar", false);
+                        SetSwitch("lastVarValue", false);
+                        break;
+                    case var _ when CheckSwitch("hasUseVar"):
+                        if (!_context.TryGetValue(currentToken.Text, out var value)) {
+                            throw new Exception($"Missing the name of UseVar");
+                        }
+                        ret = value;
+                        SetSwitch("hasUseVar", false);
+                        break;
+
+                    default:
+                        if (FuncMap.TryGetValue(currentToken.Text, out var fun)) {
+                            ret = fun(ret);
+                        } else {
+                            throw new Exception($"Can't find the command {ret} in code {GetAST(tokens)}");
+                        }
+                        break;
+                }
+
+                if (CheckSwitch("hasAsVar")) {
+                    _context[currentToken.Text] = GetSwitch("lastVarValue") ?? throw new Exception($"Missing the name ({currentToken.Text} of asVar");
                     SetSwitch("hasAsVar", false);
                     SetSwitch("lastVarValue", false);
-                }
-                else if (CheckSwitch("hasUseVar"))
-                {
-                    if (!_context.TryGetValue(sigCommand, out var value))
-                    {
+                } else if (CheckSwitch("hasUseVar")) {
+                    if (!_context.TryGetValue(currentToken.Text, out var value)) {
                         throw new Exception($"Missing the name of UseVar");
                     }
 
-                    arg = value;
+                    ret = value;
                     SetSwitch("hasUseVar", false);
-                }
-                else
-                {
-                    if (FuncMap.TryGetValue(sigCommand, out var fun))
-                    {
-                        arg = fun(arg);
-                    }
-                    else
-                    {
-                        throw new Exception($"Can't find the command {arg} in code {string.Join("", args)}");
+                } else {
+                    if (FuncMap.TryGetValue(currentToken.Text, out var fun)) {
+                        ret = fun(ret);
+                    } else {
+                        throw new Exception($"Can't find the command {ret} in code {GetAST(tokens)}");
                     }
                 }
 
             }
 
-            return arg;
+            return ret;
         }
 
         /// <summary>
@@ -235,40 +227,31 @@ namespace ExtractorSharp.Core
         /// </summary>
         /// <param name="codes"></param>
         /// <returns />
-        public List<Token> ParseBlock(string codes)
-        {
+        public List<Token> ParseBlock(string codes) {
             var tokens = new List<Token>(codes.Length / 10); // 假若平均每 10 个字符是一个 token
 
             var leftBraceCount = 0;
             var currentToken = new StringBuilder(10); // 假若平均每 10 个字符是一个 token
-            foreach (var theChar in codes)
-            {
-                switch (theChar)
-                {
+            foreach (var theChar in codes) {
+                switch (theChar) {
 
                     case '{':
                         leftBraceCount += 1;
-                        if (leftBraceCount == 1)
-                        {
+                        if (leftBraceCount == 1) {
                             tokens.Add(new Token(currentToken.ToString()));
                             currentToken.Clear();
-                        }
-                        else
-                        {
+                        } else {
                             currentToken.Append(theChar);
                         }
                         break;
                     case '}':
                         leftBraceCount -= 1;
-                        if (leftBraceCount == 0)
-                        {
+                        if (leftBraceCount == 0) {
                             var currentBlock = new BlockToken(currentToken.ToString());
                             currentBlock.ContentTokens = ParseBlock(currentBlock.Text);
                             tokens.Add(currentBlock);
                             currentToken.Clear();
-                        }
-                        else
-                        {
+                        } else {
                             currentToken.Append(theChar);
                         }
                         break;
@@ -297,15 +280,12 @@ namespace ExtractorSharp.Core
 
         }
 
-        public string GetAST(List<Token> tokens, int spaceCount = 0)
-        {
+        public string GetAST(List<Token> tokens, int spaceCount = 0) {
             var ret = new StringBuilder(tokens.Count * 10);
-            foreach (var t in tokens)
-            {
+            foreach (var t in tokens) {
                 var currentLine = new StringBuilder(10);
 
-                switch (t)
-                {
+                switch (t) {
                     case LineEndToken _t:
                         currentLine.Append(_t.Text);
                         goto default;
@@ -316,8 +296,7 @@ namespace ExtractorSharp.Core
                         currentLine.Append(_t.Text);
                         goto default;
                     default:
-                        foreach (var _ in Enumerable.Range(0, spaceCount))
-                        {
+                        foreach (var _ in Enumerable.Range(0, spaceCount)) {
                             currentLine.Insert(0, " ");
                         }
                         break;
