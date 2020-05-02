@@ -63,7 +63,7 @@ namespace ExtractorSharp.Core {
                     }
                     return res;
                 },
-                ["LoadFile"] = arg => new TokenInvokeResult { Ret = Connector.LoadFile((arg.CurrentArg as string)?.Replace("|LoadFile", "")) },
+                ["LoadFile"] = arg => new TokenInvokeResult {Ret = Connector.LoadFile(arg.CurrentArg as string).ToArray()},
                 ["exit"] = arg => {
                     var code = 0;
                     switch (arg.CurrentArg) {
@@ -126,6 +126,38 @@ namespace ExtractorSharp.Core {
                     }
 
                     return new TokenInvokeResult { Ret = iterationVariable, NewCursor = arg.Cursor + 2 };
+                },
+                ["@"] = arg =>
+                {
+                    var _block = arg.Tokens[arg.Cursor + 1];
+                    if (!(_block is BlockToken block)) {
+                        throw new Exception(
+                            $"Can't find a block in next next token, the token is {_block.Text} in fact"
+                        );
+                    }
+
+                    var APIName = block.ContentTokens[0].Text;
+                    var APIPars = new List<object>();
+                    var tokens = new List<Token>();
+                    foreach (var t in block.ContentTokens.Skip(2)) // 越过API名及其分号
+                    {
+                        switch (t)
+                        {
+                            case LineEndToken token:
+                                
+                                APIPars.Add(InvokeToken(tokens));
+                                tokens.Clear();
+                                break;
+                            case Token token:
+                                tokens.Add(token);
+                                break;
+                        }
+                    }
+                    
+
+                    InvokeToken(block.ContentTokens);
+                    Connector.Do(APIName, APIPars.ToArray());
+                    return new TokenInvokeResult { Ret = null, NewCursor = arg.Cursor + 1 };
                 }
             };
         }
