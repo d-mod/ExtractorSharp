@@ -173,7 +173,7 @@ namespace ExtractorSharp.Command.ImageCommand {
                     bmps[i] = Image.FromFile(path) as Bitmap;
                 }
             }
-
+            
             return bmps;
         }
     }
