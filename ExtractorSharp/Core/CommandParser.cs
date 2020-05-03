@@ -346,12 +346,13 @@ namespace ExtractorSharp.Core {
 
                             ret = theType.GetMethod(methodName, funcParTypes)?.Invoke(ret, funcPars);
                             break;
-                        case string property when theType.GetFields().Select(x => x.Name == property).Count() != 0:
-                            ret = theType.GetField(property).GetValue(ret);
-                            break;
                         case string property when theType.GetProperties().Select(x => x.Name == property).Count() != 0:
                             ret = theType.GetProperty(property).GetValue(ret);
                             break;
+                        case string property when theType.GetFields().Select(x => x.Name == property).Count() != 0:
+                            ret = theType.GetField(property).GetValue(ret);
+                            break;
+                        
                     }
 
                 }
