@@ -220,15 +220,8 @@ namespace ExtractorSharp {
                     case "-s":
                         Viewer.Show(name, args);
                         break;
-                    case "-c":
-                        Controller.Do(name, args);
-                        break;
-                    case "-m":
-                        // 多行模式
-                        var arg = Arguments[1];
-                        
-                        CommandParser.InvokeToken(arg);
-
+                    case "-c":                
+                        CommandParser.InvokeToken(Arguments[1]);
                         break;
                 }
             }
