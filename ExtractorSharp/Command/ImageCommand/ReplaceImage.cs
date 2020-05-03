@@ -30,8 +30,7 @@ namespace ExtractorSharp.Command.ImageCommand {
             Path = args[3] as string;
             Album = args[4] as Album;
             Indices = args[5] as int[];
-            if (Indices == null || Indices.Length == 0)
-            {
+            if (Indices == null || Indices.Length == 0) {
                 Indices = Album.List.Select(x => x.Index).ToArray();
             }
             switch (Mode) {
