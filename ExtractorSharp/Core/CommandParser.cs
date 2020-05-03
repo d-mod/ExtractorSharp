@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -50,7 +51,7 @@ namespace ExtractorSharp.Core {
 
                 ["asNull"] = arg => new TokenInvokeResult { Ret = null },
                 ["addOne"] = arg => new TokenInvokeResult { Ret = (int)arg.CurrentArg + 1 },
-                ["toBool"] = arg => new TokenInvokeResult {Ret = arg.CurrentArg as string != "false"},
+                ["toBool"] = arg => new TokenInvokeResult { Ret = arg.CurrentArg as string != "false" },
                 ["toArray"] = arg => new TokenInvokeResult { Ret = (arg.CurrentArg as string)?.Split(',') },
 
                 ["toInt"] = arg => {
@@ -95,8 +96,7 @@ namespace ExtractorSharp.Core {
                     _context[arg.NextToken.Text] = arg.CurrentArg;
                     return new TokenInvokeResult { Ret = arg.CurrentArg, NewCursor = arg.Cursor + 1 };
                 },
-                ["useVar"] = arg =>
-                {
+                ["useVar"] = arg => {
                     var value = CalculatePropertyValue(arg.NextToken.Text);
 
                     return new TokenInvokeResult { Ret = value, NewCursor = arg.Cursor + 1 };
@@ -122,7 +122,7 @@ namespace ExtractorSharp.Core {
 
                     foreach (var i in iterationVariable) {
                         _context[iterationVariableName] = i;
-                        Console.WriteLine(i);
+                        // Console.WriteLine(i);
                         InvokeToken(block.ContentTokens);
                     }
 
@@ -157,6 +157,36 @@ namespace ExtractorSharp.Core {
                     InvokeToken(block.ContentTokens);
                     Connector.Do(APIName, APIPars.ToArray());
                     return new TokenInvokeResult { Ret = null, NewCursor = arg.Cursor + 1 };
+                },
+                ["Concat"] = arg => {
+                    var ret = new TokenInvokeResult { Ret = arg.CurrentArg, NewCursor = arg.Cursor };
+
+                    var nextTokenValue = InvokeToken(arg.Tokens.Skip(arg.Cursor + 1).ToList(), out var nextTokenResult, true);
+                    ret.NewCursor += nextTokenResult.NewCursor;
+                    // concat 左侧的值不应该因右侧的值改变类型.
+                    switch (arg.CurrentArg) {
+                        case string argStr:
+                            ret.Ret = argStr + nextTokenValue;
+                            break;
+                        case int[] argArr:
+
+                            var newArrayInt = argArr.ToList();
+                            if (nextTokenValue is int valueInt) {
+                                newArrayInt.Add(valueInt);
+                            }
+                            ret.Ret = newArrayInt.ToArray();
+                            break;
+                        case object[] argArr:
+
+                            var newArrayObject = argArr.ToList();
+                            if (nextTokenValue is int valueObject) {
+                                newArrayObject.Add(valueObject);
+                            }
+                            ret.Ret = newArrayObject.ToArray();
+                            break;
+                    }
+
+                    return ret;
                 }
             };
         }
@@ -240,7 +270,7 @@ namespace ExtractorSharp.Core {
         ///     第一个是 API 名, 接下来是参数, 参数可以一行写, 也可多行写, 暂不支持命名参数       
         /// </summary>
         /// <param name="command"></param>
-        public object InvokeToken(List<Token> tokens) {
+        public object InvokeToken(List<Token> tokens, out TokenInvokeResult outResult, bool stopWhenLineEnd = false) {
             var result = new TokenInvokeResult { NewCursor = 0, Ret = "" };
             var parameter = new TokenInvokeParameter { CurrentArg = result.Ret, Cursor = 0, Tokens = tokens };
 
@@ -248,6 +278,8 @@ namespace ExtractorSharp.Core {
                 parameter.Cursor = i;
 
                 if (parameter.CurrentToken is LineEndToken) {
+                    if (stopWhenLineEnd)
+                        break;
                     continue;
                 }
 
@@ -258,14 +290,21 @@ namespace ExtractorSharp.Core {
                     // throw new Exception($"Can't find the command {Parameter.CurrentToken.Text} in code {GetAST(tokens)}");
                     result.Ret = parameter.CurrentToken.Text;
                 }
+
+                result.NewCursor = i + 1;
                 parameter.CurrentArg = result.Ret;
             }
 
+            outResult = result;
             return result.Ret;
         }
 
-        public object InvokeToken(string tokens) {
-            return InvokeToken(ParseBlock(tokens));
+        public object InvokeToken(List<Token> tokens, bool stopWhenLineEnd = false) {
+            TokenInvokeResult _;
+            return InvokeToken(tokens, out _, stopWhenLineEnd);
+        }
+        public object InvokeToken(string tokens, bool stopWhenLineEnd = false) {
+            return InvokeToken(ParseBlock(tokens), stopWhenLineEnd);
         }
 
         /// <summary>
@@ -307,7 +346,7 @@ namespace ExtractorSharp.Core {
 
                             ret = theType.GetMethod(methodName, funcParTypes)?.Invoke(ret, funcPars);
                             break;
-                        case string property when theType.GetFields().Select(x=>x.Name == property).Count() != 0:
+                        case string property when theType.GetFields().Select(x => x.Name == property).Count() != 0:
                             ret = theType.GetField(property).GetValue(ret);
                             break;
                         case string property when theType.GetProperties().Select(x => x.Name == property).Count() != 0:
