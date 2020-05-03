@@ -97,10 +97,23 @@ namespace ExtractorSharp.UnitTest.Command
             Assert.AreEqual(commandParser.InvokeToken("|useVar|b;"), 6);
             Assert.AreEqual(commandParser.InvokeToken("|useVar|b.ToString();"), "6");
             Assert.AreEqual(commandParser.InvokeToken("|useVar|a.Length;"), 3);
+
             // Assert.AreEqual(commandParser.InvokeToken("|useVar|b.CompareTo(3);"), 1); // 目前不支持传参
 
-            // commandParser.ParseInvoke("|useVar|a|message");
+            Assert.AreEqual(commandParser.InvokeToken("|useVar|b.ToString()|Concat|1;"), "61");
+            Assert.AreEqual(commandParser.InvokeToken("1|Concat|useVar|b;"), "16");
 
+            Assert.AreEqual(commandParser.InvokeToken("|useVar|b.ToString()|Concat|aaaa;"), "6aaaa");
+            Assert.IsTrue((
+                    commandParser.InvokeToken("|useVar|a|toInt|Concat|4|toInt|addOne|addOne;") as int[] ?? Array.Empty<int>()
+                ).SequenceEqual(
+                    new[] { 1, 2, 3, 6 }
+                ));
+            Assert.IsFalse((
+                commandParser.InvokeToken("4|toInt|addOne|addOne|Concat|useVar|a|toInt;") as int[] ?? Array.Empty<int>()
+            ).SequenceEqual(
+                new[] { 6, 1, 2, 3 }
+            )); // concat 左侧的值不应该因右侧的值改变类型.
 
         }
 
