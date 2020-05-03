@@ -52,35 +52,13 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Avatar.cs" />
     <Compile Include="Command\UnitTest1.cs" />
-    <Compile Include="DictionaryTest.cs" />
-    <Compile Include="EntryInfo.cs" />
-    <Compile Include="MemoryTest.cs" />
-    <Compile Include="Pictrue.cs" />
-    <Compile Include="Profession.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DressImage.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SortTest.cs" />
-    <Compile Include="TestHandler.cs" />
-    <Compile Include="UnitTest1.cs" />
-    <Compile Include="UnitTest2.cs" />
-    <Compile Include="UnitTest3.cs" />
-    <Compile Include="UnitTest4.cs" />
-    <Compile Include="Weapon.cs" />
-    <Compile Include="WeaponInfo.cs" />
-    <Compile Include="WeaponTest.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-    <None Include="Resources\profession.json" />
-    <None Include="Resources\queues.json" />
-    <None Include="Resources\weapon.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ExtractorSharp.Core\ExtractorSharp.Core.csproj">
