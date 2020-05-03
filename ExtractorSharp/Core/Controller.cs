@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using ExtractorSharp.Core.Command;
 using ExtractorSharp.Core.Composition;
 using ExtractorSharp.Core.Model;
 using ExtractorSharp.EventArguments;
 using ExtractorSharp.Exceptions;
-using ExtractorSharp.Core;
 
 namespace ExtractorSharp.Core {
     /// <summary>
@@ -29,7 +27,6 @@ namespace ExtractorSharp.Core {
 
         private readonly Dictionary<string, IExecutable> ExecuteMap;
 
-        private static CommandParser CommandParser => Program.CommandParser;
 
         public Controller() {
             actArgs = new ActionEventArgs();
@@ -272,7 +269,6 @@ namespace ExtractorSharp.Core {
                 var type = Dic[key];
                 if (type != null && typeof(ICommand).IsAssignableFrom(type)) {
                     var cmd = type.CreateInstance() as ICommand;
-
                     cmd.Do(args);
                     if (cmd.CanUndo) {
                         undoStack.Push(cmd);
