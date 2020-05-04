@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.IO;
+using System.Linq;
 using ExtractorSharp.Core.Command;
 using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Core.Model;
@@ -29,6 +30,9 @@ namespace ExtractorSharp.Command.ImageCommand {
             Path = args[3] as string;
             Album = args[4] as Album;
             Indices = args[5] as int[];
+            if (Indices == null || Indices.Length == 0) {
+                Indices = Album.List.Select(x => x.Index).ToArray();
+            }
             switch (Mode) {
                 case 0:
                     if (Album.List.Count > 0) {
@@ -169,7 +173,7 @@ namespace ExtractorSharp.Command.ImageCommand {
                     bmps[i] = Image.FromFile(path) as Bitmap;
                 }
             }
-
+            
             return bmps;
         }
     }

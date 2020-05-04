@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Security.AccessControl;
@@ -52,6 +53,8 @@ namespace ExtractorSharp {
         [Export(typeof(IConnector))]
         internal static IConnector Connector { set; get; }
 
+        internal static CommandParser CommandParser { set; get; }
+
         /// <summary>
         ///     应用程序的主入口点。
         /// </summary>
@@ -71,7 +74,7 @@ namespace ExtractorSharp {
             LoadRegistry();
             Merger = new Merger();
             Controller = new Controller();
-            RegistyCommand();
+            RegistryCommand();
             Viewer = new Viewer();
             Drawer = new Drawer();
             Form = new MainForm();
@@ -82,6 +85,8 @@ namespace ExtractorSharp {
             RegistyDialog();
             Viewer.DialogShown += ViewerDialogShown;
             Hoster = new Hoster();
+
+            CommandParser = new CommandParser();
             Application.Run(Form);
         }
 
@@ -89,7 +94,7 @@ namespace ExtractorSharp {
             ShowDebug(sender, new ThreadExceptionEventArgs(e.ExceptionObject as Exception));
         }
 
-        private static void RegistyCommand() {
+        private static void RegistryCommand() {
             Controller.Registry("addImg", typeof(AddFile));
             Controller.Registry("deleteImg", typeof(DeleteFile));
             Controller.Registry("renameImg", typeof(RenameFile));
@@ -208,15 +213,15 @@ namespace ExtractorSharp {
                 Arguments = command.Split("/");
             }
             if (Arguments.Length > 1) {
-                var args = new object[Arguments.Length - 2];
+                var args = new string[Arguments.Length - 2];
                 Array.Copy(Arguments, 2, args, 0, args.Length);
                 var name = Arguments[1];
                 switch (Arguments[0]) {
                     case "-s":
                         Viewer.Show(name, args);
                         break;
-                    case "-c":
-                        Controller.Do(name, args);
+                    case "-c":                
+                        CommandParser.InvokeToken(Arguments[1]);
                         break;
                 }
             }
@@ -235,17 +240,17 @@ namespace ExtractorSharp {
         ///     注册窗口
         /// </summary>
         private static void RegistyDialog() {
-            Viewer.Regisity("replace", typeof(ReplaceImageDialog));
-            Viewer.Regisity("merge", typeof(MergeDialog));
-            Viewer.Regisity("newImg", typeof(NewImgDialog));
-            Viewer.Regisity("convert", typeof(ConvertDialog));
-            Viewer.Regisity("changePosition", typeof(ChangePositonDialog));
-            Viewer.Regisity("about", typeof(AboutDialog));
-            Viewer.Regisity("debug", typeof(BugDialog));
-            Viewer.Regisity("newImage", typeof(NewImageDialog));
-            Viewer.Regisity("setting", typeof(SettingDialog));
-            Viewer.Regisity("saveImage", typeof(SaveImageDialog));
-            Viewer.Regisity("changeSize", typeof(ChangeSizeDialog));
+            Viewer.Registry("replace", typeof(ReplaceImageDialog));
+            Viewer.Registry("merge", typeof(MergeDialog));
+            Viewer.Registry("newImg", typeof(NewImgDialog));
+            Viewer.Registry("convert", typeof(ConvertDialog));
+            Viewer.Registry("changePosition", typeof(ChangePositonDialog));
+            Viewer.Registry("about", typeof(AboutDialog));
+            Viewer.Registry("debug", typeof(BugDialog));
+            Viewer.Registry("newImage", typeof(NewImageDialog));
+            Viewer.Registry("setting", typeof(SettingDialog));
+            Viewer.Registry("saveImage", typeof(SaveImageDialog));
+            Viewer.Registry("changeSize", typeof(ChangeSizeDialog));
         }
 
 
