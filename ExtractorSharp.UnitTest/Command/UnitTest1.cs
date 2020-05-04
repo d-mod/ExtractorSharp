@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using ExtractorSharp.Core;
-using ExtractorSharp.Core.Coder;
-using ExtractorSharp.Core.Handle;
+﻿using System.Linq;
+using ExtractorSharp.Script.Mes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace ExtractorSharp.UnitTest.Command
-{
+namespace ExtractorSharp.UnitTest.Command {
     [TestClass]
     public class UnitTest1
     {
         [TestMethod]
         public void TestInvoke()
         {
-            var commandParser = new CommandParser();
+            var commandParser = new MesParser();
             Assert.AreEqual(commandParser.InvokeToken("|asNull;"), null);
             Assert.AreEqual(commandParser.InvokeToken("12342134sdgwseg|asNull;"), null);
 
@@ -71,7 +65,7 @@ namespace ExtractorSharp.UnitTest.Command
         [TestMethod]
         public void TestParseBlock()
         {
-            var commandParser = new CommandParser();
+            var commandParser = new MesParser();
 
             var ast = commandParser.GetAST(commandParser.ParseBlock("1|toInt;\t"));
             Assert.AreEqual("1\ntoInt\n;\n", ast);

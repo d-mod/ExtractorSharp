@@ -153,7 +153,7 @@
     <Compile Include="Composition\Metadata.cs" />
     <Compile Include="Composition\Plugin.cs" />
     <Compile Include="Config\JsonConfig.cs" />
-    <Compile Include="Core\CommandParser.cs" />
+    <Compile Include="Script\Mes\MesParser.cs" />
     <Compile Include="Draw\Paint\CompareLayer.cs" />
     <Compile Include="Effect\DyeImageEffect.cs" />
     <Compile Include="Effect\LinearDodgeEffect.cs" />
@@ -219,6 +219,7 @@
     <Compile Include="Support\AudioSupport.cs" />
     <Compile Include="Support\GifSupport.cs" />
     <Compile Include="Support\ImgSupport.cs" />
+    <Compile Include="Support\MesSupport.cs" />
     <Compile Include="Support\NpkSupport.cs" />
     <Compile Include="View\Dialog\AboutDialog.cs">
       <SubType>Form</SubType>

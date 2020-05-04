@@ -27,7 +27,8 @@ namespace ExtractorSharp {
                 FileSupports.Add(new ImgSupport());
                 FileSupports.Add(new NpkSupport());
                 FileSupports.Add(new AudioSupport());
-                FileSupports.Add(new GifSupport());         
+                FileSupports.Add(new GifSupport());
+                ScriptSupports.Add(new MesSupport(this));
                 var builder = new LSBuilder();
                 var recentConfigPath = $@"{Config["RootPath"]}\conf\recent.json";
                 if (File.Exists(recentConfigPath)) {
@@ -41,6 +42,8 @@ namespace ExtractorSharp {
             public SpriteEffect OnSpriteSaving { set; get; }
 
             public List<IFileSupport> FileSupports { get; } = new List<IFileSupport>();
+
+            public List<IScriptSupport> ScriptSupports { get; } = new List<IScriptSupport>();
 
             public List<string> Recent {
                 set {
@@ -143,7 +146,6 @@ namespace ExtractorSharp {
                 }
                 if (SavePath.Length == 0) {
                     SavePath = args.Find(item => item.ToLower().EndsWith(".npk")) ?? string.Empty;
-
                 }
                 if (args.Length < 1) {
                     return;
@@ -166,8 +168,6 @@ namespace ExtractorSharp {
                         arr = LoadFile(Directory.GetFiles(args[i]));
                     } else if (support != null) {
                         arr = support.Decode(args[i]);
-                    } else {
-                        throw new FileSupportException(Language["FileSupportException"]);
                     }
                     list.AddRange(arr);
                 }
@@ -283,6 +283,15 @@ namespace ExtractorSharp {
 
             public object Dispatch(string name, params object[] args) {
                return MainForm.Controller.Dispatch(name, args);
+            }
+
+            public void Load(string file) {
+                var support = ScriptSupports.Find(e => file.ToLower().EndsWith(e.Extension));
+                if (support != null) {
+                    support.Execute(file);
+                } else {
+                    AddFile(true, file);
+                }
             }
         }
     }

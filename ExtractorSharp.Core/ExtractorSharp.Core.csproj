@@ -56,6 +56,7 @@
     <Compile Include="Composition\IEffect.cs" />
     <Compile Include="Composition\IMenuItem.cs" />
     <Compile Include="Composition\IMergeProgress.cs" />
+    <Compile Include="Composition\IScriptSupport.cs" />
     <Compile Include="Composition\ISorter.cs" />
     <Compile Include="Composition\MenuItemType.cs" />
     <Compile Include="Composition\MessageType.cs" />

@@ -53,8 +53,6 @@ namespace ExtractorSharp {
         [Export(typeof(IConnector))]
         internal static IConnector Connector { set; get; }
 
-        internal static CommandParser CommandParser { set; get; }
-
         /// <summary>
         ///     应用程序的主入口点。
         /// </summary>
@@ -85,8 +83,6 @@ namespace ExtractorSharp {
             RegistyDialog();
             Viewer.DialogShown += ViewerDialogShown;
             Hoster = new Hoster();
-
-            CommandParser = new CommandParser();
             Application.Run(Form);
         }
 
@@ -200,30 +196,11 @@ namespace ExtractorSharp {
                 Config["Version"] = new ConfigValue(Version);
                 Config.Save();
                 if (Config["ShowFeature"].Boolean) {
-                    Process.Start($"{Config["WebHost"]}/es/feature/{Config["Version"]}.html");
+                    Process.Start($"http://es.kritsu.net/feature/{Config["Version"]}.html");
                 }
             }
-            if (Arguments.Length == 1) {
-                var command = Arguments[0];
-                if (!command.StartsWith("esharp://")) {
-                    Connector.AddFile(true, command);
-                    return;
-                }
-                command = command.Replace("esharp://", "");
-                Arguments = command.Split("/");
-            }
-            if (Arguments.Length > 1) {
-                var args = new string[Arguments.Length - 2];
-                Array.Copy(Arguments, 2, args, 0, args.Length);
-                var name = Arguments[1];
-                switch (Arguments[0]) {
-                    case "-s":
-                        Viewer.Show(name, args);
-                        break;
-                    case "-c":                
-                        CommandParser.InvokeToken(Arguments[1]);
-                        break;
-                }
+            if (Arguments.Length > 0) {
+                Connector.Load(Arguments[0]);
             }
         }
 

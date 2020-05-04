@@ -9,9 +9,10 @@ using System.Windows;
 using ExtractorSharp.Core.Composition;
 using ExtractorSharp.Core.Lib;
 
-namespace ExtractorSharp.Core {
+namespace ExtractorSharp.Script.Mes {
 
     public class Token {
+
         public string Text; // 本段token对应的文本
         public Token(string text) {
             Text = text;
@@ -20,6 +21,7 @@ namespace ExtractorSharp.Core {
 
     public class BlockToken : Token {
         public BlockToken(string text) : base(text) { }
+
         public List<Token> ContentTokens = new List<Token>();
     }
     public class LineEndToken : Token {
@@ -27,28 +29,54 @@ namespace ExtractorSharp.Core {
     }
 
     public struct TokenInvokeParameter {
+
         public List<Token> Tokens;
+
         public int Cursor;
+
         public object CurrentArg;
 
         public Token LastToken => Tokens[Cursor - 1];
         public Token CurrentToken => Tokens[Cursor];
         public Token NextToken => Tokens[Cursor + 1];
     }
+
     public struct TokenInvokeResult {
+
         public object Ret;
+
         public int? NewCursor;
     }
-    public class CommandParser {
-        private static IConnector Connector => Program.Connector;
-        public static Dictionary<string, object> _context = new Dictionary<string, object>(); // 包含中间变量之类的, 全局唯一
-        public Dictionary<string, object> _status = new Dictionary<string, object>(); // 包含解析时的中间过程, 每个解析实例唯一
-        public Dictionary<string, Func<TokenInvokeParameter, TokenInvokeResult>> FuncMap;
+
+    public class ExcutingEventArgs : EventArgs {
+
+        public string Name;
+
+        public object[] Args;
+
+    }
+
+    public class MesParser {
+        private static Dictionary<string, object> _context = new Dictionary<string, object>(); // 包含中间变量之类的, 全局唯一
+        private Dictionary<string, object> _status = new Dictionary<string, object>(); // 包含解析时的中间过程, 每个解析实例唯一
+        private Dictionary<string, Func<TokenInvokeParameter, TokenInvokeResult>> FuncMap;
+
+        /// <summary>
+        /// Parser事件处理器
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public delegate void MesParserHandler(object sender, ExcutingEventArgs e);
+
+       
+        /// <summary>
+        /// 执行命令事件
+        /// </summary>
+        public event MesParserHandler Executing;
 
 
-        public CommandParser() {
+        public MesParser() {
             FuncMap = new Dictionary<string, Func<TokenInvokeParameter, TokenInvokeResult>> {
-
                 ["asNull"] = arg => new TokenInvokeResult { Ret = null },
                 ["addOne"] = arg => new TokenInvokeResult { Ret = (int)arg.CurrentArg + 1 },
                 ["toBool"] = arg => new TokenInvokeResult { Ret = arg.CurrentArg as string != "false" },
@@ -66,7 +94,7 @@ namespace ExtractorSharp.Core {
                     }
                     return res;
                 },
-                ["LoadFile"] = arg => new TokenInvokeResult { Ret = Connector.LoadFile(arg.CurrentArg as string).ToArray() },
+/*                ["LoadFile"] = arg => new TokenInvokeResult { Ret = Connector.LoadFile(arg.CurrentArg as string).ToArray() },*/
                 ["exit"] = arg => {
                     var code = 0;
                     switch (arg.CurrentArg) {
@@ -153,9 +181,12 @@ namespace ExtractorSharp.Core {
                         }
                     }
 
-
                     InvokeToken(block.ContentTokens);
-                    Connector.Do(APIName, APIPars.ToArray());
+                    // 执行命令
+                    Executing?.Invoke(this, new ExcutingEventArgs {
+                        Name = APIName,
+                        Args = APIPars.ToArray()
+                    });
                     return new TokenInvokeResult { Ret = null, NewCursor = arg.Cursor + 1 };
                 },
                 ["Concat"] = arg => {
@@ -190,6 +221,11 @@ namespace ExtractorSharp.Core {
                 }
             };
         }
+
+        public void Registry(string name, Func<TokenInvokeParameter, TokenInvokeResult> func) {
+            FuncMap.Add(name, func);
+        }
+
 
         /// <summary>
         ///     用于检查某个开关是否打开

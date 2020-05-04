@@ -113,6 +113,12 @@ namespace ExtractorSharp.Core.Composition {
         /// <param name="array">文件对象</param>
         void AddFile(bool clear, params Album[] array);
 
+        /// <summary>
+        /// 载入文件
+        /// </summary>
+        /// <param name="file"></param>
+        void Load(string file);
+
         List<Album> LoadFile(params string[] args);
 
         void RemoveFile(params Album[] array);
