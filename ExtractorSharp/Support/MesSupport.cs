@@ -16,7 +16,7 @@ namespace ExtractorSharp.Support {
 
         public MesSupport(IConnector Connector) {
             mesParser = new MesParser();
-            mesParser.Executing += (object sender, ExcutingEventArgs e) => Connector.Do(e.Name, e.Args);
+            mesParser.Executing += (sender, e) => Connector.Do(e.Name, e.Args);
             mesParser.Registry("loadFile", arg => new TokenInvokeResult { Ret = Connector.LoadFile(arg.CurrentArg as string).ToArray() });
         }
 

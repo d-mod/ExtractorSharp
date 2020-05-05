@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using ExtractorSharp.Script.Mes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -60,6 +61,11 @@ namespace ExtractorSharp.UnitTest.Command {
                 new[] { 6, 1, 2, 3 }
             )); // concat 左侧的值不应该因右侧的值改变类型.
 
+            // 环境变量部分
+            Assert.AreEqual(null, commandParser.InvokeToken("|useEnvVar|testEnv;"));
+            Assert.AreEqual("qaerfqaw", commandParser.InvokeToken("qaerfqaw|asEnvVar|testEnv;"));
+            Assert.AreEqual("qaerfqaw", commandParser.InvokeToken("|useEnvVar|testEnv;"));
+            Assert.AreEqual("qaerfqaw", Environment.GetEnvironmentVariable("testEnv"));
         }
 
         [TestMethod]

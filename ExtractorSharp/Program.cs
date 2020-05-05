@@ -167,7 +167,7 @@ namespace ExtractorSharp {
                 if (!Directory.Exists(dir)) {
                     Directory.CreateDirectory(dir);
                 }
-                var current = $"{dir}/{DateTime.Now.ToString("yyyyMMddHHmmss")}.log";
+                var current = $"{dir}/{DateTime.Now:yyyyMMddHHmmss}.log";
                 File.WriteAllBytes(current, data);
                 switch (e.Exception) {
                     case IOException _:

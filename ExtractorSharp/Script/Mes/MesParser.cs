@@ -48,7 +48,7 @@ namespace ExtractorSharp.Script.Mes {
         public int? NewCursor;
     }
 
-    public class ExcutingEventArgs : EventArgs {
+    public class ExecutingEventArgs : EventArgs {
 
         public string Name;
 
@@ -66,9 +66,9 @@ namespace ExtractorSharp.Script.Mes {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public delegate void MesParserHandler(object sender, ExcutingEventArgs e);
+        public delegate void MesParserHandler(object sender, ExecutingEventArgs e);
 
-       
+
         /// <summary>
         /// 执行命令事件
         /// </summary>
@@ -94,7 +94,6 @@ namespace ExtractorSharp.Script.Mes {
                     }
                     return res;
                 },
-/*                ["LoadFile"] = arg => new TokenInvokeResult { Ret = Connector.LoadFile(arg.CurrentArg as string).ToArray() },*/
                 ["exit"] = arg => {
                     var code = 0;
                     switch (arg.CurrentArg) {
@@ -126,6 +125,15 @@ namespace ExtractorSharp.Script.Mes {
                 },
                 ["useVar"] = arg => {
                     var value = CalculatePropertyValue(arg.NextToken.Text);
+
+                    return new TokenInvokeResult { Ret = value, NewCursor = arg.Cursor + 1 };
+                },
+                ["asEnvVar"] = arg => {
+                    Environment.SetEnvironmentVariable(arg.NextToken.Text, arg.CurrentArg.ToString());
+                    return new TokenInvokeResult { Ret = arg.CurrentArg, NewCursor = arg.Cursor + 1 };
+                },
+                ["useEnvVar"] = arg => {
+                    var value = CalculatePropertyValue(arg.NextToken.Text, true);
 
                     return new TokenInvokeResult { Ret = value, NewCursor = arg.Cursor + 1 };
                 },
@@ -183,7 +191,7 @@ namespace ExtractorSharp.Script.Mes {
 
                     InvokeToken(block.ContentTokens);
                     // 执行命令
-                    Executing?.Invoke(this, new ExcutingEventArgs {
+                    Executing?.Invoke(this, new ExecutingEventArgs {
                         Name = APIName,
                         Args = APIPars.ToArray()
                     });
@@ -346,50 +354,53 @@ namespace ExtractorSharp.Script.Mes {
         /// <summary>
         ///   计算属性, 类似 a.b 或者 a.c()
         /// </summary>
-        /// <param name="text"></param>
+        /// <param name="text">变量名</param>
+        /// <param name="useEnv">使用环境变量</param>
         /// <returns></returns>
-        public object CalculatePropertyValue(string text) {
+        public object CalculatePropertyValue(string text, bool useEnv = false) {
             object ret;
             var strings = text.Split('.');
             var name = strings[0];
-
-            if (_context.ContainsKey(name)) {
-                ret = _context[name];
+            if (!useEnv) {
+                if (_context.ContainsKey(name)) {
+                    ret = _context[name];
+                } else {
+                    throw new Exception($"Can't find the instance named '{name}'");
+                }
             } else {
-                throw new Exception($"Can't find the instance named '{name}'");
+                ret = Environment.GetEnvironmentVariable(name);
             }
 
-            if (strings.Length > 1) { // 大于 1 表明[.]后存在字符
 
-                foreach (var s in strings.Skip(1)) {
-                    if (ret == null) {
-                        throw new Exception($"Can't read property '{s}' of {name}");
-                    }
+            if (strings.Length == 1) return ret; // 等于 1 表明[.]后不存在字符 
 
-                    var theType = ret.GetType();
+            foreach (var s in strings.Skip(1)) {
+                if (ret == null) {
+                    throw new Exception($"Can't read property '{s}' of {name}");
+                }
 
-                    switch (s) {
-                        case string property when property.EndsWith(")"):
-                            // TODO: 支持方法传参
-                            var funcParsMatch = Regex.Match(property, @"(?<=[(]).+(?=[)])");
-                            var methodName = property.Split('(')[0]; // TODO: 此处改成regex的命名参数;
+                var theType = ret.GetType();
 
-                            var funcPars = funcParsMatch.Groups[0].Success
-                                ? funcParsMatch.Groups[0].Value.Split(',')
-                                : new object[] { };
+                switch (s) {
+                    case string property when property.EndsWith(")"):
+                        // TODO: 支持方法传参
+                        var funcParsMatch = Regex.Match(property, @"(?<=[(]).+(?=[)])");
+                        var methodName = property.Split('(')[0]; // TODO: 此处改成regex的命名参数;
 
-                            var funcParTypes = funcPars.Select(x => x.GetType()).ToArray();
+                        var funcPars = funcParsMatch.Groups[0].Success
+                            ? funcParsMatch.Groups[0].Value.Split(',')
+                            : new object[] { };
 
-                            ret = theType.GetMethod(methodName, funcParTypes)?.Invoke(ret, funcPars);
-                            break;
-                        case string property when theType.GetProperties().Select(x => x.Name == property).Count() != 0:
-                            ret = theType.GetProperty(property).GetValue(ret);
-                            break;
-                        case string property when theType.GetFields().Select(x => x.Name == property).Count() != 0:
-                            ret = theType.GetField(property).GetValue(ret);
-                            break;
-                        
-                    }
+                        var funcParTypes = funcPars.Select(x => x.GetType()).ToArray();
+
+                        ret = theType.GetMethod(methodName, funcParTypes)?.Invoke(ret, funcPars);
+                        break;
+                    case string property when theType.GetProperties().Select(x => x.Name == property).Count() != 0:
+                        ret = theType.GetProperty(property).GetValue(ret);
+                        break;
+                    case string property when theType.GetFields().Select(x => x.Name == property).Count() != 0:
+                        ret = theType.GetField(property).GetValue(ret);
+                        break;
 
                 }
 
