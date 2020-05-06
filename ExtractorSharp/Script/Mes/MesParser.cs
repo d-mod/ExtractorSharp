@@ -114,7 +114,7 @@ namespace ExtractorSharp.Script.Mes {
                             MessageBox.Show(string.Join(",", argArray.Select(x => x.ToString())));
                             break;
                         default:
-                            MessageBox.Show(arg.ToString());
+                            MessageBox.Show(arg.CurrentArg.ToString());
                             break;
                     }
                     return new TokenInvokeResult { Ret = arg.CurrentArg };
