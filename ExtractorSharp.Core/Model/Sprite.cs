@@ -152,7 +152,7 @@ namespace ExtractorSharp.Core.Model {
             if (bmp == null) {
                 return;
             }
-            Picture = bmp;
+            Picture = new Bitmap(bmp);
             Target = null;
             Type = type == ColorBits.UNKNOWN ? Type : type;
             if (type == ColorBits.UNKNOWN) {

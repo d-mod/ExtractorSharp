@@ -1,9 +1,21 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using ExtractorSharp.Core.Command;
 using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Core.Model;
+
+// using SixLabors.ImageSharp;
+// using SixLabors.ImageSharp.Advanced;
+// using SixLabors.ImageSharp.Formats.Png;
+// using SixLabors.ImageSharp.PixelFormats;
+// using SixLabors.ImageSharp.Processing;
+// using SixLabors.Primitives;
+// using Image = System.Drawing.Image;
+// using ISImage = SixLabors.ImageSharp.Image;
+// 以上用于 .net4.7.2 使用第三方图像库
 
 namespace ExtractorSharp.Command.ImageCommand {
     internal class ReplaceImage : ISingleAction, ICommandMessage {
@@ -23,22 +35,30 @@ namespace ExtractorSharp.Command.ImageCommand {
 
         public int[] Indices { set; get; }
 
+        private static int count;
+
         public void Do(params object[] args) {
-            Type = (ColorBits) args[0];
-            IsAdjust = (bool) args[1];
-            Mode = (int) args[2];
+            Type = (ColorBits)args[0];
+            IsAdjust = (bool)args[1];
+            Mode = (int)args[2];
             Path = args[3] as string;
             Album = args[4] as Album;
             Indices = args[5] as int[];
             if (Indices == null || Indices.Length == 0) {
                 Indices = Album.List.Select(x => x.Index).ToArray();
             }
+
+            count++;
+            if (count % 100 == 0) {
+                Debug.WriteLine($"{DateTime.Now.ToLocalTime()}, {Path}, {count}");
+            }
+
             switch (Mode) {
                 case 0:
                     if (Album.List.Count > 0) {
                         var image = Album[Indices[0]];
-                        OldImages = new[] {image.Picture};
-                        Types = new[] {image.Type};
+                        OldImages = new[] { image.Picture };
+                        Types = new[] { image.Type };
                         image.ReplaceImage(Type, IsAdjust, Image.FromFile(Path) as Bitmap);
                     }
 
@@ -70,6 +90,7 @@ namespace ExtractorSharp.Command.ImageCommand {
                         OldImages[i] = image.Picture;
                         Types[i] = image.Type;
                         image.ReplaceImage(Type, IsAdjust, images[i]);
+                        images[i].Dispose();
                     }
 
                     break;
@@ -169,11 +190,24 @@ namespace ExtractorSharp.Command.ImageCommand {
                     exist = true;
                     path = bmp;
                 }
+
                 if (exist) {
-                    bmps[i] = Image.FromFile(path) as Bitmap;
+                    // var img = ISImage.Load(path);
+                    // using (var memoryStream = new MemoryStream()) {
+                    //     var imageEncoder = img.GetConfiguration().ImageFormatsManager.FindEncoder(PngFormat.Instance);
+                    //     img.Save(memoryStream, imageEncoder);
+                    //
+                    //     memoryStream.Seek(0, SeekOrigin.Begin);
+                    //
+                    //     bmps[i] = new Bitmap(memoryStream);
+                    // }
+
+                    using (var fs = File.OpenRead(path)) {
+                        bmps[i] = Image.FromStream(fs) as Bitmap;
+                    }
                 }
             }
-            
+
             return bmps;
         }
     }
