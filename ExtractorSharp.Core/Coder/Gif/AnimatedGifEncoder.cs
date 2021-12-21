@@ -1,7 +1,6 @@
 using System;
 using System.Drawing;
 using System.IO;
-using ExtractorSharp.Core.Lib;
 
 #region .NET Disclaimer/Info
 
@@ -92,7 +91,7 @@ namespace ExtractorSharp.Core.Coder.Gif {
 		 * @param ms int delay time in milliseconds
 		 */
         public void SetDelay(int ms) {
-            delay = (int) Math.Round(ms / 10.0f);
+            this.delay = (int)Math.Round(ms / 10.0f);
         }
 
         /**
@@ -102,7 +101,9 @@ namespace ExtractorSharp.Core.Coder.Gif {
 		 * @param code int disposal code.
 		 */
         public void SetDispose(int code) {
-            if (code >= 0) dispose = code;
+            if(code >= 0) {
+                this.dispose = code;
+            }
         }
 
         /**
@@ -115,7 +116,9 @@ namespace ExtractorSharp.Core.Coder.Gif {
 		 * @return
 		 */
         public void SetRepeat(int iter) {
-            if (iter >= 0) repeat = iter;
+            if(iter >= 0) {
+                this.repeat = iter;
+            }
         }
 
         /**
@@ -130,7 +133,7 @@ namespace ExtractorSharp.Core.Coder.Gif {
 		 * @param c Color to be treated as transparent on display.
 		 */
         public void SetTransparent(Color c) {
-            transparent = c;
+            this.transparent = c;
         }
 
         /**
@@ -144,26 +147,35 @@ namespace ExtractorSharp.Core.Coder.Gif {
 		 * @return true if successful.
 		 */
         public bool AddFrame(Image im) {
-            if (im == null || !started) return false;
+            if(im == null || !this.started) {
+                return false;
+            }
+
             var ok = true;
             try {
-                if (!sizeSet) SetSize(im.Width, im.Height);
-                image = im;
-                GetImagePixels(); // convert to correct format if necessary
-                AnalyzePixels(); // build color table & map pixels
-                if (firstFrame) {
-                    WriteLSD(); // logical screen descriptior
-                    WritePalette(); // global color table
-                    if (repeat >= 0) {
-                        WriteNetscapeExt();
+                if(!this.sizeSet) {
+                    this.SetSize(im.Width, im.Height);
+                }
+
+                this.image = im;
+                this.GetImagePixels(); // convert to correct format if necessary
+                this.AnalyzePixels(); // build color table & map pixels
+                if(this.firstFrame) {
+                    this.WriteLSD(); // logical screen descriptior
+                    this.WritePalette(); // global color table
+                    if(this.repeat >= 0) {
+                        this.WriteNetscapeExt();
                     }
                 }
-                WriteGraphicCtrlExt(); // write graphic control extension
-                WriteImageDesc(); // image descriptor
-                if (!firstFrame) WritePalette(); // local color table
-                WritePixels(); // encode and write pixel data
-                firstFrame = false;
-            } catch (IOException) {
+                this.WriteGraphicCtrlExt(); // write graphic control extension
+                this.WriteImageDesc(); // image descriptor
+                if(!this.firstFrame) {
+                    this.WritePalette(); // local color table
+                }
+
+                this.WritePixels(); // encode and write pixel data
+                this.firstFrame = false;
+            } catch(IOException) {
                 ok = false;
             }
 
@@ -176,30 +188,30 @@ namespace ExtractorSharp.Core.Coder.Gif {
 		 * closed.
 		 */
         public bool Finish() {
-            if (!started) {
+            if(!this.started) {
                 return false;
             }
             var ok = true;
-            started = false;
+            this.started = false;
             try {
-                ms.WriteByte(0x3b); // gif trailer
-                ms.Flush();
-                if (closeStream) {
+                this.ms.WriteByte(0x3b); // gif trailer
+                this.ms.Flush();
+                if(this.closeStream) {
                     //					ms.Close();
                 }
-            } catch (IOException) {
+            } catch(IOException) {
                 ok = false;
             }
 
             // reset for subsequent use
-            transIndex = 0;
+            this.transIndex = 0;
             //			fs = null;
-            image = null;
-            pixels = null;
-            indexedPixels = null;
-            colorTab = null;
-            closeStream = false;
-            firstFrame = true;
+            this.image = null;
+            this.pixels = null;
+            this.indexedPixels = null;
+            this.colorTab = null;
+            this.closeStream = false;
+            this.firstFrame = true;
 
             return ok;
         }
@@ -211,7 +223,9 @@ namespace ExtractorSharp.Core.Coder.Gif {
 		 * @param fps float frame rate (frames per second)
 		 */
         public void SetFrameRate(float fps) {
-            if (fps != 0f) delay = (int) Math.Round(100f / fps);
+            if(fps != 0f) {
+                this.delay = (int)Math.Round(100f / fps);
+            }
         }
 
         /**
@@ -226,8 +240,11 @@ namespace ExtractorSharp.Core.Coder.Gif {
 		 * @return
 		 */
         public void SetQuality(int quality) {
-            if (quality < 1) quality = 1;
-            sample = quality;
+            if(quality < 1) {
+                quality = 1;
+            }
+
+            this.sample = quality;
         }
 
         /**
@@ -239,12 +256,21 @@ namespace ExtractorSharp.Core.Coder.Gif {
 		 * @param h int frame width.
 		 */
         public void SetSize(int w, int h) {
-            if (started && !firstFrame) return;
-            width = w;
-            height = h;
-            if (width < 1) width = 320;
-            if (height < 1) height = 240;
-            sizeSet = true;
+            if(this.started && !this.firstFrame) {
+                return;
+            }
+
+            this.width = w;
+            this.height = h;
+            if(this.width < 1) {
+                this.width = 320;
+            }
+
+            if(this.height < 1) {
+                this.height = 240;
+            }
+
+            this.sizeSet = true;
         }
 
         /**
@@ -256,16 +282,19 @@ namespace ExtractorSharp.Core.Coder.Gif {
 		 */
 
         public bool Start(MemoryStream os) {
-            if (os == null) return false;
+            if(os == null) {
+                return false;
+            }
+
             var ok = true;
-            closeStream = false;
-            ms = os;
+            this.closeStream = false;
+            this.ms = os;
             try {
-                WriteString("GIF89a"); // header
-            } catch (IOException) {
+                this.WriteString("GIF89a"); // header
+            } catch(IOException) {
                 ok = false;
             }
-            return started = ok;
+            return this.started = ok;
         }
 
         /**
@@ -276,12 +305,12 @@ namespace ExtractorSharp.Core.Coder.Gif {
         public bool Start() {
             var ok = true;
             try {
-                ok = Start(new MemoryStream(10 * 1024));
-                closeStream = true;
-            } catch (IOException) {
+                ok = this.Start(new MemoryStream(10 * 1024));
+                this.closeStream = true;
+            } catch(IOException) {
                 ok = false;
             }
-            return started = ok;
+            return this.started = ok;
         }
 
         /**
@@ -292,28 +321,28 @@ namespace ExtractorSharp.Core.Coder.Gif {
         public bool Output(string file) {
             try {
                 var fs = new FileStream(file, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);
-                fs.Write(ms.ToArray(), 0, (int) ms.Length);
+                fs.Write(this.ms.ToArray(), 0, (int)this.ms.Length);
                 fs.Close();
-            } catch (IOException) {
+            } catch(IOException) {
                 return false;
             }
             return true;
         }
 
         public MemoryStream Output() {
-            return ms;
+            return this.ms;
         }
 
         /**
 		 * Analyzes image colors and creates color map.
 		 */
         protected void AnalyzePixels() {
-            var len = pixels.Length;
+            var len = this.pixels.Length;
             var nPix = len / 3;
-            indexedPixels = new byte[nPix];
-            var nq = new NeuQuant(pixels, len, sample);
+            this.indexedPixels = new byte[nPix];
+            var nq = new NeuQuant(this.pixels, len, this.sample);
             // initialize quantizer
-            colorTab = nq.Process(); // create reduced palette
+            this.colorTab = nq.Process(); // create reduced palette
             // convert map from BGR to RGB
             //			for (int i = 0; i < colorTab.Length; i += 3) 
             //			{
@@ -324,19 +353,21 @@ namespace ExtractorSharp.Core.Coder.Gif {
             //			}
             // map image pixels to new palette
             var k = 0;
-            for (var i = 0; i < nPix; i++) {
+            for(var i = 0; i < nPix; i++) {
                 var index =
-                    nq.Map(pixels[k++] & 0xff,
-                        pixels[k++] & 0xff,
-                        pixels[k++] & 0xff);
-                usedEntry[index] = true;
-                indexedPixels[i] = (byte) index;
+                    nq.Map(this.pixels[k++] & 0xff,
+                        this.pixels[k++] & 0xff,
+                        this.pixels[k++] & 0xff);
+                this.usedEntry[index] = true;
+                this.indexedPixels[i] = (byte)index;
             }
-            pixels = null;
-            colorDepth = 8;
-            palSize = 7;
+            this.pixels = null;
+            this.colorDepth = 8;
+            this.palSize = 7;
             // get closest match to transparent color if specified
-            if (transparent != Color.Empty) transIndex = nq.Map(transparent.B, transparent.G, transparent.R);
+            if(this.transparent != Color.Empty) {
+                this.transIndex = nq.Map(this.transparent.B, this.transparent.G, this.transparent.R);
+            }
         }
 
         /**
@@ -344,20 +375,23 @@ namespace ExtractorSharp.Core.Coder.Gif {
 		 *
 		 */
         protected int FindClosest(Color c) {
-            if (colorTab == null) return -1;
+            if(this.colorTab == null) {
+                return -1;
+            }
+
             int r = c.R;
             int g = c.G;
             int b = c.B;
             var minpos = 0;
             var dmin = 256 * 256 * 256;
-            var len = colorTab.Length;
-            for (var i = 0; i < len;) {
-                var dr = r - (colorTab[i++] & 0xff);
-                var dg = g - (colorTab[i++] & 0xff);
-                var db = b - (colorTab[i] & 0xff);
+            var len = this.colorTab.Length;
+            for(var i = 0; i < len;) {
+                var dr = r - (this.colorTab[i++] & 0xff);
+                var dg = g - (this.colorTab[i++] & 0xff);
+                var db = b - (this.colorTab[i] & 0xff);
                 var d = dr * dr + dg * dg + db * db;
                 var index = i / 3;
-                if (usedEntry[index] && d < dmin) {
+                if(this.usedEntry[index] && d < dmin) {
                     dmin = d;
                     minpos = index;
                 }
@@ -370,32 +404,32 @@ namespace ExtractorSharp.Core.Coder.Gif {
 		 * Extracts image pixels into byte array "pixels"
 		 */
         protected void GetImagePixels() {
-            var w = image.Width;
-            var h = image.Height;
+            var w = this.image.Width;
+            var h = this.image.Height;
             //		int type = image.GetType().;
-            if (w != width
-                || h != height
+            if(w != this.width
+                || h != this.height
             ) {
                 // create new image with right size/format
                 Image temp =
-                    new Bitmap(width, height);
+                    new Bitmap(this.width, this.height);
                 var g = Graphics.FromImage(temp);
-                g.DrawImage(image, 0, 0);
-                image = temp;
+                g.DrawImage(this.image, 0, 0);
+                this.image = temp;
                 g.Dispose();
             }
             /*
 				ToDo:
 				improve performance: use unsafe code 
 			*/
-            pixels = new byte[3 * image.Width * image.Height];
-            var tempBitmap = new Bitmap(image);
+            this.pixels = new byte[3 * this.image.Width * this.image.Height];
+            var tempBitmap = new Bitmap(this.image);
             var data = tempBitmap.ToArray();
-            var len = image.Width * image.Height;
-            for (var i = 0; i < len; i++) {
-                pixels[i * 3 + 0] = data[i * 4 + 2];
-                pixels[i * 3 + 1] = data[i * 4 + 1];
-                pixels[i * 3 + 2] = data[i * 4 + 0];
+            var len = this.image.Width * this.image.Height;
+            for(var i = 0; i < len; i++) {
+                this.pixels[i * 3 + 0] = data[i * 4 + 2];
+                this.pixels[i * 3 + 1] = data[i * 4 + 1];
+                this.pixels[i * 3 + 2] = data[i * 4 + 0];
             }
 
             //		pixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
@@ -405,49 +439,52 @@ namespace ExtractorSharp.Core.Coder.Gif {
 		 * Writes Graphic Control Extension
 		 */
         protected void WriteGraphicCtrlExt() {
-            ms.WriteByte(0x21); // extension introducer
-            ms.WriteByte(0xf9); // GCE label
-            ms.WriteByte(4); // data block size
+            this.ms.WriteByte(0x21); // extension introducer
+            this.ms.WriteByte(0xf9); // GCE label
+            this.ms.WriteByte(4); // data block size
             int transp, disp;
-            if (transparent == Color.Empty) {
+            if(this.transparent == Color.Empty) {
                 transp = 0;
                 disp = 0; // dispose = no action
             } else {
                 transp = 1;
                 disp = 2; // force clear if using transparent color
             }
-            if (dispose >= 0) disp = dispose & 7; // user override
+            if(this.dispose >= 0) {
+                disp = this.dispose & 7; // user override
+            }
+
             disp <<= 2;
 
             // packed fields
-            ms.WriteByte(Convert.ToByte(0 | // 1:3 reserved
+            this.ms.WriteByte(Convert.ToByte(0 | // 1:3 reserved
                                         disp | // 4:6 disposal
                                         0 | // 7   user input - 0 = none
                                         transp)); // 8   transparency flag
 
-            WriteShort(delay); // delay x 1/100 sec
-            ms.WriteByte(Convert.ToByte(transIndex)); // transparent color index
-            ms.WriteByte(0); // block terminator
+            this.WriteShort(this.delay); // delay x 1/100 sec
+            this.ms.WriteByte(Convert.ToByte(this.transIndex)); // transparent color index
+            this.ms.WriteByte(0); // block terminator
         }
 
         /**
 		 * Writes Image Descriptor
 		 */
         protected void WriteImageDesc() {
-            ms.WriteByte(0x2c); // image separator
-            WriteShort(0); // image position x,y = 0,0
-            WriteShort(0);
-            WriteShort(width); // image size
-            WriteShort(height);
+            this.ms.WriteByte(0x2c); // image separator
+            this.WriteShort(0); // image position x,y = 0,0
+            this.WriteShort(0);
+            this.WriteShort(this.width); // image size
+            this.WriteShort(this.height);
             // packed fields
-            if (firstFrame) {
-                ms.WriteByte(0);
+            if(this.firstFrame) {
+                this.ms.WriteByte(0);
             } else {
-                ms.WriteByte(Convert.ToByte(0x80 | // 1 local color table  1=yes
+                this.ms.WriteByte(Convert.ToByte(0x80 | // 1 local color table  1=yes
                                             0 | // 2 interlace - 0=no
                                             0 | // 3 sorted - 0=no
                                             0 | // 4-5 reserved
-                                            palSize)); // 6-8 size of color table
+                                            this.palSize)); // 6-8 size of color table
             }
         }
 
@@ -456,16 +493,16 @@ namespace ExtractorSharp.Core.Coder.Gif {
 		 */
         protected void WriteLSD() {
             // logical screen size
-            WriteShort(width);
-            WriteShort(height);
+            this.WriteShort(this.width);
+            this.WriteShort(this.height);
             // packed fields
-            ms.WriteByte(Convert.ToByte(0x80 | // 1   : global color table flag = 1 (gct used)
+            this.ms.WriteByte(Convert.ToByte(0x80 | // 1   : global color table flag = 1 (gct used)
                                         0x70 | // 2-4 : color resolution = 7
                                         0x00 | // 5   : gct sort flag = 0
-                                        palSize)); // 6-8 : gct size
+                                        this.palSize)); // 6-8 : gct size
 
-            ms.WriteByte(0); // background color index
-            ms.WriteByte(0); // pixel aspect ratio - assume 1:1
+            this.ms.WriteByte(0); // background color index
+            this.ms.WriteByte(0); // pixel aspect ratio - assume 1:1
         }
 
         /**
@@ -473,23 +510,25 @@ namespace ExtractorSharp.Core.Coder.Gif {
 		 * repeat count.
 		 */
         protected void WriteNetscapeExt() {
-            ms.WriteByte(0x21); // extension introducer
-            ms.WriteByte(0xff); // app extension label
-            ms.WriteByte(11); // block size
-            WriteString("NETSCAPE" + "2.0"); // app id + auth code
-            ms.WriteByte(3); // sub-block size
-            ms.WriteByte(1); // loop sub-block id
-            WriteShort(repeat); // loop count (extra iterations, 0=repeat forever)
-            ms.WriteByte(0); // block terminator
+            this.ms.WriteByte(0x21); // extension introducer
+            this.ms.WriteByte(0xff); // app extension label
+            this.ms.WriteByte(11); // block size
+            this.WriteString("NETSCAPE" + "2.0"); // app id + auth code
+            this.ms.WriteByte(3); // sub-block size
+            this.ms.WriteByte(1); // loop sub-block id
+            this.WriteShort(this.repeat); // loop count (extra iterations, 0=repeat forever)
+            this.ms.WriteByte(0); // block terminator
         }
 
         /**
 		 * Writes color table
 		 */
         protected void WritePalette() {
-            ms.Write(colorTab, 0, colorTab.Length);
-            var n = 3 * 256 - colorTab.Length;
-            for (var i = 0; i < n; i++) ms.WriteByte(0);
+            this.ms.Write(this.colorTab, 0, this.colorTab.Length);
+            var n = 3 * 256 - this.colorTab.Length;
+            for(var i = 0; i < n; i++) {
+                this.ms.WriteByte(0);
+            }
         }
 
         /**
@@ -497,16 +536,16 @@ namespace ExtractorSharp.Core.Coder.Gif {
 		 */
         protected void WritePixels() {
             var encoder =
-                new LZWEncoder(width, height, indexedPixels, colorDepth);
-            encoder.Encode(ms);
+                new LZWEncoder(this.width, this.height, this.indexedPixels, this.colorDepth);
+            encoder.Encode(this.ms);
         }
 
         /**
 		 *    Write 16-bit value to output stream, LSB first
 		 */
         protected void WriteShort(int value) {
-            ms.WriteByte(Convert.ToByte(value & 0xff));
-            ms.WriteByte(Convert.ToByte((value >> 8) & 0xff));
+            this.ms.WriteByte(Convert.ToByte(value & 0xff));
+            this.ms.WriteByte(Convert.ToByte((value >> 8) & 0xff));
         }
 
         /**
@@ -514,7 +553,9 @@ namespace ExtractorSharp.Core.Coder.Gif {
 		 */
         protected void WriteString(string s) {
             var chars = s.ToCharArray();
-            for (var i = 0; i < chars.Length; i++) ms.WriteByte((byte) chars[i]);
+            for(var i = 0; i < chars.Length; i++) {
+                this.ms.WriteByte((byte)chars[i]);
+            }
         }
     }
 }

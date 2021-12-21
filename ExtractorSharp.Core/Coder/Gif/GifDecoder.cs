@@ -45,7 +45,6 @@ using System;
 using System.Collections;
 using System.Drawing;
 using System.IO;
-using ExtractorSharp.Core.Lib;
 
 namespace ExtractorSharp.Core.Coder.Gif {
     public class GifDecoder {
@@ -126,9 +125,12 @@ namespace ExtractorSharp.Core.Coder.Gif {
          */
         public int GetDelay(int n) {
             //
-            delay = -1;
-            if (n >= 0 && n < frameCount) delay = ((GifFrame) frames[n]).delay;
-            return delay;
+            this.delay = -1;
+            if(n >= 0 && n < this.frameCount) {
+                this.delay = ((GifFrame)this.frames[n]).delay;
+            }
+
+            return this.delay;
         }
 
         /**
@@ -136,7 +138,7 @@ namespace ExtractorSharp.Core.Coder.Gif {
          * @return frame count
          */
         public int GetFrameCount() {
-            return frameCount;
+            return this.frameCount;
         }
 
         /**
@@ -145,7 +147,7 @@ namespace ExtractorSharp.Core.Coder.Gif {
          * @return BufferedImage containing first frame, or null if none.
          */
         public Image GetImage() {
-            return GetFrame(0);
+            return this.GetFrame(0);
         }
 
         /**
@@ -155,7 +157,7 @@ namespace ExtractorSharp.Core.Coder.Gif {
          * @return iteration count if one was specified, else 1.
          */
         public int GetLoopCount() {
-            return loopCount;
+            return this.loopCount;
         }
 
         /**
@@ -164,9 +166,9 @@ namespace ExtractorSharp.Core.Coder.Gif {
          */
         private int[] GetPixels(Bitmap bitmap) {
             var data = bitmap.ToArray();
-            var len = image.Width * image.Height;
+            var len = this.image.Width * this.image.Height;
             var pixels = new int[4 * len];
-            for (var i = 0; i < len; i++) {
+            for(var i = 0; i < len; i++) {
                 pixels[i * 3 + 0] = data[i * 4 + 0];
                 pixels[i * 3 + 1] = data[i * 4 + 1];
                 pixels[i * 3 + 2] = data[i * 4 + 2];
@@ -175,54 +177,54 @@ namespace ExtractorSharp.Core.Coder.Gif {
         }
 
         private void SetPixels(int[] pixels) {
-            var len = image.Width * image.Height;
+            var len = this.image.Width * this.image.Height;
             var data = new byte[len * 4];
-            for (var i = 0; i < len; i++) {
+            for(var i = 0; i < len; i++) {
                 var pixel = pixels[i];
-                data[i * 4 + 0] = (byte) (pixel & 0xff);
-                data[i * 4 + 1] = (byte) ((pixel >> 8) & 0xff);
-                data[i * 4 + 2] = (byte) ((pixel >> 16) & 0xff);
-                data[i * 4 + 3] = (byte) (pixel >> 24);
+                data[i * 4 + 0] = (byte)(pixel & 0xff);
+                data[i * 4 + 1] = (byte)((pixel >> 8) & 0xff);
+                data[i * 4 + 2] = (byte)((pixel >> 16) & 0xff);
+                data[i * 4 + 3] = (byte)(pixel >> 24);
             }
-            bitmap = Bitmaps.FromArray(data, image.Size);
+            this.bitmap = Bitmaps.FromArray(data, this.image.Size);
         }
 
         protected void SetPixels() {
             // expose destination image's pixels as int array
             //		int[] dest =
             //			(( int ) image.getRaster().getDataBuffer()).getData();
-            var dest = GetPixels(bitmap);
+            var dest = this.GetPixels(this.bitmap);
 
             // fill in starting image contents based on last image's dispose code
-            if (lastDispose > 0) {
-                if (lastDispose == 3) {
+            if(this.lastDispose > 0) {
+                if(this.lastDispose == 3) {
                     // use image before last
-                    var n = frameCount - 2;
-                    if (n > 0) {
-                        lastImage = GetFrame(n - 1);
+                    var n = this.frameCount - 2;
+                    if(n > 0) {
+                        this.lastImage = this.GetFrame(n - 1);
                     } else {
-                        lastImage = null;
+                        this.lastImage = null;
                     }
                 }
 
-                if (lastImage != null) {
+                if(this.lastImage != null) {
                     //				int[] prev =
                     //					((DataBufferInt) lastImage.getRaster().getDataBuffer()).getData();
-                    var prev = GetPixels(new Bitmap(lastImage));
-                    Array.Copy(prev, 0, dest, 0, width * height);
+                    var prev = this.GetPixels(new Bitmap(this.lastImage));
+                    Array.Copy(prev, 0, dest, 0, this.width * this.height);
                     // copy pixels
 
-                    if (lastDispose == 2) {
+                    if(this.lastDispose == 2) {
                         // fill last image rect area with background color
-                        var g = Graphics.FromImage(image);
+                        var g = Graphics.FromImage(this.image);
                         var c = Color.Empty;
-                        if (transparency) {
+                        if(this.transparency) {
                             c = Color.FromArgb(0, 0, 0, 0); // assume background is transparent
                         } else {
-                            c = Color.FromArgb(lastBgColor);
+                            c = Color.FromArgb(this.lastBgColor);
                         }
                         var brush = new SolidBrush(c);
-                        g.FillRectangle(brush, lastRect);
+                        g.FillRectangle(brush, this.lastRect);
                         brush.Dispose();
                         g.Dispose();
                     }
@@ -233,12 +235,12 @@ namespace ExtractorSharp.Core.Coder.Gif {
             var pass = 1;
             var inc = 8;
             var iline = 0;
-            for (var i = 0; i < ih; i++) {
+            for(var i = 0; i < this.ih; i++) {
                 var line = i;
-                if (interlace) {
-                    if (iline >= ih) {
+                if(this.interlace) {
+                    if(iline >= this.ih) {
                         pass++;
-                        switch (pass) {
+                        switch(pass) {
                             case 2:
                                 iline = 4;
                                 break;
@@ -255,23 +257,29 @@ namespace ExtractorSharp.Core.Coder.Gif {
                     line = iline;
                     iline += inc;
                 }
-                line += iy;
-                if (line < height) {
-                    var k = line * width;
-                    var dx = k + ix; // start of line in dest
-                    var dlim = dx + iw; // end of dest line
-                    if (k + width < dlim) dlim = k + width; // past dest edge
-                    var sx = i * iw; // start of line in source
-                    while (dx < dlim) {
+                line += this.iy;
+                if(line < this.height) {
+                    var k = line * this.width;
+                    var dx = k + this.ix; // start of line in dest
+                    var dlim = dx + this.iw; // end of dest line
+                    if(k + this.width < dlim) {
+                        dlim = k + this.width; // past dest edge
+                    }
+
+                    var sx = i * this.iw; // start of line in source
+                    while(dx < dlim) {
                         // map color and insert in destination
-                        var index = pixels[sx++] & 0xff;
-                        var c = act[index];
-                        if (c != 0) dest[dx] = c;
+                        var index = this.pixels[sx++] & 0xff;
+                        var c = this.act[index];
+                        if(c != 0) {
+                            dest[dx] = c;
+                        }
+
                         dx++;
                     }
                 }
             }
-            SetPixels(dest);
+            this.SetPixels(dest);
         }
 
         /**
@@ -281,7 +289,10 @@ namespace ExtractorSharp.Core.Coder.Gif {
          */
         public Image GetFrame(int n) {
             Image im = null;
-            if (n >= 0 && n < frameCount) im = ((GifFrame) frames[n]).image;
+            if(n >= 0 && n < this.frameCount) {
+                im = ((GifFrame)this.frames[n]).image;
+            }
+
             return im;
         }
 
@@ -291,7 +302,7 @@ namespace ExtractorSharp.Core.Coder.Gif {
          * @return GIF image dimensions
          */
         public Size GetFrameSize() {
-            return new Size(width, height);
+            return new Size(this.width, this.height);
         }
 
         /**
@@ -301,19 +312,21 @@ namespace ExtractorSharp.Core.Coder.Gif {
          * @return read status code (0 = no errors)
          */
         public int Read(Stream inStream) {
-            Init();
-            if (inStream != null) {
+            this.Init();
+            if(inStream != null) {
                 this.inStream = inStream;
-                ReadHeader();
-                if (!Error()) {
-                    ReadContents();
-                    if (frameCount < 0) status = STATUS_FORMAT_ERROR;
+                this.ReadHeader();
+                if(!this.Error()) {
+                    this.ReadContents();
+                    if(this.frameCount < 0) {
+                        this.status = STATUS_FORMAT_ERROR;
+                    }
                 }
                 inStream.Close();
             } else {
-                status = STATUS_OPEN_ERROR;
+                this.status = STATUS_OPEN_ERROR;
             }
-            return status;
+            return this.status;
         }
 
         /**
@@ -324,15 +337,15 @@ namespace ExtractorSharp.Core.Coder.Gif {
          * @return read status code (0 = no errors)
          */
         public int Read(string name) {
-            status = STATUS_OK;
+            this.status = STATUS_OK;
             try {
                 name = name.Trim().ToLower();
-                status = Read(new FileInfo(name).OpenRead());
-            } catch (IOException) {
-                status = STATUS_OPEN_ERROR;
+                this.status = this.Read(new FileInfo(name).OpenRead());
+            } catch(IOException) {
+                this.status = STATUS_OPEN_ERROR;
             }
 
-            return status;
+            return this.status;
         }
 
         /**
@@ -341,7 +354,7 @@ namespace ExtractorSharp.Core.Coder.Gif {
          */
         protected void DecodeImageData() {
             var NullCode = -1;
-            var npix = iw * ih;
+            var npix = this.iw * this.ih;
             int available,
                 clear,
                 code_mask,
@@ -360,42 +373,53 @@ namespace ExtractorSharp.Core.Coder.Gif {
                 bi,
                 pi;
 
-            if (pixels == null || pixels.Length < npix) pixels = new byte[npix]; // allocate new pixel array
-            if (prefix == null) prefix = new short[MaxStackSize];
-            if (suffix == null) suffix = new byte[MaxStackSize];
-            if (pixelStack == null) pixelStack = new byte[MaxStackSize + 1];
+            if(this.pixels == null || this.pixels.Length < npix) {
+                this.pixels = new byte[npix]; // allocate new pixel array
+            }
+
+            if(this.prefix == null) {
+                this.prefix = new short[MaxStackSize];
+            }
+
+            if(this.suffix == null) {
+                this.suffix = new byte[MaxStackSize];
+            }
+
+            if(this.pixelStack == null) {
+                this.pixelStack = new byte[MaxStackSize + 1];
+            }
 
             //  Initialize GIF data stream decoder.
 
-            data_size = Read();
+            data_size = this.Read();
             clear = 1 << data_size;
             end_of_information = clear + 1;
             available = clear + 2;
             old_code = NullCode;
             code_size = data_size + 1;
             code_mask = (1 << code_size) - 1;
-            for (code = 0; code < clear; code++) {
-                prefix[code] = 0;
-                suffix[code] = (byte) code;
+            for(code = 0; code < clear; code++) {
+                this.prefix[code] = 0;
+                this.suffix[code] = (byte)code;
             }
 
             //  Decode GIF pixel stream.
 
             datum = bits = count = first = top = pi = bi = 0;
 
-            for (i = 0; i < npix;) {
-                if (top == 0) {
-                    if (bits < code_size) {
+            for(i = 0; i < npix;) {
+                if(top == 0) {
+                    if(bits < code_size) {
                         //  Load bytes until there are enough bits for a code.
-                        if (count == 0) {
+                        if(count == 0) {
                             // Read a new data block.
-                            count = ReadBlock();
-                            if (count <= 0) {
+                            count = this.ReadBlock();
+                            if(count <= 0) {
                                 break;
                             }
                             bi = 0;
                         }
-                        datum += (block[bi] & 0xff) << bits;
+                        datum += (this.block[bi] & 0xff) << bits;
                         bits += 8;
                         bi++;
                         count--;
@@ -410,10 +434,10 @@ namespace ExtractorSharp.Core.Coder.Gif {
 
                     //  Interpret the code
 
-                    if (code > available || code == end_of_information) {
+                    if(code > available || code == end_of_information) {
                         break;
                     }
-                    if (code == clear) {
+                    if(code == clear) {
                         //  Reset decoder.
                         code_size = data_size + 1;
                         code_mask = (1 << code_size) - 1;
@@ -421,33 +445,33 @@ namespace ExtractorSharp.Core.Coder.Gif {
                         old_code = NullCode;
                         continue;
                     }
-                    if (old_code == NullCode) {
-                        pixelStack[top++] = suffix[code];
+                    if(old_code == NullCode) {
+                        this.pixelStack[top++] = this.suffix[code];
                         old_code = code;
                         first = code;
                         continue;
                     }
                     in_code = code;
-                    if (code == available) {
-                        pixelStack[top++] = (byte) first;
+                    if(code == available) {
+                        this.pixelStack[top++] = (byte)first;
                         code = old_code;
                     }
-                    while (code > clear) {
-                        pixelStack[top++] = suffix[code];
-                        code = prefix[code];
+                    while(code > clear) {
+                        this.pixelStack[top++] = this.suffix[code];
+                        code = this.prefix[code];
                     }
-                    first = suffix[code] & 0xff;
+                    first = this.suffix[code] & 0xff;
 
                     //  Add a new string to the string table,
 
-                    if (available >= MaxStackSize) {
+                    if(available >= MaxStackSize) {
                         break;
                     }
-                    pixelStack[top++] = (byte) first;
-                    prefix[available] = (short) old_code;
-                    suffix[available] = (byte) first;
+                    this.pixelStack[top++] = (byte)first;
+                    this.prefix[available] = (short)old_code;
+                    this.suffix[available] = (byte)first;
                     available++;
-                    if ((available & code_mask) == 0
+                    if((available & code_mask) == 0
                         && available < MaxStackSize) {
                         code_size++;
                         code_mask += available;
@@ -458,29 +482,31 @@ namespace ExtractorSharp.Core.Coder.Gif {
                 //  Pop a pixel off the pixel stack.
 
                 top--;
-                pixels[pi++] = pixelStack[top];
+                this.pixels[pi++] = this.pixelStack[top];
                 i++;
             }
 
-            for (i = pi; i < npix; i++) pixels[i] = 0; // clear missing pixels
+            for(i = pi; i < npix; i++) {
+                this.pixels[i] = 0; // clear missing pixels
+            }
         }
 
         /**
          * Returns true if an error was encountered during reading/decoding
          */
         protected bool Error() {
-            return status != STATUS_OK;
+            return this.status != STATUS_OK;
         }
 
         /**
          * Initializes or re-initializes reader
          */
         protected void Init() {
-            status = STATUS_OK;
-            frameCount = 0;
-            frames = new ArrayList();
-            gct = null;
-            lct = null;
+            this.status = STATUS_OK;
+            this.frameCount = 0;
+            this.frames = new ArrayList();
+            this.gct = null;
+            this.lct = null;
         }
 
         /**
@@ -489,9 +515,9 @@ namespace ExtractorSharp.Core.Coder.Gif {
         protected int Read() {
             var curByte = 0;
             try {
-                curByte = inStream.ReadByte();
-            } catch (IOException) {
-                status = STATUS_FORMAT_ERROR;
+                curByte = this.inStream.ReadByte();
+            } catch(IOException) {
+                this.status = STATUS_FORMAT_ERROR;
             }
             return curByte;
         }
@@ -502,21 +528,23 @@ namespace ExtractorSharp.Core.Coder.Gif {
          * @return number of bytes stored in "buffer"
          */
         protected int ReadBlock() {
-            blockSize = Read();
+            this.blockSize = this.Read();
             var n = 0;
-            if (blockSize > 0) {
+            if(this.blockSize > 0) {
                 try {
                     var count = 0;
-                    while (n < blockSize) {
-                        count = inStream.Read(block, n, blockSize - n);
-                        if (count == -1) {
+                    while(n < this.blockSize) {
+                        count = this.inStream.Read(this.block, n, this.blockSize - n);
+                        if(count == -1) {
                             break;
                         }
                         n += count;
                     }
-                } catch (IOException) { }
+                } catch(IOException) { }
 
-                if (n < blockSize) status = STATUS_FORMAT_ERROR;
+                if(n < this.blockSize) {
+                    this.status = STATUS_FORMAT_ERROR;
+                }
             }
             return n;
         }
@@ -533,15 +561,15 @@ namespace ExtractorSharp.Core.Coder.Gif {
             var c = new byte[nbytes];
             var n = 0;
             try {
-                n = inStream.Read(c, 0, c.Length);
-            } catch (IOException) { }
-            if (n < nbytes) {
-                status = STATUS_FORMAT_ERROR;
+                n = this.inStream.Read(c, 0, c.Length);
+            } catch(IOException) { }
+            if(n < nbytes) {
+                this.status = STATUS_FORMAT_ERROR;
             } else {
                 tab = new int[256]; // max size to avoid bounds checks
                 var i = 0;
                 var j = 0;
-                while (i < ncolors) {
+                while(i < ncolors) {
                     var r = c[j++] & 0xff;
                     var g = c[j++] & 0xff;
                     var b = c[j++] & 0xff;
@@ -557,33 +585,36 @@ namespace ExtractorSharp.Core.Coder.Gif {
         protected void ReadContents() {
             // read GIF file content blocks
             var done = false;
-            while (!(done || Error())) {
-                var code = Read();
-                switch (code) {
+            while(!(done || this.Error())) {
+                var code = this.Read();
+                switch(code) {
                     case 0x2C: // image separator
-                        ReadImage();
+                        this.ReadImage();
                         break;
 
                     case 0x21: // extension
-                        code = Read();
-                        switch (code) {
+                        code = this.Read();
+                        switch(code) {
                             case 0xf9: // graphics control extension
-                                ReadGraphicControlExt();
+                                this.ReadGraphicControlExt();
                                 break;
 
                             case 0xff: // application extension
-                                ReadBlock();
+                                this.ReadBlock();
                                 var app = "";
-                                for (var i = 0; i < 11; i++) app += (char) block[i];
-                                if (app.Equals("NETSCAPE2.0")) {
-                                    ReadNetscapeExt();
+                                for(var i = 0; i < 11; i++) {
+                                    app += (char)this.block[i];
+                                }
+
+                                if(app.Equals("NETSCAPE2.0")) {
+                                    this.ReadNetscapeExt();
                                 } else {
-                                    Skip(); // don't care
+                                    this.Skip(); // don't care
                                 }
                                 break;
 
                             default: // uninteresting extension
-                                Skip();
+                                this.Skip();
                                 break;
                         }
                         break;
@@ -596,7 +627,7 @@ namespace ExtractorSharp.Core.Coder.Gif {
                         break;
 
                     default:
-                        status = STATUS_FORMAT_ERROR;
+                        this.status = STATUS_FORMAT_ERROR;
                         break;
                 }
             }
@@ -606,14 +637,17 @@ namespace ExtractorSharp.Core.Coder.Gif {
          * Reads Graphics Control Extension values
          */
         protected void ReadGraphicControlExt() {
-            Read(); // block size
-            var packed = Read(); // packed fields
-            dispose = (packed & 0x1c) >> 2; // disposal method
-            if (dispose == 0) dispose = 1; // elect to keep old image if discretionary
-            transparency = (packed & 1) != 0;
-            delay = ReadShort() * 10; // delay in milliseconds
-            transIndex = Read(); // transparent color index
-            Read(); // block terminator
+            this.Read(); // block size
+            var packed = this.Read(); // packed fields
+            this.dispose = (packed & 0x1c) >> 2; // disposal method
+            if(this.dispose == 0) {
+                this.dispose = 1; // elect to keep old image if discretionary
+            }
+
+            this.transparency = (packed & 1) != 0;
+            this.delay = this.ReadShort() * 10; // delay in milliseconds
+            this.transIndex = this.Read(); // transparent color index
+            this.Read(); // block terminator
         }
 
         /**
@@ -621,16 +655,19 @@ namespace ExtractorSharp.Core.Coder.Gif {
          */
         protected void ReadHeader() {
             var id = "";
-            for (var i = 0; i < 6; i++) id += (char) Read();
-            if (!id.StartsWith("GIF")) {
-                status = STATUS_FORMAT_ERROR;
+            for(var i = 0; i < 6; i++) {
+                id += (char)this.Read();
+            }
+
+            if(!id.StartsWith("GIF")) {
+                this.status = STATUS_FORMAT_ERROR;
                 return;
             }
 
-            ReadLSD();
-            if (gctFlag && !Error()) {
-                gct = ReadColorTable(gctSize);
-                bgColor = gct[bgIndex];
+            this.ReadLSD();
+            if(this.gctFlag && !this.Error()) {
+                this.gct = this.ReadColorTable(this.gctSize);
+                this.bgColor = this.gct[this.bgIndex];
             }
         }
 
@@ -638,56 +675,65 @@ namespace ExtractorSharp.Core.Coder.Gif {
          * Reads next frame image
          */
         protected void ReadImage() {
-            ix = ReadShort(); // (sub)image position & size
-            iy = ReadShort();
-            iw = ReadShort();
-            ih = ReadShort();
+            this.ix = this.ReadShort(); // (sub)image position & size
+            this.iy = this.ReadShort();
+            this.iw = this.ReadShort();
+            this.ih = this.ReadShort();
 
-            var packed = Read();
-            lctFlag = (packed & 0x80) != 0; // 1 - local color table flag
-            interlace = (packed & 0x40) != 0; // 2 - interlace flag
+            var packed = this.Read();
+            this.lctFlag = (packed & 0x80) != 0; // 1 - local color table flag
+            this.interlace = (packed & 0x40) != 0; // 2 - interlace flag
             // 3 - sort flag
             // 4-5 - reserved
-            lctSize = 2 << (packed & 7); // 6-8 - local color table size
+            this.lctSize = 2 << (packed & 7); // 6-8 - local color table size
 
-            if (lctFlag) {
-                lct = ReadColorTable(lctSize); // read table
-                act = lct; // make local table active
+            if(this.lctFlag) {
+                this.lct = this.ReadColorTable(this.lctSize); // read table
+                this.act = this.lct; // make local table active
             } else {
-                act = gct; // make global table active
-                if (bgIndex == transIndex) {
-                    bgColor = 0;
+                this.act = this.gct; // make global table active
+                if(this.bgIndex == this.transIndex) {
+                    this.bgColor = 0;
                 }
             }
             var save = 0;
-            if (transparency) {
-                save = act[transIndex];
-                act[transIndex] = 0; // set transparent color if specified
+            if(this.transparency) {
+                save = this.act[this.transIndex];
+                this.act[this.transIndex] = 0; // set transparent color if specified
             }
 
-            if (act == null) status = STATUS_FORMAT_ERROR; // no color table defined
+            if(this.act == null) {
+                this.status = STATUS_FORMAT_ERROR; // no color table defined
+            }
 
-            if (Error()) return;
+            if(this.Error()) {
+                return;
+            }
 
-            DecodeImageData(); // decode pixel data
-            Skip();
+            this.DecodeImageData(); // decode pixel data
+            this.Skip();
 
-            if (Error()) return;
+            if(this.Error()) {
+                return;
+            }
 
-            frameCount++;
+            this.frameCount++;
 
             // create new image to receive frame data
             //		image =
             //			new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB_PRE);
 
-            bitmap = new Bitmap(width, height);
-            image = bitmap;
-            SetPixels(); // transfer pixel data to image
+            this.bitmap = new Bitmap(this.width, this.height);
+            this.image = this.bitmap;
+            this.SetPixels(); // transfer pixel data to image
 
-            frames.Add(new GifFrame(bitmap, delay)); // add image to frame list
+            this.frames.Add(new GifFrame(this.bitmap, this.delay)); // add image to frame list
 
-            if (transparency) act[transIndex] = save;
-            ResetFrame();
+            if(this.transparency) {
+                this.act[this.transIndex] = save;
+            }
+
+            this.ResetFrame();
         }
 
         /**
@@ -695,18 +741,18 @@ namespace ExtractorSharp.Core.Coder.Gif {
          */
         protected void ReadLSD() {
             // logical screen size
-            width = ReadShort();
-            height = ReadShort();
+            this.width = this.ReadShort();
+            this.height = this.ReadShort();
 
             // packed fields
-            var packed = Read();
-            gctFlag = (packed & 0x80) != 0; // 1   : global color table flag
+            var packed = this.Read();
+            this.gctFlag = (packed & 0x80) != 0; // 1   : global color table flag
             // 2-4 : color resolution
             // 5   : gct sort flag
-            gctSize = 2 << (packed & 7); // 6-8 : gct size
+            this.gctSize = 2 << (packed & 7); // 6-8 : gct size
 
-            bgIndex = Read(); // background color index
-            pixelAspect = Read(); // pixel aspect ratio
+            this.bgIndex = this.Read(); // background color index
+            this.pixelAspect = this.Read(); // pixel aspect ratio
         }
 
         /**
@@ -714,14 +760,14 @@ namespace ExtractorSharp.Core.Coder.Gif {
          */
         protected void ReadNetscapeExt() {
             do {
-                ReadBlock();
-                if (block[0] == 1) {
+                this.ReadBlock();
+                if(this.block[0] == 1) {
                     // loop count sub-block
-                    var b1 = block[1] & 0xff;
-                    var b2 = block[2] & 0xff;
-                    loopCount = (b2 << 8) | b1;
+                    var b1 = this.block[1] & 0xff;
+                    var b2 = this.block[2] & 0xff;
+                    this.loopCount = (b2 << 8) | b1;
                 }
-            } while (blockSize > 0 && !Error());
+            } while(this.blockSize > 0 && !this.Error());
         }
 
         /**
@@ -729,18 +775,18 @@ namespace ExtractorSharp.Core.Coder.Gif {
          */
         protected int ReadShort() {
             // read 16-bit value, LSB first
-            return Read() | (Read() << 8);
+            return this.Read() | (this.Read() << 8);
         }
 
         /**
          * Resets frame state for reading next image.
          */
         protected void ResetFrame() {
-            lastDispose = dispose;
-            lastRect = new Rectangle(ix, iy, iw, ih);
-            lastImage = image;
-            lastBgColor = bgColor;
-            lct = null;
+            this.lastDispose = this.dispose;
+            this.lastRect = new Rectangle(this.ix, this.iy, this.iw, this.ih);
+            this.lastImage = this.image;
+            this.lastBgColor = this.bgColor;
+            this.lct = null;
         }
 
         /**
@@ -749,8 +795,8 @@ namespace ExtractorSharp.Core.Coder.Gif {
          */
         protected void Skip() {
             do {
-                ReadBlock();
-            } while (blockSize > 0 && !Error());
+                this.ReadBlock();
+            } while(this.blockSize > 0 && !this.Error());
         }
 
         public class GifFrame {
@@ -758,8 +804,8 @@ namespace ExtractorSharp.Core.Coder.Gif {
             public Image image;
 
             public GifFrame(Image im, int del) {
-                image = im;
-                delay = del;
+                this.image = im;
+                this.delay = del;
             }
         }
     }

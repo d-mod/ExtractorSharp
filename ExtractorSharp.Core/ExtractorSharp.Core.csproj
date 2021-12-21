@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ExtractorSharp.Core</RootNamespace>
     <AssemblyName>ExtractorSharp.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -23,7 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -33,9 +33,9 @@
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,42 +45,28 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Command\IAciton.cs" />
-    <Compile Include="Command\ICommand.cs" />
-    <Compile Include="Command\ICommandMessage.cs" />
-    <Compile Include="Command\IExecutable.cs" />
-    <Compile Include="Command\IFileFlushable.cs" />
-    <Compile Include="Composition\ClickType.cs" />
-    <Compile Include="Composition\IConnector.cs" />
-    <Compile Include="Composition\IFileSupport.cs" />
-    <Compile Include="Composition\IEffect.cs" />
-    <Compile Include="Composition\IMenuItem.cs" />
-    <Compile Include="Composition\IMergeProgress.cs" />
-    <Compile Include="Composition\IScriptSupport.cs" />
-    <Compile Include="Composition\ISorter.cs" />
-    <Compile Include="Composition\MenuItemType.cs" />
-    <Compile Include="Composition\MessageType.cs" />
-    <Compile Include="Config\ConfigValue.cs" />
-    <Compile Include="Config\IConfig.cs" />
-    <Compile Include="Draw\IAttractable.cs" />
-    <Compile Include="Draw\ILayer.cs" />
-    <Compile Include="EventArguments\MergeEventArg.cs" />
+    <Compile Include="Coder\SpriteCoder.cs" />
+    <Compile Include="Exceptions\CommandException.cs" />
     <Compile Include="Exceptions\FipsException.cs" />
+    <Compile Include="Language\LanguageProvider.cs" />
     <Compile Include="Lib\Avatars.cs" />
+    <Compile Include="Lib\ImageSources.cs" />
+    <Compile Include="Lib\Tools.cs" />
+    <Compile Include="Lib\Windows.cs" />
     <Compile Include="Model\Album.cs" />
+    <Compile Include="Model\ColorFormats.cs" />
+    <Compile Include="Model\CompressMode.cs" />
+    <Compile Include="Model\IFileObject.cs" />
+    <Compile Include="Model\ImageData.cs" />
     <Compile Include="Model\Texture.cs" />
     <Compile Include="Model\Sprite.cs" />
-    <Compile Include="Model\Language.cs" />
+    <Compile Include="Language\Language.cs" />
     <Compile Include="Coder\DdsTexture.cs" />
-    <Compile Include="Draw\IBrush.cs" />
-    <Compile Include="Draw\IPaint.cs" />
-    <Compile Include="Draw\Paint\Canvas.cs" />
     <Compile Include="Handle\FifthHandler.cs" />
     <Compile Include="Handle\FirstHandler.cs" />
     <Compile Include="Handle\FourthHandler.cs" />
     <Compile Include="Handle\Handler.cs" />
     <Compile Include="Handle\Img_Version.cs" />
-    <Compile Include="Composition\IPlugin.cs" />
     <Compile Include="Handle\OtherHandler.cs" />
     <Compile Include="Handle\SecondHandler.cs" />
     <Compile Include="Handle\SixthHandler.cs" />
@@ -104,6 +90,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Proxy\ProxyBuilder.cs" />
+    <Compile Include="Script\Ces\CesLexer.cs" />
+    <Compile Include="Script\Ces\CesParser.cs" />
+    <Compile Include="Script\Mes\MesParser.cs" />
     <Compile Include="Tools.cs" />
   </ItemGroup>
   <ItemGroup>

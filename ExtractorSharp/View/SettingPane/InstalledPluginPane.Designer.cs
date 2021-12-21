@@ -33,11 +33,11 @@ namespace ExtractorSharp.View.SettingPane {
             list.SmallImageList = new ImageList();
             list.Size = new System.Drawing.Size(300, 300);
 
-            browseButton.Text = Language["Browse"];
+        //    browseButton.Text = Language["Browse"];
             browseButton.Location = new System.Drawing.Point(0,310);
 
-            this.Name = "Installed";
-            this.Parent = "Plugin";
+          //  this.Name = "Installed";
+          //  this.Parent = "Plugin";
             Controls.Add(list);
             Controls.Add(browseButton);
         }

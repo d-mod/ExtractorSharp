@@ -47,8 +47,8 @@ namespace ExtractorSharp.Properties {
         }
         
         /// <summary>
-        ///   重写当前线程的 CurrentUICulture 属性
-        ///   重写当前线程的 CurrentUICulture 属性。
+        ///   重写当前线程的 CurrentUICulture 属性，对
+        ///   使用此强类型资源类的所有资源查找执行重写。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
         internal static global::System.Globalization.CultureInfo Culture {
@@ -101,69 +101,12 @@ namespace ExtractorSharp.Properties {
         }
         
         /// <summary>
-        ///   查找类似 {
-        ///  &quot;Name&quot;: &quot;中文(简体)&quot;,
-        ///  &quot;LCID&quot;: 2052,
-        ///  &quot;Group&quot;: {
-        ///    &quot;Dictionary&quot;: {
-        ///      &quot;About&quot;: &quot;关于&quot;,
-        ///      &quot;AbsolutePosition&quot;: &quot;绝对坐标&quot;,
-        ///      &quot;Action&quot;: &quot;动作&quot;,
-        ///      &quot;ActionPause&quot;: &quot;动作记录已暂停!&quot;,
-        ///      &quot;ActionRecord&quot;: &quot;动作记录已开始!&quot;,
-        ///      &quot;ActionRun&quot;: &quot;动作执行已完成&quot;,
-        ///      &quot;ActionTips&quot;: &quot;是否对所有贴图执行此处理？&quot;,
-        ///      &quot;Add&quot;: &quot;添加&quot;,
-        ///      &quot;AddAction&quot;: &quot;加入动作&quot;,
-        ///      &quot;AddCompareLayer&quot;: &quot;加入对比图层&quot;,
-        ///      &quot;AddFile&quot;: &quot;添加文件&quot;,
-        ///      &quot;AddLayer&quot;: &quot;加入图层&quot;,
-        ///      &quot;AddList&quot;: &quot;加入列表&quot;,
-        ///      &quot;AddListHideImage&quot;: &quot;隐藏文件贴图&quot;,
-        ///      &quot;AddMerge&quot;:  [字符串的其余部分被截断]&quot;; 的本地化字符串。
-        /// </summary>
-        internal static string Chinese {
-            get {
-                return ResourceManager.GetString("Chinese", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
         internal static System.Drawing.Bitmap classify {
             get {
                 object obj = ResourceManager.GetObject("classify", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 {
-        ///  &quot;Animation&quot;: false,
-        ///  &quot;ApiHost&quot;: &quot;https://kritsu.net/api&quot;,
-        ///  &quot;AutoSave&quot;: false,
-        ///  &quot;AutoSort&quot;: true,
-        ///  &quot;AutoCheckUpdate&quot;: true,
-        ///  &quot;CanvasImageSize&quot;: &quot;800,600&quot;,
-        ///  &quot;CanvasScale&quot;: 100,
-        ///  &quot;ClassifySeparator&quot;: &quot;�ָ���&quot;,
-        ///  &quot;FeedbackUrl&quot;: &quot;/project/feedback/post&quot;,
-        ///  &quot;FlashSpeed&quot;: 20,
-        ///  &quot;GamePath&quot;: &quot;&quot;,
-        ///  &quot;GifDelay&quot;: 75,
-        ///  &quot;GifTransparent&quot;: &quot;0,0,0,0&quot;,
-        ///  &quot;GridGap&quot;: 100,
-        ///  &quot;LayerMaximum&quot;: 20,
-        ///  &quot;LCID&quot;: 2052,
-        ///  &quot;LinearDodge&quot;: false,
-        ///  &quot;LinearDodgeSpriteConverter&quot;: true,
-        ///  &quot;LineLevel&quot;: 0.5,
-        ///  &quot;Mark [字符串的其余部分被截断]&quot;; 的本地化字符串。
-        /// </summary>
-        internal static string Config {
-            get {
-                return ResourceManager.GetString("Config", resourceCulture);
             }
         }
         
@@ -203,6 +146,16 @@ namespace ExtractorSharp.Properties {
         internal static System.Drawing.Bitmap edit {
             get {
                 object obj = ResourceManager.GetObject("edit", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap errorIcon {
+            get {
+                object obj = ResourceManager.GetObject("errorIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -274,6 +227,16 @@ namespace ExtractorSharp.Properties {
             get {
                 object obj = ResourceManager.GetObject("link", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Icon logo {
+            get {
+                object obj = ResourceManager.GetObject("logo", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -364,40 +327,6 @@ namespace ExtractorSharp.Properties {
             get {
                 object obj = ResourceManager.GetObject("position", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 {
-        ///  &quot;Name&quot;: &quot;default&quot;,
-        ///  &quot;Rules&quot;: {
-        ///    &quot;arma&quot;: 2150,
-        ///    &quot;armb&quot;: 650,
-        ///    &quot;armc&quot;: 2790,
-        ///    &quot;armsa&quot;: 2150,
-        ///    &quot;armsb&quot;: 650,
-        ///    &quot;armsc&quot;: 2790,
-        ///    &quot;armsx&quot;: 1350,
-        ///    &quot;armx&quot;: 1350,
-        ///    &quot;autoa&quot;: 2150,
-        ///    &quot;autob&quot;: 650,
-        ///    &quot;autoc&quot;: 2790,
-        ///    &quot;axea&quot;: 2150,
-        ///    &quot;axec&quot;: 2600,
-        ///    &quot;axed&quot;: 200,
-        ///    &quot;axex&quot;: 1350,
-        ///    &quot;beamspeara&quot;: 2150,
-        ///    &quot;beamspearb&quot;: 650, //?
-        ///    &quot;beamspearc&quot;: 2790,
-        ///    &quot;beamspeare&quot;: 2880,
-        ///    &quot;beamspearx&quot;: 1350,
-        ///    &quot;beamswda&quot;: 2150, //?
-        ///    &quot;beamswdb&quot;: 650, //?
-        ///     [字符串的其余部分被截断]&quot;; 的本地化字符串。
-        /// </summary>
-        internal static string Queue {
-            get {
-                return ResourceManager.GetString("Queue", resourceCulture);
             }
         }
         
@@ -514,6 +443,16 @@ namespace ExtractorSharp.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap successIcon {
+            get {
+                object obj = ResourceManager.GetObject("successIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap undo {
             get {
                 object obj = ResourceManager.GetObject("undo", resourceCulture);
@@ -522,39 +461,12 @@ namespace ExtractorSharp.Properties {
         }
         
         /// <summary>
-        ///   查找类似 {
-        ///  &quot;MainColor&quot;: &quot;180,214,221&quot;,
-        ///
-        ///  &quot;MainImage&quot;: &quot;&quot;,
-        ///
-        ///  &quot;MainSize&quot;: &quot;1368,768&quot;,
-        ///
-        ///  &quot;MainImageLayout&quot;: &quot;&quot;,
-        ///
-        ///  &quot;MainIcon&quot;: &quot;&quot;,
-        ///
-        ///  &quot;FormImage&quot;: &quot;&quot;,
-        ///
-        ///  &quot;FormColor&quot;: &quot;&quot;,
-        ///
-        ///  &quot;FormImageLayout&quot;: &quot;&quot;,
-        ///
-        ///  &quot;FormIcon&quot;: &quot;aww.ico&quot;,
-        ///
-        ///  &quot;CanvasColor&quot;: &quot;&quot;,
-        ///
-        ///  &quot;CanvasImage&quot;: &quot;&quot;,
-        ///
-        ///  &quot;CanvasSize&quot;: &quot;840,600&quot;,
-        ///
-        ///  &quot;StartPosition&quot;: &quot;center&quot;,
-        ///
-        ///  &quot;Title&quot;: &quot;&quot;
-        ///} 的本地化字符串。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static string View {
+        internal static System.Drawing.Bitmap warnningIcon {
             get {
-                return ResourceManager.GetString("View", resourceCulture);
+                object obj = ResourceManager.GetObject("warnningIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

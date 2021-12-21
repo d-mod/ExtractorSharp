@@ -1,21 +1,18 @@
-﻿using ExtractorSharp.Core.Composition;
-using ExtractorSharp.Core.Config;
-using ExtractorSharp.Core.Lib;
-using ExtractorSharp.Core.Model;
-using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.Composition;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ExtractorSharp.Composition;
+using ExtractorSharp.Composition.Config;
+using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.Effect {
-    public class DyeImageEffect : IEffect {
-        private readonly IConfig Config;
 
-        internal DyeImageEffect(IConfig Config) {
-            this.Config = Config;
-        }
+    [ExportMetadata("Name", "Dye")]
+    [Export(typeof(IEffect))]
+    public class DyeImageEffect : IEffect {
+
+        [Import]
+        private IConfig Config { get; }
+
 
         public string Name => "Dye";
 
@@ -24,8 +21,8 @@ namespace ExtractorSharp.Effect {
         public int Index { set; get; }
 
         public void Handle(Sprite sprite, ref Bitmap bmp) {
-            if (Config["Dye"].Boolean) {
-                bmp = bmp.Dye(Program.Drawer.Color);
+            if(Config["Dye"].Boolean) {
+                //  bmp = bmp.Dye(Drawer.Color);
             }
         }
     }

@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Drawing;
-using ExtractorSharp.Core.Config;
+using ExtractorSharp.Composition.Config;
+using ExtractorSharp.Composition.Core;
 using ExtractorSharp.Core.Draw;
 using ExtractorSharp.Core.Draw.Paint;
 using ExtractorSharp.Core.Model;
-using ExtractorSharp.Draw.Brush;
 using ExtractorSharp.Draw.Paint;
 using ExtractorSharp.EventArguments;
 
@@ -14,33 +14,37 @@ namespace ExtractorSharp.Core {
     ///     绘制器
     ///     控制着画布显示的所有内容
     /// </summary>
-    internal class Drawer {
+    /// 
+    [Export]
+    public class Drawer : IPartImportsSatisfiedNotification {
+
         private Color _color = Color.White;
 
-        private bool _lastLayerVisible;
+        [Import]
+        public Store Store { set; get; }
+
+        [Import]
+        private Language Language;
 
 
         public Drawer() {
             Properties = new Dictionary<string, ConfigValue>();
-            Brushes = new Dictionary<string, IBrush>();
-            this["MoveTool"] = new MoveTool();
-            this["Straw"] = new Straw();
-            this["Eraser"] = new Eraser();
-            this["Pencil"] = new Pencil();
-            Brush = this["MoveTool"];
+
             LayerList = new List<IPaint> {
                 new Canvas {Name = "LastLayer"},
                 new Canvas {Name = "CurrentLayer"}
             };
+
             CurrentLayer.Visible = true;
         }
 
         /// <summary>
         ///     画笔集
         /// </summary>
-        public Dictionary<string, IBrush> Brushes { get; }
+        [ImportMany(typeof(IBrush))]
+        public List<IBrush> Brushes { set; get; } = new List<IBrush>();
 
-        public List<IPaint> LayerList { get; private set; }
+        private List<IPaint> LayerList;
 
         public int CustomLayerCount { set; get; }
 
@@ -63,6 +67,7 @@ namespace ExtractorSharp.Core {
         public Canvas CurrentLayer {
             set {
                 var lastVisible = LastLayer.Visible;
+                var lastPoint = LastLayer.Location;
                 var lastRealPosition = LastLayer.RealPosition;
 
                 var curPoint = CurrentLayer.Location;
@@ -70,9 +75,9 @@ namespace ExtractorSharp.Core {
                 var curRealPosition = CurrentLayer.RealPosition;
 
                 LayerList[0] = LayerList[1]; //图层更新
-                LayerList[0].Location = curPoint;
+                LayerList[0].Location = lastPoint;
                 LayerList[0].Name = "LastLayer";
-                LayerList[0].Visible = lastVisible;
+                LastLayerVisible = lastVisible;
                 (LayerList[0] as Canvas).RealPosition = lastRealPosition;
                 LayerList[1] = value;
                 LayerList[1].Location = curPoint;
@@ -90,9 +95,8 @@ namespace ExtractorSharp.Core {
 
         public bool LastLayerVisible {
             set {
-                if (LayerList[0].Visible != value) {
+                if(LayerList[0].Visible != value) {
                     LayerList[0].Visible = value;
-                    _lastLayerVisible = value;
                     OnLayerVisibleChanged(new LayerEventArgs {
                         ChangedIndex = 0
                     });
@@ -103,6 +107,7 @@ namespace ExtractorSharp.Core {
 
 
         public Dictionary<string, ConfigValue> Properties { get; }
+
 
         /// <summary>
         ///     当前选择的画笔<see cref="IBrush" />
@@ -125,28 +130,31 @@ namespace ExtractorSharp.Core {
             get => _color;
         }
 
-        public IBrush this[string key] {
-            get => Select(key);
-            set {
-                if (Brushes.ContainsKey(key)) {
-                    Brushes.Remove(key);
-                }
-                Brushes.Add(key, value);
-            }
-        }
 
 
+        /// <summary>
+        /// 根据key选择画笔工具
+        /// </summary>
+        /// <param name="key">画笔代号</param>
+        /// <returns></returns>
         public IBrush Select(string key) {
-            if (key != null && Brushes.ContainsKey(key)) {
-                Brush = Brushes[key]; //切换画笔
-                OnBrushChanged(new DrawEventArgs {
-                    Brush = Brush
-                });
+            IBrush _brush = null;
+            if(!string.IsNullOrEmpty(key)) {
+                _brush = Brushes?.Find(e => key.Equals(e.Name));
+                if(_brush != null) {
+                    Brush = _brush; //切换画笔
+                    OnBrushChanged(new DrawEventArgs {
+                        Brush = _brush
+                    });
+                }
             }
-
-            return Brush;
+            return _brush;
         }
 
+        /// <summary>
+        /// 添加图层
+        /// </summary>
+        /// <param name="array"></param>
         public void AddLayer(params IPaint[] array) {
             LayerList.AddRange(array);
             OnLayerChanged(new LayerEventArgs());
@@ -164,12 +172,12 @@ namespace ExtractorSharp.Core {
         public void ReplaceLayer(params Sprite[] array) { }
 
         public int IndexOfLayer(Point point) {
-            for (var i = LayerList.Count - 1; i > -1; i--) {
+            for(var i = LayerList.Count - 1; i > -1; i--) {
                 var layer = LayerList[i];
-                if (!layer.Visible || layer.Locked) {
+                if(!layer.Visible || layer.Locked) {
                     continue;
                 }
-                if (LayerList[i].Contains(point)) {
+                if(LayerList[i].Contains(point)) {
                     return i;
                 }
             }
@@ -180,7 +188,7 @@ namespace ExtractorSharp.Core {
         public void DrawLayer(Graphics g) {
             OnLayerDrawing(new LayerEventArgs());
             LayerList.ForEach(e => {
-                if (e.Visible) {
+                if(e.Visible) {
                     e.Draw(g);
                 }
             });
@@ -193,12 +201,12 @@ namespace ExtractorSharp.Core {
             CusorLocation = point;
         }
 
-        public Point GetPoint(IPaint layer,Point point) {
-            if (layer is IAttractable att) {
+        public Point GetPoint(IPaint layer, Point point) {
+            if(layer is IAttractable att) {
                 var range = att.Range;
                 var rx = layer.Location.X;
                 var ry = layer.Location.Y;
-                if (layer is Canvas can) {
+                if(layer is Canvas can) {
                     rx = can.RealLocation.X;
                     ry = can.RealLocation.Y;
                 }
@@ -207,23 +215,23 @@ namespace ExtractorSharp.Core {
                 var x0 = point.X;
                 var y0 = point.Y;
 
-                foreach (var paint in LayerList) {
-                    if (paint.Equals(layer) || !paint.Visible) {
+                foreach(var paint in LayerList) {
+                    if(paint.Equals(layer) || !paint.Visible) {
                         continue;
                     }
                     var x1 = paint.Location.X;
                     var y1 = paint.Location.Y;
-                    var width = (int)(paint.Size.Width);
-                    var heihgt = (int)(paint.Size.Height);
-                    if (paint is Canvas canvas) {
+                    var width = paint.Size.Width;
+                    var heihgt = paint.Size.Height;
+                    if(paint is Canvas canvas) {
                         x1 = canvas.RealLocation.X;
                         y1 = canvas.RealLocation.Y;
                     }
-                    if (x0 > x1 - range && x0 < x1 + range) {
+                    if(x0 > x1 - range && x0 < x1 + range) {
                         x = x1;
                     }
-                    if (x0 > y1 - range && x0 < y1 + range) {
-                        y = y1 ;
+                    if(x0 > y1 - range && x0 < y1 + range) {
+                        y = y1;
                     }
                 }
                 point = new Point(x, y);
@@ -233,10 +241,7 @@ namespace ExtractorSharp.Core {
 
 
         public bool IsSelect(string name) {
-            if (Brushes.ContainsKey(name)) {
-                return Brushes[name] == Brush;
-            }
-            return false;
+            return !string.IsNullOrEmpty(name) && name.Equals(Brush?.Name);
         }
 
 
@@ -282,7 +287,13 @@ namespace ExtractorSharp.Core {
         }
 
         public void Dispose() {
-            LayerList.RemoveAll(e => e is ILayer);
+        }
+
+        public void OnImportsSatisfied() {
+            Store.Compute<List<IPaint>>("/draw/layers", () => LayerList, _ => LayerList = _)
+                .Compute("/draw/current-layer", () => CurrentLayer)
+                .Compute("/draw/last-layer", () => LastLayer);
+            this.Select("MoveTool");
         }
 
         #endregion

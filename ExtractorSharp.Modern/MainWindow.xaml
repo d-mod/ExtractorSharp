@@ -1,0 +1,149 @@
+﻿<es:BaseWindow x:Class="ExtractorSharp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:i="clr-namespace:ExtractorSharp"
+        xmlns:es="clr-namespace:ExtractorSharp.Components" 
+        d:DataContext="{d:DesignInstance Type=i:WindowModel}"
+        mc:Ignorable="d"
+        Title="ExtractorSharp Modern" 
+        TitleCharacterCasing="Normal"
+        Height="768" Width="1368"
+        WindowStartupLocation="CenterScreen" 
+        WindowStyle="None"   
+        Background="White"         
+        >
+    <Window.Resources>
+        <Style x:Key="AppHeader" TargetType="Panel">
+            <Setter Property="Background" Value="AliceBlue"></Setter>
+        </Style>
+    </Window.Resources>
+    <metro:MetroWindow.IconTemplate>
+        <DataTemplate>
+            <Image Source="favicon.ico" Width="24" Height="24"></Image>
+        </DataTemplate>
+    </metro:MetroWindow.IconTemplate>
+
+    <Canvas  x:Name="mainPanel" > 
+
+        <DockPanel Panel.ZIndex="0">
+            <DockPanel x:Name="header" Style="{StaticResource AppHeader}" MouseLeftButtonDown="DragHeader" DockPanel.Dock="Top">
+
+                <Menu Style="{StaticResource MainMenu}"  
+                  DockPanel.Dock="Left" 
+                  ItemsSource="{Binding MenuItems}"
+                  x:Name="mainMenu">
+                </Menu>
+                <Popup IsOpen="{Binding PopupOpen}" Placement="Relative"  >
+                    <Grid Width="200" Height="300" Background="White">
+
+                    </Grid>
+                </Popup>
+            </DockPanel>
+            <Border x:Name="leftPanel"               
+                    Width="277"  DockPanel.Dock="Left"
+                Padding="10"
+                
+                >
+                <StackPanel>
+                    <es:ETextbox x:Name="pathTextBox"
+                     PreviewMouseLeftButtonUp="OpenFile"
+                     PlaceHolder="{i:Language Browse}"
+                     Text="{Binding SavePath , Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"        
+                     Width="240" Height="30"                      
+                             
+                     >
+
+                    </es:ETextbox>
+                    <ListBox x:Name="fileList"        
+                     Height="600" Width="240"
+                     SelectionMode="Extended"
+                     SelectedItem="{Binding SelectedFile,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                     SelectedIndex="{Binding SelectedFileIndex,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                     ItemsSource="{Binding DisplayList}"
+                     IsTextSearchEnabled="True"
+                     Margin="0,8"
+                     >
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock ToolTip="{Binding Path}" VerticalAlignment="Center" Grid.Column="1" FontSize="14" Text="{Binding Name}" >
+                                    </TextBlock>
+
+                                </StackPanel>
+                            </DataTemplate>
+                            
+                        </ListBox.ItemTemplate>
+
+                        <ListBox.ContextMenu>
+                            <ContextMenu
+                            Style="{StaticResource App.ContextMenu}"
+                            ItemsSource="{Binding FileListMenu}"
+                                     >
+                            </ContextMenu>
+                        </ListBox.ContextMenu>
+                    </ListBox>
+                    <es:ETextbox  
+                    x:Name="searchBox" 
+                    PlaceHolder="{i:Language Search}" 
+                    Text="{Binding Path = Keyword,Mode=TwoWay,UpdateSourceTrigger =PropertyChanged}"
+                    Width="240"
+                    Height="30"
+                >
+                    </es:ETextbox>
+                </StackPanel>
+            </Border>
+            <Canvas Width="277"  DockPanel.Dock="Right">
+                <ListBox x:Name="imageList"
+                     Height="680" Width="260"   
+                     SelectionMode="Extended"
+                     ItemsSource="{Binding Sprites}"
+                     SelectedItem="{Binding SelectedImage,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                     SelectedIndex="{Binding SelectedImageIndex,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                     Canvas.Top="8"
+                     Canvas.Left="8"
+                     >
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock VerticalAlignment="Center" Text="{i:Language}"></TextBlock>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <ListBox.ContextMenu>
+                        <ContextMenu
+                            Style="{StaticResource App.ContextMenu}"
+                            ItemsSource="{Binding ImageListMenu}">
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
+                </ListBox>
+            </Canvas>
+            <Border Padding="0,10">
+                <StackPanel>
+                    <StackPanel  Orientation="Horizontal" Height="60">
+                        <CheckBox x:Name="animationCheckbox"                         
+                          Checked="CheckAnimation"
+                          Unchecked="CheckAnimation"
+                          Content="{i:Language Animation}"></CheckBox>
+                        <CheckBox Margin="10,0,0,0" x:Name="realPositionCheckbox"                         
+                          Checked="RealPosition"
+                          Unchecked="RealPosition"
+                          Content="{i:Language RealPosition}"></CheckBox>
+                    </StackPanel>
+                    <Canvas Name="canvas"  ClipToBounds="True" Background="Gray" Width="800" Height="600">
+                        <es:DragImage 
+                            Source="{Binding ImageSource}"
+                            Canvas.Left="{Binding ImageX,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                            Canvas.Top="{Binding ImageY,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                 
+                            x:Name="image"></es:DragImage>
+                    </Canvas>
+                </StackPanel>
+            </Border>
+        </DockPanel>
+
+        <es:Toast x:Name="toast" Visibility="Collapsed" DockPanel.Dock="Right" Canvas.Right="0" Panel.ZIndex="1"></es:Toast>
+
+    </Canvas>
+</es:BaseWindow>

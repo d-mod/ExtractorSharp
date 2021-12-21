@@ -1,43 +1,65 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.Windows.Forms;
-using ExtractorSharp.Component;
-using ExtractorSharp.Core.Composition;
+using ExtractorSharp.Components;
+using ExtractorSharp.Composition;
+using ExtractorSharp.Composition.Control;
+using ExtractorSharp.Composition.Core;
+using ExtractorSharp.Core;
 using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.View.Dialog {
-    public partial class NewImageDialog : ESDialog {
+
+
+    [ExportMetadata("Name", "newImage")]
+    [Export(typeof(IView))]
+    public partial class NewImageDialog : BaseDialog, IPartImportsSatisfiedNotification {
         private Album Album;
 
-        public NewImageDialog(IConnector Connector) : base(Connector) {
+
+        [Import]
+        private Controller Controller;
+
+        [Import]
+        private Messager Messager;
+
+        public NewImageDialog() {
+        }
+
+        public void OnImportsSatisfied() {
             InitializeComponent();
             yesButton.Click += Run;
             CancelButton = cancelButton;
         }
 
-        public override DialogResult Show(params object[] args) {
+        public override object ShowView(params object[] args) {
             var album = args[0] as Album;
-            if (album != null) {
+            if(album != null) {
                 Album = album;
                 index_box.Maximum = album.List.Count;
                 index_box.Value = album.List.Count;
                 return ShowDialog();
             }
-            Connector.SendWarning("NotSelectImgTips");
+            Messager.Warning("NotSelectImgTips");
             return DialogResult.None;
         }
 
         public void Run(object sender, EventArgs e) {
-            var count = (int) count_box.Value;
-            var type = ColorBits.LINK;
-            if (_1555_radio.Checked) {
-                type = ColorBits.ARGB_1555;
-            } else if (_4444_radio.Checked) {
-                type = ColorBits.ARGB_4444;
-            } else if (_8888_radio.Checked) {
-                type = ColorBits.ARGB_8888;
+            var count = (int)count_box.Value;
+            var type = ColorFormats.LINK;
+            if(_1555_radio.Checked) {
+                type = ColorFormats.ARGB_1555;
+            } else if(_4444_radio.Checked) {
+                type = ColorFormats.ARGB_4444;
+            } else if(_8888_radio.Checked) {
+                type = ColorFormats.ARGB_8888;
             }
-            var index = (int) index_box.Value;
-            Connector.Do("newImage", Album, count, type, index);
+            var index = (int)index_box.Value;
+            Controller.Do("NewImage", new CommandContext(Album){
+                { "Type" , type },
+                { "Count" , count },
+                { "Index" , index }
+            });
             DialogResult = DialogResult.OK;
         }
     }

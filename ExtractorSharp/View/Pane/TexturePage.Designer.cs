@@ -26,10 +26,9 @@ namespace ExtractorSharp.View.Pane {
         /// </summary>
         private void InitializeComponent() {
             components = new System.ComponentModel.Container();
-            Text = Language["Texture"];
+            //Text = Language["Texture"];
         }
 
-        private Language Language => Language.Default;
 
         #endregion
     }

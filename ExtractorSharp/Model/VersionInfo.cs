@@ -10,10 +10,10 @@ namespace ExtractorSharp.Model {
             var buf = new StringBuilder();
             buf.Append(Name);
             buf.AppendLine();
-            if (Time != null) {
+            if(Time != null) {
                 buf.AppendLine(Time);
             }
-            foreach (var inf in Info) {
+            foreach(var inf in Info) {
                 buf.AppendLine(inf);
             }
             return buf.ToString();

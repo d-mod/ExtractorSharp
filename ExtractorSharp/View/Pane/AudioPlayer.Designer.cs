@@ -24,7 +24,7 @@
         /// </summary>
         private void InitializeComponent() {
             this.playButton = new System.Windows.Forms.Button();
-            this.pauseButton = new ExtractorSharp.Component.ESButton();
+            this.pauseButton = new ExtractorSharp.Components.ESButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.timeLabel = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
@@ -86,7 +86,7 @@
 
         #endregion
         private System.Windows.Forms.Button playButton;
-        private Component.ESButton pauseButton;
+        private Components.ESButton pauseButton;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label timeLabel;
     }

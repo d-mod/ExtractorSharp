@@ -1,8 +1,6 @@
-﻿using System;
-using System.IO;
-using System.Text;
+﻿using System.Text;
 
-namespace ExtractorSharp.Core.Lib {
+namespace System.IO {
     public static class Streams {
         #region 基本语法糖
 
@@ -117,7 +115,7 @@ namespace ExtractorSharp.Core.Lib {
         public static string ReadString(this Stream stream, Encoding encoding) {
             var ms = new MemoryStream();
             var j = 0;
-            while ((j = stream.ReadByte()) != 0 && j != -1) {
+            while((j = stream.ReadByte()) != 0 && j != -1) {
                 ms.WriteByte((byte)j);
             }
             ms.Close();
@@ -135,7 +133,7 @@ namespace ExtractorSharp.Core.Lib {
         /// <param name="str"></param>
         public static void WriteString(this Stream stream, string str, Encoding encoding, bool split) {
             stream.Write(encoding.GetBytes(str));
-            if (split) {
+            if(split) {
                 stream.WriteByte(0);
             }
         }

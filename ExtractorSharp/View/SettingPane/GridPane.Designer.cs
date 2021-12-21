@@ -43,13 +43,13 @@
             this.gridGapGroup.Size = new System.Drawing.Size(297, 100);
             this.gridGapGroup.TabIndex = 2;
             this.gridGapGroup.TabStop = false;
-            this.gridGapGroup.Text = Language["GridGap"];
+         //   this.gridGapGroup.Text = Language["GridGap"];
             // 
             // FilePane
             // 
             this.Controls.Add(this.gridGapGroup);
-            this.Parent = "View";
-            this.Name = "Grid";
+          //  this.Parent = "View";
+        //    this.Name = "Grid";
             this.Size = new System.Drawing.Size(329, 244);
             this.gridGapGroup.ResumeLayout(false);
             this.gridGapGroup.PerformLayout();

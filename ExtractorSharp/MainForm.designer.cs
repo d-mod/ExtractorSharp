@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using ExtractorSharp.View;
-using ExtractorSharp.Component;
+using ExtractorSharp.Components;
 using ExtractorSharp.Draw;
 using ExtractorSharp.Core;
 using System.IO;
@@ -10,6 +10,9 @@ using ExtractorSharp.Core.Draw;
 using ExtractorSharp.Core.Model;
 using ExtractorSharp.Properties;
 using ExtractorSharp.View.Pane;
+using System.Runtime.CompilerServices;
+using System.Security.Policy;
+using System.ComponentModel.Composition;
 
 namespace ExtractorSharp {
     partial class MainForm {
@@ -37,8 +40,12 @@ namespace ExtractorSharp {
         /// </summary>
         private void InitializeComponent() {
             components = new Container();
-            albumList = new ESListBox<Album>();
-            albumListMenu = albumList.ContextMenuStrip;
+            fileList = new ESListBox<Album> {
+                Language = Language,
+                FormattingEnabled = true,
+            };
+
+            fileListMenu = fileList.ContextMenuStrip;
 
             editFileItem = new ToolStripMenuItem();
             cutFileItem = new ToolStripMenuItem();
@@ -53,7 +60,7 @@ namespace ExtractorSharp {
             newFileItem = new ToolStripMenuItem();
             exchangeFileItem = new ToolStripMenuItem();
 
-            hideImgItem = new ToolStripMenuItem();
+            hideFileItem = new ToolStripMenuItem();
             addMergeItem = new ToolStripMenuItem();
             addOutsideMergeItem = new ToolStripMenuItem();
             runMergeItem = new ToolStripMenuItem();
@@ -68,7 +75,12 @@ namespace ExtractorSharp {
             splitFileItem = new ToolStripMenuItem();
             mixFileItem = new ToolStripMenuItem();
 
-            imageList = new ESListBox<Sprite>();
+            filePropertiesItem = new ToolStripMenuItem();
+
+            imageList = new ESListBox<Sprite> {
+                Language = Language,
+                FormattingEnabled = true
+            };
             imageListMenu = imageList.ContextMenuStrip;
 
             editImageItem = new ToolStripMenuItem();
@@ -89,27 +101,17 @@ namespace ExtractorSharp {
             saveSingleImageItem = new ToolStripMenuItem();
 
             openItem = new ToolStripMenuItem();
-            openFileItem = new ToolStripMenuItem();
-            openRecentItem = new ToolStripMenuItem();
-
-            addItem = new ToolStripMenuItem();
-            addDirItem = new ToolStripMenuItem();
-            addRecentItem = new ToolStripMenuItem();
 
             saveItem = new ToolStripMenuItem();
             saveFileItem = new ToolStripMenuItem();
             saveRecentItem = new ToolStripMenuItem();     
             saveDirItem = new ToolStripMenuItem();
 
-            exitItem = new ToolStripMenuItem();
 
             convertItem = new ToolStripMenuItem();
 
             mainMenu = new MenuStrip();
             fileMenu = new ToolStripMenuItem();
-            addFileItem = new ToolStripMenuItem();
-            openDirItem = new ToolStripMenuItem();
-            saveAsFileItem = new ToolStripMenuItem();
 
             linearDodgeItem = new ToolStripMenuItem();
             dyeItem = new ToolStripMenuItem();
@@ -131,6 +133,7 @@ namespace ExtractorSharp {
             displayRuleItem = new ToolStripMenuItem();
             adjustRuleItem = new ToolStripMenuItem();
             previewItem = new ToolStripMenuItem();
+            pixelateItem = new ToolStripMenuItem();
 
             gridItem = new ToolStripMenuItem();
             borderItem = new ToolStripMenuItem();
@@ -145,7 +148,7 @@ namespace ExtractorSharp {
             saveGifItem = new ToolStripMenuItem();
             box = new PictureBox();
             linearDodgeBox = new CheckBox();
-            realPositionBox = new CheckBox();
+            relativePositionCheckedBox = new CheckBox();
             dyeBox = new CheckBox();
             displayBox = new CheckBox();
 
@@ -158,16 +161,18 @@ namespace ExtractorSharp {
 
             scaleLabel = new Label();
             scaleBox = new NumericUpDown();
-            pixelateBox = new CheckBox();
-
 
             aboutMenu = new ToolStripMenuItem();
             feedbackItem = new ToolStripMenuItem();
             versionItem = new ToolStripMenuItem();
             settingItem = new ToolStripMenuItem();
             helpItem = new ToolStripMenuItem();
+            checkUpdateItem = new ToolStripMenuItem();
 
-            layerList = new ESListBox<IPaint>();
+            layerList = new ESListBox<IPaint> {
+                Language = Language,
+                FormattingEnabled = true
+            };
             layerMenu = layerList.ContextMenuStrip;
             upLayerItem = new ToolStripMenuItem();
             downLayerItem = new ToolStripMenuItem();
@@ -192,9 +197,8 @@ namespace ExtractorSharp {
 
             previewPanel = new Panel();
             colorPanel = new ColorPanel();
-            messager = new ESMessager(Connector);
 
-            albumListMenu.SuspendLayout();
+            fileListMenu.SuspendLayout();
             imageListMenu.SuspendLayout();
             mainMenu.SuspendLayout();
             ((ISupportInitialize)(box)).BeginInit();
@@ -202,42 +206,43 @@ namespace ExtractorSharp {
             // 
             // albumList
             // 
-            albumList.HorizontalScrollbar = true;
-            albumList.Location = new Point(20, 90);
-            albumList.Name = "albumList";
-            albumList.Size = new Size(210, 579);
-            albumList.TabIndex = 3;
-            albumList.CanClear = false;
+            fileList.HorizontalScrollbar = true;
+            fileList.Location = new Point(20, 90);
+            fileList.Name = "albumList";
+            fileList.Size = new Size(210, 579);
+            fileList.TabIndex = 3;
+            fileList.CanClear = false;
             // 
             // albumListMenu
             // 
-            albumListMenu.Items.Add(editFileItem);
-            albumListMenu.Items.Add(newFileItem);
-            albumListMenu.Items.Add(exchangeFileItem);
-            albumListMenu.Items.Add(saveAsItem);
-            albumListMenu.Items.AddSeparator();
-            albumListMenu.Items.Add(addReplaceItem);
-            albumListMenu.Items.Add(replaceToThisFileItem);
-            albumListMenu.Items.Add(replaceFromFileItem);
-            albumListMenu.Items.AddSeparator();
-            albumListMenu.Items.Add(repairFileItem);
-            albumListMenu.Items.Add(recoverFileItem);
-            albumListMenu.Items.AddSeparator();
+            fileListMenu.Items.Add(editFileItem);
+            fileListMenu.Items.Add(newFileItem);
+            fileListMenu.Items.Add(exchangeFileItem);
+            fileListMenu.Items.Add(saveAsItem);
+            fileListMenu.Items.AddSeparator();
+            fileListMenu.Items.Add(addReplaceItem);
+            fileListMenu.Items.Add(replaceToThisFileItem);
+            fileListMenu.Items.Add(replaceFromFileItem);
+            fileListMenu.Items.AddSeparator();
+            fileListMenu.Items.Add(repairFileItem);
+            fileListMenu.Items.Add(recoverFileItem);
+            fileListMenu.Items.AddSeparator();
             //
-            albumListMenu.Items.Add(compareFileItem);
+            fileListMenu.Items.Add(compareFileItem);
             //
-            albumListMenu.Items.Add(splitFileItem);
-            albumListMenu.Items.Add(mixFileItem);
-            albumListMenu.Items.AddSeparator();
-            albumListMenu.Items.Add(hideImgItem);
-            albumListMenu.Items.Add(renameItem);
-            albumListMenu.Items.Add(convertItem);
-            albumListMenu.Items.AddSeparator();
-            albumListMenu.Items.Add(addMergeItem);
-            albumListMenu.Items.Add(addOutsideMergeItem);
-            albumListMenu.Items.Add(runMergeItem);
-            albumListMenu.Items.AddSeparator();
-            albumListMenu.Size = new Size(221, 268);
+            fileListMenu.Items.Add(splitFileItem);
+            fileListMenu.Items.Add(mixFileItem);
+            fileListMenu.Items.AddSeparator();
+            fileListMenu.Items.Add(hideFileItem);
+            fileListMenu.Items.Add(renameItem);
+            fileListMenu.Items.Add(convertItem);
+            fileListMenu.Items.Add(filePropertiesItem);
+            fileListMenu.Items.AddSeparator();
+            fileListMenu.Items.Add(addMergeItem);
+            fileListMenu.Items.Add(addOutsideMergeItem);
+            fileListMenu.Items.Add(runMergeItem);
+            fileListMenu.Items.AddSeparator();
+            fileListMenu.Size = new Size(221, 268);
 
             editFileItem.Text = Language["Edit"];
 
@@ -245,7 +250,7 @@ namespace ExtractorSharp {
             editFileItem.DropDownItems.Add(copyFileItem);
             editFileItem.DropDownItems.Add(pasteFileItem);
 
-            replaceFromFileItem.Text = Language["ReplaceFromFile"];
+            replaceFromFileItem.Text = Language["ReplaceFromOutsideFile"];
             replaceFromFileItem.ShortcutKeys = Keys.Control | Keys.Q;
             replaceFromFileItem.Image = Resources.replace;
 
@@ -282,8 +287,8 @@ namespace ExtractorSharp {
             exchangeFileItem.Text = Language["ExchangeFile"];
             exchangeFileItem.ShortcutKeys = Keys.Control | Keys.G;
 
-            hideImgItem.Text = Language["HideFile"];
-            hideImgItem.ShortcutKeys = Keys.Control | Keys.H;
+            hideFileItem.Text = Language["HideFile"];
+            hideFileItem.ShortcutKeys = Keys.Control | Keys.H;
 
             convertItem.Text = Language["ConvertVersion"];
             convertItem.Image = Resources.change;
@@ -301,6 +306,9 @@ namespace ExtractorSharp {
             renameItem.Text = Language["Rename"];
             renameItem.ShortcutKeys = Keys.Control | Keys.R;
             renameItem.Image = Resources.rename;
+
+            filePropertiesItem.Text = Language["Properties"];
+            filePropertiesItem.ShortcutKeys = Keys.Control | Keys.P;
 
             repairFileItem.Text = Language["RepairFile"];
             repairFileItem.Image = Resources.repair;
@@ -320,6 +328,7 @@ namespace ExtractorSharp {
             imageList.Size = new Size(270, 310);
             imageList.TabIndex = 4;
             imageList.CanClear = false;
+          
             // 
             // imageListMenu
             // 
@@ -422,11 +431,15 @@ namespace ExtractorSharp {
             aboutMenu.Text = Language["About"];
             aboutMenu.DropDownItems.Add(aboutItem);
             aboutMenu.DropDownItems.Add(helpItem);
-            aboutMenu.DropDownItems.Add(versionItem);
             aboutMenu.DropDownItems.Add(feedbackItem);
+            aboutMenu.DropDownItems.AddSeparator();
+            aboutMenu.DropDownItems.Add(versionItem);
+            aboutMenu.DropDownItems.Add(checkUpdateItem);
+            aboutMenu.DropDownItems.AddSeparator();
             aboutMenu.DropDownItems.Add(settingItem);
             aboutItem.Text = Language["About"];
             aboutItem.Image = Resources.about;
+            
 
             versionItem.Text = Language["Features"];
 
@@ -439,54 +452,29 @@ namespace ExtractorSharp {
             settingItem.Text = Language["Setting"];
             settingItem.Image = Resources.setting;
 
+            checkUpdateItem.Text = Language["CheckUpdate"];
+
+
             // 
             // fileMenu
             // 
-            fileMenu.DropDownItems.Add(openItem);
-            fileMenu.DropDownItems.Add(addItem);
-            fileMenu.DropDownItems.AddSeparator();
-            fileMenu.DropDownItems.Add(saveItem);
-            fileMenu.DropDownItems.Add(saveAsFileItem);
-            fileMenu.DropDownItems.AddSeparator();
-            fileMenu.DropDownItems.Add(exitItem);
+            //fileMenu.DropDownItems.Add(openItem);
+           // fileMenu.DropDownItems.Add(saveItem);
             fileMenu.Text = Language["File"];
+            fileMenu.Name = "File";
 
             openItem.Text = Language["Open"];
+            openItem.Name = "Open";
             openItem.ShowShortcutKeys = false;
             openItem.Image = Resources.open;
 
-            openFileItem.Text = Language["File"];
-            openFileItem.ShowShortcutKeys = false;
-            openFileItem.ShortcutKeys = Keys.Control | Keys.O;
 
-            openDirItem.Text = Language["Directory"];
-            openRecentItem.Text = Language["Recent"];
-            openRecentItem.DropDownItems.AddSeparator();
+/*            openItem.DropDownItems.Add(openFileItem);
+            openItem.DropDownItems.Add(openDirItem);*/
 
-            openItem.DropDownItems.Add(openFileItem);
-            openItem.DropDownItems.Add(openDirItem);
-            openItem.DropDownItems.Add(openRecentItem);
-
-
-            addItem.Text = Language["Add"];
-            addItem.Image = Resources.addFile;
-            addRecentItem.Text = Language["Recent"];
-            addRecentItem.DropDownItems.AddSeparator();
-
-
-            addFileItem.Text = Language["File"];
-            addFileItem.ShowShortcutKeys = false;
-            addFileItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.O;
-
-            addDirItem.Text = Language["Directory"];
-
-            addItem.DropDownItems.Add(addFileItem);
-            addItem.DropDownItems.Add(addDirItem);
-            addItem.DropDownItems.Add(addRecentItem);
 
 
             saveItem.Text = Language["Save"];
-            saveItem.ShowShortcutKeys = false;
             saveItem.Image = Resources.save;
             saveRecentItem.Text = Language["Recent"];
             saveRecentItem.DropDownItems.AddSeparator();
@@ -499,16 +487,7 @@ namespace ExtractorSharp {
             saveItem.DropDownItems.Add(saveDirItem);
             saveItem.DropDownItems.Add(saveRecentItem);
 
-            saveAsFileItem.Text = Language["SaveAs"];
-            saveAsFileItem.ShowShortcutKeys = false;
-            saveAsFileItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.S;
-            saveAsFileItem.Image = Resources.saveAs;
 
-
-            exitItem.Text = Language["Exit"];
-            exitItem.ShortcutKeys = Keys.Alt | Keys.F4;
-            exitItem.ShowShortcutKeys = false;
-            exitItem.Image = Resources.exit;
 
             editMenu.Text = Language["Edit"];
             editMenu.DropDownItems.Add(undoItem);
@@ -554,10 +533,26 @@ namespace ExtractorSharp {
 
 
             viewMenu.Text = Language["View"];
-            viewMenu.DropDownItems.Add(ruleItem);
-            viewMenu.DropDownItems.Add(gridItem);
-            viewMenu.DropDownItems.Add(borderItem);
             viewMenu.DropDownItems.Add(previewItem);
+            viewMenu.DropDownItems.Add(pixelateItem);
+
+
+
+            previewItem.Text = Language["Preview"];
+            previewItem.CheckOnClick = true;
+            previewItem.Checked = Config["Preview"].Boolean;
+
+            pixelateItem.Text = Language["Pixelate"];
+            pixelateItem.CheckOnClick = true;
+            pixelateItem.Checked = Config["Pixelate"].Boolean;
+
+            toolsMenu.Text = Language["Tools"];
+
+            toolsMenu.DropDownItems.Add(ruleItem);
+            toolsMenu.DropDownItems.Add(gridItem);
+            toolsMenu.DropDownItems.Add(borderItem);
+            toolsMenu.DropDownItems.AddSeparator();
+
 
             ruleItem.Text = Language["Ruler"];
             ruleItem.Image = Resources.ruler;
@@ -565,42 +560,36 @@ namespace ExtractorSharp {
             ruleItem.DropDownItems.Add(adjustRuleItem);
 
             displayRuleItem.Text = Language["DisplayRuler"];
-            displayRuleItem.Checked = Config["Ruler"].Boolean;
             displayRuleItem.ShortcutKeys = Keys.Control | Keys.N;
             displayRuleItem.ShowShortcutKeys = true;
             displayRuleItem.CheckOnClick = true;
-            
+
             adjustRuleItem.Text = Language["ResetRuler"];
 
-            previewItem.Text = Language["Preview"];
-            previewItem.CheckOnClick = true;
-            previewItem.Checked = Config["Preview"].Boolean;
+
             gridItem.Text = Language["Grid"];
             gridItem.Checked = Config["Grid"].Boolean;
             gridItem.Image = Resources.grid;
             borderItem.Text = Language["Border"];
             borderItem.Checked = Config["Border"].Boolean;
-
-
-            toolsMenu.Text = Language["Tools"];
-            
             // 
             // Message
             // 
-            messager.Location = new Point(1072, 25);
+            messagePanel.Location = new Point(1072, 25);
 
-            openButton.Location = new Point(20, 63);
+            openButton.Location = new Point(250, 50);
             openButton.Text = Language["Open"];
             openButton.Size = new Size(75, 25);
             openButton.UseVisualStyleBackColor = true;
 
-            closeButton.Location = new Point(155, 63);
+            closeButton.Location = new Point(350, 50);
             closeButton.Text = Language["Close"];
             closeButton.Size = new Size(75, 25);
             closeButton.UseVisualStyleBackColor = true;
 
-            pathBox.Location = new Point(20, 40);
-            pathBox.Size = new Size(210, 20);
+            pathBox.Location = new Point(20, 48);
+            pathBox.Size = new Size(210, 32);
+            pathBox.TextAlign = HorizontalAlignment.Left;
             // 
             // box
             // 
@@ -620,31 +609,26 @@ namespace ExtractorSharp {
             ///
             scaleLabel.AutoSize = true;
             scaleLabel.Text = $"{Language["CanvasScale"]}(%)";
-            scaleLabel.Location = new Point(250, 53);
+            scaleLabel.Location = new Point(250, 55);
 
             ///
             ///
             ///
             scaleBox.Size = new Size(100, 40);
-            scaleBox.Location = new Point(320, 50);
+            scaleBox.Location = new Point(330, 50);
             scaleBox.Minimum = 20;
             scaleBox.Maximum = 100000;
+            scaleBox.TextAlign = HorizontalAlignment.Center;
 
-
-            //
-            //
-            //
-            pixelateBox.Text = Language["Pixelate"];
-            pixelateBox.Location = new Point(430, 50);
 
             // 
             // realPositionBox
             // 
-            realPositionBox.Location = new Point(1085, 60);
-            realPositionBox.Name = "realPositionBox";
-            realPositionBox.AutoSize = true;
-            realPositionBox.TabIndex = 11;
-            realPositionBox.Text = Language["RealPosition"];
+            relativePositionCheckedBox.Location = new Point(1085, 60);
+            relativePositionCheckedBox.Name = "realPositionBox";
+            relativePositionCheckedBox.AutoSize = true;
+            relativePositionCheckedBox.TabIndex = 11;
+            relativePositionCheckedBox.Text = Language["RealPosition"];
             //
             //
             //
@@ -749,13 +733,13 @@ namespace ExtractorSharp {
             Controls.Add(mainMenu);
             Controls.Add(searchIcon);
             Controls.Add(searchBox);
-            Controls.Add(albumList);
+            Controls.Add(fileList);
             Controls.Add(layerList);
-            Controls.Add(messager);
-            Controls.Add(openButton);
-            Controls.Add(closeButton);
+            Controls.Add(messagePanel);
+/*            Controls.Add(openButton);
+            Controls.Add(closeButton);*/
             Controls.Add(pathBox);
-            Controls.Add(realPositionBox);
+            Controls.Add(relativePositionCheckedBox);
             Controls.Add(displayBox);
             Controls.Add(linearDodgeBox);
             Controls.Add(dyeBox);
@@ -764,7 +748,6 @@ namespace ExtractorSharp {
             Controls.Add(colorPanel);
             Controls.Add(scaleLabel);
             Controls.Add(scaleBox);
-            Controls.Add(pixelateBox);
             Controls.Add(previewPanel);
             MainMenuStrip = mainMenu;
             Name = "MainForm";
@@ -772,7 +755,7 @@ namespace ExtractorSharp {
             AllowDrop = true;
             ClientSize = Config["MainSize"].Size;
             BackColor = Config["MainColor"].Color;
-            albumListMenu.ResumeLayout(false);
+            fileListMenu.ResumeLayout(false);
             imageListMenu.ResumeLayout(false);
             mainMenu.ResumeLayout(false);
             mainMenu.PerformLayout();
@@ -789,31 +772,22 @@ namespace ExtractorSharp {
 
         #endregion
         
-        private ESListBox<Album> albumList;
-        private ESListBox<Sprite> imageList;
-        private ESListBox<IPaint> layerList;
+        internal ESListBox<Album> fileList;
+        internal ESListBox<Sprite> imageList;
+        internal ESListBox<IPaint> layerList;
 
         private MenuStrip mainMenu;
         private ToolStripMenuItem fileMenu;
 
         private ToolStripMenuItem openItem;
-        private ToolStripMenuItem openFileItem;
-        private ToolStripMenuItem openDirItem;
-        private ToolStripMenuItem openRecentItem;
 
-        private ToolStripMenuItem addItem;
-        private ToolStripMenuItem addFileItem;
-        private ToolStripMenuItem addDirItem;
-        private ToolStripMenuItem addRecentItem;
 
         private ToolStripMenuItem saveItem;
         private ToolStripMenuItem saveFileItem;
         private ToolStripMenuItem saveDirItem;
         private ToolStripMenuItem saveRecentItem;
 
-        private ToolStripMenuItem saveAsFileItem;
 
-        private ToolStripMenuItem exitItem;
 
         private ToolStripMenuItem editMenu;
         private ToolStripMenuItem undoItem;
@@ -833,12 +807,14 @@ namespace ExtractorSharp {
         private ToolStripMenuItem versionItem;      //版本特性
         private ToolStripMenuItem settingItem;     //设置
         private ToolStripMenuItem helpItem;        //帮助
+        private ToolStripMenuItem checkUpdateItem; //检查更新
 
         private ToolStripMenuItem viewMenu;         //视图
         private ToolStripMenuItem ruleItem;         //标尺
         private ToolStripMenuItem displayRuleItem;  //显示标尺
         private ToolStripMenuItem adjustRuleItem;   //校正标尺
         private ToolStripMenuItem previewItem;      //贴图预览
+        private ToolStripMenuItem pixelateItem;  //像素化
 
         private ToolStripMenuItem gridItem;         //网格
         private ToolStripMenuItem borderItem;       //边框
@@ -847,7 +823,7 @@ namespace ExtractorSharp {
 
         private ToolStripMenuItem modelMenu;      //模型管理
 
-        private ContextMenuStrip albumListMenu;
+        private ContextMenuStrip fileListMenu;
         private ToolStripMenuItem newFileItem;       //新建文件
         private ToolStripMenuItem replaceFromFileItem;      //替换到外部文件
         private ToolStripMenuItem replaceToThisFileItem;   //替换到该文件
@@ -864,7 +840,7 @@ namespace ExtractorSharp {
         private ToolStripMenuItem saveAsItem;       //另存为
         private ToolStripMenuItem renameItem;       //重命名
         private ToolStripMenuItem convertItem;      //转换版本
-        private ToolStripMenuItem hideImgItem;      //隐藏文件内所有贴图
+        private ToolStripMenuItem hideFileItem;      //隐藏文件内所有贴图
         private ToolStripMenuItem addMergeItem;    //加入拼合队列
         private ToolStripMenuItem addOutsideMergeItem;//加入外部文件到拼合队列
         private ToolStripMenuItem runMergeItem;    //执行拼合队列
@@ -874,6 +850,8 @@ namespace ExtractorSharp {
         private ToolStripMenuItem compareFileItem;   //对比文件
         private ToolStripMenuItem splitFileItem;     //拆分文件
         private ToolStripMenuItem mixFileItem;       //合并文件
+
+        private ToolStripMenuItem filePropertiesItem;  //文件属性
 
         private ContextMenuStrip imageListMenu;
 
@@ -907,14 +885,13 @@ namespace ExtractorSharp {
         private ToolStripMenuItem renameLayerItem;
 
         
-        private CheckBox realPositionBox;        //真实坐标
+        private CheckBox relativePositionCheckedBox;        //真实坐标
         private CheckBox displayBox;            //动画播放
         private CheckBox linearDodgeBox;          //线性减淡
         private CheckBox dyeBox;             //染色
 
         private Label scaleLabel;
         private NumericUpDown scaleBox;         //画布比例
-        private CheckBox pixelateBox;              //像素化
 
 
         private Button openButton;              //打开文件
@@ -943,11 +920,13 @@ namespace ExtractorSharp {
         private ToolStripMenuItem selectThisTargetItem;
         private ToolStripMenuItem selectAllHideItem;
 
-        private DropPanel dropPanel;
+        
         private AudioPlayer player;
         private Panel previewPanel;
         private ColorPanel colorPanel;
-        private ESMessager messager;
+
+        [Import]
+        private MessagePanel messagePanel;
     }
 }
 

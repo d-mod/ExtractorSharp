@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using ExtractorSharp.Core.Model;
 
-namespace ExtractorSharp.Core.Lib {
+namespace System.Drawing {
     public static class Colors {
         public const int Argb1555 = 0x0e;
         public const int Argb4444 = 0x0f;
@@ -17,7 +16,7 @@ namespace ExtractorSharp.Core.Lib {
         /// <returns></returns>
         public static void ReadColor(Stream stream, int bits, byte[] target, int offset) {
             byte[] bs;
-            if (bits == Argb8888) {
+            if(bits == Argb8888) {
                 stream.Read(4, out bs);
                 bs.CopyTo(target, offset);
                 return;
@@ -27,7 +26,7 @@ namespace ExtractorSharp.Core.Lib {
             byte g = 0;
             byte b = 0;
             stream.Read(2, out bs);
-            switch (bits) {
+            switch(bits) {
                 case Argb1555:
                     a = (byte)(bs[1] >> 7);
                     r = (byte)((bs[1] >> 2) & 0x1f);
@@ -51,7 +50,7 @@ namespace ExtractorSharp.Core.Lib {
             target[offset + 3] = a;
         }
 
-        public static void ReadColor(Stream stream, ColorBits bits, byte[] target, int offset) {
+        public static void ReadColor(Stream stream, ColorFormats bits, byte[] target, int offset) {
             ReadColor(stream, (int)bits, target, offset);
         }
 
@@ -61,8 +60,8 @@ namespace ExtractorSharp.Core.Lib {
             return target;
         }
 
-        public static byte[] ReadColor(Stream stream, ColorBits bits) {
-            return ReadColor(stream, (int) bits);
+        public static byte[] ReadColor(Stream stream, ColorFormats bits) {
+            return ReadColor(stream, (int)bits);
         }
 
 
@@ -73,8 +72,8 @@ namespace ExtractorSharp.Core.Lib {
         /// <param name="stream"></param>
         /// <param name="data"></param>
         /// <param name="bits"></param>
-        public static void WriteColor(Stream stream, byte[] data, ColorBits bits) {
-            if (bits == ColorBits.ARGB_8888) {
+        public static void WriteColor(Stream stream, byte[] data, ColorFormats bits) {
+            if(bits == ColorFormats.ARGB_8888) {
                 stream.Write(data);
                 return;
             }
@@ -84,22 +83,22 @@ namespace ExtractorSharp.Core.Lib {
             var b = data[0];
             var left = 0;
             var right = 0;
-            switch (bits) {
-                case ColorBits.ARGB_1555:
-                    a = (byte) (a >> 7);
-                    r = (byte) (r >> 3);
-                    g = (byte) (g >> 3);
-                    b = (byte) (b >> 3);
-                    left = (byte) (((g & 7) << 5) | b);
-                    right = (byte) ((a << 7) | (r << 2) | (g >> 3));
+            switch(bits) {
+                case ColorFormats.ARGB_1555:
+                    a = (byte)(a >> 7);
+                    r = (byte)(r >> 3);
+                    g = (byte)(g >> 3);
+                    b = (byte)(b >> 3);
+                    left = (byte)(((g & 7) << 5) | b);
+                    right = (byte)((a << 7) | (r << 2) | (g >> 3));
                     break;
-                case ColorBits.ARGB_4444:
+                case ColorFormats.ARGB_4444:
                     left = g | (b >> 4);
                     right = a | (r >> 4);
                     break;
             }
-            stream.WriteByte((byte) left);
-            stream.WriteByte((byte) right);
+            stream.WriteByte((byte)left);
+            stream.WriteByte((byte)right);
         }
 
         /// <summary>
@@ -108,8 +107,8 @@ namespace ExtractorSharp.Core.Lib {
         /// <param name="stream"></param>
         /// <param name="color"></param>
         /// <param name="bits"></param>
-        public static void WriteColor(this Stream stream, Color color, ColorBits bits) {
-            byte[] data = {color.B, color.G, color.R, color.A};
+        public static void WriteColor(this Stream stream, Color color, ColorFormats bits) {
+            byte[] data = { color.B, color.G, color.R, color.A };
             WriteColor(stream, data, bits);
         }
 
@@ -121,7 +120,7 @@ namespace ExtractorSharp.Core.Lib {
         /// <param name="count"></param>
         /// <returns></returns>
         public static IEnumerable<Color> ReadPalette(Stream stream, int count) {
-            for (var i = 0; i < count; i++) {
+            for(var i = 0; i < count; i++) {
                 var data = new byte[4];
                 stream.Read(data);
                 yield return Color.FromArgb(data[3], data[0], data[1], data[2]);
@@ -131,16 +130,19 @@ namespace ExtractorSharp.Core.Lib {
 
         public static void WritePalette(Stream stream, IEnumerable<Color> table) {
             var list = table.ToList();
-            foreach (var color in list) {
-                var data = new[] {color.R, color.G, color.B, color.A};
+            foreach(var color in list) {
+                var data = new[] { color.R, color.G, color.B, color.A };
                 stream.Write(data);
             }
+        }
+
+        public static void MergePalette(IEnumerable<Color> palette, IEnumerable<Color> merge) {
         }
 
         public static string ToHexString(this Color color) {
             var val = color.ToArgb();
             var str = val.ToString("x2");
-            for (var i = str.Length; i < 8; i++) {
+            for(var i = str.Length; i < 8; i++) {
                 str = "0" + str;
             }
             return $"#{str}";

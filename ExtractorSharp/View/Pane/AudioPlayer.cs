@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Windows.Forms;
+using ExtractorSharp.Core;
 using ExtractorSharp.Core.Handle;
 using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.View.Pane {
     internal partial class AudioPlayer : UserControl {
-        private readonly Language Language = Language.Default;
+
         private int handle;
+
         private bool isRun;
+
+        public Language Language { set; get; } = Language.Empty;
+
 
         public AudioPlayer() {
             InitializeComponent();
@@ -21,12 +26,12 @@ namespace ExtractorSharp.View.Pane {
         /// </summary>
         public void Play(Album ogg) {
             Visible = true;
-            if (handle != 0) {
+            if(handle != 0) {
                 Bass.Stop(handle);
                 Bass.Close(handle);
             }
 
-            if (ogg != null && ogg.Version == ImgVersion.Other) {
+            if(ogg != null && ogg.Version == ImgVersion.Other) {
                 ogg.Adjust();
                 groupBox1.Text = ogg.Name;
                 handle = Bass.Play(ogg.Data);

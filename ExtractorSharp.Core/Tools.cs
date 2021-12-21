@@ -1,20 +1,12 @@
 ﻿using System;
 using System.Reflection;
-using System.Windows.Forms;
 
 namespace ExtractorSharp.Core {
     /// <summary>
     ///     工具函数集
     /// </summary>
     public static class Tools {
-        public static void InsertRange(this CheckedListBox.ObjectCollection collection, int index, object[] array) {
-            var i = 0;
-            while (i < array.Length) collection.Insert(index++, array[i++]);
-        }
 
-        public static void AddSeparator(this ToolStripItemCollection items) {
-            items.Add(new ToolStripSeparator());
-        }
 
 
         /// <summary>

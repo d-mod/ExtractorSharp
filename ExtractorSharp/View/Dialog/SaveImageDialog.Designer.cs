@@ -26,12 +26,12 @@ namespace ExtractorSharp.View.Dialog {
         /// </summary>
         private void InitializeComponent() {
             this.pathBox = new System.Windows.Forms.TextBox();
-            this.loadButton = new ExtractorSharp.Component.ESButton();
+            this.loadButton = new ExtractorSharp.Components.ESButton();
             this.fullPathCheck = new System.Windows.Forms.CheckBox();
             this.allImagesCheck = new System.Windows.Forms.CheckBox();
             this.tipsCheck = new System.Windows.Forms.CheckBox();
-            this.yesButton = new ExtractorSharp.Component.ESButton();
-            this.cancelButton = new ExtractorSharp.Component.ESButton();
+            this.yesButton = new ExtractorSharp.Components.ESButton();
+            this.cancelButton = new ExtractorSharp.Components.ESButton();
             pathLabel = new Label();
             nameLabel = new Label();
             nameBox = new TextBox();
@@ -129,12 +129,12 @@ namespace ExtractorSharp.View.Dialog {
         #endregion
 
         private System.Windows.Forms.TextBox pathBox;
-        private Component.ESButton loadButton;
+        private Components.ESButton loadButton;
         private System.Windows.Forms.CheckBox tipsCheck;
         private System.Windows.Forms.CheckBox fullPathCheck;
         private System.Windows.Forms.CheckBox allImagesCheck;
-        private Component.ESButton yesButton;
-        private Component.ESButton cancelButton;
+        private Components.ESButton yesButton;
+        private Components.ESButton cancelButton;
         private Label pathLabel;
         private Label nameLabel;
         private TextBox nameBox;

@@ -1,41 +1,40 @@
-﻿using ExtractorSharp.Component;
-using ExtractorSharp.Core.Composition;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using System.ComponentModel.Composition;
+using System.Windows.Forms;
+using ExtractorSharp.Components;
+using ExtractorSharp.Composition.Config;
 
 namespace ExtractorSharp.View.SettingPane {
-    public partial class MovePane : AbstractSettingPane {
-        public MovePane(IConnector Connector):base(Connector){
+    public partial class MovePane : Panel {
+
+        [Import]
+        public IConfig Config;
+        public MovePane() {
             InitializeComponent();
             moveStepBar.ValueChanged += MoveStepBarChanged;
             moveStepBox.ValueChanged += MoveStepBoxChanged;
         }
 
         private void MoveStepBarChanged(object sender, EventArgs e) {
-            if (moveStepBox.Value != moveStepBar.Value) {
+            if(moveStepBox.Value != moveStepBar.Value) {
                 moveStepBox.Value = moveStepBar.Value;
             }
         }
 
         private void MoveStepBoxChanged(object sender, EventArgs e) {
-            if (moveStepBox.Value != moveStepBar.Value) {
+            if(moveStepBox.Value != moveStepBar.Value) {
                 moveStepBar.Value = (int)moveStepBox.Value;
             }
         }
 
-        public override void Initialize() {
+        public void Initialize() {
             moveStepBox.Value = Config["MoveStep"].Integer;
             autoChangePositionCheck.Checked = Config["AutoChangePosition"].Boolean;
         }
 
-        public override void Save() {
-            Config["MoveStep"] = new Core.Config.ConfigValue(moveStepBox.Value);
-            Config["AutoChangePosition"] = new Core.Config.ConfigValue(autoChangePositionCheck.Checked);
+        public void Save() {
+            Config["MoveStep"] = new ConfigValue(moveStepBox.Value);
+            Config["AutoChangePosition"] = new ConfigValue(autoChangePositionCheck.Checked);
         }
 
     }

@@ -1,53 +1,56 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Linq;
+using System.Text;
 using ExtractorSharp.Core.Coder;
 using ExtractorSharp.Core.Handle;
-using ExtractorSharp.Core.Lib;
-using ExtractorSharp.Json.Attr;
 
 namespace ExtractorSharp.Core.Model {
-    public sealed class Album {
-        private int _tabindex;
+    public sealed class Album : INotifyPropertyChanged , IFileObject {
 
         /// <summary>
         ///     贴图个数
         /// </summary>
-        public int Count;
+        public int Count { set; get; }
 
         /// <summary>
         ///     文件数据
         /// </summary>
         public byte[] Data;
 
-
         public List<Texture> Textures = new List<Texture>();
 
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public Album() {
-            Handler = Handler.CreateHandler(Version, this);
+            this.List = new List<Sprite>();
+            this.Handler = Handler.CreateHandler(this.Version, this);
+        }
+
+        private void OnPropertyChanged(string propertyName) {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public Album(Bitmap[] array) : this() {
-            var sprites = new Sprite[array.Length];
-            for (var i = 0; i < array.Length; i++) {
-                sprites[i] = new Sprite(this) {
+            for(var i = 0; i < array.Length; i++) {
+                var sprite = new Sprite(this) {
                     Index = i,
-                    Picture = array[i],
+                    Image = array[i],
                     CompressMode = CompressMode.ZLIB,
                     Size = array[i].Size,
                     FrameSize = array[i].Size
                 };
+                this.List.Add(sprite);
             }
-            List.AddRange(sprites);
-            Adjust();
+            this.Adjust();
         }
 
         /// <summary>
         ///     处理器
         /// </summary>
-        [LSIgnore]
         public Handler Handler { get; set; }
 
         /// <summary>
@@ -63,42 +66,63 @@ namespace ExtractorSharp.Core.Model {
         /// <summary>
         ///     贴图列表
         /// </summary>
-        public List<Sprite> List { get; } = new List<Sprite>();
+        public List<Sprite> List { private set; get; }
 
         /// <summary>
         ///     索引信息长度
         /// </summary>
         public long IndexLength { set; get; }
 
+        private string _path = string.Empty;
+
         /// <summary>
         ///     文件路径
         /// </summary>
-        public string Path { set; get; } = string.Empty;
+        public string Path {
+            set {
+                this._path = value;
+                this.OnPropertyChanged("Path");
+            }
+            get => this._path;
+        }
 
         public string Name {
-            get => Path.GetSuffix();
-            set => Path = Path.Replace(Name, value);
+            set => this.Path = this.Path.Replace(this.Name, value);
+            get => this.Path.GetSuffix();
         }
+
+        private ImgVersion _version = ImgVersion.Ver2;
 
         /// <summary>
         ///     文件版本
         /// </summary>
-        public ImgVersion Version { get; set; } = ImgVersion.Ver2;
+        public ImgVersion Version {
+            set {
+                this._version = value;
+                this.OnPropertyChanged("Version");
+            }
+            get => this._version;
+        }
 
 
-        public List<Color> CurrentTable {
+        public List<Color> CurrentPalette {
             get {
-                if (TableIndex > -1 && TableIndex < Tables.Count) {
-                    return Tables[TableIndex];
+                if(this.PaletteIndex > -1 && this.PaletteIndex < this.Palettes.Count) {
+                    return this.Palettes[this.PaletteIndex];
                 }
-                return new List<Color>();
+                return new List<Color>(256);
+            }
+            set {
+                if(this.PaletteIndex > -1 && this.PaletteIndex < this.Palettes.Count) {
+                    this.Palettes[this.PaletteIndex] = value;
+                }
             }
         }
 
         /// <summary>
         ///     色表
         /// </summary>
-        public List<List<Color>> Tables { set; get; } = new List<List<Color>> {new List<Color>()};
+        public List<List<Color>> Palettes { set; get; } = new List<List<Color>> { new List<Color>() };
 
 
         /// <summary>
@@ -106,33 +130,35 @@ namespace ExtractorSharp.Core.Model {
         /// </summary>
         public Album Target { set; get; }
 
+        private int _paletteIndex;
         /// <summary>
         ///     色表索引
         /// </summary>
-        public int TableIndex {
+        public int PaletteIndex {
             set {
-                if (_tabindex != value) {
-                    Refresh();
-                    _tabindex = Math.Min(value, Tables.Count - 1);
+                if(this._paletteIndex != value) {
+                    this.Refresh();
+                    this._paletteIndex = Math.Min(value, this.Palettes.Count - 1);
+                    this.OnPropertyChanged("PaletteIndex");
                 }
             }
-            get => _tabindex;
+            get => this._paletteIndex;
         }
 
         public Sprite this[int index] {
-            get => List[index];
+            get => this.List[index];
             set {
-                if (index < List.Count) {
-                    List[index] = value;
+                if(index < this.List.Count) {
+                    this.List[index] = value;
                 } else {
-                    List.Add(value);
+                    this.List.Add(value);
                 }
             }
         }
 
 
         public override string ToString() {
-            return Name;
+            return this.Name;
         }
 
 
@@ -140,7 +166,9 @@ namespace ExtractorSharp.Core.Model {
         ///     重置图片
         /// </summary>
         public void Refresh() {
-            List.ForEach(e => e.Picture = null);
+            foreach(var sprite in this.List) {
+                sprite.Image = null;
+            }
         }
 
         /// <summary>
@@ -148,8 +176,10 @@ namespace ExtractorSharp.Core.Model {
         /// </summary>
         /// <param name="stream"></param>
         public void InitHandle(Stream stream) {
-            Handler = Handler.CreateHandler(Version, this);
-            if (Handler != null && stream != null) Handler.CreateFromStream(stream);
+            this.Handler = Handler.CreateHandler(this.Version, this);
+            if(this.Handler != null && stream != null) {
+                this.Handler.CreateFromStream(stream);
+            }
         }
 
         /// <summary>
@@ -158,14 +188,13 @@ namespace ExtractorSharp.Core.Model {
         /// <param name="album"></param>
         public void Replace(Album album) {
             album = album.Clone();
-            Version = album.Version;
-            Tables = album.Tables;
-            TableIndex = album.TableIndex;
-            Handler = album.Handler;
-            Handler.Album = this;
-            List.Clear();
-            List.AddRange(album.List);
-            AdjustIndex();
+            this.Version = album.Version;
+            this.Palettes = album.Palettes;
+            this.PaletteIndex = album.PaletteIndex;
+            this.Handler = album.Handler;
+            this.Handler.Album = this;
+            this.List = album.List.ToList();
+            this.AdjustIndex();
         }
 
         /// <summary>
@@ -173,18 +202,19 @@ namespace ExtractorSharp.Core.Model {
         /// </summary>
         /// <param name="version"></param>
         public void ConvertTo(ImgVersion version) {
-            Handler.ConvertToVersion(version);
-            Version = version;
-            InitHandle(null);
+            this.Handler.ConvertToVersion(version);
+            this.Version = version;
+            this.InitHandle(null);
         }
 
         /// <summary>
         ///     校正序号
         /// </summary>
         public void AdjustIndex() {
-            for (var i = 0; i < List.Count; i++) {
-                List[i].Index = i;
-                List[i].Parent = this;
+            for(var i = 0; i < this.List.Count; i++) {
+                this.List[i].Index = i;
+                //todo
+                this.List[i].Parent = this;
             }
         }
 
@@ -192,29 +222,29 @@ namespace ExtractorSharp.Core.Model {
         ///     隐藏贴图
         /// </summary>
         public void Hide() {
-            var count = List.Count;
-            List.Clear();
-            Tables = new List<List<Color>> {new List<Color>()};
-            TableIndex = 0;
-            ConvertTo(ImgVersion.Ver2);
-            NewImage(count, ColorBits.LINK, -1);
+            var count = this.List.Count;
+            this.List.Clear();
+            this.Palettes = new List<List<Color>> { new List<Color>() };
+            this.PaletteIndex = 0;
+            this.ConvertTo(ImgVersion.Ver2);
+            this.NewImage(count, ColorFormats.LINK, -1);
         }
 
         public Album Clone() {
-            Adjust();
-            var temp=NpkCoder.ReadImg(Data, Path);
-            temp.TableIndex = TableIndex;
+            this.Adjust();
+            var temp = NpkCoder.ReadImg(this.Data, this.Path);
+            temp.PaletteIndex = this.PaletteIndex;
             return temp;
         }
 
         public void Save(Stream stream) {
-            Adjust();
-            stream.Write(Data);
+            this.Adjust();
+            stream.Write(this.Data);
         }
 
         public void Save(string file) {
-            using (var fs = new FileStream(file, FileMode.Create)) {
-                Save(fs);
+            using(var fs = new FileStream(file, FileMode.Create)) {
+                this.Save(fs);
             }
         }
 
@@ -225,24 +255,19 @@ namespace ExtractorSharp.Core.Model {
         /// <param name="al"></param>
         /// <returns></returns>
         public bool Equals(Album al) {
-            return Path.Equals(al?.Path);
+            return this.Path.Equals(al?.Path);
         }
 
         /// <summary>
         ///     从流初始化
         /// </summary>
         /// <param name="stream"></param>
-        public void CreateFromStream(Stream stream) {
-            Handler.CreateFromStream(stream);
+        public void Load(Stream stream) {
+            this.Handler.CreateFromStream(stream);
         }
 
-        /// <summary>
-        ///     解析贴图
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        public Bitmap ConvertToBitmap(Sprite entity) {
-            return Handler.ConvertToBitmap(entity);
+        public ImageData GetImageData(Sprite sprite) {
+            return this.Handler.GetImageData(sprite);
         }
 
         /// <summary>
@@ -250,8 +275,8 @@ namespace ExtractorSharp.Core.Model {
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public byte[] ConvertToByte(Sprite entity) {
-            return Handler.ConvertToByte(entity);
+        public byte[] ConvertToByte(Sprite sprite) {
+            return this.Handler.ConvertToByte(sprite);
         }
 
         /// <summary>
@@ -260,24 +285,61 @@ namespace ExtractorSharp.Core.Model {
         /// <param name="count"></param>
         /// <param name="type"></param>
         /// <param name="index"></param>
-        public void NewImage(int count, ColorBits type, int index) {
-            Handler.NewImage(count, type, index);
-            AdjustIndex();
+        public void NewImage(int count, ColorFormats type, int index) {
+            if(count < 1) {
+                return;
+            }
+            if(index < 0) {
+                index = this.List.Count;
+            }
+            var array = new Sprite[count];
+            var first = new Sprite(this) {
+                Index = index
+            };
+
+            this.List.Insert(index, first);
+
+            if(type != ColorFormats.LINK) {
+                array[0].ColorFormat = type;
+            }
+
+            for(var i = 1; i < count; i++) {
+                array[i] = new Sprite(this) {
+                    ColorFormat = type
+                };
+                if(type == ColorFormats.LINK) {
+                    array[i].TargetIndex = index;
+                }
+                array[i].Index = index + i;
+                this.List.Insert(index + i, array[i]);
+            }
+            this.AdjustIndex();
         }
+
+        public void RemoveImage(int start, int length) {
+            if(start < 0 || length < 1) {
+                return;
+            }
+            this.List.RemoveRange(start, length);
+            this.AdjustIndex();
+        }
+
 
         /// <summary>
         ///     校正贴图
         /// </summary>
         public void Adjust() {
-            if (Target != null) {
+            if(this.Target != null) {
                 return;
             }
-            AdjustIndex();
-            Handler.Adjust();
+            this.AdjustIndex();
+            this.Handler.Adjust();
         }
 
         public IEnumerator<Sprite> GetEnumerator() {
-            return List.GetEnumerator();
+            return this.List.GetEnumerator();
         }
+
+
     }
 }

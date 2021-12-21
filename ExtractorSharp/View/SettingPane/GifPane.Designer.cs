@@ -1,4 +1,4 @@
-﻿using ExtractorSharp.Component;
+﻿using ExtractorSharp.Components;
 
 namespace ExtractorSharp.View.SettingPane {
     partial class GifPane {
@@ -56,8 +56,8 @@ namespace ExtractorSharp.View.SettingPane {
            // Controls.Add(backgroundLabel);
            // Controls.Add(backgroundPanel);
            // Controls.Add(backgroundBox);
-            this.Name = "GIF";
-            this.Parent = "File";
+           // this.Name = "GIF";
+           // this.Parent = "File";
         }
 
 

@@ -28,10 +28,10 @@ namespace ExtractorSharp.View.Dialog {
         private void InitializeComponent() {
             this.tree = new TreeView();
             this.panel = new Panel();
-            this.applyButton = new Component.ESButton();
-            this.yesButton = new ExtractorSharp.Component.ESButton();
-            this.resetButton = new Component.ESButton();
-            this.cancelButton = new ExtractorSharp.Component.ESButton();
+            this.applyButton = new Components.ESButton();
+            this.yesButton = new ExtractorSharp.Components.ESButton();
+            this.resetButton = new Components.ESButton();
+            this.cancelButton = new ExtractorSharp.Components.ESButton();
             this.SuspendLayout();
             // 
             // easeTabPanel1
@@ -91,10 +91,10 @@ namespace ExtractorSharp.View.Dialog {
         #endregion
 
         private TreeView tree;
-        private Component.ESButton applyButton;
-        private Component.ESButton yesButton;
-        private Component.ESButton cancelButton;
-        private Component.ESButton resetButton;
+        private Components.ESButton applyButton;
+        private Components.ESButton yesButton;
+        private Components.ESButton cancelButton;
+        private Components.ESButton resetButton;
         private Panel panel;
     }
 }

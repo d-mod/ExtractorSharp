@@ -6,36 +6,62 @@ namespace ExtractorSharp.Core.Model {
     /// <summary>
     ///     DDS文件信息
     /// </summary>
-    public class Texture {
+    public sealed class Texture {
+
         private Bitmap _image;
+
+        private ImageData _imageData;
+
         public int Index { set; get; }
+
         public int Width { set; get; } = 4;
+
         public int Height { set; get; } = 4;
+
         public int Length { set; get; }
+
         public int FullLength { set; get; }
+
         public byte[] Data { set; get; }
-        public TextureVersion Version { set; get; } = TextureVersion.Dxt1;
-        public ColorBits Type { set; get; } = ColorBits.DXT_1;
+
+        public TextureVersion Version { set; get; } = TextureVersion.DXT1;
+
+        public ColorFormats Type { set; get; } = ColorFormats.DDS_DXT1;
 
         public Bitmap Pictrue {
             get {
-                if (_image != null) return _image;
-                var data = Zlib.Decompress(Data, FullLength);
-                if (Type < ColorBits.LINK) {
-                    return Bitmaps.FromArray(data, new Size(Width, Height), Type);
+                if(this._image != null) {
+                    return this._image;
+                }
+                return this.ImageData.ToBitmap();
+            }
+            set => this._image = value;
+        }
+
+        public ImageData ImageData {
+            get {
+                if(this._imageData != null) {
+                    return this._imageData;
+                }
+
+                var data = Zlib.Decompress(this.Data, this.FullLength);
+                if(this.Type < ColorFormats.LINK) {
+                    data = Bitmaps.ConvertTo32Bits(data, this.Type);
+                    return new ImageData(data, this.Width, this.Height);
                 }
                 var dds = DdsDecoder.Decode(data);
                 data = dds.DdsMipmaps[0].Data;
-                var bmp = Bitmaps.FromArray(data, new Size(Width, Height));
-                return bmp;
+                return this._imageData = new ImageData(data, this.Width, this.Height);
             }
-            set => _image = value;
         }
 
-        public static Texture CreateFromBitmap(Sprite sprite) {
-            var bmp = sprite.Picture;
-            var type = sprite.Type;
-            if (type > ColorBits.LINK) type -= 4;
+        public static Texture CreateFromSprite(Sprite sprite) {
+            var bmp = sprite.Image;
+            var type = sprite.ColorFormat;
+            if(type > ColorFormats.LINK) {
+                type -= 4;
+            }
+
             var data = bmp.ToArray(type);
             var fullLength = data.Length;
             var width = bmp.Width;
@@ -69,18 +95,22 @@ namespace ExtractorSharp.Core.Model {
         /// <summary>
         ///     大小
         /// </summary>
-        public Size Size => new Size(RightDown.X - LeftUp.X, RightDown.Y - LeftUp.Y);
+        public Size Size => new Size(this.RightDown.X - this.LeftUp.X, this.RightDown.Y - this.LeftUp.Y);
 
         public int Top { set; get; }
 
-        public Rectangle Rectangle => new Rectangle(LeftUp, Size);
+        public Rectangle Rectangle => new Rectangle(this.LeftUp, this.Size);
 
         public int Unknown { get; set; }
     }
 
     public enum TextureVersion {
-        Dxt1 = 0x01,
-        Dxt3 = 0X03,
-        Dxt5 = 0x05
+
+        DXT1 = 0x01,
+
+        DXT3 = 0X03,
+
+        DXT5 = 0x05
+
     }
 }

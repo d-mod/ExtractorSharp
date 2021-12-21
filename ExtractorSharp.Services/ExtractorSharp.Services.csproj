@@ -1,0 +1,206 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1592A00E-3EEB-4D78-876E-E4ED721DEEF3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ExtractorSharp.Services</RootNamespace>
+    <AssemblyName>ExtractorSharp.Services</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAPICodePack-Core.1.1.1\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAPICodePack-Shell.1.1.1\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Command\Confirm\ClosingConfirm.cs" />
+    <Compile Include="Command\Draws\EraserDraw.cs" />
+    <Compile Include="Command\Draws\MoveToolsDraw.cs" />
+    <Compile Include="Command\Draws\PencilDraw.cs" />
+    <Compile Include="Command\Confirm\AddFileConfirm.cs" />
+    <Compile Include="Command\Files\ConvertFile.cs" />
+    <Compile Include="Command\Files\LoadFile.cs" />
+    <Compile Include="Command\Files\OpenFile.cs" />
+    <Compile Include="Command\Files\SaveAsFile.cs" />
+    <Compile Include="Command\Files\SaveToDirectory.cs" />
+    <Compile Include="Command\Images\SaveAsImage.cs" />
+    <Compile Include="Command\Merges\AddFileToMerge.cs" />
+    <Compile Include="Command\SetSavePath.cs" />
+    <Compile Include="Command\Files\CutFile.cs" />
+    <Compile Include="Command\Files\DeleteFile.cs" />
+    <Compile Include="Command\Files\ExchangeFile.cs" />
+    <Compile Include="Command\Files\HideFile.cs" />
+    <Compile Include="Command\Files\MixFile.cs" />
+    <Compile Include="Command\Files\MoveFile.cs" />
+    <Compile Include="Command\Files\NewFile.cs" />
+    <Compile Include="Command\Files\PasteFile.cs" />
+    <Compile Include="Command\Files\RecoverFile.cs" />
+    <Compile Include="Command\Files\RenameFile.cs" />
+    <Compile Include="Command\Files\RepairFile.cs" />
+    <Compile Include="Command\Files\ReplaceFile.cs" />
+    <Compile Include="Command\Files\ReplaceFileFromList.cs" />
+    <Compile Include="Command\Files\SaveFile.cs" />
+    <Compile Include="Command\Files\SortFile.cs" />
+    <Compile Include="Command\Files\SplitFile.cs" />
+    <Compile Include="Command\Images\CanvasImage.cs" />
+    <Compile Include="Command\Images\ChangePosition.cs" />
+    <Compile Include="Command\Images\ChangeSize.cs" />
+    <Compile Include="Command\Images\CutImage.cs" />
+    <Compile Include="Command\Images\DeleteImage.cs" />
+    <Compile Include="Command\Images\DyeImage.cs" />
+    <Compile Include="Command\Images\HideImage.cs" />
+    <Compile Include="Command\Images\LinearDodge.cs" />
+    <Compile Include="Command\Images\LinkImage.cs" />
+    <Compile Include="Command\Images\MoveImage.cs" />
+    <Compile Include="Command\Images\NewImage.cs" />
+    <Compile Include="Command\Images\PasteImage.cs" />
+    <Compile Include="Command\Images\PasteSingleImage.cs" />
+    <Compile Include="Command\Images\ReplaceImage.cs" />
+    <Compile Include="Command\Images\SaveGif.cs" />
+    <Compile Include="Command\Images\SaveImage.cs" />
+    <Compile Include="Command\Images\TrimImage.cs" />
+    <Compile Include="Command\Layers\AddCompareLayer.cs" />
+    <Compile Include="Command\Layers\AddLayer.cs" />
+    <Compile Include="Command\Layers\DeleteLayer.cs" />
+    <Compile Include="Command\Layers\MoveLayer.cs" />
+    <Compile Include="Command\Layers\RenameLayer.cs" />
+    <Compile Include="Command\Merges\AddMerge.cs" />
+    <Compile Include="Command\Merges\ClearMerge.cs" />
+    <Compile Include="Command\Merges\MoveMerge.cs" />
+    <Compile Include="Command\Merges\RemoveMerge.cs" />
+    <Compile Include="Command\Merges\RunMerge.cs" />
+    <Compile Include="Command\Merges\SortMerge.cs" />
+    <Compile Include="Command\ChangeColor.cs" />
+    <Compile Include="Command\SwitchPalatte.cs" />
+    <Compile Include="Constants\CommandKeys.cs" />
+    <Compile Include="Constants\ListenterKeys.cs" />
+    <Compile Include="Constants\StoreKeys.cs" />
+    <Compile Include="Draw\Brush\Eraser.cs" />
+    <Compile Include="Draw\Brush\MoveTool.cs" />
+    <Compile Include="Draw\Brush\Pencil.cs" />
+    <Compile Include="Draw\Brush\Straw.cs" />
+    <Compile Include="Draw\Paint\Border.cs" />
+    <Compile Include="Draw\Paint\Canvas.cs" />
+    <Compile Include="Draw\Paint\CompareLayer.cs" />
+    <Compile Include="Draw\Paint\Grid.cs" />
+    <Compile Include="Draw\Paint\Layer.cs" />
+    <Compile Include="Draw\Paint\Ruler.cs" />
+    <Compile Include="JsonConfig.cs" />
+    <Compile Include="Listener\CommandLog.cs" />
+    <Compile Include="Listener\RefreshFile.cs" />
+    <Compile Include="Listener\RefreshImage.cs" />
+    <Compile Include="Listener\RefreshList.cs" />
+    <Compile Include="Listener\SaveChanged.cs" />
+    <Compile Include="Menu\Edit\ChangePositionMenuItem.cs" />
+    <Compile Include="Menu\Edit\RedoMenuItem.cs" />
+    <Compile Include="Menu\Edit\UndoMenuItem.cs" />
+    <Compile Include="Menu\FileList\DeleteFileItem.cs" />
+    <Compile Include="Menu\FileList\HideFileItem.cs" />
+    <Compile Include="Menu\FileList\Merge\AddMergeQueueItem.cs" />
+    <Compile Include="Menu\FileList\Merge\RunMergeItem.cs" />
+    <Compile Include="Menu\FileList\NewFileItem.cs" />
+    <Compile Include="Menu\FileList\FilePropertiesItem.cs" />
+    <Compile Include="Menu\FileList\RenameFileItem.cs" />
+    <Compile Include="Menu\FileList\Replace\ReplaceFromOutsideFileItem.cs" />
+    <Compile Include="Menu\FileList\SaveAsFileItem.cs" />
+    <Compile Include="Menu\File\CloseFileMenuItem.cs" />
+    <Compile Include="Menu\File\ExitMenuItem.cs" />
+    <Compile Include="Menu\File\OpenNewWindowMenuItem.cs" />
+    <Compile Include="Menu\File\Open\OpenDirectoryMenuItem.cs" />
+    <Compile Include="Menu\File\Open\OpenFileMenuItem.cs" />
+    <Compile Include="Menu\File\Open\OpenRecentMenuItem.cs" />
+    <Compile Include="Menu\File\Save\SaveAsMenuItem.cs" />
+    <Compile Include="Menu\File\Save\SaveDirectoryMenuItem.cs" />
+    <Compile Include="Menu\File\Save\SaveFileMenuItem.cs" />
+    <Compile Include="Menu\ImageList\DeleteImageItem.cs" />
+    <Compile Include="Menu\ImageList\HideImageItem.cs" />
+    <Compile Include="Menu\ImageList\ImagePropertiesItem.cs" />
+    <Compile Include="Menu\ImageList\NewImageItem.cs" />
+    <Compile Include="Menu\ImageList\ReplaceImageItem.cs" />
+    <Compile Include="Menu\ImageList\SaveAsImageItem.cs" />
+    <Compile Include="Menu\ImageList\SaveImageItem.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Starter.cs" />
+    <Compile Include="StoreConfig.cs" />
+    <Compile Include="Stores\RootModule.cs" />
+    <Compile Include="Supports\AudioSupport.cs" />
+    <Compile Include="Supports\GifSupport.cs" />
+    <Compile Include="Supports\ImgSupport.cs" />
+    <Compile Include="Supports\MesSupport.cs" />
+    <Compile Include="Supports\NpkSupport.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ExtractorSharp.Composition\ExtractorSharp.Composition.csproj">
+      <Project>{1f094af0-2442-4e5c-8f80-b56dba200d58}</Project>
+      <Name>ExtractorSharp.Composition</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExtractorSharp.Core\ExtractorSharp.Core.csproj">
+      <Project>{09014dd5-3314-437e-bb2e-6fbd0d1e7864}</Project>
+      <Name>ExtractorSharp.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExtractorSharp.Json\ExtractorSharp.Json.csproj">
+      <Project>{06d35140-706a-40ce-9373-6b948f092a30}</Project>
+      <Name>ExtractorSharp.Json</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="Resources\chinese.json" />
+    <None Include="Resources\config.json" />
+    <None Include="Resources\pencil.png" />
+    <None Include="Resources\rules.json" />
+    <None Include="Resources\view.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Metadata\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

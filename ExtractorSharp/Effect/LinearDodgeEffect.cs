@@ -1,21 +1,18 @@
-﻿using ExtractorSharp.Core.Composition;
-using ExtractorSharp.Core.Config;
+﻿using System.ComponentModel.Composition;
+using System.Drawing;
+using ExtractorSharp.Composition;
+using ExtractorSharp.Composition.Config;
 using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Core.Model;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExtractorSharp.Effect {
-    public class LinearDodgeEffect : IEffect {
-        private readonly IConfig Config;
 
-        internal LinearDodgeEffect(IConfig Config) {
-            this.Config = Config;
-        }
+    [ExportMetadata("Name", "LinearDodge")]
+    [Export(typeof(IEffect))]
+    public class LinearDodgeEffect : IEffect {
+
+        [Import]
+        private IConfig Config;
 
         public string Name => "LinearDodge";
 
@@ -24,7 +21,7 @@ namespace ExtractorSharp.Effect {
         public int Index { set; get; }
 
         public void Handle(Sprite sprite, ref Bitmap bmp) {
-            if (Config["LinearDodge"].Boolean) {
+            if(Config["LinearDodge"].Boolean) {
                 bmp = bmp.LinearDodge();
             }
         }

@@ -1,0 +1,16 @@
+﻿<Application x:Class="ExtractorSharp.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="clr-namespace:ExtractorSharp"
+             >
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Style/Metro.xaml" />
+                <ResourceDictionary Source="Style/Icons.xaml" />
+                <ResourceDictionary Source="Style/Controls.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <i:ColorFormatsBoolConverter x:Key="ColorFormatConverter"></i:ColorFormatsBoolConverter>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

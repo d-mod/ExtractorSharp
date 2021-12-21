@@ -37,7 +37,7 @@ namespace ExtractorSharp.View.SettingPane {
             this.moveStepGroup.Size = new System.Drawing.Size(380, 100);
             this.moveStepGroup.TabIndex = 2;
             this.moveStepGroup.TabStop = false;
-            this.moveStepGroup.Text = Language["MoveStep"];
+         //   this.moveStepGroup.Text = Language["MoveStep"];
 
             // 
             // flashSpeedBar
@@ -65,14 +65,14 @@ namespace ExtractorSharp.View.SettingPane {
             autoChangePositionCheck.UseVisualStyleBackColor = true;
             autoChangePositionCheck.AutoSize = true;
             autoChangePositionCheck.Size = new Size(200, 30);
-            autoChangePositionCheck.Text = Language["AutoChangePosition"];
+          //  autoChangePositionCheck.Text = Language["AutoChangePosition"];
             autoChangePositionCheck.Location = new Point(13, 130);
 
             this.Controls.Add(moveStepGroup);
             this.Controls.Add(autoChangePositionCheck);
 
-            this.Name = "Move";
-            this.Parent = "View";
+//this.Name = "Move";
+          //  this.Parent = "View";
 
         }
 

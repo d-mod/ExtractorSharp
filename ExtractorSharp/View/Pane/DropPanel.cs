@@ -1,22 +1,34 @@
-﻿using System.Windows.Forms;
-using ExtractorSharp.Core.Composition;
+﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using System.Windows.Forms;
 
 namespace ExtractorSharp.View.Pane {
     /// <summary>
     ///     历史记录/动作界面
     /// </summary>
-    public partial class DropPanel : TabControl {
-        public DropPanel(IConnector Connector) {
-            InitializeComponent();
-            TabPages.Add(new HistoryPage(Connector));
-            TabPages.Add(new ActionPage(Connector));
-            TabPages.Add(new PalettePage());
-            //TabPages.Add(new TexturePage());
+    [Export(typeof(DropPanel))]
+    public partial class DropPanel : TabControl, IPartImportsSatisfiedNotification {
+
+        [ImportMany(typeof(DropPage))]
+        private List<DropPage> pages;
+
+        public DropPanel() {
         }
 
-        public override void Refresh() {
-            SelectedTab.Refresh();
-            base.Refresh();
+        public void OnImportsSatisfied() {
+            InitializeComponent();
+            TabPages.AddRange(pages.ToArray());
+            this.VisibleChanged += Refresh;
+            this.SelectedIndexChanged += Refresh;
         }
+
+        private void Refresh(object sender, System.EventArgs e) {
+            SelectedTab?.Refresh();
+        }
+
+    }
+
+    public abstract class DropPage : TabPage {
+
     }
 }

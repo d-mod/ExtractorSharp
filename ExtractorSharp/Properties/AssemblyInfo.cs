@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
 [assembly: AssemblyTitle("ExtractorSharp")]
-[assembly: AssemblyDescription("AWW BWG")]
+[assembly: AssemblyDescription("ExtractorSharp")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Kritsu")]
 [assembly: AssemblyProduct("ExtractorSharp")]
-[assembly: AssemblyCopyright("Copyright @2018 by Kritsu")]
+[assembly: AssemblyCopyright("Copyright 2017-present by Kritsu")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,6 +32,6 @@ using System.Runtime.InteropServices;
 //可以指定所有这些值，也可以使用“生成号”和“修订号”的默认值，
 // 方法是按如下所示使用“*”: :
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.7.3.1")]
-[assembly: AssemblyFileVersion("1.7.3.1")]
+[assembly: AssemblyVersion("1.7.4.0")]
+[assembly: AssemblyFileVersion("1.7.4.0")]
 [assembly: NeutralResourcesLanguage("zh-CN")]

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using ExtractorSharp.Core.Coder;
-using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Core.Model;
 using ExtractorSharp.Json.Attr;
 
@@ -16,14 +14,19 @@ namespace ExtractorSharp.Core.Handle {
         private static readonly Dictionary<ImgVersion, Type> Dic = new Dictionary<ImgVersion, Type>();
 
         static Handler() {
-            Regisity();
+            Regisity(ImgVersion.Other, typeof(OtherHandler));
+            Regisity(ImgVersion.Ver1, typeof(FirstHandler));
+            Regisity(ImgVersion.Ver2, typeof(SecondHandler));
+            Regisity(ImgVersion.Ver4, typeof(FourthHandler));
+            Regisity(ImgVersion.Ver5, typeof(FifthHandler));
+            Regisity(ImgVersion.Ver6, typeof(SixthHandler));
         }
 
         [LSIgnore] public Album Album;
 
 
         public Handler(Album album) {
-            Album = album;
+            this.Album = album;
         }
 
         public static List<ImgVersion> Versions => Dic.Keys.ToList();
@@ -42,47 +45,39 @@ namespace ExtractorSharp.Core.Handle {
         public abstract void CreateFromStream(Stream stream);
 
         /// <summary>
-        ///     将字节集转换为图片
+        ///     获取图片数据
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="sprite"></param>
         /// <returns></returns>
-        public abstract Bitmap ConvertToBitmap(Sprite entity);
+        public abstract ImageData GetImageData(Sprite sprite);
 
         /// <summary>
         ///     将图片转换为字节集
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="sprite"></param>
         /// <returns></returns>
-        public abstract byte[] ConvertToByte(Sprite entity);
-
-        /// <summary>
-        ///     新建指定个数的贴图
-        /// </summary>
-        /// <param name="count"></param>
-        /// <param name="type"></param>
-        /// <param name="index"></param>
-        public virtual void NewImage(int count, ColorBits type, int index) { }
+        public abstract byte[] ConvertToByte(Sprite sprite);
 
         /// <summary>
         ///     校正数据
         /// </summary>
         public void Adjust() {
-            foreach (var entity in Album.List) {
-                entity.Adjust();
+            foreach(var sprite in this.Album.List) {
+                sprite.Adjust();
             }
-            Album.Count = Album.List.Count;
+            this.Album.Count = this.Album.List.Count;
             var ms = new MemoryStream();
-            var data = AdjustData();
-            if (Album.Version > ImgVersion.Ver1) {
+            var data = this.AdjustData();
+            if(this.Album.Version > ImgVersion.Ver1) {
                 ms.WriteString(NpkCoder.IMG_FLAG);
-                ms.WriteLong(Album.IndexLength);
-                ms.WriteInt((int) Album.Version);
-                ms.WriteInt(Album.Count);
+                ms.WriteLong(this.Album.IndexLength);
+                ms.WriteInt((int)this.Album.Version);
+                ms.WriteInt(this.Album.Count);
             }
             ms.Write(data);
             ms.Close();
-            Album.Data = ms.ToArray();
-            Album.Length = Album.Data.Length;
+            this.Album.Data = ms.ToArray();
+            this.Album.Length = this.Album.Data.Length;
         }
 
         /// <summary>
@@ -91,21 +86,11 @@ namespace ExtractorSharp.Core.Handle {
         /// <param name="version"></param>
         /// <param name="type"></param>
         public static void Regisity(ImgVersion version, Type type) {
-            if (Dic.ContainsKey(version)) {
+            if(Dic.ContainsKey(version)) {
                 Dic.Remove(version);
             }
             Dic.Add(version, type);
         }
-
-        public static void Regisity() {
-            Regisity(ImgVersion.Other, typeof(OtherHandler));
-            Regisity(ImgVersion.Ver1, typeof(FirstHandler));
-            Regisity(ImgVersion.Ver2, typeof(SecondHandler));
-            Regisity(ImgVersion.Ver4, typeof(FourthHandler));
-            Regisity(ImgVersion.Ver5, typeof(FifthHandler));
-            Regisity(ImgVersion.Ver6, typeof(SixthHandler));
-        }
-
 
         public virtual void ConvertToVersion(ImgVersion version) { }
 

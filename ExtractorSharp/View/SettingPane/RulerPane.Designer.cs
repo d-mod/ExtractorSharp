@@ -26,18 +26,18 @@
             components = new System.ComponentModel.Container();
             this.displaySpanBox = new System.Windows.Forms.CheckBox();
             this.displayCrosshairBox = new System.Windows.Forms.CheckBox();
-
-            displaySpanBox.Text = Language["DisplayRulerSpan"];
+///
+    //        displaySpanBox.Text = Language["DisplayRulerSpan"];
             displaySpanBox.AutoSize = true;
             displaySpanBox.Location = new System.Drawing.Point(20, 40);
 
-            displayCrosshairBox.Text= Language["DisplayRulerCrosshair"];
+       //     displayCrosshairBox.Text= Language["DisplayRulerCrosshair"];
             displayCrosshairBox.AutoSize = true;
             displayCrosshairBox.Location = new System.Drawing.Point(20, 100);
 
             this.Controls.Add(displaySpanBox);
             this.Controls.Add(displayCrosshairBox);
-            this.Parent = "View";
+     //       this.Parent = "View";
             this.Name = "Ruler";
         }
 

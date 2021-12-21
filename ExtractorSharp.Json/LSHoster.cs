@@ -11,7 +11,10 @@ namespace ExtractorSharp.Json {
         /// </summary>
         /// <param name="converter"></param>
         public static void Add(IConverter converter) {
-            if (!Dictionary.ContainsKey(converter.Type)) Dictionary.Add(converter.Type, new List<IConverter>());
+            if(!Dictionary.ContainsKey(converter.Type)) {
+                Dictionary.Add(converter.Type, new List<IConverter>());
+            }
+
             Dictionary[converter.Type].Add(converter);
         }
     }

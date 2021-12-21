@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.IO;
 using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Core.Model;
@@ -8,54 +7,41 @@ namespace ExtractorSharp.Core.Handle {
     public class SecondHandler : Handler {
         public SecondHandler(Album album) : base(album) { }
 
-        public override Bitmap ConvertToBitmap(Sprite entity) {
-            var data = entity.Data;
-            var type = entity.Type;
-            var size = entity.Width * entity.Height * (type == ColorBits.ARGB_8888 ? 4 : 2);
-            if (entity.CompressMode == CompressMode.ZLIB) {
+        public override ImageData GetImageData(Sprite sprite) {
+            var data = sprite.Data;
+            var type = sprite.ColorFormat;
+            var width = sprite.Width;
+            var height = sprite.Height;
+            var size = width * height * (type == ColorFormats.ARGB_8888 ? 4 : 2);
+            if(sprite.CompressMode == CompressMode.ZLIB) {
                 data = Zlib.Decompress(data, size);
             }
-            return Bitmaps.FromArray(data, entity.Size, type);
+            data = Bitmaps.ConvertTo32Bits(data, type);
+            return new ImageData(data, width, height);
         }
 
-        public override byte[] ConvertToByte(Sprite entity) {
-            if (entity.Type > ColorBits.LINK) {
-                entity.Type -= 4;
+        public override byte[] ConvertToByte(Sprite sprite) {
+            if(sprite.ColorFormat > ColorFormats.LINK) {
+                sprite.ColorFormat -= 4;
             }
-            if (entity.CompressMode > CompressMode.ZLIB) {
-                entity.CompressMode = CompressMode.ZLIB;
+            if(sprite.CompressMode > CompressMode.ZLIB) {
+                sprite.CompressMode = CompressMode.ZLIB;
             }
-            return entity.Picture.ToArray(entity.Type);
-        }
-
-        public override void NewImage(int count, ColorBits type, int index) {
-            if (count < 1) return;
-            var array = new Sprite[count];
-            array[0] = new Sprite(Album) {
-                Index = index
-            };
-            if (type != ColorBits.LINK) array[0].Type = type;
-            for (var i = 1; i < count; i++) {
-                array[i] = new Sprite(Album) {
-                    Type = type
-                };
-                if (type == ColorBits.LINK) {
-                    array[i].Target = array[0];
-                }
-                array[i].Index = index + i;
-            }
-            Album.List.InsertAt(index, array);
+            var data = sprite.ImageData.Data;
+            var bits = sprite.ColorFormat;
+            data = Bitmaps.ConvertToBits(data, bits);
+            return data;
         }
 
         public override byte[] AdjustData() {
-            using (var ms = new MemoryStream()) {
-                foreach (var entity in Album.List) {
-                    ms.WriteInt((int) entity.Type);
-                    if (entity.Type == ColorBits.LINK && entity.Target != null) {
-                        ms.WriteInt(entity.Target.Index);
+            using(var ms = new MemoryStream()) {
+                foreach(var entity in this.Album.List) {
+                    ms.WriteInt((int)entity.ColorFormat);
+                    if(entity.IsLink) {
+                        ms.WriteInt(entity.TargetIndex);
                         continue;
                     }
-                    ms.WriteInt((int) entity.CompressMode);
+                    ms.WriteInt((int)entity.CompressMode);
                     ms.WriteInt(entity.Width);
                     ms.WriteInt(entity.Height);
                     ms.WriteInt(entity.Length);
@@ -64,30 +50,30 @@ namespace ExtractorSharp.Core.Handle {
                     ms.WriteInt(entity.FrameWidth);
                     ms.WriteInt(entity.FrameHeight);
                 }
-                Album.IndexLength = ms.Length;
-                foreach (var entity in Album.List) {
-                    if (entity.Type == ColorBits.LINK) {
+                this.Album.IndexLength = ms.Length;
+                foreach(var sprite in this.Album.List) {
+                    if(sprite.ColorFormat == ColorFormats.LINK) {
                         continue;
                     }
-                    ms.Write(entity.Data);
+                    ms.Write(sprite.Data);
                 }
                 return ms.ToArray();
             }
         }
 
         public override void CreateFromStream(Stream stream) {
-            var dic = new Dictionary<Sprite, int>();
-            var pos = stream.Position + Album.IndexLength;
-            for (var i = 0; i < Album.Count; i++) {
-                var image = new Sprite(Album);
-                image.Index = Album.List.Count;
-                image.Type = (ColorBits) stream.ReadInt();
-                Album.List.Add(image);
-                if (image.Type == ColorBits.LINK) {
-                    dic.Add(image, stream.ReadInt());
+            var pos = stream.Position + this.Album.IndexLength;
+            for(var i = 0; i < this.Album.Count; i++) {
+                var image = new Sprite(this.Album) {
+                    Index = this.Album.List.Count,
+                    ColorFormat = (ColorFormats)stream.ReadInt()
+                };
+                this.Album.List.Add(image);
+                if(image.ColorFormat == ColorFormats.LINK) {
+                    image.TargetIndex = stream.ReadInt();
                     continue;
                 }
-                image.CompressMode = (CompressMode) stream.ReadInt();
+                image.CompressMode = (CompressMode)stream.ReadInt();
                 image.Width = stream.ReadInt();
                 image.Height = stream.ReadInt();
                 image.Length = stream.ReadInt();
@@ -96,26 +82,16 @@ namespace ExtractorSharp.Core.Handle {
                 image.FrameWidth = stream.ReadInt();
                 image.FrameHeight = stream.ReadInt();
             }
-            if (stream.Position < pos) {
-                Album.List.Clear();
+            if(stream.Position < pos) {
+                this.Album.List.Clear();
                 return;
             }
-            foreach (var image in Album.List.ToArray()) {
-                if (image.Type == ColorBits.LINK) {
-                    if (dic.ContainsKey(image) && dic[image] < Album.List.Count && dic[image] > -1 &&
-                        dic[image] != image.Index) {
-                        image.Target = Album.List[dic[image]];
-                        image.Size = image.Target.Size;
-                        image.FrameSize = image.Target.FrameSize;
-                        image.Location = image.Target.Location;
-                    } else {
-                        Album.List.Clear();
-                        return;
-                    }
+            foreach(var image in this.Album.List.ToArray()) {
+                if(image.IsLink) {
                     continue;
                 }
-                if (image.CompressMode == CompressMode.NONE) {
-                    image.Length = image.Width * image.Height * (image.Type == ColorBits.ARGB_8888 ? 4 : 2);
+                if(image.CompressMode == CompressMode.NONE) {
+                    image.Length = image.Width * image.Height * (image.ColorFormat == ColorFormats.ARGB_8888 ? 4 : 2);
                 }
                 var data = new byte[image.Length];
                 stream.Read(data);
@@ -124,9 +100,10 @@ namespace ExtractorSharp.Core.Handle {
         }
 
         public override void ConvertToVersion(ImgVersion version) {
-            if (version == ImgVersion.Ver4 || version == ImgVersion.Ver6) {
-                Album.List.ForEach(item => item.Type = ColorBits.ARGB_1555);
+            if(version == ImgVersion.Ver4 || version == ImgVersion.Ver6) {
+                this.Album.List.ForEach(item => item.ColorFormat = ColorFormats.ARGB_1555);
             }
         }
+
     }
 }

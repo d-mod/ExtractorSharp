@@ -1,0 +1,46 @@
+﻿<es:BaseDialog x:Class="ExtractorSharp.View.NewImageDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i ="clr-namespace:ExtractorSharp"
+        xmlns:es ="clr-namespace:ExtractorSharp.Components"
+        xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+        mc:Ignorable="d"
+        Height="400" Width="400">
+
+    <StackPanel VerticalAlignment="Center">
+        <Label Width="320" Content="{i:Language ImageCount}"></Label>
+        <metro:NumericUpDown Value="{Binding ImageCount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Minimum="1" Maximum="999" Width="320">
+            
+        </metro:NumericUpDown>
+        <Label Width="320" Content="{i:Language InsertOffset}"></Label>
+        <metro:NumericUpDown Value="{Binding Offset,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Minimum="-1"  Maximum="{Binding MaxCount}"  Width="320">
+
+        </metro:NumericUpDown>
+        <GroupBox Margin="0,20,0,0" Width="320" Height="160" Header="{i:Language ColorFormat}">
+            <StackPanel VerticalAlignment="Center">
+                <StackPanel.Resources>
+                    <Style TargetType="RadioButton" BasedOn="{StaticResource MahApps.Styles.RadioButton}">
+                        <Setter Property="Margin" Value="0,0,0,10"></Setter>
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}"></Setter>
+                    </Style>
+                </StackPanel.Resources>
+                <RadioButton IsChecked="{Binding ColorFormat,Converter={StaticResource ColorFormatConverter},ConverterParameter=17}" Content="{i:Language Default}"></RadioButton>
+                <RadioButton IsChecked="{Binding ColorFormat,Converter={StaticResource ColorFormatConverter},ConverterParameter=14}">
+                    <TextBlock Text="{i:Language 'ARGB_1555'}"></TextBlock>
+                </RadioButton>
+                <RadioButton IsChecked="{Binding ColorFormat,Converter={StaticResource ColorFormatConverter},ConverterParameter=15}">
+                    <TextBlock Text="{i:Language 'ARGB_4444'}"></TextBlock>
+                </RadioButton>
+                <RadioButton IsChecked="{Binding ColorFormat,Converter={StaticResource ColorFormatConverter},ConverterParameter=16}">
+                    <TextBlock Text="{i:Language 'ARGB_8888'}"></TextBlock>
+                </RadioButton>
+            </StackPanel>
+        </GroupBox>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Style="{StaticResource PrimaryButton}" Foreground="White" Click="OnOk" Content="{i:Language OK}"></Button>
+            <Button Margin="0,0,40,0"  IsCancel="True" Content="{i:Language Cancel}"></Button>
+        </StackPanel>
+    </StackPanel>
+</es:BaseDialog>

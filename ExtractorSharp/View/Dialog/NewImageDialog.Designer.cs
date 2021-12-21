@@ -1,5 +1,5 @@
 ﻿using System.Windows.Forms;
-using ExtractorSharp.Component;
+using ExtractorSharp.Components;
 
 namespace ExtractorSharp.View.Dialog {
     partial class NewImageDialog {

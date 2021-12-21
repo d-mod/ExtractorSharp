@@ -25,8 +25,8 @@ namespace ExtractorSharp.View.SettingPane.Theme {
         /// 使用代码编辑器修改此方法的内容。
         /// </summary>
         private void InitializeComponent() {
-            this.Parent = "Theme";
-            this.Name = "Background";
+         //   this.Parent = "Theme";
+        //    this.Name = "Background";
             
         }
 

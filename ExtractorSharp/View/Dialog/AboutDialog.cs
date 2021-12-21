@@ -1,9 +1,19 @@
-﻿using ExtractorSharp.Component;
-using ExtractorSharp.Core.Composition;
+﻿using System.ComponentModel.Composition;
+using ExtractorSharp.Components;
+using ExtractorSharp.Composition;
 
 namespace ExtractorSharp.View.Dialog {
-    public partial class AboutDialog : ESDialog {
-        public AboutDialog(IConnector Data) : base(Data) {
+
+
+    [ExportMetadata("Name", "about")]
+    [Export(typeof(IView))]
+    public partial class AboutDialog : BaseDialog, IPartImportsSatisfiedNotification {
+
+        public AboutDialog() {
+
+        }
+
+        public void OnImportsSatisfied() {
             InitializeComponent();
         }
     }

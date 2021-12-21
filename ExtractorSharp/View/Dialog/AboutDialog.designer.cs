@@ -37,7 +37,7 @@ namespace ExtractorSharp.View.Dialog{
             label.Name = "nameLabel";
             label.Size = new Size(185, 12);
             label.TabIndex = 0;
-            label.Text = $"{ProductName} ver{Program.Version}\r\n\t  Copyright by Kritsu";
+            label.Text = $"{ProductName} ver{ProductVersion}\r\n\t  Copyright by Kritsu";
 
             
             // 

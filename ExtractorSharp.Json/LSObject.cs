@@ -16,15 +16,15 @@ namespace ExtractorSharp.Json {
         private object _value;
 
         public LSObject() {
-            List = new List<LSObject>();
-            Root = this;
-            Parent = this;
+            this.List = new List<LSObject>();
+            this.Root = this;
+            this.Parent = this;
         }
 
         public LSObject(string Name, object Value, LSType Type) : this() {
             this.Name = Name;
             this.Value = Value;
-            ValueType = Type;
+            this.ValueType = Type;
         }
 
         public static string Separator { set; get; } = ",";
@@ -32,18 +32,18 @@ namespace ExtractorSharp.Json {
         private List<LSObject> List { get; }
 
         public LSObject this[string name] {
-            get => Find(name);
+            get => this.Find(name);
             set {
                 var obj = this[name];
-                if (this[name] != null) {
-                    List.Remove(obj);
+                if(this[name] != null) {
+                    this.List.Remove(obj);
                 }
                 value.Name = name;
-                List.Add(value);
+                this.List.Add(value);
             }
         }
 
-        public LSObject this[int i] => List[i];
+        public LSObject this[int i] => this.List[i];
 
         /// <summary>
         ///     下标
@@ -53,7 +53,7 @@ namespace ExtractorSharp.Json {
         /// <summary>
         ///     返回元素总数
         /// </summary>
-        public int Count => List.Count;
+        public int Count => this.List.Count;
 
         /// <summary>
         ///     名字
@@ -64,8 +64,8 @@ namespace ExtractorSharp.Json {
         ///     值
         /// </summary>
         public object Value {
-            set => SetValue(value);
-            get => _value;
+            set => this.SetValue(value);
+            get => this._value;
         }
 
         public LSType ValueType { set; get; } = LSType.Object;
@@ -82,77 +82,78 @@ namespace ExtractorSharp.Json {
 
 
         public object Clone() {
-            var json = "{" + ToString() + "}";
+            var json = "{" + this.ToString() + "}";
             return new LSBuilder().ReadJson(json);
         }
 
         public IEnumerator<LSObject> GetEnumerator() {
-            return List.GetEnumerator();
+            return this.List.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator() {
-            return List.GetEnumerator();
+            return this.List.GetEnumerator();
         }
 
 
         public void Clear() {
-            List.Clear();
-            Value = null;
-            ValueType = LSType.Object;
+            this.List.Clear();
+            this.Value = null;
+            this.ValueType = LSType.Object;
         }
 
         public bool Contains(string name) {
-            return List.Exists(e => e.Name == name);
+            return this.List.Exists(e => e.Name == name);
         }
 
         public bool Contains(string name, object value) {
-            return List.Exists(e => e.Name == name && value.Equals(e.Value));
+            return this.List.Exists(e => e.Name == name && value.Equals(e.Value));
         }
 
         public LSObject Add(object obj) {
-            return Add(null, obj);
+            return this.Add(null, obj);
         }
 
         public LSObject Add(string name, object obj) {
-            if (obj is LSObject e) {
-                return Add(name, e);
+            if(obj is LSObject e) {
+                return this.Add(name, e);
             }
-            var eo = new LSObject();
-            eo.Value = obj;
-            return Add(name, eo);
+            var eo = new LSObject {
+                Value = obj
+            };
+            return this.Add(name, eo);
         }
 
         public LSObject Add(string name, LSObject child) {
-            if (child == null) {
+            if(child == null) {
                 child = new LSObject();
             }
             child.Name = name;
-            return Add(child);
+            return this.Add(child);
         }
 
         public LSObject Add(LSObject child) {
-            if (child != null && !child.Equals(this)) {
-                child.Index = List.Count;
+            if(child != null && !child.Equals(this)) {
+                child.Index = this.List.Count;
                 child.Parent = this;
-                child.Root = Root;
-                List.Add(child);
+                child.Root = this.Root;
+                this.List.Add(child);
                 return child;
             }
             return null;
         }
 
         public void Remove(string name) {
-            List.RemoveAll(e => name.Equals(e.Name));
+            this.List.RemoveAll(e => name.Equals(e.Name));
         }
 
 
         public void CopyTo(LSObject obj) {
-            obj.ValueType = ValueType;
-            if (obj.ValueType == LSType.Object) {
+            obj.ValueType = this.ValueType;
+            if(obj.ValueType == LSType.Object) {
                 obj.List.Clear();
-                obj.List.AddRange(List);
+                obj.List.AddRange(this.List);
             } else {
-                obj.Value = Value;
+                obj.Value = this.Value;
             }
         }
 
@@ -164,11 +165,11 @@ namespace ExtractorSharp.Json {
             var arr = path.Split(".");
             var len = arr.Length;
             LSObject obj = null;
-            if (arr.Length > 0) {
-                obj = FindByChild(arr); //寻找下级元素
-                if (obj == null) //寻找父元素的下级元素
-                {
-                    obj = FindByParent(arr);
+            if(arr.Length > 0) {
+                obj = this.FindByChild(arr); //寻找下级元素
+                //寻找父元素的下级元素
+                if(obj == null) {
+                    obj = this.FindByParent(arr);
                 }
             }
             return obj;
@@ -176,9 +177,9 @@ namespace ExtractorSharp.Json {
 
 
         public LSObject FindByParent(params string[] paths) {
-            if (Parent != null) //寻找同级元素及其下级元素
-            {
-                return Parent.FindByChild(paths);
+            //寻找同级元素及其下级元素
+            if(this.Parent != null) {
+                return this.Parent.FindByChild(paths);
             }
             return null;
         }
@@ -191,7 +192,7 @@ namespace ExtractorSharp.Json {
         public LSObject FindByChild(string[] paths) {
             var obj = this;
             var len = 0;
-            while (len < paths.Length && obj != null) {
+            while(len < paths.Length && obj != null) {
                 var name = paths[len];
                 obj = obj.FindByChild(name);
                 len++;
@@ -205,11 +206,11 @@ namespace ExtractorSharp.Json {
         /// <param name="name"></param>
         /// <returns></returns>
         public LSObject FindByChild(string name) {
-            if (name != null && name.Equals(Name)) {
+            if(name != null && name.Equals(this.Name)) {
                 return this;
             }
-            foreach (var e in List) {
-                if (e.Name != null && (e.Name.Equals(name) || Regex.IsMatch(e.Name, name))) {
+            foreach(var e in this.List) {
+                if(e.Name != null && (e.Name.Equals(name) || Regex.IsMatch(e.Name, name))) {
                     return e;
                 }
             }
@@ -217,7 +218,7 @@ namespace ExtractorSharp.Json {
         }
 
         public override string ToString() {
-            return ToString(0);
+            return this.ToString(0);
         }
 
 
@@ -227,48 +228,51 @@ namespace ExtractorSharp.Json {
         /// <param name="obj"></param>
         /// <returns></returns>
         public void GetValue<T>(ref T obj) {
-            if (ValueType == LSType.Null) {
+            if(this.ValueType == LSType.Null) {
                 obj = default;
                 return;
             }
-            if (ValueType != LSType.Object && !typeof(Enum).IsAssignableFrom(obj.GetType())) {
-                obj = (T) Value;
+            if(this.ValueType != LSType.Object && !typeof(Enum).IsAssignableFrom(obj.GetType())) {
+                obj = (T)this.Value;
                 return;
             }
             var type = obj.GetType();
             //获取实例泛型
             var arr = type.GetGenericArguments();
-            switch (obj) {
+            switch(obj) {
                 //键值对,第一个泛型必须是string
                 case IDictionary dic:
-                    if (arr.Length > 1 && arr[0].Equals(typeof(string))) {
+                    if(arr.Length > 1 && arr[0].Equals(typeof(string))) {
                         type = arr[1];
-                        List.ForEach(item => dic[item.Name] = item.GetValue(type));
+                        this.List.ForEach(item => dic[item.Name] = item.GetValue(type));
                     }
                     break;
                 //数组
                 case Array a:
                     type = type.GetElementType();
-                    for (var i = 0; i < a.Length; i++) a.SetValue(List[i].GetValue(type), i);
+                    for(var i = 0; i < a.Length; i++) {
+                        a.SetValue(this.List[i].GetValue(type), i);
+                    }
+
                     break;
                 //列表
                 case IList e:
-                    if (arr.Length > 0) {
+                    if(arr.Length > 0) {
                         type = arr[0];
-                        List.ForEach(item => e.Add(item.GetValue(type)));
+                        this.List.ForEach(item => e.Add(item.GetValue(type)));
                     }
                     break;
                 case Enum em:
-                    obj = (T) Enum.Parse(obj.GetType(), Value?.ToString());
+                    obj = (T)Enum.Parse(obj.GetType(), this.Value?.ToString());
                     break;
                 default:
                     //遍历子元素
-                    foreach (var child in List) {
+                    foreach(var child in this.List) {
                         //根据元素名,给属性赋值
                         var completed = false;
                         var properties = type.GetProperties(FILED_FLAG);
-                        foreach (var p in properties) {
-                            if (p.CanWrite && p.Name.EqualsIgnoreCase(child.Name) && p.NotIgnore()) {
+                        foreach(var p in properties) {
+                            if(p.CanWrite && p.Name.EqualsIgnoreCase(child.Name) && p.NotIgnore()) {
                                 p.SetValue(obj, child.GetValue(p.PropertyType));
                                 completed = true;
                                 break;
@@ -276,11 +280,13 @@ namespace ExtractorSharp.Json {
                         }
 
                         //判断是否成功映射
-                        if (completed) continue;
+                        if(completed) {
+                            continue;
+                        }
                         //给字段赋值
                         var fileds = type.GetFields(FILED_FLAG);
-                        foreach (var f in fileds) {
-                            if (f.Name.EqualsIgnoreCase(child.Name) && f.NotIgnore()) {
+                        foreach(var f in fileds) {
+                            if(f.Name.EqualsIgnoreCase(child.Name) && f.NotIgnore()) {
                                 f.SetValue(obj, child.GetValue(f.FieldType));
                                 break;
                             }
@@ -297,75 +303,77 @@ namespace ExtractorSharp.Json {
         /// <param name="type"></param>
         /// <returns></returns>
         public object GetValue(Type type) {
-            if (ValueType == LSType.Object || typeof(Enum).IsAssignableFrom(type)) {
-                var obj = type.CreateInstance(List.Count);
-                GetValue(ref obj);
+            if(this.ValueType == LSType.Object || typeof(Enum).IsAssignableFrom(type)) {
+                var obj = type.CreateInstance(this.List.Count);
+                this.GetValue(ref obj);
                 return obj;
             }
-            return Value;
+            return this.Value;
         }
 
 
         public void SetValue(object value) {
-            if (value == null) {
-                ValueType = LSType.Null;
-                _value = null;
+            if(value == null) {
+                this.ValueType = LSType.Null;
+                this._value = null;
                 return;
             }
-            switch (value) {
+            switch(value) {
                 case IDictionary dic:
-                    foreach (var key in dic.Keys) {
-                        var child = new LSObject();
-                        child.Value = dic[key];
-                        child.Name = key.ToString();
-                        Add(child);
+                    foreach(var key in dic.Keys) {
+                        var child = new LSObject {
+                            Value = dic[key],
+                            Name = key.ToString()
+                        };
+                        this.Add(child);
                     }
                     break;
-                case string s:
-                case char c:
-                    ValueType = LSType.String;
-                    _value = value?.ToString();
+                case string _:
+                case char _:
+                    this.ValueType = LSType.String;
+                    this._value = value?.ToString();
                     break;
                 case LSObject es:
-                    CopyTo(es);
+                    this.CopyTo(es);
                     return;
                 case IEnumerable arr:
-                    foreach (var a in arr) {
-                        var child = new LSObject();
-                        child.Value = a;
-                        Add(child);
+                    foreach(var a in arr) {
+                        var child = new LSObject {
+                            Value = a
+                        };
+                        this.Add(child);
                     }
                     break;
                 case bool b:
-                    ValueType = LSType.Bool;
-                    _value = b;
+                    this.ValueType = LSType.Bool;
+                    this._value = b;
                     break;
-                case Enum e:
-                    ValueType = LSType.String;
-                    _value = value.ToString();
+                case Enum _:
+                    this.ValueType = LSType.String;
+                    this._value = value.ToString();
                     break;
-                case byte b:
-                case short sh:
-                case int i:
-                case long l:
-                case double dl:
-                case float f:
-                case decimal d:
-                    ValueType = LSType.Number;
-                    _value = value;
+                case byte _:
+                case short _:
+                case int _:
+                case long _:
+                case double _:
+                case float _:
+                case decimal _:
+                    this.ValueType = LSType.Number;
+                    this._value = value;
                     break;
                 default:
                     var type = value.GetType();
                     var fileds = type.GetFields(FILED_FLAG);
-                    foreach (var filed in fileds) {
-                        if (filed.NotIgnore()) {
-                            Add(filed.Name, filed.GetValue(value));
+                    foreach(var filed in fileds) {
+                        if(filed.NotIgnore()) {
+                            this.Add(filed.Name, filed.GetValue(value));
                         }
                     }
                     var properties = type.GetProperties(FILED_FLAG);
-                    foreach (var prop in properties) {
-                        if (prop.NotIgnore() && prop.CanRead) {
-                            Add(prop.Name, prop.GetValue(value));
+                    foreach(var prop in properties) {
+                        if(prop.NotIgnore() && prop.CanRead) {
+                            this.Add(prop.Name, prop.GetValue(value));
                         }
                     }
                     break;
@@ -373,7 +381,7 @@ namespace ExtractorSharp.Json {
         }
 
         public Type GetValueType() {
-            return Value?.GetType();
+            return this.Value?.GetType();
         }
 
         /// <summary>
@@ -385,17 +393,17 @@ namespace ExtractorSharp.Json {
             var buf = new StringBuilder();
             buf.AppendTab(++depth);
             //属性名
-            if (Name != null && !string.Empty.Equals(Name.Trim())) {
-                buf.Append($"{Mark + Name + Mark} : ");
+            if(this.Name != null && !string.Empty.Equals(this.Name.Trim())) {
+                buf.Append($"{Mark + this.Name + Mark} : ");
             }
-            if (ValueType == LSType.Object) {
+            if(this.ValueType == LSType.Object) {
                 buf.Append("{");
                 buf.AppendLine();
-                for (var i = 0; i < List.Count; i++) {
-                    if (i != List.Count - 1) {
-                        buf.AppendLine(List[i].ToString(depth) + Separator);
+                for(var i = 0; i < this.List.Count; i++) {
+                    if(i != this.List.Count - 1) {
+                        buf.AppendLine(this.List[i].ToString(depth) + Separator);
                     } else {
-                        buf.AppendLine(List[i].ToString(depth));
+                        buf.AppendLine(this.List[i].ToString(depth));
                     }
                 }
                 buf.AppendTab(depth);
@@ -403,12 +411,12 @@ namespace ExtractorSharp.Json {
                 buf.Append("}");
             } else {
                 //字符串
-                if (ValueType == LSType.String) {
-                    buf.Append($"{Mark + Value.ToString().ReFormat() + Mark}");
-                } else if (ValueType == LSType.Null) {
+                if(this.ValueType == LSType.String) {
+                    buf.Append($"{Mark + this.Value.ToString().ReFormat() + Mark}");
+                } else if(this.ValueType == LSType.Null) {
                     buf.Append("null");
                 } else {
-                    buf.Append(Value);
+                    buf.Append(this.Value);
                 }
             }
             return buf.ToString();

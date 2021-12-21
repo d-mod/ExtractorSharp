@@ -24,8 +24,8 @@
         /// </summary>
         private void InitializeComponent() {
             this.savePathBox = new System.Windows.Forms.TextBox();
-            this.browseButton = new ExtractorSharp.Component.ESButton();
-            this.emptyButton = new Component.ESButton();
+            this.browseButton = new ExtractorSharp.Components.ESButton();
+            this.emptyButton = new Components.ESButton();
             this.savePathGroup = new System.Windows.Forms.GroupBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.promptCheck = new System.Windows.Forms.CheckBox();
@@ -45,7 +45,7 @@
             this.browseButton.Location = new System.Drawing.Point(15, 60);
             this.browseButton.Size = new System.Drawing.Size(75, 24);
             this.browseButton.TabIndex = 1;
-            this.browseButton.Text = Language["Browse"];
+           // this.browseButton.Text = Language["Browse"];
             this.browseButton.UseVisualStyleBackColor = true;
             //
             //
@@ -53,7 +53,7 @@
             this.emptyButton.Location = new System.Drawing.Point(100, 60);
             this.emptyButton.Size = new System.Drawing.Size(75, 24);
             this.emptyButton.TabIndex = 1;
-            this.emptyButton.Text = Language["Empty"];
+          //  this.emptyButton.Text = Language["Empty"];
             this.emptyButton.UseVisualStyleBackColor = true;
             // 
             // groupBox1
@@ -65,7 +65,7 @@
             this.savePathGroup.Size = new System.Drawing.Size(350, 100);
             this.savePathGroup.TabIndex = 2;
             this.savePathGroup.TabStop = false;
-            this.savePathGroup.Text = Language["SaveImagePath"];
+          //  this.savePathGroup.Text = Language["SaveImagePath"];
 
             // 
             // checkBox1
@@ -74,7 +74,7 @@
             this.promptCheck.Location = new System.Drawing.Point(13, 300);
             this.promptCheck.Size = new System.Drawing.Size(78, 16);
             this.promptCheck.TabIndex = 3;
-            this.promptCheck.Text = Language["SaveImageTips"];
+         //   this.promptCheck.Text = Language["SaveImageTips"];
             this.promptCheck.UseVisualStyleBackColor = true;
             // 
             // checkBox2
@@ -82,12 +82,12 @@
             this.fullPathCheck.AutoSize = true;
             this.fullPathCheck.Location = new System.Drawing.Point(220, 300);
             this.fullPathCheck.Size = new System.Drawing.Size(78, 16);
-            this.fullPathCheck.Text = Language["SavePathTips"];
+          //  this.fullPathCheck.Text = Language["SavePathTips"];
             this.fullPathCheck.UseVisualStyleBackColor = true;
 
             converterGroup.Location = new System.Drawing.Point(13, 130);
             converterGroup.Size = new System.Drawing.Size(350, 150);
-            converterGroup.Text = Language["Effect"];
+        //    converterGroup.Text = Language["Effect"];
             
             // 
             // FilePane
@@ -96,8 +96,8 @@
             this.Controls.Add(this.promptCheck);
             this.Controls.Add(this.savePathGroup);
             this.Controls.Add(this.converterGroup);
-            this.Parent = "File";
-            this.Name = "SaveImage";
+          //  this.Parent = "File";
+          //  this.Name = "SaveImage";
             this.Size = new System.Drawing.Size(329, 300);
             this.savePathGroup.ResumeLayout(false);
             this.savePathGroup.PerformLayout();
@@ -109,8 +109,8 @@
         #endregion
 
         private System.Windows.Forms.TextBox savePathBox;
-        private Component.ESButton emptyButton;
-        private Component.ESButton browseButton;
+        private Components.ESButton emptyButton;
+        private Components.ESButton browseButton;
         private System.Windows.Forms.GroupBox savePathGroup;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.CheckBox promptCheck;

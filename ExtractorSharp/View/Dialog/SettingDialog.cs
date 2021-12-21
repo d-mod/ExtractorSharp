@@ -1,109 +1,127 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Windows.Forms;
-using ExtractorSharp.Component;
+using ExtractorSharp.Components;
+using ExtractorSharp.Composition;
+using ExtractorSharp.Composition;
+using ExtractorSharp.Composition.Config;
 using ExtractorSharp.Core;
-using ExtractorSharp.Core.Composition;
 using ExtractorSharp.View.SettingPane;
-using ExtractorSharp.View.SettingPane.Theme;
 
 namespace ExtractorSharp.View.Dialog {
-    public partial class SettingDialog : ESDialog {
-        private readonly Dictionary<TreeNode, AbstractSettingPane> Dictionary;
 
-        public SettingDialog(IConnector Connector) : base(Connector) {
-            Dictionary = new Dictionary<TreeNode, AbstractSettingPane>();
+    [ExportMetadata("Name", "setting")]
+    [Export(typeof(IView))]
+    public partial class SettingDialog : BaseDialog, IPartImportsSatisfiedNotification {
+
+        private Dictionary<TreeNode, ISetting> Dictionary;
+
+        [ImportMany(typeof(ISetting))]
+        private List<Lazy<ISetting, ISettingMetadata>> lazies;
+
+        [Import]
+        private IConfig Config;
+
+        public SettingDialog() {
+        }
+
+        private ISetting Current { set; get; }
+
+        public void OnImportsSatisfied() {
+            Dictionary = new Dictionary<TreeNode, ISetting>();
             InitializeComponent();
             tree.AfterSelect += SelectNode;
             yesButton.Click += Yes;
             applyButton.Click += Apply;
             resetButton.Click += Reset;
             cancelButton.Click += Cancel;
-            try {
-                AddConfig();
-            } catch (Exception e) { }
+            AddConfig();
         }
-
-        private AbstractSettingPane SelectPane { set; get; }
-
 
         protected override void OnEscape() {
             Cancel(null, null);
         }
 
         private void AddConfig() {
-            AddConfig(typeof(GerneralPane));
-            //AddConfig(typeof(BackgroundPane));
-            AddConfig(typeof(GifPane));
-            AddConfig(typeof(SaveImagePane));
-            AddConfig(typeof(RulerPane));
-            AddConfig(typeof(GridPane));
-            AddConfig(typeof(AnimationPane));
-            AddConfig(typeof(LanguagePane));
-            AddConfig(typeof(InstalledPluginPane));
-            //AddConfig(typeof(MarketplacePane));
-            AddConfig(typeof(MovePane));
+            foreach(var lazy in lazies) {
+                var setting = lazy.Value;
+                var metadata = lazy.Metadata;
+                AddConfig(setting, metadata);
+            }
+            tree.Sort();
+
+            /*            AddConfig(typeof(GerneralPane));
+                        //AddConfig(typeof(BackgroundPane));
+                        AddConfig(typeof(GifPane));
+                        AddConfig(typeof(SaveImagePane));
+                        AddConfig(typeof(RulerPane));
+                        AddConfig(typeof(GridPane));
+                        AddConfig(typeof(AnimationPane));
+                        AddConfig(typeof(LanguagePane));
+                        AddConfig(typeof(InstalledPluginPane));
+                        //AddConfig(typeof(MarketplacePane));
+                        AddConfig(typeof(MovePane));*/
         }
 
-        private void AddConfig(Type type) {
-            if (!typeof(AbstractSettingPane).IsAssignableFrom(type)) {
-                return;
-            }
-            var control = type.CreateInstance(Connector) as AbstractSettingPane;
-            var parentArray = tree.Nodes.Find(control.Parent, false);
-            TreeNode parentNode = null;
-            if (parentArray.Length > 0) {
+        private void AddConfig(ISetting setting, ISettingMetadata metadata) {
+            var control = setting.View as Control;
+            var name = metadata.Name;
+            var parent = metadata.Parent;
+            var parentArray = tree.Nodes.Find(parent, false);
+            TreeNode parentNode;
+            if(parentArray.Length > 0) {
                 parentNode = parentArray[0];
             } else {
-                parentNode = tree.Nodes.Add(Language[control.Parent]);
-                parentNode.Name = control.Parent;
+                parentNode = tree.Nodes.Add(Language[parent]);
+                parentNode.Name = parent;
             }
 
-            TreeNode childrenNode = null;
-            if (control.Name == null) {
+            TreeNode childrenNode;
+            if(name == null) {
                 childrenNode = parentNode;
             } else {
-                var name = Language[control.Name];
                 var childrenArray = parentNode.Nodes.Find(name, false);
-                if (childrenArray.Length > 0) {
+                if(childrenArray.Length > 0) {
                     childrenNode = childrenArray[0];
                 } else {
-                    childrenNode = parentNode.Nodes.Add(name);
+                    childrenNode = parentNode.Nodes.Add(Language[name]);
                 }
             }
 
-            Dictionary[childrenNode] = control;
+            Dictionary[childrenNode] = setting;
         }
 
         private void SelectNode(object sender, TreeViewEventArgs e) {
             panel.Controls.Clear();
-            if (!Dictionary.ContainsKey(e.Node)) {
+            if(!Dictionary.ContainsKey(e.Node)) {
                 return;
             }
-            var control = Dictionary[e.Node];
+            var setting = Dictionary[e.Node];
+            var control = setting.View as Control;
             control.Size = panel.Size;
             panel.Controls.Add(control);
-            SelectPane = control;
+            Current = setting;
         }
 
 
         private void Initialize() {
             Config.Save();
-            foreach (var control in Dictionary.Values) {
+            foreach(var control in Dictionary.Values) {
                 control.Initialize();
             }
         }
 
         private void Save() {
-            foreach (var control in Dictionary.Values) {
+            foreach(var control in Dictionary.Values) {
                 control.Save();
             }
             Config.Save();
         }
 
-        public override DialogResult Show(params object[] args) {
+        public override object ShowView(params object[] args) {
             Initialize();
-            return ShowDialog();
+            return base.ShowView(args);
         }
 
         private void Cancel(object sender, EventArgs e) {
@@ -113,7 +131,6 @@ namespace ExtractorSharp.View.Dialog {
 
         private void Apply(object sender, EventArgs e) {
             Save();
-            Connector.CanvasFlush();
         }
 
         private void Yes(object sender, EventArgs e) {
@@ -125,5 +142,7 @@ namespace ExtractorSharp.View.Dialog {
             Config.Reset();
             Initialize();
         }
+
+
     }
 }

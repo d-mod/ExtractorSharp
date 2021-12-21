@@ -1,0 +1,19 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style TargetType="FrameworkElement">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"></Setter>
+    </Style>
+    <Style TargetType="Label">
+        <Setter Property="Foreground" Value="Gray"></Setter>
+    </Style>
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Controls/ListBox.xaml"/>
+        <ResourceDictionary Source="Controls/Menu.xaml"/>
+        <ResourceDictionary Source="Controls/ContextMenu.xaml"/>
+        <ResourceDictionary Source="Controls/Scrollbar.xaml"/>
+        <ResourceDictionary Source="Controls/NumericUpDown.xaml"/>
+        <ResourceDictionary Source="Controls/Button.xaml"/>
+        <ResourceDictionary Source="Controls/Page.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+</ResourceDictionary>

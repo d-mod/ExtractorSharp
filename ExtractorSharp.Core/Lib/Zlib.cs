@@ -12,7 +12,7 @@ namespace ExtractorSharp.Core.Lib {
         /// <param name="data"></param>
         /// <returns></returns>
         public static byte[] Compress(byte[] data) {
-            var size = (int) (data.LongLength * 1.001 + 12); //缓冲长度 
+            var size = (int)(data.LongLength * 1.001 + 12); //缓冲长度 
             var target = new byte[size];
             Compress(target, ref size, data, data.Length);
             var temp = new byte[size];
@@ -34,9 +34,9 @@ namespace ExtractorSharp.Core.Lib {
 
 
         [DllImport("zlib1.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "compress")]
-        private static extern int Compress([In] [Out] byte[] dest, ref int destLen, byte[] source, int sourceLen);
+        private static extern int Compress([In][Out] byte[] dest, ref int destLen, byte[] source, int sourceLen);
 
         [DllImport("zlib1.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "uncompress")]
-        private static extern int Decompress([In] [Out] byte[] dest, ref int destLen, byte[] source, int sourceLen);
+        private static extern int Decompress([In][Out] byte[] dest, ref int destLen, byte[] source, int sourceLen);
     }
 }

@@ -1,4 +1,4 @@
-﻿using ExtractorSharp.Component;
+﻿using ExtractorSharp.Components;
 
 namespace ExtractorSharp.View.Dialog {
     partial class ConvertDialog {

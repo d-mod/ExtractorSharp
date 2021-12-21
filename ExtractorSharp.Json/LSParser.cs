@@ -7,84 +7,92 @@ using System.Text.RegularExpressions;
 
 namespace ExtractorSharp.Json {
     public sealed class LSParser {
+
         private int index;
 
         private char[] source;
+
         private LSToken token = LSToken.None;
         private Dictionary<LSObject, string> dictionary { set; get; }
 
         public LSObject Decode(string source) {
             this.source = source.ToCharArray();
-            index = 0;
-            dictionary = new Dictionary<LSObject, string>();
-            LookAhead();
-            if (token == LSToken.LBrace || token == LSToken.LBracket) return ParseObject();
+            this.index = 0;
+            this.dictionary = new Dictionary<LSObject, string>();
+            this.LookAhead();
+            if(this.token == LSToken.LBrace || this.token == LSToken.LBracket) {
+                return this.ParseObject();
+            }
+
             return new LSObject();
         }
 
         private LSObject ParseObject() {
-            Consume();
+            this.Consume();
             var obj = new LSObject();
             var name = new StringBuilder();
-            while (true) {
-                switch (LookAhead()) {
+            while(true) {
+                switch(this.LookAhead()) {
                     case LSToken.Comma:
-                        Consume();
+                        this.Consume();
                         //分隔符,清除name
                         name.Clear();
                         break;
                     case LSToken.RBracket: //]} 对象终止
                     case LSToken.RBrace:
-                        Consume();
+                        this.Consume();
                         //处理未能识别的表达式
-                        foreach (var t in dictionary.Keys.ToArray()) {
-                            var t2 = obj.Find(dictionary[t]);
-                            if (t2 != null) {
-                                if (t.ValueType == LSType.Object) {
+                        foreach(var t in this.dictionary.Keys.ToArray()) {
+                            var t2 = obj.Find(this.dictionary[t]);
+                            if(t2 != null) {
+                                if(t.ValueType == LSType.Object) {
                                     t2.CopyTo(t);
-                                } else if (t.ValueType == LSType.String && t2.ValueType != LSType.Object) {
+                                } else if(t.ValueType == LSType.String && t2.ValueType != LSType.Object) {
                                     var s = t.Value as string;
-                                    t.Value = s.Replace("${" + dictionary[t] + "}", t2.Value?.ToString());
+                                    t.Value = s.Replace("${" + this.dictionary[t] + "}", t2.Value?.ToString());
                                 }
-                                dictionary.Remove(t);
+                                this.dictionary.Remove(t);
                             }
                         }
                         return obj;
                     case LSToken.Colon: //: 
-                        Consume();
-                        if (LookAhead() != LSToken.Expression) {
-                            var value = ParseValue();
+                        this.Consume();
+                        if(this.LookAhead() != LSToken.Expression) {
+                            var value = this.ParseValue();
                             var t = obj.Add(name.ToString(), value);
-                            if (value is string s) {
+                            if(value is string s) {
                                 var match = Regex.Match(s, @"\$\{.*\}");
                                 var exp = match.Value;
-                                if (exp != string.Empty && (match.Index < 1 || s[match.Index - 1] != '\\')) {
-                                    dictionary.Add(t, exp.Substring(2, exp.Length - 3));
+                                if(exp != string.Empty && (match.Index < 1 || s[match.Index - 1] != '\\')) {
+                                    this.dictionary.Add(t, exp.Substring(2, exp.Length - 3));
                                 }
                             }
                             name.Clear();
                         }
                         break;
                     case LSToken.Dot:
-                        Consume();
+                        this.Consume();
                         //refrence
                         name.Append(".");
                         break;
                     case LSToken.Expression:
-                        var key = ParseExpression();
+                        var key = this.ParseExpression();
                         var current = obj.Find(key);
                         var tp = obj.Add(name.ToString(), current);
-                        if (current == null) dictionary.Add(tp, key);
+                        if(current == null) {
+                            this.dictionary.Add(tp, key);
+                        }
+
                         current = null;
                         name.Clear();
                         break;
                     case LSToken.Identifier:
-                        name.Append(ParseIdentifier());
+                        name.Append(this.ParseIdentifier());
                         break;
                     case LSToken.Charcter: // 字符/字符串
                     case LSToken.String:
-                        var val = ParseValue();
-                        if (LookAhead() == LSToken.Colon) {
+                        var val = this.ParseValue();
+                        if(this.LookAhead() == LSToken.Colon) {
                             //兼容字符串命名
                             name.Clear();
                             name.Append(val + "");
@@ -98,32 +106,32 @@ namespace ExtractorSharp.Json {
                     case LSToken.False:
                     case LSToken.Number:
                     case LSToken.Null:
-                        obj.Add(ParseValue());
+                        obj.Add(this.ParseValue());
                         break;
                     default:
-                        throw new Exception($"无法识别的字符!'{source[index]}'");
+                        throw new Exception($"无法识别的字符!'{this.source[this.index]}'");
                 }
             }
         }
 
         private object ParseValue() {
-            switch (LookAhead()) {
+            switch(this.LookAhead()) {
                 case LSToken.Number:
-                    return ParseNumber();
+                    return this.ParseNumber();
                 case LSToken.Charcter:
                 case LSToken.String:
-                    return ParseString();
+                    return this.ParseString();
                 case LSToken.LBracket:
                 case LSToken.LBrace:
-                    return ParseObject();
+                    return this.ParseObject();
                 case LSToken.True:
-                    Consume();
+                    this.Consume();
                     return true;
                 case LSToken.False:
-                    Consume();
+                    this.Consume();
                     return false;
                 case LSToken.Null:
-                    Consume();
+                    this.Consume();
                     break;
             }
             return null;
@@ -134,7 +142,7 @@ namespace ExtractorSharp.Json {
         /// </summary>
         /// <returns></returns>
         private string ParseIdentifier() {
-            return ParseString(".[]:,; \t\n\r");
+            return this.ParseString(".[]:,; \t\n\r");
         }
 
         /// <summary>
@@ -142,9 +150,9 @@ namespace ExtractorSharp.Json {
         /// </summary>
         /// <returns></returns>
         private string ParseExpression() {
-            index++;
-            var s = ParseString("}");
-            index++;
+            this.index++;
+            var s = this.ParseString("}");
+            this.index++;
             return s;
         }
 
@@ -154,9 +162,9 @@ namespace ExtractorSharp.Json {
         /// </summary>
         /// <returns></returns>
         private string ParseString() {
-            var c = source[index - 1];
-            var s = ParseString(c + "");
-            index++;
+            var c = this.source[this.index - 1];
+            var s = this.ParseString(c + "");
+            this.index++;
             return s;
         }
 
@@ -167,37 +175,37 @@ namespace ExtractorSharp.Json {
         /// <param name="end"></param>
         /// <returns></returns>
         private string ParseString(string end) {
-            Consume();
+            this.Consume();
             var str_buf = new StringBuilder();
             var runIndex = -1;
-            var l = source.Length;
-            var p = source;
-            while (index < l) {
-                var c = p[index++];
-                if (end.IndexOf(c) > -1) {
-                    index--;
-                    if (runIndex != -1) {
-                        if (str_buf.Length == 0) {
-                            return source.Substring(runIndex, index - runIndex);
+            var l = this.source.Length;
+            var p = this.source;
+            while(this.index < l) {
+                var c = p[this.index++];
+                if(end.IndexOf(c) > -1) {
+                    this.index--;
+                    if(runIndex != -1) {
+                        if(str_buf.Length == 0) {
+                            return this.source.Substring(runIndex, this.index - runIndex);
                         }
-                        str_buf.Append(source, runIndex, index - runIndex);
+                        str_buf.Append(this.source, runIndex, this.index - runIndex);
                     }
                     return str_buf.ToString();
                 }
-                if (index == l) {
+                if(this.index == l) {
                     break;
                 }
-                if (runIndex != -1) {
-                    str_buf.Append(source, runIndex, index - runIndex - 1);
+                if(runIndex != -1) {
+                    str_buf.Append(this.source, runIndex, this.index - runIndex - 1);
                     runIndex = -1;
                 }
-                if (c != '\\') {
-                    if (runIndex == -1) {
-                        runIndex = index - 1;
+                if(c != '\\') {
+                    if(runIndex == -1) {
+                        runIndex = this.index - 1;
                     }
                     continue;
                 }
-                switch (p[index++]) {
+                switch(p[this.index++]) {
                     case '\\':
                     case '"':
                     case '\'':
@@ -206,18 +214,18 @@ namespace ExtractorSharp.Json {
                     case 'n':
                     case 'r':
                     case 't':
-                        str_buf.Append(p[index - 1].ToString().Format());
+                        str_buf.Append(p[this.index - 1].ToString().Format());
                         break;
                     case '$':
                         str_buf.Append(@"\$");
                         break;
                     case 'u':
-                        if (l - index < 4) {
+                        if(l - this.index < 4) {
                             break;
                         }
-                        var codePoint = ParseUnicode(p[index], p[index + 1], p[index + 2], p[index + 3]);
-                        str_buf.Append((char) codePoint);
-                        index += 4;
+                        var codePoint = this.ParseUnicode(p[this.index], p[this.index + 1], p[this.index + 2], p[this.index + 3]);
+                        str_buf.Append((char)codePoint);
+                        this.index += 4;
                         break;
                 }
             }
@@ -226,12 +234,12 @@ namespace ExtractorSharp.Json {
 
         private uint ParseSingleChar(char c1, uint multipliyer) {
             uint p1 = 0;
-            if (c1 >= '0' && c1 <= '9') {
-                p1 = (uint) (c1 - '0') * multipliyer;
-            } else if (c1 >= 'A' && c1 <= 'F') {
-                p1 = (uint) (c1 - 'A' + 10) * multipliyer;
-            } else if (c1 >= 'a' && c1 <= 'f') {
-                p1 = (uint) (c1 - 'a' + 10) * multipliyer;
+            if(c1 >= '0' && c1 <= '9') {
+                p1 = (uint)(c1 - '0') * multipliyer;
+            } else if(c1 >= 'A' && c1 <= 'F') {
+                p1 = (uint)(c1 - 'A' + 10) * multipliyer;
+            } else if(c1 >= 'a' && c1 <= 'f') {
+                p1 = (uint)(c1 - 'a' + 10) * multipliyer;
             }
             return p1;
         }
@@ -245,10 +253,10 @@ namespace ExtractorSharp.Json {
         /// <param name="c4"></param>
         /// <returns></returns>
         private uint ParseUnicode(char c1, char c2, char c3, char c4) {
-            var p1 = ParseSingleChar(c1, 0x1000);
-            var p2 = ParseSingleChar(c2, 0x100);
-            var p3 = ParseSingleChar(c3, 0x10);
-            var p4 = ParseSingleChar(c4, 1);
+            var p1 = this.ParseSingleChar(c1, 0x1000);
+            var p2 = this.ParseSingleChar(c2, 0x100);
+            var p3 = this.ParseSingleChar(c3, 0x10);
+            var p4 = this.ParseSingleChar(c4, 1);
             return p1 + p2 + p3 + p4;
         }
 
@@ -258,102 +266,107 @@ namespace ExtractorSharp.Json {
         /// </summary>
         /// <returns></returns>
         private object ParseNumber() {
-            Consume();
+            this.Consume();
             // Need to start back one place because the first digit is also a token and would have been consumed
-            var startIndex = index - 1;
+            var startIndex = this.index - 1;
             var dec = false;
             do {
-                if (index == source.Length) {
+                if(this.index == this.source.Length) {
                     break;
                 }
-                var c = source[index];
+                var c = this.source[this.index];
 
-                if (char.IsNumber(c) || c == '.' || c == '-' || c == '+' || c == 'e' || c == 'E') {
-                    if (c == '.' || c == 'e' || c == 'E') {
+                if(char.IsNumber(c) || c == '.' || c == '-' || c == '+' || c == 'e' || c == 'E') {
+                    if(c == '.' || c == 'e' || c == 'E') {
                         dec = true;
                     }
-                    if (++index == source.Length) {
+                    if(++this.index == this.source.Length) {
                         break; //throw new Exception("Unexpected end of string whilst parsing number");
                     }
                     continue;
                 }
                 break;
-            } while (true);
-            var len = index - startIndex;
-            var s = source.Substring(startIndex, len);
-            if (dec) {
+            } while(true);
+            var len = this.index - startIndex;
+            var s = this.source.Substring(startIndex, len);
+            if(dec) {
                 return decimal.Parse(s, NumberFormatInfo.InvariantInfo);
             }
-            if (len < 9) {
+            if(len < 9) {
                 return int.Parse(s);
             }
-            if (len >= 9 && len < 20) {
+            if(len >= 9 && len < 20) {
                 return long.Parse(s);
             }
             return decimal.Parse(s, NumberFormatInfo.InvariantInfo);
         }
 
         private LSToken LookAhead() {
-            return token = token != LSToken.None ? token : NextToken();
+            return this.token = this.token != LSToken.None ? this.token : this.NextToken();
         }
 
 
         private void Consume() {
-            token = LSToken.None;
+            this.token = LSToken.None;
         }
 
         private LSToken NextToken() {
             char c;
             // Skip past whitespace
             do {
-                c = source[index];
-                if (c == '/' && source[index + 1] == '/') {
+                c = this.source[this.index];
+                if(c == '/' && this.source[this.index + 1] == '/') {
                     // c++ style single line comments
-                    index += 2;
+                    this.index += 2;
                     do {
-                        c = source[index];
-                        if (c == '\r' || c == '\n') {
+                        c = this.source[this.index];
+                        if(c == '\r' || c == '\n') {
                             break; // read till end of line
                         }
-                    } while (++index < source.Length);
+                    } while(++this.index < this.source.Length);
                 }
-                if (c > ' ') break;
-                if (c != '\n' && c != '\r' && c != ' ' && c != '\t') break;
-            } while (++index < source.Length);
+                if(c > ' ') {
+                    break;
+                }
 
-            if (index == source.Length) {
+                if(c != '\n' && c != '\r' && c != ' ' && c != '\t') {
+                    break;
+                }
+            } while(++this.index < this.source.Length);
+
+            if(this.index == this.source.Length) {
                 throw new Exception("Reached end of string unexpectedly");
             }
 
-            c = source[index];
+            c = this.source[this.index];
 
-            switch (c) {
+            switch(c) {
                 case '{':
-                    index++;
+                    this.index++;
                     return LSToken.LBrace;
                 case '}':
-                    index++;
+                    this.index++;
                     return LSToken.RBrace;
                 case '[':
-                    index++;
+                    this.index++;
                     return LSToken.LBracket;
                 case ']':
-                    index++;
+                    this.index++;
                     return LSToken.RBracket;
                 case ',':
-                    index++;
+                    this.index++;
                     return LSToken.Comma;
                 case ':':
-                    index++;
+                    this.index++;
                     return LSToken.Colon;
                 case '\'':
-                    index++;
+                    this.index++;
                     return LSToken.Charcter;
                 case '"':
-                    index++;
+                    this.index++;
                     return LSToken.String;
                 case '$': //引用
-                    if (source[++index] == '{') {
+                    if(this.source[++this.index] == '{') {
                         return LSToken.Expression;
                     }
                     break;
@@ -369,25 +382,25 @@ namespace ExtractorSharp.Json {
                 case '9':
                 case '-':
                 case '+':
-                    index++;
+                    this.index++;
                     return LSToken.Number;
                 case '.':
-                    if (char.IsNumber(source[index++])) {
+                    if(char.IsNumber(this.source[this.index++])) {
                         return LSToken.Number;
                     }
                     return LSToken.Dot;
                 default:
-                    if (IsKeyword("true")) {
+                    if(this.IsKeyword("true")) {
                         return LSToken.True;
                     }
-                    if (IsKeyword("false")) {
+                    if(this.IsKeyword("false")) {
                         return LSToken.False;
                     }
-                    if (IsKeyword("null")) {
+                    if(this.IsKeyword("null")) {
                         return LSToken.Null;
                     }
                     //identifier
-                    if (IsIdentifier(c)) {
+                    if(IsIdentifier(c)) {
                         return LSToken.Identifier;
                     }
                     break;
@@ -402,16 +415,16 @@ namespace ExtractorSharp.Json {
 
 
         private bool IsKeyword(string keyword) {
-            if (source.Length - index >= keyword.Length) {
-                if (source.Substring(index, keyword.Length).EqualsIgnoreCase(keyword)) {
-                    if (source.Length - index >= keyword.Length) {
-                        var c = source[index + keyword.Length];
+            if(this.source.Length - this.index >= keyword.Length) {
+                if(this.source.Substring(this.index, keyword.Length).EqualsIgnoreCase(keyword)) {
+                    if(this.source.Length - this.index >= keyword.Length) {
+                        var c = this.source[this.index + keyword.Length];
                         //避免关键字前缀的标识符,例如trueab 或者 false123之类
-                        if (IsIdentifier(c) && char.IsNumber(c)) {
+                        if(IsIdentifier(c) && char.IsNumber(c)) {
                             return false;
                         }
                     }
-                    index += keyword.Length;
+                    this.index += keyword.Length;
                     return true;
                 }
             }

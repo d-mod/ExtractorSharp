@@ -1,0 +1,16 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                    >
+    <SolidColorBrush x:Key="Secondary" Color="#ff0088"></SolidColorBrush>
+    <SolidColorBrush x:Key="Primary" Color="#0088ff"></SolidColorBrush>
+    <icon:PackIconMaterial x:Shared="false" x:Key="Icons.Exit" Foreground="{StaticResource Secondary}"  Kind="ExitToApp"/>
+    <icon:PackIconCodicons x:Shared="false" x:Key="Icons.CloseFile" Foreground="Gray"   Kind="CloseAll"/>
+    <icon:PackIconCodicons x:Shared="false" x:Key="Icons.Save" Foreground="#0088ff"   Kind="Save"/>
+    <icon:PackIconCodicons x:Shared="false" x:Key="Icons.OpenFile" Foreground="DeepSkyBlue"  Kind="Files"/>
+    <icon:PackIconCodicons x:Shared="false" x:Key="Icons.OpenDirectory" Foreground="Orange"  Kind="Folder"/>
+    <icon:PackIconMaterial x:Shared="false" x:Key="Icons.Undo" Foreground="{StaticResource Primary}" Kind="Undo"/>
+    <icon:PackIconMaterial x:Shared="false" x:Key="Icons.Redo" Foreground="#8800ff" Kind="Redo"/>
+    <icon:PackIconCodicons x:Shared="false" x:Key="Icons.NewFile" Foreground="DeepSkyBlue"  Kind="NewFile"/>
+    <icon:PackIconMaterial x:Shared="false" x:Key="Icons.DeleteFile" Foreground="Red"  Kind="Delete"/>
+</ResourceDictionary>

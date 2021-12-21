@@ -1,35 +1,45 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using ExtractorSharp.Component;
-using ExtractorSharp.Core.Composition;
-using ExtractorSharp.Core.Config;
+using ExtractorSharp.Components;
+using ExtractorSharp.Composition;
+using ExtractorSharp.Composition.Config;
+using ExtractorSharp.Composition.Control;
+using ExtractorSharp.Core;
+using ExtractorSharp.Core.Model;
+using ExtractorSharp.Services.Constants;
 
 namespace ExtractorSharp.View.Dialog {
-    public partial class SaveImageDialog : ESDialog {
-        public SaveImageDialog(IConnector Connector) : base(Connector) {
-            InitializeComponent();
-            pathBox.Click += LoadPath;
-            loadButton.Click += LoadPath;
-            yesButton.Click += Replace;
-            CancelButton = cancelButton;
+
+    [Export(typeof(IView))]
+    [ExportMetadata("Name","SaveImage")]
+    public partial class SaveImageDialog : BaseDialog, IPartImportsSatisfiedNotification {
+
+
+        public SaveImageDialog() {
         }
 
-        public override DialogResult Show(params object[] args) {
+        public override object ShowView(params object[] args) {
             pathBox.Text = Config["SaveImagePath"].Value;
             fullPathCheck.Checked = Config["SaveImageFullPath"].Boolean;
             allImagesCheck.Checked = Config["SaveAllImage"].Boolean;
-            if (Config["SaveImageTip"].Boolean) {
+            if(Config["SaveImageTip"].Boolean) {
                 return ShowDialog();
             }
             return Save();
         }
 
         private DialogResult Save() {
-            var file = Connector.SelectedFile;
-            var indices = Connector.CheckedImageIndices;
-            if (file == null || indices.Length == 0) return DialogResult.Cancel;
-            if (allImagesCheck.Checked) {
+            ///TODO
+            var file = Store.Get<Album>(StoreKeys.SELECTED_FILE);//Connector.SelectedFile;
+            var indices = Store.Get<int[]>(StoreKeys.SELECTED_IMAGE_INDICES);//Connector.CheckedImageIndices;
+            if(file == null || indices.Length == 0) {
+                return DialogResult.Cancel;
+            }
+
+            if(allImagesCheck.Checked) {
                 indices = new int[0];
             }
             var name = nameBox.Text;
@@ -38,12 +48,21 @@ namespace ExtractorSharp.View.Dialog {
             var incre = -1;
             var prefix = name;
             var digit = 0;
-            if (match.Success) {
+            if(match.Success) {
                 incre = int.Parse(value);
                 prefix = prefix.Remove(match.Index, match.Length);
                 digit = value.Length;
             }
-            Connector.Do("saveImage", file, 1, indices, pathBox.Text, prefix, incre, digit, fullPathCheck.Checked, Connector.Effect, allImagesCheck.Checked);
+            Controller.Do("SaveImage", new CommandContext(file) {
+                { "Mode", 1 },
+                { "Indices",indices },
+                { "Path" ,pathBox.Text},
+                { "Prefix",prefix },
+                { "Increment",incre },
+                { "Digit", digit},
+                { "FullPath",fullPathCheck.Checked },
+                { "AllImage",allImagesCheck.Checked }
+            });
             return DialogResult.OK;
         }
 
@@ -58,9 +77,17 @@ namespace ExtractorSharp.View.Dialog {
 
         private void LoadPath(object sender, EventArgs e) {
             var dialog = new FolderBrowserDialog();
-            if (dialog.ShowDialog() == DialogResult.OK) {
+            if(dialog.ShowDialog() == DialogResult.OK) {
                 pathBox.Text = dialog.SelectedPath;
             }
+        }
+
+        public void OnImportsSatisfied() {
+            InitializeComponent();
+            pathBox.Click += LoadPath;
+            loadButton.Click += LoadPath;
+            yesButton.Click += Replace;
+            CancelButton = cancelButton;
         }
     }
 }

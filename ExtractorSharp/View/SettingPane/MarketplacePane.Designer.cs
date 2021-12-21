@@ -33,17 +33,17 @@ namespace ExtractorSharp.View.SettingPane {
             list.View = System.Windows.Forms.View.SmallIcon;
             list.SmallImageList = new ImageList();
             list.Size = new System.Drawing.Size(300, 300);
-
-            refreshButton.Text = Language["Refresh"];
+//
+        //    refreshButton.Text = Language["Refresh"];
             refreshButton.Location = new System.Drawing.Point(0, 310);
 
 
-            installButton.Text = Language["Install"];
+         //   installButton.Text = Language["Install"];
             installButton.Location = new System.Drawing.Point(100, 310);
 
 
-            this.Name = "Marketplace";
-            this.Parent = "Plugin";
+         //   this.Name = "Marketplace";
+        //    this.Parent = "Plugin";
             Controls.Add(list);
             Controls.Add(refreshButton);
             Controls.Add(installButton);

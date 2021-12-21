@@ -1,34 +1,52 @@
 ﻿using System;
-using ExtractorSharp.Component;
-using ExtractorSharp.Core.Composition;
-using ExtractorSharp.Core.Config;
+using System.ComponentModel.Composition;
+using System.Windows.Forms;
+using ExtractorSharp.Components;
+using ExtractorSharp.Composition;
+using ExtractorSharp.Composition.Config;
+using ExtractorSharp.Core;
+using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.View.SettingPane {
-    public partial class AnimationPane : AbstractSettingPane {
-        public AnimationPane(IConnector Data) : base(Data) {
-            InitializeComponent();
-            animationBar.ValueChanged += FlashSpeedBarChanged;
-            animationSpeedBox.ValueChanged += FlashSpeedBoxChanged;
-        }
+
+    [Export(typeof(ISetting))]
+    [ExportMetadata("Name", "Animation")]
+    [ExportMetadata("Parent", "View")]
+    public partial class AnimationPane : Panel, ISetting, IPartImportsSatisfiedNotification {
+
+        [Import]
+        private IConfig Config;
+
+        [Import]
+        private Language Language;
+
+        public object View => this;
+
 
         private void FlashSpeedBarChanged(object sender, EventArgs e) {
-            if (animationSpeedBox.Value != animationBar.Value) {
+            if(animationSpeedBox.Value != animationBar.Value) {
                 animationSpeedBox.Value = animationBar.Value;
             }
         }
 
         private void FlashSpeedBoxChanged(object sender, EventArgs e) {
-            if (animationSpeedBox.Value != animationBar.Value) {
-                animationBar.Value = (int) animationSpeedBox.Value;
+            if(animationSpeedBox.Value != animationBar.Value) {
+                animationBar.Value = (int)animationSpeedBox.Value;
             }
         }
 
-        public override void Initialize() {
+        public void Initialize() {
             animationBar.Value = Config["FlashSpeed"].Integer;
         }
 
-        public override void Save() {
+        public void Save() {
             Config["FlashSpeed"] = new ConfigValue(animationBar.Value);
+        }
+
+        public void OnImportsSatisfied() {
+            InitializeComponent();
+            animationBar.ValueChanged += FlashSpeedBarChanged;
+            animationSpeedBox.ValueChanged += FlashSpeedBoxChanged;
         }
     }
 }

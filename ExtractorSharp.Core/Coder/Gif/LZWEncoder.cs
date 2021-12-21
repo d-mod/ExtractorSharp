@@ -139,18 +139,18 @@ namespace ExtractorSharp.Core.Coder.Gif {
 
         //----------------------------------------------------------------------------
         public LZWEncoder(int width, int height, byte[] pixels, int color_depth) {
-            imgW = width;
-            imgH = height;
-            pixAry = pixels;
-            initCodeSize = Math.Max(2, color_depth);
+            this.imgW = width;
+            this.imgH = height;
+            this.pixAry = pixels;
+            this.initCodeSize = Math.Max(2, color_depth);
         }
 
         // Add a character to the end of the current packet, and if it is 254
         // characters, flush the packet to disk.
         private void Add(byte c, Stream outs) {
-            accum[a_count++] = c;
-            if (a_count > 254) {
-                Flush(outs);
+            this.accum[this.a_count++] = c;
+            if(this.a_count > 254) {
+                this.Flush(outs);
             }
         }
 
@@ -158,17 +158,17 @@ namespace ExtractorSharp.Core.Coder.Gif {
 
         // table clear for block compress
         private void ClearTable(Stream outs) {
-            ResetCodeTable(hsize);
-            free_ent = ClearCode + 2;
-            clear_flg = true;
+            this.ResetCodeTable(this.hsize);
+            this.free_ent = this.ClearCode + 2;
+            this.clear_flg = true;
 
-            Output(ClearCode, outs);
+            this.Output(this.ClearCode, outs);
         }
 
         // reset code table
         private void ResetCodeTable(int hsize) {
-            for (var i = 0; i < hsize; ++i) {
-                htab[i] = -1;
+            for(var i = 0; i < hsize; ++i) {
+                this.htab[i] = -1;
             }
         }
 
@@ -182,90 +182,90 @@ namespace ExtractorSharp.Core.Coder.Gif {
             int hshift;
 
             // Set up the globals:  g_init_bits - initial number of bits
-            g_init_bits = init_bits;
+            this.g_init_bits = init_bits;
 
             // Set up the necessary values
-            clear_flg = false;
-            n_bits = g_init_bits;
-            maxcode = MaxCode(n_bits);
+            this.clear_flg = false;
+            this.n_bits = this.g_init_bits;
+            this.maxcode = this.MaxCode(this.n_bits);
 
-            ClearCode = 1 << (init_bits - 1);
-            EOFCode = ClearCode + 1;
-            free_ent = ClearCode + 2;
+            this.ClearCode = 1 << (init_bits - 1);
+            this.EOFCode = this.ClearCode + 1;
+            this.free_ent = this.ClearCode + 2;
 
-            a_count = 0; // clear packet
+            this.a_count = 0; // clear packet
 
-            ent = NextPixel();
+            ent = this.NextPixel();
 
             hshift = 0;
-            for (fcode = hsize; fcode < 65536; fcode *= 2) {
+            for(fcode = this.hsize; fcode < 65536; fcode *= 2) {
                 ++hshift;
             }
             hshift = 8 - hshift; // set hash code range bound
 
-            hsize_reg = hsize;
-            ResetCodeTable(hsize_reg); // clear hash table
+            hsize_reg = this.hsize;
+            this.ResetCodeTable(hsize_reg); // clear hash table
 
-            Output(ClearCode, outs);
+            this.Output(this.ClearCode, outs);
 
-            outer_loop :
-            while ((c = NextPixel()) != EOF) {
-                fcode = (c << maxbits) + ent;
+        outer_loop:
+            while((c = this.NextPixel()) != EOF) {
+                fcode = (c << this.maxbits) + ent;
                 i = (c << hshift) ^ ent; // xor hashing
 
-                if (htab[i] == fcode) {
-                    ent = codetab[i];
+                if(this.htab[i] == fcode) {
+                    ent = this.codetab[i];
                     continue;
                 }
-                if (htab[i] >= 0) // non-empty slot
+                if(this.htab[i] >= 0) // non-empty slot
                 {
                     disp = hsize_reg - i; // secondary hash (after G. Knott)
-                    if (i == 0) {
+                    if(i == 0) {
                         disp = 1;
                     }
                     do {
-                        if ((i -= disp) < 0) {
+                        if((i -= disp) < 0) {
                             i += hsize_reg;
                         }
 
-                        if (htab[i] == fcode) {
-                            ent = codetab[i];
+                        if(this.htab[i] == fcode) {
+                            ent = this.codetab[i];
                             goto outer_loop;
                         }
-                    } while (htab[i] >= 0);
+                    } while(this.htab[i] >= 0);
                 }
-                Output(ent, outs);
+                this.Output(ent, outs);
                 ent = c;
-                if (free_ent < maxmaxcode) {
-                    codetab[i] = free_ent++; // code -> hashtable
-                    htab[i] = fcode;
+                if(this.free_ent < this.maxmaxcode) {
+                    this.codetab[i] = this.free_ent++; // code -> hashtable
+                    this.htab[i] = fcode;
                 } else {
-                    ClearTable(outs);
+                    this.ClearTable(outs);
                 }
             }
             // Put out the final code.
-            Output(ent, outs);
-            Output(EOFCode, outs);
+            this.Output(ent, outs);
+            this.Output(this.EOFCode, outs);
         }
 
         //----------------------------------------------------------------------------
         public void Encode(Stream os) {
-            os.WriteByte(Convert.ToByte(initCodeSize)); // write "initial code size" byte
+            os.WriteByte(Convert.ToByte(this.initCodeSize)); // write "initial code size" byte
 
-            remaining = imgW * imgH; // reset navigation variables
-            curPixel = 0;
+            this.remaining = this.imgW * this.imgH; // reset navigation variables
+            this.curPixel = 0;
 
-            Compress(initCodeSize + 1, os); // compress and write the pixel data
+            this.Compress(this.initCodeSize + 1, os); // compress and write the pixel data
 
             os.WriteByte(0); // write block terminator
         }
 
         // Flush the packet to disk, and reset the accumulator
         private void Flush(Stream outs) {
-            if (a_count > 0) {
-                outs.WriteByte(Convert.ToByte(a_count));
-                outs.Write(accum, 0, a_count);
-                a_count = 0;
+            if(this.a_count > 0) {
+                outs.WriteByte(Convert.ToByte(this.a_count));
+                outs.Write(this.accum, 0, this.a_count);
+                this.a_count = 0;
             }
         }
 
@@ -277,53 +277,53 @@ namespace ExtractorSharp.Core.Coder.Gif {
         // Return the next pixel from the image
         //----------------------------------------------------------------------------
         private int NextPixel() {
-            var upperBound = pixAry.GetUpperBound(0);
+            var upperBound = this.pixAry.GetUpperBound(0);
 
-            return curPixel <= upperBound ? pixAry[curPixel++] & 0xff : EOF;
+            return this.curPixel <= upperBound ? this.pixAry[this.curPixel++] & 0xff : EOF;
         }
 
         private void Output(int code, Stream outs) {
-            cur_accum &= masks[cur_bits];
+            this.cur_accum &= this.masks[this.cur_bits];
 
-            if (cur_bits > 0) {
-                cur_accum |= code << cur_bits;
+            if(this.cur_bits > 0) {
+                this.cur_accum |= code << this.cur_bits;
             } else {
-                cur_accum = code;
+                this.cur_accum = code;
             }
 
-            cur_bits += n_bits;
+            this.cur_bits += this.n_bits;
 
-            while (cur_bits >= 8) {
-                Add((byte) (cur_accum & 0xff), outs);
-                cur_accum >>= 8;
-                cur_bits -= 8;
+            while(this.cur_bits >= 8) {
+                this.Add((byte)(this.cur_accum & 0xff), outs);
+                this.cur_accum >>= 8;
+                this.cur_bits -= 8;
             }
 
             // If the next entry is going to be too big for the code size,
             // then increase it, if possible.
-            if (free_ent > maxcode || clear_flg) {
-                if (clear_flg) {
-                    maxcode = MaxCode(n_bits = g_init_bits);
-                    clear_flg = false;
+            if(this.free_ent > this.maxcode || this.clear_flg) {
+                if(this.clear_flg) {
+                    this.maxcode = this.MaxCode(this.n_bits = this.g_init_bits);
+                    this.clear_flg = false;
                 } else {
-                    ++n_bits;
-                    if (n_bits == maxbits) {
-                        maxcode = maxmaxcode;
+                    ++this.n_bits;
+                    if(this.n_bits == this.maxbits) {
+                        this.maxcode = this.maxmaxcode;
                     } else {
-                        maxcode = MaxCode(n_bits);
+                        this.maxcode = this.MaxCode(this.n_bits);
                     }
                 }
             }
 
-            if (code == EOFCode) {
+            if(code == this.EOFCode) {
                 // At EOF, write the rest of the buffer.
-                while (cur_bits > 0) {
-                    Add((byte) (cur_accum & 0xff), outs);
-                    cur_accum >>= 8;
-                    cur_bits -= 8;
+                while(this.cur_bits > 0) {
+                    this.Add((byte)(this.cur_accum & 0xff), outs);
+                    this.cur_accum >>= 8;
+                    this.cur_bits -= 8;
                 }
 
-                Flush(outs);
+                this.Flush(outs);
             }
         }
     }

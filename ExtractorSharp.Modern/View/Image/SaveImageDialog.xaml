@@ -1,0 +1,33 @@
+﻿<es:BaseDialog x:Class="ExtractorSharp.View.Image.SaveImageDialog"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:ExtractorSharp.View.Image"
+      xmlns:es="clr-namespace:ExtractorSharp.Components"
+      xmlns:i ="clr-namespace:ExtractorSharp" 
+      xmlns:model="clr-namespace:ExtractorSharp.View.Model" 
+      d:DataContext="{d:DesignInstance Type=model:SaveImageModel}"
+      mc:Ignorable="d" 
+      Height="400" Width="400"
+      >
+    <Border Padding="0,20,0,0">
+        <StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <es:ETextbox 
+                    PlaceHolder="{i:Language Path}"
+                    Text="{Binding Target, UpdateSourceTrigger=PropertyChanged}"
+                    HorizontalAlignment="Center"
+                    Height="32" TextWrapping="NoWrap"
+                    Width="240"
+                    />
+                <Button Content="{i:Language Browse}" Click="Browse"></Button>
+            </StackPanel>
+            <StackPanel Style="{StaticResource Action}">
+                <Button IsDefault="True" Style="{StaticResource PrimaryButton}" Foreground="White" Click="OnOk" Content="{i:Language OK}"></Button>
+                <Button Margin="0,0,40,0"  IsCancel="True" Content="{i:Language Cancel}"></Button>
+            </StackPanel>
+        </StackPanel>
+
+    </Border>
+</es:BaseDialog>

@@ -48,13 +48,21 @@
       <HintPath>..\packages\MSTest.TestFramework.1.2.0\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Command\UnitTest1.cs" />
+    <Compile Include="Script\CesTest.cs" />
+    <Compile Include="Command\FileTest.cs" />
+    <Compile Include="Script\MesTest.cs" />
+    <Compile Include="UnitTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ExtractorSharp.Composition\ExtractorSharp.Composition.csproj">
+      <Project>{1F094AF0-2442-4E5C-8F80-B56DBA200D58}</Project>
+      <Name>ExtractorSharp.Composition</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ExtractorSharp.Core\ExtractorSharp.Core.csproj">
       <Project>{09014dd5-3314-437e-bb2e-6fbd0d1e7864}</Project>
       <Name>ExtractorSharp.Core</Name>
@@ -62,6 +70,10 @@
     <ProjectReference Include="..\ExtractorSharp.Json\ExtractorSharp.Json.csproj">
       <Project>{06D35140-706A-40CE-9373-6B948F092A30}</Project>
       <Name>ExtractorSharp.Json</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExtractorSharp.Services\ExtractorSharp.Services.csproj">
+      <Project>{1592a00e-3eeb-4d78-876e-e4ed721deef3}</Project>
+      <Name>ExtractorSharp.Services</Name>
     </ProjectReference>
     <ProjectReference Include="..\ExtractorSharp\ExtractorSharp.csproj">
       <Project>{37d3351f-80f8-4905-a06f-65c430ec5ee2}</Project>

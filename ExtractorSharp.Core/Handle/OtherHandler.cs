@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-using System.IO;
-using ExtractorSharp.Core.Lib;
+﻿using System.IO;
 using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.Core.Handle {
@@ -12,21 +10,22 @@ namespace ExtractorSharp.Core.Handle {
         public OtherHandler(Album album) : base(album) { }
 
         public override byte[] AdjustData() {
-            return _data;
+            return this._data;
         }
 
 
-        public override Bitmap ConvertToBitmap(Sprite entity) {
-            return null;
-        }
 
         public override byte[] ConvertToByte(Sprite entity) {
             return new byte[0];
         }
 
         public override void CreateFromStream(Stream stream) {
-            stream.Read((int) Album.IndexLength, out _data);
-            Album.Data = _data;
+            stream.Read((int)this.Album.IndexLength, out this._data);
+            this.Album.Data = this._data;
+        }
+
+        public override ImageData GetImageData(Sprite sprite) {
+            return null;
         }
     }
 }

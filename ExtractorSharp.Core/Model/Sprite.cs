@@ -1,183 +1,295 @@
-﻿using System.Drawing;
+﻿using System;
+using System.ComponentModel;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using ExtractorSharp.Core.Coder;
 using ExtractorSharp.Core.Handle;
 using ExtractorSharp.Core.Lib;
-using ExtractorSharp.Json.Attr;
 
 namespace ExtractorSharp.Core.Model {
-    public class Sprite {
-        [LSIgnore]
-        private Bitmap _image;
+    public sealed class Sprite : IFormattable, INotifyPropertyChanged {
+
+        private Size _frameSize = Size.Empty;
 
         /// <summary>
         ///     帧域宽高
         /// </summary>
-        [LSIgnore]
-        public Size FrameSize = Size.Empty;
+        public Size FrameSize {
+            set {
+                this._frameSize = value;
+                this.OnPropertyChanged("FrameSize");
+            }
+            get => this._frameSize;
+        }
+
+        private CompressMode _compressMode = CompressMode.NONE;
 
         /// <summary>
         ///     压缩类型
         /// </summary>
-        public CompressMode CompressMode = CompressMode.NONE;
+        public CompressMode CompressMode {
+            set {
+                this._compressMode = value;
+                this.OnPropertyChanged("CompressMode");
+            }
+            get => this._compressMode;
+        }
 
         /// <summary>
-        ///     贴图在V2,V4时的数据
+        ///     贴图的数据
         /// </summary>
-        [LSIgnore]
         public byte[] Data = new byte[2];
+
+        private int _index;
 
         /// <summary>
         ///     贴图在img中的下标
         /// </summary>
-        public int Index;
+        public int Index {
+            set {
+                this._index = value;
+                this.OnPropertyChanged("Index");
+            }
+            get => this._index;
+
+        }
 
 
         /// <summary>
         ///     数据长度
         /// </summary>
-        [LSIgnore]
         public int Length = 2;
 
+        private Point _location;
 
         /// <summary>
         ///     贴图坐标
         /// </summary>
-        [LSIgnore]
-        public Point Location;
+        public Point Location {
+            set {
+                this._location = value;
+                this.OnPropertyChanged("Location");
+            }
+            get => this._location;
+        }
 
         /// <summary>
         ///     存储该贴图的img
         /// </summary>
-        [LSIgnore]
-        public Album Parent;
+        public Album Parent { set; get; }
+
+
+        private Size _size = new Size(1, 1);
 
         /// <summary>
         ///     贴图宽高
         /// </summary>
-        [LSIgnore]
-        public Size Size = new Size(1, 1);
+        public Size Size {
+            set {
+                this._size = value;
+                this.OnPropertyChanged("Size");
+            }
+            get {
+                if(this.Target != null) {
+                    return this.Target.Size;
+                }
+                return this._size;
+            }
+        }
+
+        private int _targetIndex = -1;
+
+        /// <summary>
+        /// 索引贴图的下标
+        /// </summary>
+        public int TargetIndex {
+            set {
+                this._targetIndex = value;
+                if(value > -1) {
+                    this.ColorFormat = ColorFormats.LINK;
+                } else {
+                    this.ColorFormat = ColorFormats.ARGB_1555;
+                }
+                this.OnPropertyChanged("TargetIndex");
+            }
+            get => this._targetIndex;
+        }
+
+        public bool IsLink => this.ColorFormat == ColorFormats.LINK && this.TargetIndex < this.Parent.Count && this.TargetIndex > -1;
+
 
         /// <summary>
         ///     当贴图为链接贴图时所指向的贴图
         /// </summary>
-        [LSIgnore]
-        public Sprite Target;
-
-        public Sprite() { }
-
-        public Sprite(Album parent) {
-            Parent = parent;
+        public Sprite Target {
+            get {
+                if(this.IsLink) {
+                    return this.Parent[this.TargetIndex];
+                }
+                return null;
+            }
         }
+
+
+        private ColorFormats _type = ColorFormats.ARGB_1555;
 
         /// <summary>
         ///     色位
         /// </summary>
-        public ColorBits Type { set; get; } = ColorBits.ARGB_1555;
+        public ColorFormats ColorFormat {
+            set {
+                if(this._type != value) {
+                    this._type = value;
+                    this.OnPropertyChanged("ColorFormat");
+                }
+            }
+            get => this._type;
+        }
 
         /// <summary>
-        ///     贴图内容
+        /// 图片缓存
         /// </summary>
-        [LSIgnore]
-        public Bitmap Picture {
+        private Bitmap _image;
+
+        /// <summary>
+        /// 图片
+        /// </summary>
+        public Bitmap Image {
             get {
-                if (Type == ColorBits.LINK) {
-                    return Target?.Picture;
+                if(this.IsLink) {
+                    return this.Target?.Image;
                 }
-                if (IsOpen) {
-                    return _image;
+                if(this._image == null) {
+                    this._image = this.ImageData.ToBitmap(); //使用父容器解析
                 }
-                return _image = Parent.ConvertToBitmap(this); //使用父容器解析
+                return this._image;
             }
             set {
-                _image = value;
-                if (value != null) {
-                    Size = value.Size;
+                this._image = value;
+                this._imageData = ImageData.CreateByBitmap(value);
+                if(value != null) {
+                    this.Size = value.Size;
+                } else {
+                    this.Size = new Size(1, 1);
                 }
             }
         }
 
-        [LSIgnore]
-        public bool IsOpen => _image != null;
+        /// <summary>
+        /// 图片数据缓存
+        /// </summary>
+        private ImageData _imageData;
+        /// <summary>
+        ///  Bitmap形式数据
+        /// </summary>
+        public ImageData ImageData {
+            get {
+                if(this.IsLink) {
+                    return this.Target?.ImageData;
+                }
+                if(this._imageData == null) {
+                    this._imageData = this.Parent.GetImageData(this);//使用父容器解析
+                }
+                return this._imageData;
+            }
+            set {
+                this._imageData = value;
+            }
+        }
+
+
+        public bool IsOpen => this._image != null || this._imageData != null;
 
         public int X {
-            set => Location.X = value;
-            get => Location.X;
+            set => this.Location = new Point(value, this.Y);
+            get => this.Location.X;
         }
 
         public int Y {
-            set => Location.Y = value;
-            get => Location.Y;
+            set => this.Location = new Point(this.X, value);
+            get => this.Location.Y;
         }
 
         public int Width {
-            set => Size.Width = value;
-            get => Size.Width;
+            set => this.Size = new Size(value, this.Height);
+            get => this.Size.Width;
         }
 
         public int Height {
-            set => Size.Height = value;
-            get => Size.Height;
+            set => this.Size = new Size(this.Width, value);
+            get => this.Size.Height;
         }
 
         public int FrameWidth {
-            set => FrameSize = new Size(value, FrameHeight);
-            get => FrameSize.Width;
+            set => this.FrameSize = new Size(value, this.FrameHeight);
+            get => this.FrameSize.Width;
         }
 
         public int FrameHeight {
-            set => FrameSize = new Size(FrameWidth, value);
-            get => FrameSize.Height;
+            set => this.FrameSize = new Size(this.FrameWidth, value);
+            get => this.FrameSize.Height;
         }
 
         /// <summary>
         ///     文件版本
         /// </summary>
-        [LSIgnore]
-        public ImgVersion Version => Parent.Version;
+        public ImgVersion Version => this.Parent.Version;
 
-        [LSIgnore]
-        public bool Hidden => Width * Height == 1 && CompressMode == CompressMode.NONE;
+        public bool IsHidden => this.Width * this.Height == 1 && this.CompressMode == CompressMode.NONE;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
 
-        public void Load() {
-            _image = Parent.ConvertToBitmap(this); //使用父容器
+        public Sprite() { }
+
+        public Sprite(Album parent) {
+            this.Parent = parent;
         }
 
+        private void OnPropertyChanged(string propertyName) {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void Load() {
+            this._imageData = this.Parent.GetImageData(this); //使用父容器
+        }
+
+        public void Refresh() {
+            this._imageData = null;
+            this._image = null;
+        }
         /// <summary>
         ///     替换贴图
         /// </summary>
         /// <param name="type"></param>
         /// <param name="isAdjust"></param>
         /// <param name="bmp"></param>
-        public void ReplaceImage(ColorBits type, bool isAdjust, Bitmap bmp) {
-            if (bmp == null) {
+        public void ReplaceImage(ColorFormats type, Bitmap bmp) {
+            if(bmp == null) {
                 return;
             }
-            Picture = bmp;
-            Target = null;
-            Type = type == ColorBits.UNKNOWN ? Type : type;
-            if (type == ColorBits.UNKNOWN) {
-                if (Type == ColorBits.LINK) {
-                    type = ColorBits.ARGB_1555;
-                } else if (Version != ImgVersion.Ver5 && Type > ColorBits.LINK) {
-                    type = Type - 4;
+            this.Image = bmp;
+            this.TargetIndex = -1;
+            if(type == ColorFormats.UNKNOWN) {
+                if(this.ColorFormat == ColorFormats.LINK) {
+                    type = ColorFormats.ARGB_1555;
+                } else if(this.Version != ImgVersion.Ver5 && this.ColorFormat > ColorFormats.LINK) {
+                    type = this.ColorFormat - 4;
                 } else {
-                    type = Type;
+                    type = this.ColorFormat;
                 }
             }
-            Type = type;
-            if (isAdjust) {
-                X += bmp.Width - Size.Width;
-                Y += bmp.Height - Size.Height;
+            this.ColorFormat = type;
+            this.Size = bmp.Size;
+            if(this.FrameHeight < bmp.Height) {
+                this.FrameHeight = bmp.Height;
             }
-            Size = bmp.Size;
-            if (FrameHeight < bmp.Height) {
-                FrameHeight = bmp.Height;
+            if(this.FrameWidth < bmp.Width) {
+                this.FrameWidth = bmp.Width;
             }
-            if (FrameWidth < bmp.Width) {
-                FrameWidth = bmp.Width;
-            }
-            if (Width * Height > 1) {
-                CompressMode = CompressMode.ZLIB;
+            if(this.Width * this.Height > 1) {
+                this.CompressMode = CompressMode.ZLIB;
             }
         }
 
@@ -186,21 +298,21 @@ namespace ExtractorSharp.Core.Model {
         ///     裁剪画布透明部分
         /// </summary>
         public void TrimImage() {
-            if (Type == ColorBits.LINK || CompressMode == CompressMode.NONE) {
+            if(this.ColorFormat == ColorFormats.LINK || this.CompressMode == CompressMode.NONE) {
                 return;
             }
-            if (Picture == null) {
+            if(this.Image == null) {
                 return;
             }
-            var rct = Picture.Scan();
+            var rct = this.Image.Scan();
             var image = new Bitmap(rct.Width, rct.Height);
             var g = Graphics.FromImage(image);
             var empty = new Rectangle(Point.Empty, rct.Size);
-            g.DrawImage(Picture, empty, rct, GraphicsUnit.Pixel);
+            g.DrawImage(this.Image, empty, rct, GraphicsUnit.Pixel);
             g.Dispose();
-            Size = rct.Size;
-            Location = Location.Add(rct.Location);
-            Picture = image;
+            this.Size = rct.Size;
+            this.Location = this.Location.Add(rct.Location);
+            this.Image = image;
         }
 
         /// <summary>
@@ -208,78 +320,66 @@ namespace ExtractorSharp.Core.Model {
         /// </summary>
         /// <param name="target"></param>
         public void CanvasImage(Rectangle target) {
-            if (Type == ColorBits.LINK) {
+            if(this.IsLink) {
                 return;
             }
-            Picture = Picture.Canvas(target.Add(new Rectangle(Location, Size.Empty)));
-            Size = target.Size;
-            Location = target.Location;
+            this.Image = this.Image.Canvas(target.Add(new Rectangle(this.Location, Size.Empty)));
+            this.Size = target.Size;
+            this.Location = target.Location;
         }
 
 
         /// <summary>
         ///     数据校正
         /// </summary>
-        public virtual void Adjust() {
-            if (Type == ColorBits.LINK) {
-                Length = 0;
+        public void Adjust() {
+            if(this.IsLink) {
+                this.Length = 0;
                 return;
             }
-            if (!IsOpen) {
+            if(!this.IsOpen) {
                 return;
             }
-            Data = Parent.ConvertToByte(this);
-            if (Data.Length > 0 && CompressMode >= CompressMode.ZLIB) Data = Zlib.Compress(Data);
-            Length = Data.Length; //不压缩时，按原长度保存
+            this.Data = this.Parent.Handler.ConvertToByte(this);
+            if(this.Data.Length > 0 && this.CompressMode >= CompressMode.ZLIB) {
+                this.Data = Zlib.Compress(this.Data);
+            }
+            this.Length = this.Data.Length; //不压缩时，按原长度保存
         }
 
 
         public bool Equals(Sprite entity) {
-            return entity != null && Parent.Equals(entity.Parent) && Index == entity.Index;
+            return entity != null && this.Parent.Equals(entity.Parent) && this.Index == entity.Index;
         }
 
         public override string ToString() {
-            if (Type == ColorBits.LINK && Target != null) {
-                return Index + "," + Language.Default["TargetIndex"] + Target.Index;
+            if(this.ColorFormat == ColorFormats.LINK) {
+                return $"{this.Index},\u00A0<TargetIndex>{this.TargetIndex}";
             }
-            return Index + "," + Type + "," + Language.Default["Position"] + Location.GetString() + "," +
-                   Language.Default["Size"] + Size.GetString() + "," + Language.Default["FrameSize"]  +
-                   FrameSize.GetString();
+            if(this.IsHidden) {
+                return $"{this.Index},\u00A0<NullImage>";
+            }
+            return $"{this.Index},\u00A0<{this.ColorFormat}>, <Position>{this.Location.GetString()},\u00A0<Size>{this.Size.GetString()},\u00A0<FrameSize>{this.FrameSize.GetString()}";
         }
 
         public Sprite Clone(Album album) {
             return new Sprite(album) {
-                Picture = Picture,
+                Image = Image,
                 CompressMode = CompressMode,
-                Type = Type,
+                ColorFormat = ColorFormat,
                 Location = Location,
                 FrameSize = FrameSize,
-                Target = Target
+                TargetIndex = TargetIndex
             };
         }
+
+        public string ToString(string formatString, IFormatProvider formatProvider) {
+            if(formatProvider.GetFormat(this.GetType()) is ICustomFormatter formatter) {
+                return formatter.Format(formatString, this, formatProvider);
+            }
+            return null;
+        }
+
     }
 
-    /// <summary>
-    ///     色位
-    /// </summary>
-    public enum ColorBits {
-        ARGB_1555 = 0x0e,
-        ARGB_4444 = 0x0f,
-        ARGB_8888 = 0x10,
-        LINK = 0x11,
-        DXT_1 = 0x12,
-        DXT_3 = 0x13,
-        DXT_5 = 0x14,
-        UNKNOWN = 0x00
-    }
-
-    /// <summary>
-    ///     压缩类型
-    /// </summary>
-    public enum CompressMode {
-        ZLIB = 0x06,
-        NONE = 0x05,
-        DDS_ZLIB = 0x07,
-        UNKNOWN = 0x01
-    }
 }

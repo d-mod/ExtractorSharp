@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
-using ExtractorSharp.Core.Lib;
 using ExtractorSharp.Core.Model;
 
 namespace ExtractorSharp.Core.Handle {
@@ -15,35 +13,39 @@ namespace ExtractorSharp.Core.Handle {
         public FifthHandler(Album album) : base(album) { }
 
 
-        public override Bitmap ConvertToBitmap(Sprite entity) {
-            if (entity.Type < ColorBits.LINK && entity.Length > 0) {
-                return base.ConvertToBitmap(entity);
+
+        public override ImageData GetImageData(Sprite sprite) {
+            if(sprite.ColorFormat < ColorFormats.LINK && sprite.Length > 0) {
+                return base.GetImageData(sprite);
             }
-            if (!_map.ContainsKey(entity.Index)) {
-                return new Bitmap(1, 1);
+            if(!this._map.ContainsKey(sprite.Index)) {
+                return ImageData.Empty;
             }
-            var index = _map[entity.Index];
-            var dds = index.Texture;
-            var bmp = dds.Pictrue.Clone(index.Rectangle, PixelFormat.DontCare);
-            if (index.Top != 0) {
-                bmp.RotateFlip(RotateFlipType.Rotate90FlipXY);
+            var info = this._map[sprite.Index];
+            var dds = info.Texture;
+            var data = dds.ImageData.Clone(info.Rectangle);
+            if(info.Top != 0) {
+                data = data.RotateFlip();
             }
-            return bmp;
+            return data;
         }
 
-        public override byte[] ConvertToByte(Sprite entity) {
-            if (entity.Type < ColorBits.LINK && entity.Length > 0) {
-                return base.ConvertToByte(entity);
+
+
+
+        public override byte[] ConvertToByte(Sprite sprite) {
+            if(sprite.ColorFormat < ColorFormats.LINK && sprite.Length > 0) {
+                return base.ConvertToByte(sprite);
             }
-            if (entity.Width * entity.Height == 1) {
-                entity.CompressMode = CompressMode.NONE;
-                return base.ConvertToByte(entity);
+            if(sprite.Width * sprite.Height == 1) {
+                sprite.CompressMode = CompressMode.NONE;
+                return base.ConvertToByte(sprite);
             }
-            if (entity.CompressMode == CompressMode.ZLIB) {
-                entity.CompressMode = CompressMode.DDS_ZLIB;
+            if(sprite.CompressMode == CompressMode.ZLIB) {
+                sprite.CompressMode = CompressMode.DDS_ZLIB;
             }
-            var dds = Texture.CreateFromBitmap(entity);
-            _map[entity.Index] = new TextureInfo {
+            var dds = Texture.CreateFromSprite(sprite);
+            this._map[sprite.Index] = new TextureInfo {
                 Texture = dds,
                 RightDown = new Point(dds.Width, dds.Height)
             };
@@ -56,21 +58,24 @@ namespace ExtractorSharp.Core.Handle {
         /// </summary>
         /// <returns></returns>
         public override byte[] AdjustData() {
-            List.Clear();
-            foreach (var index in _map.Values) {
+            this.List.Clear();
+            foreach(var index in this._map.Values) {
                 var dds = index.Texture;
-                if (List.Contains(dds)) continue;
-                dds.Index = List.Count;
-                List.Add(dds);
+                if(this.List.Contains(dds)) {
+                    continue;
+                }
+
+                dds.Index = this.List.Count;
+                this.List.Add(dds);
             }
 
             var ms = new MemoryStream();
-            ms.WriteInt(Album.CurrentTable.Count);
-            Colors.WritePalette(ms, Album.CurrentTable);
+            ms.WriteInt(this.Album.CurrentPalette.Count);
+            Colors.WritePalette(ms, this.Album.CurrentPalette);
 
-            foreach (var dds in List) {
-                ms.WriteInt((int) dds.Version);
-                ms.WriteInt((int) dds.Type);
+            foreach(var dds in this.List) {
+                ms.WriteInt((int)dds.Version);
+                ms.WriteInt((int)dds.Type);
                 ms.WriteInt(dds.Index);
                 ms.WriteInt(dds.Length);
                 ms.WriteInt(dds.FullLength);
@@ -80,25 +85,25 @@ namespace ExtractorSharp.Core.Handle {
 
             var ver2List = new List<Sprite>();
             var start = ms.Length;
-            foreach (var entity in Album.List) {
-                ms.WriteInt((int) entity.Type);
-                if (entity.Type == ColorBits.LINK) {
-                    ms.WriteInt(entity.Target.Index);
+            foreach(var sprite in this.Album.List) {
+                ms.WriteInt((int)sprite.ColorFormat);
+                if(sprite.ColorFormat == ColorFormats.LINK) {
+                    ms.WriteInt(sprite.TargetIndex);
                     continue;
                 }
-                ms.WriteInt((int) entity.CompressMode);
-                ms.WriteInt(entity.Size.Width);
-                ms.WriteInt(entity.Size.Height);
-                ms.WriteInt(entity.Length);
-                ms.WriteInt(entity.Location.X);
-                ms.WriteInt(entity.Location.Y);
-                ms.WriteInt(entity.FrameSize.Width);
-                ms.WriteInt(entity.FrameSize.Height);
-                if (entity.Type < ColorBits.LINK && entity.Length != 0) {
-                    ver2List.Add(entity);
+                ms.WriteInt((int)sprite.CompressMode);
+                ms.WriteInt(sprite.Size.Width);
+                ms.WriteInt(sprite.Size.Height);
+                ms.WriteInt(sprite.Length);
+                ms.WriteInt(sprite.Location.X);
+                ms.WriteInt(sprite.Location.Y);
+                ms.WriteInt(sprite.FrameSize.Width);
+                ms.WriteInt(sprite.FrameSize.Height);
+                if(sprite.ColorFormat < ColorFormats.LINK && sprite.Length != 0) {
+                    ver2List.Add(sprite);
                     continue;
                 }
-                var info = _map[entity.Index];
+                var info = this._map[sprite.Index];
                 ms.WriteInt(info.Unknown);
                 ms.WriteInt(info.Texture.Index);
                 ms.WriteInt(info.LeftUp.X);
@@ -107,19 +112,19 @@ namespace ExtractorSharp.Core.Handle {
                 ms.WriteInt(info.RightDown.Y);
                 ms.WriteInt(info.Top);
             }
-            Album.IndexLength = ms.Length - start;
-            foreach (var dds in List) {
+            this.Album.IndexLength = ms.Length - start;
+            foreach(var dds in this.List) {
                 ms.Write(dds.Data);
             }
-            foreach (var sprite in ver2List) {
+            foreach(var sprite in ver2List) {
                 ms.Write(sprite.Data);
             }
             ms.Close();
             var data = ms.ToArray();
-            Album.Length = data.Length + 40;
+            this.Album.Length = data.Length + 40;
             ms = new MemoryStream();
-            ms.WriteInt(List.Count);
-            ms.WriteInt(Album.Length);
+            ms.WriteInt(this.List.Count);
+            ms.WriteInt(this.Album.Length);
             ms.Write(data);
             ms.Close();
             return ms.ToArray();
@@ -127,15 +132,15 @@ namespace ExtractorSharp.Core.Handle {
 
         public override void CreateFromStream(Stream stream) {
             var indexCount = stream.ReadInt();
-            Album.Length = stream.ReadInt();
+            this.Album.Length = stream.ReadInt();
             var count = stream.ReadInt();
             var table = new List<Color>(Colors.ReadPalette(stream, count));
-            Album.Tables = new List<List<Color>> {table};
+            this.Album.Palettes = new List<List<Color>> { table };
             var list = new List<Texture>();
-            for (var i = 0; i < indexCount; i++) {
+            for(var i = 0; i < indexCount; i++) {
                 var dds = new Texture {
-                    Version = (TextureVersion) stream.ReadInt(),
-                    Type = (ColorBits) stream.ReadInt(),
+                    Version = (TextureVersion)stream.ReadInt(),
+                    Type = (ColorFormats)stream.ReadInt(),
                     Index = stream.ReadInt(),
                     Length = stream.ReadInt(),
                     FullLength = stream.ReadInt(),
@@ -144,27 +149,27 @@ namespace ExtractorSharp.Core.Handle {
                 };
                 list.Add(dds);
             }
-            var dic = new Dictionary<Sprite, int>();
             var ver2List = new List<Sprite>();
-            for (var i = 0; i < Album.Count; i++) {
-                var entity = new Sprite(Album);
-                entity.Index = Album.List.Count;
-                entity.Type = (ColorBits) stream.ReadInt();
-                Album.List.Add(entity);
-                if (entity.Type == ColorBits.LINK) {
-                    dic.Add(entity, stream.ReadInt());
+            for(var i = 0; i < this.Album.Count; i++) {
+                var sprite = new Sprite(this.Album) {
+                    Index = this.Album.List.Count,
+                    ColorFormat = (ColorFormats)stream.ReadInt()
+                };
+                this.Album.List.Add(sprite);
+                if(sprite.ColorFormat == ColorFormats.LINK) {
+                    sprite.TargetIndex = stream.ReadInt();
                     continue;
                 }
-                entity.CompressMode = (CompressMode) stream.ReadInt();
-                entity.Width = stream.ReadInt();
-                entity.Height = stream.ReadInt();
-                entity.Length = stream.ReadInt(); //保留，固定为0
-                entity.X = stream.ReadInt();
-                entity.Y = stream.ReadInt();
-                entity.FrameWidth = stream.ReadInt();
-                entity.FrameHeight = stream.ReadInt();
-                if (entity.Type < ColorBits.LINK && entity.Length != 0) {
-                    ver2List.Add(entity);
+                sprite.CompressMode = (CompressMode)stream.ReadInt();
+                sprite.Width = stream.ReadInt();
+                sprite.Height = stream.ReadInt();
+                sprite.Length = stream.ReadInt(); //保留，固定为0
+                sprite.X = stream.ReadInt();
+                sprite.Y = stream.ReadInt();
+                sprite.FrameWidth = stream.ReadInt();
+                sprite.FrameHeight = stream.ReadInt();
+                if(sprite.ColorFormat < ColorFormats.LINK && sprite.Length != 0) {
+                    ver2List.Add(sprite);
                     continue;
                 }
                 var j = stream.ReadInt();
@@ -180,37 +185,36 @@ namespace ExtractorSharp.Core.Handle {
                     RightDown = rightdown,
                     Top = top
                 };
-                _map.Add(entity.Index, info);
+                this._map.Add(sprite.Index, info);
             }
 
-            foreach (var entity in dic.Keys) entity.Target = Album.List[dic[entity]];
-            foreach (var dds in list) {
+            foreach(var dds in list) {
                 var data = new byte[dds.Length];
                 stream.Read(data);
                 dds.Data = data;
             }
-            foreach (var entity in ver2List) {
-                var data = new byte[entity.Length];
+            foreach(var sprite in ver2List) {
+                var data = new byte[sprite.Length];
                 stream.Read(data);
-                entity.Data = data;
+                sprite.Data = data;
             }
         }
 
         public override void ConvertToVersion(ImgVersion version) {
-            foreach (var entity in Album.List) {
-                entity.Load();
-                if (version <= ImgVersion.Ver2) {
-                    if (entity.Type == ColorBits.DXT_1) {
-                        entity.Type = ColorBits.ARGB_1555;
+            foreach(var sprite in this.Album.List) {
+                sprite.Load();
+                if(version <= ImgVersion.Ver2) {
+                    if(sprite.ColorFormat == ColorFormats.DDS_DXT1) {
+                        sprite.ColorFormat = ColorFormats.ARGB_1555;
                     }
-                    if (entity.Type == ColorBits.DXT_5) {
-                        entity.Type = ColorBits.ARGB_8888;
+                    if(sprite.ColorFormat == ColorFormats.DDS_DXT5) {
+                        sprite.ColorFormat = ColorFormats.ARGB_8888;
                     }
-                } else if (version == ImgVersion.Ver4) {
-                    entity.Type = ColorBits.ARGB_1555;
+                } else if(version == ImgVersion.Ver4) {
+                    sprite.ColorFormat = ColorFormats.ARGB_1555;
                 }
-                if (entity.CompressMode > CompressMode.ZLIB) {
-                    entity.CompressMode = CompressMode.ZLIB;
+                if(sprite.CompressMode > CompressMode.ZLIB) {
+                    sprite.CompressMode = CompressMode.ZLIB;
                 }
             }
         }

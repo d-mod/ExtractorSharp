@@ -1,0 +1,59 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:es="clr-namespace:ExtractorSharp.Components"
+                    xmlns:i="clr-namespace:ExtractorSharp"
+                    xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+                    xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                    >
+    <Style TargetType="RepeatButton" x:Key="UpDownButtonStyle">
+        <Setter Property="HorizontalAlignment" Value="Right"></Setter>
+        <Setter Property="Foreground" Value="#0088ff"></Setter>
+        <Setter Property="Background" Value="Transparent"></Setter>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"></Setter>
+        <Setter Property="BorderBrush" Value="Transparent"></Setter>
+        <Setter Property="BorderThickness" Value="0"></Setter>
+    </Style>
+    
+    <Style TargetType="metro:NumericUpDown">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="metro:NumericUpDown">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
+                        <Grid  Width="{TemplateBinding Width}"  Height ="{TemplateBinding Height}"
+                           
+                               >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition  Width="*"/>
+                                <ColumnDefinition MinWidth="{TemplateBinding UpDownButtonsWidth}"
+                                                  MaxWidth="{TemplateBinding UpDownButtonsWidth}"
+                                                  />
+                                <ColumnDefinition MinWidth="{TemplateBinding UpDownButtonsWidth}"
+                                                  MaxWidth="{TemplateBinding UpDownButtonsWidth}"
+                                                  />
+                            </Grid.ColumnDefinitions>
+                            <es:ETextbox Grid.Column="0" Grid.Row="0"
+                                         BorderBrush="Transparent"
+                                         TextAlignment="Left"
+                                         Height="{TemplateBinding Height}" x:Name="PART_TextBox"></es:ETextbox>
+                            <RepeatButton Grid.Column="1"           
+                                          Width="{TemplateBinding UpDownButtonsWidth}" 
+                                          Height="{TemplateBinding Height}" x:Name="PART_NumericUp"
+                                          Style="{StaticResource UpDownButtonStyle}"
+                                          >
+                                <icon:Material Kind="Plus"></icon:Material>
+                            </RepeatButton>
+                            <RepeatButton Grid.Column="2"                                 
+                                          Width="{TemplateBinding UpDownButtonsWidth}" 
+                                          Height="{TemplateBinding Height}" 
+                                          x:Name="PART_NumericDown"
+                                          Style="{StaticResource UpDownButtonStyle}"
+                                          >
+                                <icon:Material Kind="Minus"></icon:Material>
+                            </RepeatButton>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

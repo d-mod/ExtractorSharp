@@ -1,8 +1,6 @@
-﻿using System;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 
-namespace ExtractorSharp.Core.Lib {
+namespace System.Text {
     public static class Strings {
         #region 基本重写
 
@@ -26,7 +24,7 @@ namespace ExtractorSharp.Core.Lib {
 
         public static string RemoveSuffix(this string s) {
             var i = s.IndexOf(".", StringComparison.Ordinal);
-            if (i < 0) {
+            if(i < 0) {
                 i = s.Length;
             }
             return s.Substring(0, i);
@@ -61,10 +59,10 @@ namespace ExtractorSharp.Core.Lib {
             var cs2 = s2.ToCharArray();
             var r1 = string.Empty;
             var r2 = new StringBuilder();
-            for (int i = cs1.Length - 1, j = 0; i > 0 && j < cs2.Length; i--, j++) {
+            for(int i = cs1.Length - 1, j = 0; i > 0 && j < cs2.Length; i--, j++) {
                 r1 = cs1[i] + r1;
                 r2.Append(cs2[j]);
-                if (!r1.Equals(r2.ToString())) {
+                if(!r1.Equals(r2.ToString())) {
                     continue;
                 }
                 s2 = s2.Substring(j + 1);
@@ -77,6 +75,11 @@ namespace ExtractorSharp.Core.Lib {
             var index = split.Select(c => str.LastIndexOf(c)).Aggregate(-1,
                 (current, index2) => (current > index2 || index2 == -1 ? current : index2));
             return str.Substring(index + 1);
+        }
+
+
+        public static bool EqualsIgnoreCase(this string s1, string s2) {
+            return string.Equals(s1?.ToLower(), s2?.ToLower());
         }
 
         #endregion

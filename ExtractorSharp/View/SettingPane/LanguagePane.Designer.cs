@@ -38,7 +38,7 @@
             // LanguagePane
             // 
             this.Controls.Add(this.languageBox);
-            this.Parent = "Language";
+          //  this.Parent = "Language";
             this.Size = new System.Drawing.Size(241, 151);
             this.ResumeLayout(false);
 

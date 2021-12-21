@@ -1,0 +1,42 @@
+﻿<TextBox x:Class="ExtractorSharp.Components.ETextbox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:es="clr-namespace:ExtractorSharp.Components"
+             mc:Ignorable="d" 
+             Name="TextBox"
+             MinHeight="28"
+             VerticalContentAlignment="Center"
+         >
+    <TextBox.Template>
+        <ControlTemplate TargetType="es:ETextbox" >
+            <Grid>
+                <Border x:Name="Wrapper" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Background="White" />
+                <Grid x:Name="Inner">
+                    <ScrollViewer x:Name="PART_ContentHost" 
+                                  BorderThickness="0" Grid.Column="1" 
+                                  IsTabStop="False" Margin="2"
+                                  VerticalAlignment="Center"
+                                  Padding="2,0"
+                                  Background="{x:Null}" />
+                    <!--水印-->
+                    <TextBlock x:Name="PlaceHolder"  Padding="{TemplateBinding Padding}" Visibility="Collapsed"
+                                       Text="{TemplateBinding PlaceHolder}" Grid.Column="1"
+                                       Foreground="{TemplateBinding Foreground}" IsHitTestVisible="False" Opacity="0.5"
+                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="5,2,5,2" />
+                </Grid>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Text}" Value="">
+                    <Setter TargetName="PlaceHolder" Property="Visibility" Value="Visible"></Setter>
+                </DataTrigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </TextBox.Template>
+
+</TextBox>

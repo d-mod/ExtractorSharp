@@ -1,18 +1,23 @@
-﻿using ExtractorSharp.Component;
-using ExtractorSharp.Core.Composition;
-using ExtractorSharp.Core.Config;
+﻿using System.ComponentModel.Composition;
+using System.Windows.Forms;
+using ExtractorSharp.Components;
+using ExtractorSharp.Composition.Config;
 
 namespace ExtractorSharp.View.SettingPane {
-    public partial class GridPane : AbstractSettingPane {
-        public GridPane(IConnector Data) : base(Data) {
+    public partial class GridPane : Panel {
+
+        [Import]
+        public IConfig Config;
+
+        public GridPane() {
             InitializeComponent();
         }
 
-        public override void Initialize() {
+        public void Initialize() {
             gridGapBox.Value = Config["GridGap"].Decimal;
         }
 
-        public override void Save() {
+        public void Save() {
             Config["GridGap"] = new ConfigValue(gridGapBox.Value);
         }
     }

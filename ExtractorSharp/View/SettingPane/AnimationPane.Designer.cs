@@ -63,8 +63,6 @@ namespace ExtractorSharp.View.SettingPane {
             // FilePane
             // 
             this.Controls.Add(this.animationGroup);
-            this.Parent = "View";
-            this.Name = "Animation";
             this.Size = new System.Drawing.Size(329, 244);
             this.animationGroup.ResumeLayout(false);
             this.animationGroup.PerformLayout();

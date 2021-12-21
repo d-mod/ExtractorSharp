@@ -33,8 +33,8 @@
             this.scaleRadio = new System.Windows.Forms.RadioButton();
             this.scaleBox = new System.Windows.Forms.NumericUpDown();
             this.useDefaultBox = new System.Windows.Forms.CheckBox();
-            this.yesButton = new ExtractorSharp.Component.ESButton();
-            this.cancelButton = new ExtractorSharp.Component.ESButton();
+            this.yesButton = new ExtractorSharp.Components.ESButton();
+            this.cancelButton = new ExtractorSharp.Components.ESButton();
             ((System.ComponentModel.ISupportInitialize)(this.widthBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.heightBox)).BeginInit();
             this.group.SuspendLayout();
@@ -197,7 +197,7 @@
         private System.Windows.Forms.RadioButton scaleRadio;
         private System.Windows.Forms.NumericUpDown scaleBox;
         private System.Windows.Forms.CheckBox useDefaultBox;
-        private Component.ESButton yesButton;
-        private Component.ESButton cancelButton;
+        private Components.ESButton yesButton;
+        private Components.ESButton cancelButton;
     }
 }

@@ -24,7 +24,7 @@
         /// </summary>
         private void InitializeComponent() {
             this.gamePathBox = new System.Windows.Forms.TextBox();
-            this.browseButton = new ExtractorSharp.Component.ESButton();
+            this.browseButton = new ExtractorSharp.Components.ESButton();
             this.gamePathGroup = new System.Windows.Forms.GroupBox();
             this.autoSaveCheck = new System.Windows.Forms.CheckBox();
             this.autoUpdateCheck = new System.Windows.Forms.CheckBox();
@@ -86,7 +86,6 @@
             this.Controls.Add(this.autoUpdateCheck);
             this.Controls.Add(this.updatedShowFeatureCheck);
             this.Controls.Add(this.gamePathGroup);
-            this.Parent = "Gerneral";
             this.Size = new System.Drawing.Size(329, 244);
             this.gamePathGroup.ResumeLayout(false);
             this.gamePathGroup.PerformLayout();
@@ -98,7 +97,7 @@
         #endregion
 
         private System.Windows.Forms.TextBox gamePathBox;
-        private Component.ESButton browseButton;
+        private Components.ESButton browseButton;
         private System.Windows.Forms.GroupBox gamePathGroup;
         private System.Windows.Forms.CheckBox autoSaveCheck;
         private System.Windows.Forms.CheckBox autoUpdateCheck;

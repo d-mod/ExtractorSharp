@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
-using ExtractorSharp.Component;
+using ExtractorSharp.Components;
 using ExtractorSharp.Properties;
 
 namespace ExtractorSharp.View.Dialog{

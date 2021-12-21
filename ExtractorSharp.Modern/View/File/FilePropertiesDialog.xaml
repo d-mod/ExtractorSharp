@@ -1,0 +1,60 @@
+﻿<es:BaseDialog x:Class="ExtractorSharp.View.FilePropertiesDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:es="clr-namespace:ExtractorSharp.Components"
+        xmlns:i="clr-namespace:ExtractorSharp" 
+        xmlns:model="clr-namespace:ExtractorSharp.View.Model" 
+        d:DataContext="{d:DesignInstance Type=model:FilePropertiesModel}"
+               mc:Ignorable="d"
+        Height="440" Width="400">
+    <es:BaseDialog.Resources>
+        <Style x:Key="Row" TargetType="StackPanel">
+            <Setter Property="Margin" Value="0,20,0,0"></Setter>
+            <Setter Property="Width" Value="320"></Setter>
+            <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+        </Style>
+
+    </es:BaseDialog.Resources>
+    <Canvas Width="320" Margin="0,20">
+        <StackPanel>
+
+            <StackPanel Width="320" Orientation="Horizontal"  Margin="0,20,0,0">
+                <Label>文件名:</Label>
+                <TextBlock  Margin="20,0,0,0"  VerticalAlignment="Center" Text="{Binding FileName}"></TextBlock>
+            </StackPanel>
+            <StackPanel Width="320" Orientation="Horizontal"  Margin="0,20,0,0">
+                <Label>贴图数量:</Label>
+                <TextBlock Margin="20,0,0,0" VerticalAlignment="Center" Text="{Binding ImageCount}"></TextBlock>
+            </StackPanel>
+            <StackPanel Style="{StaticResource Row}">
+                <Label>文件完整路径</Label>
+                <es:ETextbox TextWrapping="Wrap" x:Name="pathBox" Text="{Binding FilePath}"></es:ETextbox>
+            </StackPanel>
+            <StackPanel Style="{StaticResource Row}">
+                <Label>文件版本</Label>
+                <ComboBox ItemsSource="{Binding Versions}" SelectedItem="{Binding FileVersion}"></ComboBox>
+                <TextBlock Foreground="Red"
+                           Text="{i:Language ConvertFile,Group=Tips}"
+                           Visibility="{Binding NeedConvert,Converter= {StaticResource BooleanToVisibilityConverter}}"
+                           ></TextBlock>
+                <CheckBox Visibility="{Binding ShowConvertAll,Converter= {StaticResource BooleanToVisibilityConverter}}" 
+                       Content="{i:Language ConvertAllCheckedFile}" 
+                          IsChecked="{Binding ConvertAll}"></CheckBox>
+                
+            </StackPanel>
+            
+            <ProgressBar x:Name="progressBar"
+                         Minimum="0"
+                         Value="{Binding ConvertProgress}"
+                         Maximum="{Binding ConvertMaximum}"
+                         Visibility="{Binding ShowConvert,Converter= {StaticResource BooleanToVisibilityConverter}}" 
+                         Height="32" Margin="0,20,0,0"></ProgressBar>
+        </StackPanel>
+        <StackPanel Canvas.Right="0" Canvas.Bottom="0" Style="{StaticResource Action}">
+            <Button IsDefault="True" Style="{StaticResource PrimaryButton}" Foreground="White" Click="OnOk" Content="{i:Language OK}"></Button>
+            <Button Margin="0,0,40,0"  IsCancel="True" Content="{i:Language Cancel}"></Button>
+        </StackPanel>
+    </Canvas>
+</es:BaseDialog>
