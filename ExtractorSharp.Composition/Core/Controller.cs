@@ -11,6 +11,15 @@ using ExtractorSharp.EventArguments;
 using ExtractorSharp.Exceptions;
 
 namespace ExtractorSharp.Composition.Core {
+
+
+    class RollbackLog {
+       public IRollback Rollback { set; get; }
+        public ICommandMetadata Metadata { set; get; }
+        public CommandContext Context { set; get; }
+    }
+
+
     /// <summary>
     ///     命令控制器
     ///     <see cref="ICommand" />
@@ -20,9 +29,9 @@ namespace ExtractorSharp.Composition.Core {
 
 
 
-        private readonly Stack<KeyValuePair<IRollback, ICommandMetadata>> redoStack;
+        private readonly Stack<RollbackLog> redoStack;
 
-        private readonly Stack<KeyValuePair<IRollback, ICommandMetadata>> undoStack;
+        private readonly Stack<RollbackLog> undoStack;
 
 
         /// <summary>
@@ -38,9 +47,9 @@ namespace ExtractorSharp.Composition.Core {
 
         public Controller() {
 
-            this.undoStack = new Stack<KeyValuePair<IRollback, ICommandMetadata>>();
+            this.undoStack = new Stack<RollbackLog>();
 
-            this.redoStack = new Stack<KeyValuePair<IRollback, ICommandMetadata>>();
+            this.redoStack = new Stack<RollbackLog>();
 
             this.Macro = new List<IMacro>();
         }
@@ -61,8 +70,8 @@ namespace ExtractorSharp.Composition.Core {
         public IEnumerable<KeyValuePair<IRollback, IName>> History {
             get {
                 var list = new List<KeyValuePair<IRollback, IName>>();
-                var undo = this.undoStack.Select(e => new KeyValuePair<IRollback, IName>(e.Key, e.Value));
-                var redo = this.redoStack.Select(e => new KeyValuePair<IRollback, IName>(e.Key, e.Value));
+                var undo = this.undoStack.Select(e => new KeyValuePair<IRollback, IName>(e.Rollback, e.Metadata));
+                var redo = this.redoStack.Select(e => new KeyValuePair<IRollback, IName>(e.Rollback, e.Metadata));
                 undo.Reverse();
                 list.AddRange(undo);
                 list.AddRange(redo);
@@ -260,8 +269,8 @@ namespace ExtractorSharp.Composition.Core {
                     events.ForEach(l => l.After(e));
 
 
-                    if(cmd is IRollback rollback) {
-                        this.undoStack.Push(new KeyValuePair<IRollback, ICommandMetadata>(rollback, metadata));
+                    if(cmd is IRollback rollback) {;
+                        this.undoStack.Push(new RollbackLog { Context = context, Rollback = rollback, Metadata = metadata });
                         this.Current = rollback;
                     }
 
@@ -269,7 +278,7 @@ namespace ExtractorSharp.Composition.Core {
                         this.AddMacro(action);
                     }
                     while(this.redoStack.Count > 0) {
-                        var redo = this.redoStack.Pop().Key;
+                        var redo = this.redoStack.Pop().Rollback;
                         if(redo is IDisposable disposable) {
                             disposable.Dispose();
                         }
@@ -290,14 +299,16 @@ namespace ExtractorSharp.Composition.Core {
         public Controller Undo() {
             if(this.undoStack.Count > 0) {
                 var pair = this.undoStack.Pop();
-                var cmd = pair.Key;
-                var metadata = pair.Value;
+                var cmd = pair.Rollback;
+                var context = pair.Context;
+                var metadata = pair.Metadata;
                 cmd.Undo();
                 this.redoStack.Push(pair);
                 this.OnCommandChanged(new CommandEventArgs {
                     Metadata = metadata,
                     Name = metadata.Name,
                     Command = cmd,
+                    Context = context,
                     Type = CommandEventType.Undo
                 }); ;
             }
@@ -310,14 +321,16 @@ namespace ExtractorSharp.Composition.Core {
         public Controller Redo() {
             if(this.redoStack.Count > 0) {
                 var pair = this.redoStack.Pop();
-                var cmd = pair.Key;
-                var metadata = pair.Value;
+                var cmd = pair.Rollback;
+                var context = pair.Context;
+                var metadata = pair.Metadata;
                 cmd.Redo();
                 this.undoStack.Push(pair);
                 this.OnCommandChanged(new CommandEventArgs {
                     Metadata = metadata,
                     Name = metadata.Name,
                     Command = cmd,
+                    Context =context,
                     Type = CommandEventType.Redo
                 });
             }

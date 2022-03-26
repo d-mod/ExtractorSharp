@@ -4,7 +4,6 @@ using System.IO;
 using ExtractorSharp.Composition;
 using ExtractorSharp.Composition.Control;
 using ExtractorSharp.Composition.Stores;
-using ExtractorSharp.Composition.Stores;
 using ExtractorSharp.Services.Constants;
 
 namespace ExtractorSharp.Services.Listener {

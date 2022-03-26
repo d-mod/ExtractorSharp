@@ -60,8 +60,8 @@ namespace ExtractorSharp.Services.Commands {
                     var arr = support.Decode(arg);
                     list.AddRange(arr);
                 }
-                e.Value++;
                 this.Progress.Report(e);
+                e.Value++;
             }
             this.Store
                 .Set(StoreKeys.LOAD_FILES, list);

@@ -30,6 +30,7 @@ namespace ExtractorSharp.Services.Command.Files {
         private bool IsSaved;
 
 
+
         public void Do(CommandContext context) {
             context.Export(this);
 
@@ -120,6 +121,7 @@ namespace ExtractorSharp.Services.Command.Files {
                         list = new List<Album>(this.oldFiles);
                     } else if(this.newFiles != null) {
                         list.RemoveAll(this.newFiles.Contains);
+                        list = list.ToList();
                     }
                     return list;
                 });
@@ -146,6 +148,7 @@ namespace ExtractorSharp.Services.Command.Files {
 
         public class OpenFileProgress : IProgress<ProgressEventArgs> {
             private Action Completed;
+            private bool isFirst = true ;
 
             public OpenFileProgress(Action Completed) {
                 this.Completed = Completed;
@@ -153,11 +156,10 @@ namespace ExtractorSharp.Services.Command.Files {
 
 
             public void Report(ProgressEventArgs e) {
-
-                if(e.IsCompleted) {
+                if(e.IsCompleted && isFirst) {
+                    isFirst = false;
                     this.Completed?.Invoke();
                 }
-
             }
 
 
