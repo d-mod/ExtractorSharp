@@ -124,6 +124,12 @@ namespace ExtractorSharp.Services.Constants {
         /// 刚加载的临时文件(临时)
         /// </summary>
         public const string LOAD_FILES = "/load/files";
+
+        /// <summary>
+        /// <see cref="object"/>
+        /// 脚本上次返回值
+        /// </summary>
+        public const string SCRIPT_LAST_RESULT = "/data/script-last-result";
         #endregion
 
         #region MERGE
