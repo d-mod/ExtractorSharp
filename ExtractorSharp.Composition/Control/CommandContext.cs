@@ -58,7 +58,7 @@ namespace ExtractorSharp.Composition.Control {
 
         public void Add(IEnumerable<KeyValuePair<string,object>> context) {
             foreach(var item in context.ToList()) {
-                this.parameters[item.Key] = item.Value;
+                this.Add(item.Key, item.Value);
             }
         }
 
