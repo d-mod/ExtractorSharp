@@ -877,6 +877,7 @@ namespace ExtractorSharp {
         }
 
         private void ImageChanged(object sender, EventArgs e) {
+            Store.Trigger(StoreKeys.SELECTED_FILE);
             Drawer.OnPalatteChanged(new FileEventArgs {
                 Entity = imageList.SelectedItem,
                 Album = fileList.SelectedItem

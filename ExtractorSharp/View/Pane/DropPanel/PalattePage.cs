@@ -8,6 +8,7 @@ using ExtractorSharp.Composition.Core;
 using ExtractorSharp.Core;
 using ExtractorSharp.Core.Model;
 using ExtractorSharp.EventArguments;
+using ExtractorSharp.Services.Constants;
 
 namespace ExtractorSharp.View.Pane {
 
@@ -38,7 +39,7 @@ namespace ExtractorSharp.View.Pane {
             Controller.CommandChanged += UndoFresh;
             deleteButton.Click += DeletePalette;
 
-            Store.Watch<Album>("/filelist/selected-item", OnFileChanged);
+            Store.Watch<Album>(StoreKeys.SELECTED_FILE, OnFileChanged);
         }
 
         private void DeletePalette(object sender, EventArgs e) {

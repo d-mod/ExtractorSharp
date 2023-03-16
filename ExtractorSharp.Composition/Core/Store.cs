@@ -99,6 +99,13 @@ namespace ExtractorSharp.Composition.Core {
         }
 
 
+        public Store Trigger(string key) {
+            var field = this.GetField(key);
+            field?.Trigger();
+            return this;
+        }
+
+
         public void OnValueChanged(object sender, EventArgs e) {
             if(this.bindings.ContainsKey(sender)) {
                 var field = this.bindings[sender];
@@ -239,6 +246,13 @@ namespace ExtractorSharp.Composition.Core {
             /// </summary>
             public void Notify() {
                 ValueChanged?.Invoke(this.Value);
+            }
+
+            public void Trigger() {
+                var oldValue = this._value;
+                if(this.Value != oldValue) {
+                    this.Notify();
+                }
             }
 
             public object Value {
